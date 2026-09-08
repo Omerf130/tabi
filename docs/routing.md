@@ -24,13 +24,15 @@ Trip URLs always include `tripId`. There is no implied “current trip” outsid
 | `/app/trips/[tripId]/itinerary` | Single-open day accordion + activity timeline; `?date=` deep link | 6 / 7 |
 | `/app/trips/[tripId]/itinerary/activities/new` | Redirect stub → itinerary `?date=` (compatibility) | 7 |
 | `/app/trips/[tripId]/itinerary/activities/[activityId]/edit` | Redirect stub → itinerary `?date=` (compatibility) | 7 |
-| `/app/trips/[tripId]/documents` | Files (placeholder until Phase 12) | 5 / 12 |
+| `/app/trips/[tripId]/documents` | Travel Wallet — trip documents (PDF/images) | 10 |
+| `/app/trips/[tripId]/documents/[documentId]` | Document detail (view/download) | 10 |
+| `/app/trips/[tripId]/documents/[documentId]/file` | Authenticated private document file proxy | 10 |
 | `/app/trips/[tripId]/memories` | Journal (placeholder until Phase 21) | 5 / 21 |
 | `/app/trips/[tripId]/more` | Travel Hub — travel tools, management links, account, logout | 5 / 9 |
 | `/app/trips/[tripId]/accommodations` | Accommodation list (read-only for travelers) | 9 |
 | `/app/trips/[tripId]/accommodations/[accommodationId]` | Accommodation detail + Maps / Taxi Mode | 9 |
 | `/app/trips/[tripId]/accommodations/[accommodationId]/taxi` | Taxi Mode full-screen overlay | 9 |
-| `/app/trips/[tripId]/settings` | Trip settings (owner: cover, accommodations CRUD) | 8B / 9 |
+| `/app/trips/[tripId]/settings` | Trip settings (owner: cover, accommodations, documents CRUD) | 8B / 9 / 10 |
 | `/app/trips/[tripId]/cover` | Authenticated Trip cover image delivery | 8B |
 | `/app/trips/[tripId]/packing` | Packing lists | 19 |
 | `/app/trips/[tripId]/members` | Trip members + owner invite management | 4 |

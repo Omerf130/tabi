@@ -4,6 +4,12 @@ import { TripHeader } from "@/features/app-shell/TripHeader";
 import { TripCoverSettings } from "@/features/trips/cover/TripCoverSettings";
 import { TripAccommodationSettings } from "@/features/accommodations/TripAccommodationSettings";
 import { listAccommodationsForTripSettings } from "@/features/accommodations/queries";
+import { TripDocumentSettings } from "@/features/documents/TripDocumentSettings";
+import {
+  listAccommodationLinkOptions,
+  listActivityLinkOptions,
+  listTravelDocumentsForTrip,
+} from "@/features/documents/queries";
 import { listRemindersForUserTrip } from "@/features/trips/reminders/queries";
 import { TripReminderSettings } from "@/features/trips/reminders/TripReminderSettings";
 import { TripDetailsSection } from "@/features/trips/settings/TripDetailsSection";
@@ -33,9 +39,13 @@ export default async function TripSettingsPage({
     requireUser(),
   ]);
   const todayJapan = getJapanCalendarDate();
-  const [reminders, accommodations] = await Promise.all([
+  const [reminders, accommodations, documents, activityOptions, accommodationOptions] =
+    await Promise.all([
     listRemindersForUserTrip(trip.id, user.id, todayJapan),
     listAccommodationsForTripSettings(trip.id),
+    trip.role === "owner" ? listTravelDocumentsForTrip(trip.id) : Promise.resolve([]),
+    trip.role === "owner" ? listActivityLinkOptions(trip.id) : Promise.resolve([]),
+    trip.role === "owner" ? listAccommodationLinkOptions(trip.id) : Promise.resolve([]),
   ]);
 
   return (
@@ -60,6 +70,14 @@ export default async function TripSettingsPage({
               startDate={trip.startDate}
               endDate={trip.endDate}
               accommodations={accommodations}
+            />
+          ) : null}
+          {trip.role === "owner" ? (
+            <TripDocumentSettings
+              tripId={trip.id}
+              documents={documents}
+              activityOptions={activityOptions}
+              accommodationOptions={accommodationOptions}
             />
           ) : null}
           <TripReminderSettings

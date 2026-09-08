@@ -17,6 +17,7 @@ Decisions now must not make that work harder later.
 - Trip data should stay **fetchable as trip-scoped records** (JSON-shaped documents keyed by `tripId`), not only as live RPC that cannot be snapshotted.
 - Simple mutations (complete activity, check packing item) should be modelable as small commands so they can be queued locally and replayed when online.
 - Do not rely on public CDN URLs for documents; offline copies must come from authorized downloads.
+- Travel documents (Phase 10) already use a same-origin authenticated proxy (`/documents/[documentId]/file`) with `private, no-store` caching — future explicit downloads should extend that pattern, not expose Vercel Blob URLs to the client.
 - App Router URLs under `/app/trips/[tripId]/...` are cache-friendly later; keep trip identity in the path.
 - Do not introduce a PWA plugin now that would fight a later, deliberate offline design.
 

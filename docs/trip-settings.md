@@ -21,7 +21,8 @@ Future features should follow the same split rather than placing CRUD controls d
 1. **פרטי הטיול** — basic Trip information (read-only for now)
 2. **תמונת הטיול** — owner-managed cover image
 3. **מקומות לינה** — owner-managed accommodations (hidden from members)
-4. **תזכורות אישיות** — personal in-app reminders
+4. **מסמכים** — owner-managed travel documents / Travel Wallet (hidden from members)
+5. **תזכורות אישיות** — personal in-app reminders
 
 ## Personal reminders (Phase 8E)
 
@@ -48,6 +49,16 @@ Travelers access accommodations via **More → מקומות לינה** or direct
 
 See [accommodation-model.md](accommodation-model.md) for schema, occupancy semantics, Taxi Mode, and authorization.
 
+## Documents / Travel Wallet (Phase 10)
+
+Trip-scoped documents (PDF + images) with metadata in MongoDB and bytes in private Blob storage.
+
+- Owner manages CRUD in Settings (`#documents`)
+- Members consume via the primary **Documents** tab and detail routes
+- Files are never exposed as permanent Blob URLs; delivery uses an authenticated proxy with `Cache-Control: private, no-store`
+
+See [travel-documents.md](travel-documents.md).
+
 ## Source layout
 
 ```
@@ -62,6 +73,9 @@ src/features/trips/reminders/
   TripReminderSettings.tsx
 src/features/accommodations/
   TripAccommodationSettings.tsx
+src/features/documents/
+  TripDocumentSettings.tsx
 src/models/TripReminder.ts
 src/models/Accommodation.ts
+src/models/TravelDocument.ts
 ```

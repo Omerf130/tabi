@@ -174,3 +174,89 @@ export function IconActivityOther({ className }: IconProps) {
     </svg>
   );
 }
+
+export function IconGrid({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <rect x="5" y="5" width="6" height="6" rx="1" />
+      <rect x="13" y="5" width="6" height="6" rx="1" />
+      <rect x="5" y="13" width="6" height="6" rx="1" />
+      <rect x="13" y="13" width="6" height="6" rx="1" />
+    </svg>
+  );
+}
+
+export function IconPlane({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M4 13 10 11 20 5l-2 8-4 1-1 4-2-1 1-4-4 1Z" />
+    </svg>
+  );
+}
+
+export function IconTrain({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <rect x="5" y="6" width="14" height="11" rx="2" />
+      <path d="M5 11h14" />
+      <path d="M8 19v-2M16 19v-2" />
+      <circle cx="8.5" cy="15.5" r="1" fill="currentColor" stroke="none" />
+      <circle cx="15.5" cy="15.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function IconTicket({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M5 8.5h14v7H5z" />
+      <path d="M9 8.5v7M15 8.5v7" strokeDasharray="2 2" />
+    </svg>
+  );
+}
+
+export function IconShield({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M12 4.5 18 7v5.5c0 3.5-2.8 6.2-6 7.5-3.2-1.3-6-4.2-6-7.5V7z" />
+    </svg>
+  );
+}
+
+export function IconLink({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M10 8.5a3.5 3.5 0 0 1 5 5l-1.5 1.5" />
+      <path d="M14 15.5a3.5 3.5 0 0 1-5-5L10.5 9" />
+    </svg>
+  );
+}
+
+export function IconFilePdf({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M8 4.5h6l5 5v10H8z" />
+      <path d="M14 4.5V10h5.5" />
+      <path d="M10 14h5M10 17h3.5" />
+    </svg>
+  );
+}
+
+export function IconFileImage({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <rect x="5" y="5.5" width="14" height="13" rx="2" />
+      <circle cx="9.5" cy="10.5" r="1.25" />
+      <path d="m7 17 3.5-3.5 2.5 2 3-4 3 5.5" />
+    </svg>
+  );
+}
+
+export function IconCalendar({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <rect x="5" y="6" width="14" height="13" rx="2" />
+      <path d="M8 4.5v3M16 4.5v3M5 10h14" />
+    </svg>
+  );
+}
