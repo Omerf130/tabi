@@ -1,0 +1,16 @@
+.shell {
+  min-height: 100dvh;
+  background-color: var(--color-background);
+}
+
+.content {
+  width: 100%;
+  max-width: var(--layout-wide-max);
+  margin-inline: auto;
+}
+
+@media (min-width: 1024px) {
+  .content {
+    margin-inline: 0;
+  }
+}

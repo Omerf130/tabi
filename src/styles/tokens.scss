@@ -1,0 +1,140 @@
+:root,
+[data-color-scheme="light"] {
+  color-scheme: light;
+
+  --color-background: #f3eee6;
+  --color-surface: #fbf7f1;
+  --color-surface-subtle: #ebe4da;
+  --color-primary: #7a2e38;
+  --color-primary-hover: #64262e;
+  --color-primary-pressed: #521f26;
+  --color-on-primary: #fbf7f1;
+  --color-accent: #c48b90;
+  --color-accent-soft: #f3e6e7;
+  --color-text: #2a2422;
+  --color-text-muted: #5e5650;
+  --color-border: #ddd4c8;
+  --color-focus: #7a2e38;
+  --color-success: #3f6b4f;
+  --color-warning: #a86b2d;
+  --color-danger: #9b3535;
+  --color-on-danger: #fbf7f1;
+  --color-success-soft: #e4eee7;
+  --color-warning-soft: #f4eadb;
+  --color-danger-soft: #f4e4e4;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+
+  --space-page-inline: 1rem;
+  --space-section: 2rem;
+  --space-card-gap: 0.75rem;
+  --space-card-padding: 1rem;
+
+  --layout-content-max: 40rem;
+  --layout-wide-max: 72rem;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 3px rgb(42 36 34 / 8%);
+  --shadow-md: 0 8px 24px rgb(42 36 34 / 10%);
+
+  --text-display: 2rem;
+  --text-title: 1.5rem;
+  --text-section: 1.125rem;
+  --text-card: 1rem;
+  --text-body: 1rem;
+  --text-secondary: 0.9375rem;
+  --text-label: 0.8125rem;
+  --text-caption: 0.75rem;
+  --text-numeric: 1.125rem;
+
+  --line-height-display: 1.2;
+  --line-height-tight: 1.25;
+  --line-height-body: 1.6;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  --transition-fast: 120ms ease;
+  --transition-base: 180ms ease;
+
+  --size-touch-min: 2.75rem;
+  --size-bottom-nav: 4.5rem;
+  --size-nav-rail: 5.25rem;
+
+  --text-header-trip: 1.375rem;
+  --text-header-section: 1.0625rem;
+
+  --color-shell-border: rgb(42 36 34 / 10%);
+  --color-nav-muted: rgb(94 86 80 / 72%);
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (min-width: 768px) {
+  :root,
+  [data-color-scheme="light"],
+  [data-color-scheme="dark"] {
+    --space-page-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root,
+  [data-color-scheme="light"],
+  [data-color-scheme="dark"] {
+    --space-page-inline: 2rem;
+  }
+}
+
+[data-color-scheme="dark"] {
+  color-scheme: dark;
+
+  --color-background: #1c1816;
+  --color-surface: #27211e;
+  --color-surface-subtle: #322b27;
+  --color-primary: #c45b66;
+  --color-primary-hover: #d46a75;
+  --color-primary-pressed: #b04e58;
+  --color-on-primary: #1c1816;
+  --color-accent: #d4a3a8;
+  --color-accent-soft: #3a2c2e;
+  --color-text: #f2ebe4;
+  --color-text-muted: #a89b93;
+  --color-border: #3d3530;
+  --color-focus: #d4a3a8;
+  --color-success: #7aaf8b;
+  --color-warning: #d4a05a;
+  --color-danger: #d16a6a;
+  --color-on-danger: #1c1816;
+  --color-success-soft: #24332a;
+  --color-warning-soft: #3a2f22;
+  --color-danger-soft: #3a2424;
+
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 35%);
+  --shadow-md: 0 8px 24px rgb(0 0 0 / 40%);
+
+  --color-shell-border: rgb(242 235 228 / 12%);
+  --color-nav-muted: rgb(168 155 147 / 72%);
+}
+
+/*
+  Tabi Japan V1 visual identity.
+  Light/dark via data-color-scheme only (no OS auto-switch).
+  No destination overlay in V1.
+
+  Layout tokens:
+  --layout-content-max  readable / compact content
+  --layout-wide-max     future itinerary, documents, planner
+*/

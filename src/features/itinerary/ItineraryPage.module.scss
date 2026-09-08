@@ -1,0 +1,352 @@
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-block-end: var(--space-6);
+  padding-block-end: var(--space-4);
+  border-bottom: 1px solid var(--color-shell-border);
+}
+
+.introCopy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.range {
+  font-size: var(--text-body);
+  color: var(--color-text);
+  line-height: var(--line-height-tight);
+}
+
+.summary {
+  font-size: var(--text-secondary);
+  color: var(--color-text-muted);
+}
+
+.dayList {
+  display: flex;
+  flex-direction: column;
+}
+
+.day {
+  border-bottom: 1px solid var(--color-shell-border);
+}
+
+.day:last-child {
+  border-bottom: none;
+}
+
+.dayToggle {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--size-touch-min);
+  padding-block: var(--space-3);
+  padding-inline: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.dayToggle:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.dayChevron {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-block-start: 0.2rem;
+  color: var(--color-text-muted);
+  transition: transform var(--transition-fast);
+}
+
+.dayChevron[data-expanded="true"] {
+  transform: rotate(-90deg);
+}
+
+[dir="rtl"] .dayChevron[data-expanded="true"] {
+  transform: rotate(90deg);
+}
+
+.dayToggleCopy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+.dayToggleTitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.dayNumber {
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.dayMetaInline {
+  font-size: var(--text-secondary);
+  color: var(--color-text-muted);
+}
+
+.dayCount {
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.day[data-temporal="today"] .dayNumber {
+  color: var(--color-primary);
+}
+
+.dayPanel {
+  padding-block-end: var(--space-4);
+  padding-inline-start: calc(1rem + var(--space-3));
+}
+
+.emptyDay {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-secondary);
+  color: var(--color-text-muted);
+}
+
+.dayAddAction {
+  margin-block-start: var(--space-3);
+}
+
+.dayAddButton {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.dayAddButton:hover {
+  text-decoration: underline;
+}
+
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-block-end: var(--space-3);
+}
+
+.activity {
+  padding-block-end: var(--space-3);
+  border-bottom: 1px solid var(--color-shell-border);
+}
+
+.activity:last-child {
+  border-bottom: none;
+  padding-block-end: 0;
+}
+
+.activityRow {
+  display: grid;
+  grid-template-columns: 3.25rem 1fr;
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.activityTime {
+  margin: 0;
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+  text-align: end;
+  padding-block-start: 0.2rem;
+}
+
+.activityTimePlaceholder {
+  display: block;
+  min-height: 1rem;
+}
+
+.activityBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.activityMain {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.activityIconWrap {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-block-start: 0.1rem;
+}
+
+.activityIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-text-muted);
+}
+
+.activityText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  flex: 1;
+}
+
+.activityTitle {
+  margin: 0;
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.activityLocation {
+  margin: 0;
+  font-size: var(--text-secondary);
+  color: var(--color-text);
+  line-height: var(--line-height-body);
+}
+
+.activityNotes {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-body);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.activityActionsSlot {
+  padding-inline-start: calc(1.5rem + var(--space-2));
+}
+
+.activityActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.activityActionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.actionLink {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.actionLink:hover {
+  text-decoration: underline;
+}
+
+.secondaryActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+}
+
+.secondaryAction,
+.secondaryActionDanger {
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.secondaryAction:hover,
+.secondaryActionDanger:hover {
+  color: var(--color-text);
+  text-decoration: underline;
+}
+
+.secondaryActionDanger {
+  color: var(--color-danger);
+}
+
+.inlineEditor {
+  margin-block: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-shell-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-subtle);
+}
+
+.movePanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.moveActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.inlineError {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--color-danger);
+}
+
+@media (min-width: 1024px) {
+  .intro {
+    margin-block-end: var(--space-8);
+  }
+
+  .dayToggle {
+    padding-block: var(--space-4);
+  }
+
+  .dayNumber {
+    font-size: var(--text-section);
+  }
+}
+
+@media (max-width: 480px) {
+  .activityRow {
+    grid-template-columns: 1fr;
+  }
+
+  .activityTime {
+    text-align: start;
+  }
+
+  .activityActionsSlot {
+    padding-inline-start: 0;
+  }
+}

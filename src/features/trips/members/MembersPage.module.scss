@@ -1,0 +1,120 @@
+.sectionTitle {
+  font-size: var(--text-card);
+  font-weight: var(--font-weight-semibold);
+  margin-block-end: var(--space-3);
+}
+
+.memberList,
+.inviteList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-block-end: var(--space-5);
+}
+
+.memberCard,
+.inviteCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.memberHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.memberName {
+  font-weight: var(--font-weight-semibold);
+}
+
+.memberEmail,
+.meta {
+  font-size: var(--text-secondary);
+  color: var(--color-text-muted);
+}
+
+.memberActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.inlineForm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.inviteSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.newInvite {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--color-border);
+}
+
+.helper {
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.error {
+  font-size: var(--text-caption);
+  color: var(--color-danger);
+}
+
+.success {
+  font-size: var(--text-caption);
+  color: var(--color-primary);
+}
+
+.actionsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+}
+
+.copyBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .memberCard,
+  .inviteCard {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

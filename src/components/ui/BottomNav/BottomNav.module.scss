@@ -1,0 +1,124 @@
+.nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  gap: var(--space-1);
+  min-height: var(--size-bottom-nav);
+  padding-top: var(--space-2);
+  padding-bottom: calc(var(--space-2) + var(--safe-bottom));
+  padding-inline: var(--space-1);
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-shell-border);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav[data-variant="rail"] {
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: var(--space-1);
+  min-height: 0;
+  padding-block: var(--space-3) var(--space-4);
+  padding-inline: var(--space-2);
+  border-top: none;
+  border-inline-start: none;
+  background-color: transparent;
+}
+
+.item {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1875rem;
+  min-height: calc(var(--size-touch-min) - var(--space-1));
+  min-width: 0;
+  padding-inline: var(--space-1);
+  color: var(--color-nav-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.nav[data-variant="rail"] .item {
+  flex: 0 0 auto;
+  width: 100%;
+  gap: var(--space-1);
+  min-height: auto;
+  padding-block: var(--space-2);
+  padding-inline: var(--space-1);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+}
+
+.item[data-active="true"] {
+  color: var(--color-primary);
+}
+
+.item[data-active="true"] .label {
+  font-weight: var(--font-weight-semibold);
+}
+
+.nav[data-variant="bottom"] .item[data-active="true"]::before {
+  content: "";
+  position: absolute;
+  top: 0.125rem;
+  inset-inline: 28%;
+  height: 2px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+}
+
+.nav[data-variant="rail"] .item[data-active="true"] {
+  background-color: var(--color-accent-soft);
+  color: var(--color-primary);
+}
+
+.nav[data-variant="rail"] .item[data-active="true"]::before {
+  content: none;
+}
+
+.icon {
+  display: flex;
+  width: 1.375rem;
+  height: 1.375rem;
+}
+
+.nav[data-variant="bottom"] .icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.label {
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav[data-variant="rail"] .label {
+  font-size: var(--text-label);
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+  .nav[data-variant="bottom"] {
+    padding-inline: var(--space-3);
+  }
+
+  .nav[data-variant="bottom"] .item {
+    max-width: 5.5rem;
+  }
+}

@@ -1,0 +1,21 @@
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.dates {
+  font-size: var(--text-body);
+  color: var(--color-text);
+}
+
+.role {
+  font-size: var(--text-secondary);
+  color: var(--color-text-muted);
+}
+
+.lede {
+  font-size: var(--text-secondary);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-body);
+}
