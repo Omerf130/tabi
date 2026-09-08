@@ -3,6 +3,27 @@ import "server-only";
 import mongoose, { type InferSchemaType, type Model } from "mongoose";
 import { isValidCalendarDateString } from "@/features/trips/calendar-date";
 
+const tripCoverImageSchema = new mongoose.Schema(
+  {
+    pathname: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    url: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    contentType: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+  },
+  { _id: false },
+);
+
 const tripSchema = new mongoose.Schema(
   {
     name: {
@@ -34,9 +55,15 @@ const tripSchema = new mongoose.Schema(
       required: true,
       index: true,
     },
+    coverImage: {
+      type: tripCoverImageSchema,
+      default: null,
+    },
   },
   { timestamps: true },
 );
+
+export type TripCoverImageDocument = InferSchemaType<typeof tripCoverImageSchema>;
 
 export type TripDocument = InferSchemaType<typeof tripSchema> & {
   _id: mongoose.Types.ObjectId;

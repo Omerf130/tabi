@@ -16,6 +16,12 @@ export type TripWorkspace = {
   startDate: string;
   endDate: string;
   role: TripMemberRole;
+  coverImage?: TripCoverImage;
+};
+
+export type TripCoverImage = {
+  pathname: string;
+  contentType: string;
 };
 
 type TripRecord = {
@@ -23,6 +29,10 @@ type TripRecord = {
   name: string;
   startDate: string;
   endDate: string;
+  coverImage?: {
+    pathname: string;
+    contentType: string;
+  } | null;
 };
 
 export function toTripListItem(
@@ -50,5 +60,11 @@ export function toTripWorkspace(
     startDate: trip.startDate,
     endDate: trip.endDate,
     role,
+    coverImage: trip.coverImage
+      ? {
+          pathname: trip.coverImage.pathname,
+          contentType: trip.coverImage.contentType,
+        }
+      : undefined,
   };
 }

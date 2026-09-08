@@ -1,0 +1,527 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
+}
+
+.heroComposition {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 16.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  isolation: isolate;
+}
+
+.heroComposition[data-phase="upcoming"][data-has-cover="true"] {
+  min-height: 18rem;
+}
+
+.heroComposition[data-phase="active"] {
+  min-height: 11rem;
+}
+
+.heroComposition[data-phase="active"][data-has-cover="true"] {
+  min-height: 12.5rem;
+}
+
+.heroComposition[data-phase="completed"] {
+  min-height: 14rem;
+}
+
+.heroMedia {
+  position: absolute;
+  inset: 0;
+}
+
+.heroImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.heroBackdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 85% 12%, rgb(196 139 144 / 28%), transparent 42%),
+    linear-gradient(
+      145deg,
+      rgb(122 46 56 / 92%) 0%,
+      rgb(42 36 34 / 78%) 52%,
+      rgb(42 36 34 / 88%) 100%
+    );
+}
+
+.heroComposition[data-has-cover="true"] .heroBackdrop {
+  background: linear-gradient(
+    180deg,
+    rgb(42 36 34 / 12%) 0%,
+    rgb(42 36 34 / 42%) 42%,
+    rgb(42 36 34 / 82%) 72%,
+    rgb(42 36 34 / 94%) 100%
+  );
+}
+
+.heroBody {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: inherit;
+}
+
+.heroIdentity {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+  justify-content: flex-end;
+  padding: var(--space-5);
+  padding-block-end: var(--space-4);
+  color: var(--color-on-primary);
+}
+
+.heroComposition[data-phase="active"] .heroIdentity {
+  flex: 1;
+  justify-content: flex-end;
+  padding-block-end: var(--space-5);
+}
+
+.heroMark {
+  align-self: flex-start;
+  font-size: var(--text-caption);
+  letter-spacing: 0.28em;
+  opacity: 0.72;
+}
+
+.heroPhase {
+  margin: 0;
+  font-size: var(--text-caption);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.82;
+}
+
+.heroTitle {
+  margin: 0;
+  font-size: clamp(1.75rem, 6vw, 2.35rem);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
+}
+
+.heroTitle[data-compact="true"] {
+  font-size: clamp(1.375rem, 4.5vw, 1.75rem);
+}
+
+.heroDates,
+.heroDayMeta {
+  margin: 0;
+  font-size: var(--text-secondary);
+  line-height: var(--line-height-body);
+  opacity: 0.92;
+}
+
+.heroDayMeta {
+  font-size: var(--text-body);
+}
+
+.heroDayDivider {
+  margin-inline: var(--space-2);
+  opacity: 0.7;
+}
+
+.heroFooter {
+  padding: var(--space-3) var(--space-5) var(--space-4);
+  border-top: 1px solid rgb(251 247 241 / 14%);
+  background: rgb(42 36 34 / 78%);
+  color: var(--color-on-primary);
+}
+
+.heroComposition[data-has-cover="true"] .heroFooter {
+  background: rgb(42 36 34 / 84%);
+}
+
+.heroCountdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  text-align: center;
+}
+
+.countdownLead {
+  margin: 0;
+  font-size: var(--text-caption);
+  letter-spacing: 0.04em;
+  opacity: 0.86;
+}
+
+.countdownFigure {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--space-2);
+  margin: 0;
+  line-height: 1;
+}
+
+.countdownValue {
+  font-size: clamp(1.875rem, 8vw, 2.5rem);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.03em;
+}
+
+.countdownUnit {
+  font-size: var(--text-section);
+  font-weight: var(--font-weight-medium);
+  opacity: 0.92;
+}
+
+.heroClosing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  text-align: center;
+}
+
+.closingStatus {
+  margin: 0;
+  font-size: var(--text-section);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.closingLine {
+  margin: 0;
+  font-size: var(--text-secondary);
+  opacity: 0.88;
+}
+
+.dailyItinerary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  border: 1px solid rgb(122 46 56 / 12%);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(180deg, rgb(251 247 241 / 98%) 0%, var(--color-surface) 100%);
+  box-shadow: var(--shadow-md);
+}
+
+.dailyItineraryHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.dailyItineraryTitle {
+  margin: 0;
+  font-size: var(--text-title);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.dailyItinerarySubtitle,
+.dailyItineraryMeta {
+  margin: 0;
+  font-size: var(--text-secondary);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
+}
+
+.dailyItineraryMeta {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.dailyItineraryEmpty {
+  margin: 0;
+  font-size: var(--text-secondary);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timelineItem {
+  display: grid;
+  grid-template-columns: 3.25rem 1.375rem minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+  padding-block-end: var(--space-5);
+}
+
+.timelineItem[data-last="true"] {
+  padding-block-end: 0;
+}
+
+.timelineTimeColumn {
+  padding-block-start: 0.125rem;
+  text-align: end;
+}
+
+.timelineRail {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 1.375rem;
+  min-height: 100%;
+}
+
+.timelineDot {
+  z-index: 1;
+  width: 0.6875rem;
+  height: 0.6875rem;
+  margin-block-start: 0.4rem;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+}
+
+.timelineItem[data-emphasis="now"] .timelineDot {
+  width: 0.8125rem;
+  height: 0.8125rem;
+  margin-block-start: 0.32rem;
+  border-width: 0;
+  background: var(--color-primary);
+  box-shadow: 0 0 0 4px rgb(122 46 56 / 14%);
+}
+
+.timelineItem[data-emphasis="next"] .timelineDot {
+  border-style: dashed;
+  background: rgb(122 46 56 / 8%);
+}
+
+.timelineLine {
+  position: absolute;
+  inset-block-start: 1.1rem;
+  inset-block-end: -0.5rem;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    rgb(122 46 56 / 28%) 0%,
+    var(--color-border) 100%
+  );
+  border-radius: var(--radius-full);
+}
+
+.timelineContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  padding-block-start: 0.0625rem;
+}
+
+.timelineTitleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.timelineTime {
+  font-size: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  line-height: var(--line-height-tight);
+}
+
+.timelineTimeMuted {
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-tight);
+}
+
+.timelineEmphasis {
+  padding-inline: var(--space-2);
+  padding-block: 0.125rem;
+  border-radius: var(--radius-full);
+  background: rgb(122 46 56 / 10%);
+  color: var(--color-primary);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+}
+
+.timelineItem[data-emphasis="now"] .timelineEmphasis {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.timelineTitle {
+  margin: 0;
+  font-size: var(--text-section);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.timelineItem[data-emphasis="now"] .timelineTitle {
+  color: var(--color-primary);
+}
+
+.timelineLocation {
+  margin: 0;
+  font-size: var(--text-caption);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
+}
+
+.dailyItineraryOverflow {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.dailyItineraryCta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--size-touch-min);
+  padding-inline: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
+}
+
+.dailyItineraryCta:hover {
+  background: var(--color-primary-hover);
+}
+
+.dailyItineraryCta:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.completedEntry {
+  display: flex;
+  justify-content: center;
+}
+
+.completedEntryLink {
+  color: var(--color-primary);
+  font-size: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+.completedEntryLink:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.completedEntryLink:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+@media (min-width: 768px) {
+  .heroComposition[data-phase="upcoming"][data-has-cover="true"] {
+    min-height: 19rem;
+  }
+
+  .heroComposition[data-phase="active"][data-has-cover="true"] {
+    min-height: 13.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home {
+    gap: var(--space-4);
+  }
+
+  .heroComposition[data-phase="upcoming"] {
+    min-height: 17rem;
+  }
+
+  .heroComposition[data-phase="upcoming"][data-has-cover="true"] {
+    min-height: 20rem;
+  }
+
+  .heroComposition[data-phase="active"][data-has-cover="true"] {
+    min-height: 14rem;
+  }
+
+  .heroIdentity {
+    padding: var(--space-6);
+    padding-block-end: var(--space-4);
+  }
+
+  .heroComposition[data-phase="active"] .heroIdentity {
+    padding-block-end: var(--space-6);
+  }
+
+  .heroFooter {
+    padding: var(--space-4) var(--space-6) var(--space-5);
+  }
+
+  .dailyItinerary {
+    padding: var(--space-6);
+  }
+}
+
+@media (min-width: 1440px) {
+  .heroComposition[data-phase="upcoming"][data-has-cover="true"] {
+    min-height: 21rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dailyItineraryCta {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .heroComposition,
+  .dailyItinerary {
+    animation: homeEnter 420ms ease both;
+  }
+
+  .dailyItinerary {
+    animation-delay: 80ms;
+  }
+}
+
+@keyframes homeEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroComposition,
+  .dailyItinerary {
+    animation: none;
+  }
+}

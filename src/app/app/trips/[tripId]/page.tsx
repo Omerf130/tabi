@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { Badge } from "@/components/ui/Badge/Badge";
 import { AppPage } from "@/features/app-shell/AppPage";
-import { TripHeader } from "@/features/app-shell/TripHeader";
+import { listActivitiesForTripDay } from "@/features/itinerary/queries";
+import { requireUser } from "@/features/auth/session";
+import { buildTripHomeViewModel } from "@/features/trip-home/build-trip-home-view-model";
+import { TripHomeContent } from "@/features/trip-home/TripHomeContent";
 import { requireTripMember } from "@/features/trips/authorization";
-import {
-  formatCalendarDateRangeDisplay,
-  getJapanCalendarDate,
-} from "@/features/trips/calendar-date";
-import { TRIP_PHASE_LABELS, TRIP_ROLE_LABELS } from "@/features/trips/constants";
-import { getTripPhase, type TripPhase } from "@/features/trips/trip-phase";
-import styles from "./TripHome.module.scss";
+import { getTripCoverPath } from "@/features/trips/cover/constants";
+import { getJapanCalendarDate } from "@/features/trips/calendar-date";
+import { getJapanWallClockTime } from "@/features/trips/japan-wall-clock";
+import { listIncompleteRemindersForUserTripDay } from "@/features/trips/reminders/queries";
+import { selectTodayHomeReminders } from "@/features/trips/reminders/select-today-home-reminders";
+import { getTripPhase } from "@/features/trips/trip-phase";
 
 export async function generateMetadata({
   params,
@@ -21,40 +22,47 @@ export async function generateMetadata({
   return { title: `${trip.name} · Tabi` };
 }
 
-function phaseTone(phase: TripPhase) {
-  if (phase === "active") return "success" as const;
-  if (phase === "upcoming") return "accent" as const;
-  return "neutral" as const;
-}
-
 export default async function TripHomePage({
   params,
 }: {
   params: Promise<{ tripId: string }>;
 }) {
   const { tripId } = await params;
-  const trip = await requireTripMember(tripId);
-  const phase = getTripPhase(
-    trip.startDate,
-    trip.endDate,
-    getJapanCalendarDate(),
+  const [trip, user] = await Promise.all([
+    requireTripMember(tripId),
+    requireUser(),
+  ]);
+  const todayJapan = getJapanCalendarDate();
+  const nowJapanTime = getJapanWallClockTime();
+  const phase = getTripPhase(trip.startDate, trip.endDate, todayJapan);
+  const previewDate =
+    phase === "active" ? todayJapan : phase === "upcoming" ? trip.startDate : null;
+  const [dayActivities, todayReminderRecords] = await Promise.all([
+    previewDate
+      ? listActivitiesForTripDay(trip.id, previewDate)
+      : Promise.resolve([]),
+    phase === "active"
+      ? listIncompleteRemindersForUserTripDay(trip.id, user.id, todayJapan)
+      : Promise.resolve([]),
+  ]);
+  const todayReminders = selectTodayHomeReminders(
+    todayReminderRecords,
+    phase,
+    todayJapan,
   );
 
+  const model = buildTripHomeViewModel({
+    trip,
+    coverImageHref: trip.coverImage ? getTripCoverPath(trip.id) : undefined,
+    dayActivities,
+    todayReminders,
+    todayJapan,
+    nowJapanTime,
+  });
+
   return (
-    <>
-      <TripHeader title={trip.name} />
-      <AppPage width="content">
-        <div className={styles.intro}>
-          <Badge tone={phaseTone(phase)}>{TRIP_PHASE_LABELS[phase]}</Badge>
-          <p className={styles.dates}>
-            {formatCalendarDateRangeDisplay(trip.startDate, trip.endDate)}
-          </p>
-          <p className={styles.role}>{TRIP_ROLE_LABELS[trip.role]}</p>
-          <p className={styles.lede}>
-            מסך הבית המלא יגיע בשלב הבא. בינתיים אפשר לנווט בין חלקי הטיול.
-          </p>
-        </div>
-      </AppPage>
-    </>
+    <AppPage width="wide">
+      <TripHomeContent model={model} />
+    </AppPage>
   );
 }

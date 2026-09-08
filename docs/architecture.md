@@ -27,7 +27,7 @@ See [permissions.md](permissions.md) and [data-domain.md](data-domain.md).
 - Styling uses semantic CSS variables (`--color-primary`, etc.). For V1 those tokens **are** the Tabi Japan visual identity. They are not a destination-switching engine. See [theming.md](theming.md).
 - Reusable UI primitives live in `src/components/ui/` (SCSS Modules). Prefer Server Components; client only when a primitive needs event state (BottomNav active routing via TripPrimaryNav, the design-system preview, auth form pending state).
 - Trip-scoped pages use **TripShellLayout** + **TripHeader** + **AppPage**. See [app-shell.md](app-shell.md).
-- Itinerary days are derived from Trip dates server-side; accordion UX in client island. See [itinerary-foundation.md](itinerary-foundation.md).
+- Itinerary days are derived from Trip dates server-side; accordion UX in client island. Trip Home is server-rendered from lifecycle + today's Activities. See [itinerary-foundation.md](itinerary-foundation.md), [trip-home.md](trip-home.md).
 - Authentication is first-party (Argon2id + hashed sessions). See [auth.md](auth.md).
 
 ## Infrastructure (V1)
@@ -52,6 +52,7 @@ src/
   components/ui/       # Phase 1 primitives (BottomNav, AppHeader, …)
   features/app-shell/  # Phase 5 trip + global shell
   features/itinerary/  # Phase 6–7 derived days + accordion + activities
+  features/trip-home/  # Phase 8 lifecycle dashboard
   features/auth/       # Phase 2 authentication
   features/trips/      # Phase 3 trips domain
   lib/db/              # Mongoose connection

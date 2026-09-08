@@ -20,13 +20,15 @@ Trip URLs always include `tripId`. There is no implied “current trip” outsid
 | `/app` | Authenticated entry → trip routing | 3 |
 | `/app/trips` | Trip list | 3 |
 | `/app/trips/new` | Create trip | 3 |
-| `/app/trips/[tripId]` | Trip home (stub until Phase 8) | 5 / 8 |
+| `/app/trips/[tripId]` | Trip Home — lifecycle dashboard (before/during/after) | 8 |
 | `/app/trips/[tripId]/itinerary` | Single-open day accordion + activity timeline; `?date=` deep link | 6 / 7 |
 | `/app/trips/[tripId]/itinerary/activities/new` | Redirect stub → itinerary `?date=` (compatibility) | 7 |
 | `/app/trips/[tripId]/itinerary/activities/[activityId]/edit` | Redirect stub → itinerary `?date=` (compatibility) | 7 |
 | `/app/trips/[tripId]/documents` | Files (placeholder until Phase 12) | 5 / 12 |
 | `/app/trips/[tripId]/memories` | Journal (placeholder until Phase 21) | 5 / 21 |
 | `/app/trips/[tripId]/more` | More menu (members link, trips list, account, logout) | 5 |
+| `/app/trips/[tripId]/settings` | Trip settings (owner: cover image) | 8B |
+| `/app/trips/[tripId]/cover` | Authenticated Trip cover image delivery | 8B |
 | `/app/trips/[tripId]/packing` | Packing lists | 19 |
 | `/app/trips/[tripId]/members` | Trip members + owner invite management | 4 |
 

@@ -20,6 +20,10 @@ export async function MorePageContent({ tripId }: MorePageContentProps) {
           <IconMembers className={styles.rowIcon} />
           <span>חברי הטיול</span>
         </Link>
+        <Link href={`/app/trips/${tripId}/settings`} className={styles.row}>
+          <IconTrips className={styles.rowIcon} />
+          <span>הגדרות הטיול</span>
+        </Link>
         <Link href="/app/trips" className={styles.row}>
           <IconTrips className={styles.rowIcon} />
           <span>הטיולים שלי</span>

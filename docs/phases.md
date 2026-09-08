@@ -72,3 +72,7 @@ Trip days & planner foundation: days derived from `Trip.startDate`/`endDate`, re
 ## Phase 7
 
 Itinerary UX + core activity planning: `Activity` model, single-open day accordion, inline owner create/edit, `?date=` deep link, restrained secondary actions. Members read-only. See [activity-model.md](activity-model.md), [itinerary-foundation.md](itinerary-foundation.md).
+
+## Phase 8
+
+Trip Home: lifecycle-aware dashboard at `/app/trips/[tripId]` with before/during/after states, countdown, Now/Next Up from today's Activities, and itinerary deep links. Server-rendered; Japan calendar/time semantics. See [trip-home.md](trip-home.md).
