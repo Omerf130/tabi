@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { AppPage } from "@/features/app-shell/AppPage";
 import { TripHeader } from "@/features/app-shell/TripHeader";
 import { TripCoverSettings } from "@/features/trips/cover/TripCoverSettings";
+import { TripAccommodationSettings } from "@/features/accommodations/TripAccommodationSettings";
+import { listAccommodationsForTripSettings } from "@/features/accommodations/queries";
 import { listRemindersForUserTrip } from "@/features/trips/reminders/queries";
 import { TripReminderSettings } from "@/features/trips/reminders/TripReminderSettings";
 import { TripDetailsSection } from "@/features/trips/settings/TripDetailsSection";
@@ -31,7 +33,10 @@ export default async function TripSettingsPage({
     requireUser(),
   ]);
   const todayJapan = getJapanCalendarDate();
-  const reminders = await listRemindersForUserTrip(trip.id, user.id, todayJapan);
+  const [reminders, accommodations] = await Promise.all([
+    listRemindersForUserTrip(trip.id, user.id, todayJapan),
+    listAccommodationsForTripSettings(trip.id),
+  ]);
 
   return (
     <>
@@ -49,6 +54,14 @@ export default async function TripSettingsPage({
             hasCover={Boolean(trip.coverImage)}
             isOwner={trip.role === "owner"}
           />
+          {trip.role === "owner" ? (
+            <TripAccommodationSettings
+              tripId={trip.id}
+              startDate={trip.startDate}
+              endDate={trip.endDate}
+              accommodations={accommodations}
+            />
+          ) : null}
           <TripReminderSettings
             tripId={trip.id}
             startDate={trip.startDate}

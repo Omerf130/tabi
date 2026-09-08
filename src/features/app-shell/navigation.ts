@@ -50,7 +50,7 @@ export function getActiveNavSection(
   if (segment === "memories") {
     return "memories";
   }
-  if (segment === "more" || segment === "members") {
+  if (segment === "more" || segment === "members" || segment === "accommodations") {
     return "more";
   }
 

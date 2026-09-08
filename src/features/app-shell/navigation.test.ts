@@ -33,10 +33,13 @@ describe("navigation", () => {
     );
   });
 
-  it("maps members to more", () => {
+  it("maps members and accommodations to more", () => {
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/members`, TRIP_A)).toBe(
       "more",
     );
+    expect(
+      getActiveNavSection(`/app/trips/${TRIP_A}/accommodations`, TRIP_A),
+    ).toBe("more");
   });
 
   it("returns null for non-matching trip paths", () => {

@@ -97,6 +97,17 @@ export function IconMembers({ className }: IconProps) {
   );
 }
 
+export function IconAccommodation({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M5 19V8.5h14V19" />
+      <path d="M5 12h14" />
+      <path d="M9 8.5V5h6v3.5" />
+      <path d="M12 15v4" />
+    </svg>
+  );
+}
+
 export function IconActivityAttraction({ className }: IconProps) {
   return (
     <svg {...stroke} className={className}>

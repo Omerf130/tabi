@@ -16,7 +16,7 @@ Do not store the whole trip application in one MongoDB document. Each domain bel
 
 - Days — **derived** from Trip dates in Phase 6; optional sparse `(tripId, date)` metadata later if needed. See [itinerary-foundation.md](itinerary-foundation.md).
 - **Activities** — Phase 7; `tripId + date (YYYY-MM-DD) + order`. See [activity-model.md](activity-model.md).
-- Accommodations
+- **Accommodations** — Phase 9; separate collection scoped by `tripId`. See [accommodation-model.md](accommodation-model.md).
 - Transportation
 - Restaurants
 - Passes

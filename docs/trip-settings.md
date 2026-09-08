@@ -20,7 +20,8 @@ Future features should follow the same split rather than placing CRUD controls d
 
 1. **פרטי הטיול** — basic Trip information (read-only for now)
 2. **תמונת הטיול** — owner-managed cover image
-3. **תזכורות אישיות** — personal in-app reminders
+3. **מקומות לינה** — owner-managed accommodations (hidden from members)
+4. **תזכורות אישיות** — personal in-app reminders
 
 ## Personal reminders (Phase 8E)
 
@@ -39,6 +40,14 @@ Home displays today's incomplete reminders during an active trip via `HomeRemind
 
 Later Phase 22 still owns system-generated reminders, luggage automation, and push delivery.
 
+## Accommodations (Phase 9)
+
+Trip-scoped shared accommodations. Owner manages CRUD in Settings (`#accommodations`); members do not see the CRUD section.
+
+Travelers access accommodations via **More → מקומות לינה** or directly at `/app/trips/[tripId]/accommodations`.
+
+See [accommodation-model.md](accommodation-model.md) for schema, occupancy semantics, Taxi Mode, and authorization.
+
 ## Source layout
 
 ```
@@ -51,5 +60,8 @@ src/features/trips/reminders/
   reminder-domain.ts
   select-today-home-reminders.ts
   TripReminderSettings.tsx
+src/features/accommodations/
+  TripAccommodationSettings.tsx
 src/models/TripReminder.ts
+src/models/Accommodation.ts
 ```

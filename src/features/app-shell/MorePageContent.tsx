@@ -1,8 +1,13 @@
 import Link from "next/link";
 import { LogoutButton } from "@/app/app/LogoutButton";
 import { Card } from "@/components/ui/Card/Card";
-import { IconMembers, IconTrips } from "@/components/ui/icons";
+import {
+  IconAccommodation,
+  IconMembers,
+  IconTrips,
+} from "@/components/ui/icons";
 import { getCurrentUser } from "@/features/auth/session";
+import { buildAccommodationListHref } from "@/features/accommodations/constants";
 import { AppPage } from "./AppPage";
 import styles from "./MorePage.module.scss";
 
@@ -15,20 +20,40 @@ export async function MorePageContent({ tripId }: MorePageContentProps) {
 
   return (
     <AppPage width="content">
-      <div className={styles.list}>
-        <Link href={`/app/trips/${tripId}/members`} className={styles.row}>
-          <IconMembers className={styles.rowIcon} />
-          <span>חברי הטיול</span>
-        </Link>
-        <Link href={`/app/trips/${tripId}/settings`} className={styles.row}>
-          <IconTrips className={styles.rowIcon} />
-          <span>הגדרות הטיול</span>
-        </Link>
-        <Link href="/app/trips" className={styles.row}>
-          <IconTrips className={styles.rowIcon} />
-          <span>הטיולים שלי</span>
-        </Link>
-      </div>
+      <section className={styles.section} aria-labelledby="travel-tools-title">
+        <h2 id="travel-tools-title" className={styles.sectionTitle}>
+          כלי נסיעה
+        </h2>
+        <div className={styles.toolsGrid}>
+          <Link
+            href={buildAccommodationListHref(tripId)}
+            className={styles.toolCard}
+          >
+            <IconAccommodation className={styles.toolIcon} />
+            <span className={styles.toolLabel}>מקומות לינה</span>
+          </Link>
+        </div>
+      </section>
+
+      <section className={styles.section} aria-labelledby="management-title">
+        <h2 id="management-title" className={styles.sectionTitle}>
+          ניהול
+        </h2>
+        <div className={styles.managementList}>
+          <Link href={`/app/trips/${tripId}/members`} className={styles.row}>
+            <IconMembers className={styles.rowIcon} />
+            <span>חברי הטיול</span>
+          </Link>
+          <Link href={`/app/trips/${tripId}/settings`} className={styles.row}>
+            <IconTrips className={styles.rowIcon} />
+            <span>הגדרות הטיול</span>
+          </Link>
+          <Link href="/app/trips" className={styles.row}>
+            <IconTrips className={styles.rowIcon} />
+            <span>הטיולים שלי</span>
+          </Link>
+        </div>
+      </section>
 
       {user ? (
         <Card variant="standard">

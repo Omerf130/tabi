@@ -1,8 +1,58 @@
-.list {
+.section {
+  margin-block-end: var(--space-6);
+}
+
+.sectionTitle {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.toolsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+.toolCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 6.5rem;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+}
+
+.toolCard:hover,
+.toolCard:focus-visible {
+  border-color: var(--color-text-muted);
+  background-color: var(--color-surface-subtle);
+}
+
+.toolIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.toolLabel {
+  font-size: var(--text-body);
+}
+
+.managementList {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  margin-block-end: var(--space-5);
 }
 
 .row {
@@ -43,4 +93,17 @@
 
 .logout {
   margin-block-start: var(--space-5);
+}
+
+@media (min-width: 640px) {
+  .toolsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .toolsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: 36rem;
+  }
 }
