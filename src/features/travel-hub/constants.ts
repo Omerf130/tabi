@@ -70,7 +70,7 @@ export const TRAVEL_TOOLS: readonly TravelToolDefinition[] = [
   {
     id: "weather",
     label: "מזג אוויר",
-    status: "coming_soon",
+    status: "active",
     colorClass: "toolColorWeather",
   },
   {

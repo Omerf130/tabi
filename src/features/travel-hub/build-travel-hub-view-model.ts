@@ -6,6 +6,7 @@ import {
 } from "@/features/accommodations/constants";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
 import { buildCurrencyHref } from "@/features/currency/constants";
+import { buildWeatherHref } from "@/features/weather/constants";
 import { buildListDetailHref, buildListsLandingHref } from "@/features/lists/constants";
 import type { TripListSummaryViewModel } from "@/features/lists/types";
 import { getJapanCalendarDate } from "@/features/trips/calendar-date";
@@ -37,6 +38,8 @@ function buildToolHref(tripId: string, toolId: (typeof TRAVEL_TOOLS)[number]["id
       return buildListsLandingHref(tripId);
     case "currency":
       return buildCurrencyHref(tripId);
+    case "weather":
+      return buildWeatherHref(tripId);
     default:
       return undefined;
   }

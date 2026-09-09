@@ -19,9 +19,9 @@ V1 is **Tabi for Japan**. Japan-specific product features are in scope; a destin
 | 10 | Transportation |
 | 11 | Collaborative Trip Lists (רשימות) |
 | 12 | Currency Converter |
-| 13 | Offline Foundation |
-| 14 | Offline Documents |
-| 15 | Weather |
+| 13 | Weather |
+| 14 | Offline Foundation |
+| 15 | Offline Documents |
 | 16 | Documents |
 | 17 | Dictionary |
 | 18 | Emergency |
@@ -83,8 +83,14 @@ Collaborative Trip Lists: four checklist types (`packing`, `before_trip`, `durin
 
 ## Phase 11.5
 
-Travel Hub redesign: `/more` becomes **מרכז הטיול** with hero placeholder, contextual accommodation card, phase-aware smart list attention, colored travel tools grid (working + future disabled tools), and a single management entry to `/manage`. Future tools (transport, dictionary, weather, emergency) remain visible but disabled until their phases. Google Places lodging photos may display via server-mediated proxy when available.
+Travel Hub redesign: `/more` becomes **מרכז הטיול** with hero placeholder, contextual accommodation card, phase-aware smart list attention, colored travel tools grid (working + future disabled tools), and a single management entry to `/manage`. Future tools (transport, dictionary, emergency) remain visible but disabled until their phases. Google Places lodging photos may display via server-mediated proxy when available.
 
 ## Phase 12
 
 Currency Converter: trip-scoped travel reference converter at `/currency` with Frankfurter API v2 (server-only), default **JPY → ILS** at amount **1000**, two-panel UI, searchable picker, session rate cache, and `localStorage` pair preferences. See [currency-converter.md](currency-converter.md).
+
+## Phase 13
+
+Weather: trip-scoped travel weather at `/weather` with WeatherAPI.com (server-only), coordinate-based `WeatherLocationRef`, searchable global locations, 3-day forecast, Celsius display, and `localStorage` location preference. See [weather.md](weather.md).
+
+**UI-not-final principle:** Current feature screens across Tabi (including Phase 13 Weather) are functional but not the final product design. A later dedicated Product Polish phase may significantly redesign cards, layouts, icons, spacing, and tool presentation without changing underlying business architecture.

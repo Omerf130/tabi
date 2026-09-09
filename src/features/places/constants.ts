@@ -9,11 +9,22 @@ export const PLACES_DISPLAY_LANGUAGE_CODE = "ja";
 /** Lodging bias for Accommodation; other features may override via request. */
 export const PLACES_LODGING_PRIMARY_TYPES = ["lodging"] as const;
 
+/** Geographic bias for weather location search fallback. */
+export const PLACES_GEOGRAPHIC_PRIMARY_TYPES = [
+  "locality",
+  "administrative_area_level_1",
+  "administrative_area_level_2",
+  "country",
+] as const;
+
 export const PLACES_AUTOCOMPLETE_FIELD_MASK =
   "suggestions.placePrediction.placeId,suggestions.placePrediction.text,suggestions.placePrediction.structuredFormat";
 
 export const PLACES_DETAILS_FIELD_MASK =
   "id,displayName,formattedAddress,googleMapsUri,addressComponents";
+
+export const PLACES_DETAILS_GEOGRAPHY_FIELD_MASK =
+  "id,displayName,formattedAddress,addressComponents,location,types,primaryType";
 
 export const PLACES_PHOTO_FIELD_MASK = "photos";
 

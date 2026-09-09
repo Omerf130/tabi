@@ -57,7 +57,8 @@ export function getActiveNavSection(
     segment === "settings" ||
     segment === "accommodations" ||
     segment === "lists" ||
-    segment === "currency"
+    segment === "currency" ||
+    segment === "weather"
   ) {
     return "more";
   }

@@ -4,8 +4,10 @@ import {
   PLACES_AUTOCOMPLETE_FIELD_MASK,
   PLACES_AUTOCOMPLETE_MAX_SUGGESTIONS,
   PLACES_DETAILS_FIELD_MASK,
+  PLACES_DETAILS_GEOGRAPHY_FIELD_MASK,
   PLACES_PHOTO_FIELD_MASK,
   PLACES_DISPLAY_LANGUAGE_CODE,
+  PLACES_GEOGRAPHIC_PRIMARY_TYPES,
   PLACES_INCLUDED_REGION_CODES,
   PLACES_LODGING_PRIMARY_TYPES,
   PLACES_MESSAGES,
@@ -68,6 +70,12 @@ type GooglePlaceDetailsResponse = {
   formattedAddress?: string;
   googleMapsUri?: string;
   addressComponents?: GoogleAddressComponent[];
+  location?: {
+    latitude?: number;
+    longitude?: number;
+  };
+  types?: string[];
+  primaryType?: string;
 };
 
 type GooglePlacePhotoResponse = {
@@ -98,7 +106,12 @@ function normalizePlaceId(rawId: string | undefined): string | undefined {
 
 async function fetchPlaceDetails(
   placeId: string,
-  options: { sessionToken?: string; languageCode?: string } = {},
+  options: {
+    sessionToken?: string;
+    languageCode?: string;
+    fieldMask?: string;
+    revalidateSeconds?: number;
+  } = {},
 ): Promise<GooglePlaceDetailsResponse> {
   const apiKey = getGooglePlacesApiKey();
   const encodedPlaceId = encodeURIComponent(placeId);
@@ -118,9 +131,12 @@ async function fetchPlaceDetails(
     headers: {
       "Content-Type": "application/json",
       "X-Goog-Api-Key": apiKey,
-      "X-Goog-FieldMask": PLACES_DETAILS_FIELD_MASK,
+      "X-Goog-FieldMask": options.fieldMask ?? PLACES_DETAILS_FIELD_MASK,
     },
     cache: "no-store",
+    next: options.revalidateSeconds
+      ? { revalidate: options.revalidateSeconds }
+      : undefined,
   });
 
   if (!response.ok) {
@@ -186,6 +202,83 @@ export async function autocompletePlaces(input: {
   }
 
   return suggestions;
+}
+
+export async function autocompleteGeographicPlaces(input: {
+  query: string;
+  sessionToken: string;
+  languageCode?: string;
+  revalidateSeconds?: number;
+}): Promise<PlaceSuggestion[]> {
+  const apiKey = getGooglePlacesApiKey();
+  const languageCode = input.languageCode ?? PLACES_SEARCH_LANGUAGE_CODE;
+
+  const response = await fetch("https://places.googleapis.com/v1/places:autocomplete", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": apiKey,
+      "X-Goog-FieldMask": PLACES_AUTOCOMPLETE_FIELD_MASK,
+    },
+    body: JSON.stringify({
+      input: input.query,
+      sessionToken: input.sessionToken,
+      includedPrimaryTypes: [...PLACES_GEOGRAPHIC_PRIMARY_TYPES],
+      languageCode,
+      includeQueryPredictions: false,
+    }),
+    cache: "no-store",
+    next: input.revalidateSeconds
+      ? { revalidate: input.revalidateSeconds }
+      : undefined,
+  });
+
+  if (!response.ok) {
+    throw new GooglePlacesRequestError(PLACES_MESSAGES.autocompleteFailed);
+  }
+
+  const payload = (await response.json()) as GoogleAutocompleteResponse;
+  const suggestions: PlaceSuggestion[] = [];
+
+  for (const item of payload.suggestions ?? []) {
+    const prediction = item.placePrediction;
+    const placeId = normalizePlaceId(prediction?.placeId);
+    if (!placeId) {
+      continue;
+    }
+
+    const primaryText =
+      prediction?.structuredFormat?.mainText?.text?.trim() ||
+      prediction?.text?.text?.trim();
+    if (!primaryText) {
+      continue;
+    }
+
+    const secondaryText =
+      prediction?.structuredFormat?.secondaryText?.text?.trim() || undefined;
+
+    suggestions.push({ placeId, primaryText, secondaryText });
+    if (suggestions.length >= PLACES_AUTOCOMPLETE_MAX_SUGGESTIONS) {
+      break;
+    }
+  }
+
+  return suggestions;
+}
+
+export async function fetchPlaceGeographyDetails(
+  placeId: string,
+  options: {
+    sessionToken?: string;
+    languageCode?: string;
+    revalidateSeconds?: number;
+  } = {},
+): Promise<GooglePlaceDetailsResponse> {
+  return fetchPlaceDetails(placeId, {
+    ...options,
+    languageCode: options.languageCode ?? PLACES_SEARCH_LANGUAGE_CODE,
+    fieldMask: PLACES_DETAILS_GEOGRAPHY_FIELD_MASK,
+  });
 }
 
 /** Terminates the autocomplete session with one Place Details request. */
