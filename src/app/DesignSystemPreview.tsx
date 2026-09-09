@@ -12,7 +12,7 @@ import {
   IconMemories,
   IconMore,
 } from "@/components/ui/icons";
-import styles from "./page.module.scss";
+import styles from "./design-system/page.module.scss";
 
 type Scheme = "light" | "dark";
 

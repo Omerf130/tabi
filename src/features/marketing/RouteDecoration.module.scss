@@ -1,0 +1,21 @@
+.decoration {
+  display: block;
+  color: var(--mkt-primary, #5b4cf0);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.decoration[data-variant="dots"] {
+  width: 7rem;
+  height: 1.5rem;
+}
+
+.decoration[data-variant="curve"] {
+  width: 10rem;
+  height: 4rem;
+}
+
+.decoration[data-variant="pin"] {
+  width: 1.5rem;
+  height: 2rem;
+}
