@@ -59,6 +59,15 @@ const tripSchema = new mongoose.Schema(
       type: tripCoverImageSchema,
       default: null,
     },
+    initializations: {
+      type: {
+        listsV1: {
+          type: Boolean,
+          default: false,
+        },
+      },
+      default: () => ({ listsV1: false }),
+    },
   },
   { timestamps: true },
 );

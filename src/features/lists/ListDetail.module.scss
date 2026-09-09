@@ -1,0 +1,164 @@
+.header {
+  margin-block-end: var(--space-4);
+}
+
+.progressLabel {
+  margin: 0;
+  font-size: var(--text-secondary);
+  color: var(--color-text-muted);
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.itemRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.itemLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  cursor: pointer;
+  min-height: var(--size-touch-min);
+}
+
+.itemLabelCompleted .itemText {
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, var(--color-text-muted) 65%, transparent);
+}
+
+.checkbox {
+  width: 1.375rem;
+  height: 1.375rem;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.itemText {
+  flex: 1;
+  font-size: var(--text-body);
+  line-height: var(--line-height-body);
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+.editInput,
+.addInput {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
+  font: inherit;
+  font-size: var(--text-body);
+  color: var(--color-text);
+}
+
+.itemActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding-inline-start: calc(1.375rem + var(--space-3));
+}
+
+.actionButton,
+.actionButtonMuted,
+.actionButtonDanger {
+  min-height: var(--size-touch-min);
+  padding-inline: var(--space-3);
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  font: inherit;
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+}
+
+.actionButton {
+  color: var(--color-primary);
+}
+
+.actionButtonMuted {
+  color: var(--color-text-muted);
+}
+
+.actionButtonDanger {
+  color: var(--color-danger);
+}
+
+.actionButton:focus-visible,
+.actionButtonMuted:focus-visible,
+.actionButtonDanger:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.addForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-block-start: var(--space-2);
+}
+
+.addButton {
+  min-height: var(--size-touch-min);
+  padding-inline: var(--space-4);
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font: inherit;
+  font-size: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+}
+
+.addButton:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.error {
+  margin: 0;
+  font-size: var(--text-secondary);
+  color: var(--color-danger);
+}
+
+@media (min-width: 768px) {
+  .addForm {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .addInput {
+    flex: 1;
+  }
+
+  .addButton {
+    flex-shrink: 0;
+  }
+}

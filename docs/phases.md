@@ -17,7 +17,7 @@ V1 is **Tabi for Japan**. Japan-specific product features are in scope; a destin
 | 8 | Trip Home |
 | 9 | Accommodation & Taxi Mode |
 | 10 | Transportation |
-| 11 | Pass Manager |
+| 11 | Collaborative Trip Lists (רשימות) |
 | 12 | Documents |
 | 13 | Offline Foundation |
 | 14 | Offline Documents |

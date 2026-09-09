@@ -3,11 +3,13 @@ import { LogoutButton } from "@/app/app/LogoutButton";
 import { Card } from "@/components/ui/Card/Card";
 import {
   IconAccommodation,
+  IconGrid,
   IconMembers,
   IconTrips,
 } from "@/components/ui/icons";
 import { getCurrentUser } from "@/features/auth/session";
 import { buildAccommodationListHref } from "@/features/accommodations/constants";
+import { buildListsLandingHref } from "@/features/lists/constants";
 import { AppPage } from "./AppPage";
 import styles from "./MorePage.module.scss";
 
@@ -31,6 +33,10 @@ export async function MorePageContent({ tripId }: MorePageContentProps) {
           >
             <IconAccommodation className={styles.toolIcon} />
             <span className={styles.toolLabel}>מקומות לינה</span>
+          </Link>
+          <Link href={buildListsLandingHref(tripId)} className={styles.toolCard}>
+            <IconGrid className={styles.toolIcon} />
+            <span className={styles.toolLabel}>רשימות</span>
           </Link>
         </div>
       </section>

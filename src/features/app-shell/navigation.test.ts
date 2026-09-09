@@ -33,12 +33,18 @@ describe("navigation", () => {
     );
   });
 
-  it("maps members and accommodations to more", () => {
+  it("maps members, accommodations, and lists to more", () => {
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/members`, TRIP_A)).toBe(
       "more",
     );
     expect(
       getActiveNavSection(`/app/trips/${TRIP_A}/accommodations`, TRIP_A),
+    ).toBe("more");
+    expect(getActiveNavSection(`/app/trips/${TRIP_A}/lists`, TRIP_A)).toBe(
+      "more",
+    );
+    expect(
+      getActiveNavSection(`/app/trips/${TRIP_A}/lists/packing`, TRIP_A),
     ).toBe("more");
   });
 
