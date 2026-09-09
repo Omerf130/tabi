@@ -72,6 +72,47 @@ describe("buildItineraryDays", () => {
     expect(days[0]?.activities.map((item) => item.id)).toEqual(["a"]);
     expect(days[1]?.activities.map((item) => item.id)).toEqual(["b"]);
   });
+
+  it("merges transport items into day items without changing activity order", () => {
+    const transportsByDate = new Map([
+      [
+        "2026-10-25",
+        [
+          {
+            id: "t1",
+            type: "train" as const,
+            typeLabel: "רכבת",
+            routeLabel: "Tokyo → Kyoto",
+            timeLabel: "08:00 → 10:00",
+            departureTime: "08:00",
+            detailHref: "/transport/t1",
+          },
+        ],
+      ],
+    ]);
+
+    const days = buildItineraryDays({
+      startDate: "2026-10-25",
+      endDate: "2026-10-25",
+      todayJapan: "2026-10-25",
+      activities: [
+        {
+          id: "a",
+          date: "2026-10-25",
+          title: "מוזיאון",
+          type: "attraction",
+          typeLabel: "אטרקציה",
+          order: 0,
+          startTime: "10:00",
+          timeLabel: "10:00",
+        },
+      ],
+      transportsByDate,
+    });
+
+    expect(days[0]?.items.map((item) => item.kind)).toEqual(["transport", "activity"]);
+    expect(days[0]?.activities.map((item) => item.id)).toEqual(["a"]);
+  });
 });
 
 describe("buildItineraryDaysForTrip", () => {
@@ -79,6 +120,7 @@ describe("buildItineraryDaysForTrip", () => {
     const days = buildItineraryDaysForTrip(
       { startDate: "2026-10-25", endDate: "2026-10-26" },
       [],
+      new Map(),
       "2026-10-25",
     );
 

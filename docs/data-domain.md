@@ -19,7 +19,7 @@ Do not store the whole trip application in one MongoDB document. Each domain bel
 - **Accommodations** — Phase 9; separate collection scoped by `tripId`. See [accommodation-model.md](accommodation-model.md).
 - **TravelDocument** — Phase 10; metadata in MongoDB, file bytes in private Blob. See [travel-documents.md](travel-documents.md).
 - **TripListItem** — Phase 11; collaborative trip checklists (`listType` + `order` + `isCompleted`), scoped by `tripId`. Default templates seed lazily via `Trip.initializations.listsV1`.
-- Transportation
+- **Transport** — Phase 14; trip-scoped segments (`flight`, `train`, `bus`, `ferry`, `car`, `taxi`) with local endpoint date/time/timezone. See [transport.md](transport.md).
 - Restaurants
 - Passes
 - Reminders

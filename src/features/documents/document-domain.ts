@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import { connectDb } from "@/lib/db/connect";
 import { Activity } from "@/models/Activity";
 import { Accommodation } from "@/models/Accommodation";
+import { Transport } from "@/models/Transport";
 import { TravelDocument } from "@/models/TravelDocument";
 import {
   deleteTravelDocumentBlob,
@@ -35,7 +36,14 @@ function toLinkFields(metadata: TravelDocumentMetadataInput) {
   return {
     activityId: toOptionalObjectId(metadata.activityId),
     accommodationId: toOptionalObjectId(metadata.accommodationId),
+    transportId: toOptionalObjectId(metadata.transportId),
   };
+}
+
+function countContextLinks(metadata: TravelDocumentMetadataInput): number {
+  return [metadata.activityId, metadata.accommodationId, metadata.transportId].filter(
+    Boolean,
+  ).length;
 }
 
 async function assertActivityBelongsToTrip(
@@ -63,11 +71,22 @@ async function assertAccommodationBelongsToTrip(
   }
 }
 
+async function assertTransportBelongsToTrip(
+  tripId: string,
+  transportId: string,
+): Promise<void> {
+  await connectDb();
+  const transport = await Transport.findOne({ _id: transportId, tripId }).lean();
+  if (!transport) {
+    throw new TravelDocumentValidationError(TRAVEL_DOCUMENT_MESSAGES.invalidLink);
+  }
+}
+
 async function validateContextLinks(
   tripId: string,
   metadata: TravelDocumentMetadataInput,
 ): Promise<void> {
-  if (metadata.activityId && metadata.accommodationId) {
+  if (countContextLinks(metadata) > 1) {
     throw new TravelDocumentValidationError(TRAVEL_DOCUMENT_MESSAGES.bothLinks);
   }
 
@@ -77,6 +96,10 @@ async function validateContextLinks(
 
   if (metadata.accommodationId) {
     await assertAccommodationBelongsToTrip(tripId, metadata.accommodationId);
+  }
+
+  if (metadata.transportId) {
+    await assertTransportBelongsToTrip(tripId, metadata.transportId);
   }
 }
 

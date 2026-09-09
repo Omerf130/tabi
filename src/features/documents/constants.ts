@@ -73,7 +73,7 @@ export const TRAVEL_DOCUMENT_MESSAGES = {
   tooLarge: "הקובץ גדול מדי (עד 15MB)",
   invalidType: "סוג קובץ לא נתמך. PDF, JPEG, PNG או WebP בלבד",
   invalidLink: "קישור לא תקין למסמך",
-  bothLinks: "ניתן לקשר מסמך לפעילות או לינה, לא לשניהם",
+  bothLinks: "ניתן לקשר מסמך לפריט אחד בלבד (פעילות, לינה או תחבורה)",
   deleteConfirm: "למחוק את המסמך?",
 } as const;
 

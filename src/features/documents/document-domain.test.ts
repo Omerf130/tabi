@@ -17,6 +17,7 @@ const {
   travelDocumentFindOneMock,
   activityFindOneMock,
   accommodationFindOneMock,
+  transportFindOneMock,
 } = vi.hoisted(() => ({
   uploadTravelDocumentBlobMock: vi.fn(),
   deleteTravelDocumentBlobMock: vi.fn(),
@@ -26,6 +27,7 @@ const {
   travelDocumentFindOneMock: vi.fn(),
   activityFindOneMock: vi.fn(),
   accommodationFindOneMock: vi.fn(),
+  transportFindOneMock: vi.fn(),
 }));
 
 vi.mock("./blob-storage", () => ({
@@ -58,9 +60,16 @@ vi.mock("@/models/Accommodation", () => ({
   },
 }));
 
+vi.mock("@/models/Transport", () => ({
+  Transport: {
+    findOne: transportFindOneMock,
+  },
+}));
+
 const tripId = "507f1f77bcf86cd799439011";
 const documentId = "507f1f77bcf86cd799439012";
 const activityId = "507f1f77bcf86cd799439013";
+const transportId = "507f1f77bcf86cd799439014";
 const otherTripActivityId = "507f1f77bcf86cd799439015";
 
 describe("travel document domain", () => {
@@ -91,6 +100,9 @@ describe("travel document domain", () => {
     });
     accommodationFindOneMock.mockReturnValue({
       lean: vi.fn().mockResolvedValue(null),
+    });
+    transportFindOneMock.mockReturnValue({
+      lean: vi.fn().mockResolvedValue({ _id: transportId }),
     });
   });
 
@@ -128,6 +140,42 @@ describe("travel document domain", () => {
     expect(deleteTravelDocumentBlobMock).toHaveBeenCalledWith(
       "trips/trip/documents/doc/file",
     );
+  });
+
+  it("rejects multiple context links", async () => {
+    await expect(
+      createTravelDocument({
+        tripId,
+        metadata: {
+          title: "Ticket",
+          category: "ticket",
+          activityId,
+          transportId,
+        },
+        fileBytes: Buffer.from("%PDF-1"),
+        contentType: "application/pdf",
+        sizeBytes: 6,
+      }),
+    ).rejects.toBeInstanceOf(TravelDocumentValidationError);
+
+    expect(uploadTravelDocumentBlobMock).not.toHaveBeenCalled();
+  });
+
+  it("accepts transport link when transport belongs to trip", async () => {
+    const id = await createTravelDocument({
+      tripId,
+      metadata: {
+        title: "Train ticket",
+        category: "train",
+        transportId,
+      },
+      fileBytes: Buffer.from("%PDF-1"),
+      contentType: "application/pdf",
+      sizeBytes: 6,
+    });
+
+    expect(id).toBe(documentId);
+    expect(transportFindOneMock).toHaveBeenCalled();
   });
 
   it("rejects cross-trip activity link", async () => {

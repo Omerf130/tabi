@@ -31,6 +31,7 @@ Collection: `TravelDocument`
   },
   activityId?: ObjectId,
   accommodationId?: ObjectId,
+  transportId?: ObjectId,
   createdAt,
   updatedAt
 }
@@ -39,7 +40,8 @@ Collection: `TravelDocument`
 Rules:
 
 - `tripId` required on every query
-- At most **one** contextual link: `activityId` **or** `accommodationId`, never both (enforced in Zod + Mongoose)
+- At most **one** contextual link: `activityId`, `accommodationId`, or `transportId` — never more than one (enforced in Zod + Mongoose)
+- Stale transport links are tolerated when a linked transport is deleted
 - No Blob URL stored in MongoDB
 - No file bytes/base64 in MongoDB
 - No Google Places display fields copied into the document

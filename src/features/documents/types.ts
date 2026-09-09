@@ -13,6 +13,12 @@ export type TravelDocumentContextLink =
       accommodationId: string;
       title: string;
       subtitle?: string;
+    }
+  | {
+      type: "transport";
+      transportId: string;
+      title: string;
+      subtitle?: string;
     };
 
 export type TravelDocumentViewModel = {
@@ -45,4 +51,10 @@ export type ActivityLinkOption = {
 export type AccommodationLinkOption = {
   id: string;
   label: string;
+};
+
+export type TransportLinkOption = {
+  id: string;
+  label: string;
+  departureDate: string;
 };

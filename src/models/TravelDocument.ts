@@ -68,6 +68,11 @@ const travelDocumentSchema = new mongoose.Schema(
       ref: "Accommodation",
       default: null,
     },
+    transportId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Transport",
+      default: null,
+    },
   },
   { timestamps: true },
 );
@@ -75,10 +80,13 @@ const travelDocumentSchema = new mongoose.Schema(
 travelDocumentSchema.index({ tripId: 1, category: 1, createdAt: -1 });
 
 travelDocumentSchema.pre("validate", function validateSingleContextLink() {
-  if (this.activityId && this.accommodationId) {
+  const linkCount = [this.activityId, this.accommodationId, this.transportId].filter(
+    Boolean,
+  ).length;
+  if (linkCount > 1) {
     this.invalidate(
       "activityId",
-      "A document may link to an activity or accommodation, not both",
+      "A document may link to one context item only",
     );
   }
 });

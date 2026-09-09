@@ -10,7 +10,8 @@ import { ActivityMovePanel } from "./ActivityMovePanel";
 import { ActivityRow } from "./ActivityRow";
 import { ActivityRowActions } from "./ActivityRowActions";
 import { ACTIVITY_MESSAGES } from "./constants";
-import { formatDayActivityCount } from "./format-day-activity-count";
+import { formatDayItineraryCount } from "./format-day-itinerary-count";
+import { TransportItineraryRow } from "./TransportItineraryRow";
 import { toActivityFormValues } from "./to-activity-view-model";
 import type { ActivityActionState } from "./actions";
 import type { ActivityViewModel, TripDayViewModel } from "./types";
@@ -233,21 +234,30 @@ export function ItineraryDayAccordion({
                   ) : null}
                 </span>
                 <span className={styles.dayCount}>
-                  {formatDayActivityCount(day.activities.length)}
+                  {formatDayItineraryCount(day.items)}
                 </span>
               </span>
             </button>
 
             {isExpanded ? (
               <div id={panelId} className={styles.dayPanel}>
-                {day.activities.length > 0 ? (
+                {day.items.length > 0 ? (
                   <div className={styles.activityList}>
-                    {day.activities.map((activity) =>
-                      renderActivityItem(activity),
-                    )}
+                    {day.items.map((item) => {
+                      if (item.kind === "transport") {
+                        return (
+                          <TransportItineraryRow
+                            key={`transport-${item.transport.id}`}
+                            transport={item.transport}
+                          />
+                        );
+                      }
+
+                      return renderActivityItem(item.activity);
+                    })}
                   </div>
                 ) : (
-                  <p className={styles.emptyDay}>אין פעילויות ביום זה</p>
+                  <p className={styles.emptyDay}>אין פריטים ביום זה</p>
                 )}
 
                 {editor.kind === "create" ? (

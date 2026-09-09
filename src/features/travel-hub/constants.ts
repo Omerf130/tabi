@@ -58,7 +58,7 @@ export const TRAVEL_TOOLS: readonly TravelToolDefinition[] = [
   {
     id: "transport",
     label: "תחבורה",
-    status: "coming_soon",
+    status: "active",
     colorClass: "toolColorTransport",
   },
   {

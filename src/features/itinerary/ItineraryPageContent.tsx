@@ -2,6 +2,7 @@ import { AppPage } from "@/features/app-shell/AppPage";
 import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
 import type { TripWorkspace } from "@/features/trips/public-trip";
 import { getInclusiveDateRange, getTripDayCount } from "@/features/trips/trip-days";
+import { listTransportsForItineraryTrip } from "@/features/transport/queries";
 import { buildItineraryDaysForTrip } from "./build-itinerary-days";
 import { ItineraryDayAccordion } from "./ItineraryDayAccordion";
 import { listActivitiesForTrip } from "./queries";
@@ -17,8 +18,11 @@ export async function ItineraryPageContent({
   trip,
   requestedDate,
 }: ItineraryPageContentProps) {
-  const activities = await listActivitiesForTrip(trip.id);
-  const days = buildItineraryDaysForTrip(trip, activities);
+  const [activities, transportsByDate] = await Promise.all([
+    listActivitiesForTrip(trip.id),
+    listTransportsForItineraryTrip(trip.id, trip.startDate, trip.endDate),
+  ]);
+  const days = buildItineraryDaysForTrip(trip, activities, transportsByDate);
   const dayCount = getTripDayCount(trip.startDate, trip.endDate);
   const tripDates = getInclusiveDateRange(trip.startDate, trip.endDate);
   const initialExpandedDate = resolveInitialItineraryDay(trip, requestedDate);

@@ -21,6 +21,7 @@ import {
 import type {
   AccommodationLinkOption,
   ActivityLinkOption,
+  TransportLinkOption,
   TravelDocumentSettingsViewModel,
 } from "@/features/documents/types";
 import sectionStyles from "@/features/trips/settings/TripSettingsSections.module.scss";
@@ -33,6 +34,7 @@ type TripDocumentSettingsProps = {
   documents: TravelDocumentSettingsViewModel[];
   activityOptions: ActivityLinkOption[];
   accommodationOptions: AccommodationLinkOption[];
+  transportOptions: TransportLinkOption[];
 };
 
 type DocumentFormProps = {
@@ -40,6 +42,7 @@ type DocumentFormProps = {
   document?: TravelDocumentSettingsViewModel;
   activityOptions: ActivityLinkOption[];
   accommodationOptions: AccommodationLinkOption[];
+  transportOptions: TransportLinkOption[];
   action: (
     prev: TravelDocumentActionState,
     formData: FormData,
@@ -54,14 +57,20 @@ type DocumentRowProps = {
   document: TravelDocumentSettingsViewModel;
   activityOptions: ActivityLinkOption[];
   accommodationOptions: AccommodationLinkOption[];
+  transportOptions: TransportLinkOption[];
 };
 
-function getInitialLinkType(document?: TravelDocumentSettingsViewModel): "none" | "activity" | "accommodation" {
+type DocumentLinkType = "none" | "activity" | "accommodation" | "transport";
+
+function getInitialLinkType(document?: TravelDocumentSettingsViewModel): DocumentLinkType {
   if (document?.contextLink?.type === "activity") {
     return "activity";
   }
   if (document?.contextLink?.type === "accommodation") {
     return "accommodation";
+  }
+  if (document?.contextLink?.type === "transport") {
+    return "transport";
   }
   return "none";
 }
@@ -70,6 +79,7 @@ function ContextLinkFields({
   document,
   activityOptions,
   accommodationOptions,
+  transportOptions,
   idPrefix,
   linkType,
   onLinkTypeChange,
@@ -77,9 +87,10 @@ function ContextLinkFields({
   document?: TravelDocumentSettingsViewModel;
   activityOptions: ActivityLinkOption[];
   accommodationOptions: AccommodationLinkOption[];
+  transportOptions: TransportLinkOption[];
   idPrefix: string;
-  linkType: "none" | "activity" | "accommodation";
-  onLinkTypeChange: (value: "none" | "activity" | "accommodation") => void;
+  linkType: DocumentLinkType;
+  onLinkTypeChange: (value: DocumentLinkType) => void;
 }) {
   return (
     <div className={styles.linkFields}>
@@ -89,14 +100,13 @@ function ContextLinkFields({
           name="linkType"
           value={linkType}
           onChange={(event) =>
-            onLinkTypeChange(
-              event.target.value as "none" | "activity" | "accommodation",
-            )
+            onLinkTypeChange(event.target.value as DocumentLinkType)
           }
         >
           <option value="none">ללא קישור</option>
           <option value="activity">פעילות</option>
           <option value="accommodation">לינה</option>
+          <option value="transport">תחבורה</option>
         </select>
       </Field>
 
@@ -137,6 +147,27 @@ function ContextLinkFields({
           </select>
         </Field>
       ) : null}
+
+      {linkType === "transport" ? (
+        <Field label="תחבורה" htmlFor={`${idPrefix}-transport`}>
+          <select
+            id={`${idPrefix}-transport`}
+            name="transportId"
+            defaultValue={
+              document?.contextLink?.type === "transport"
+                ? document.contextLink.transportId
+                : ""
+            }
+          >
+            <option value="">בחרו קטע תחבורה</option>
+            {transportOptions.map((option) => (
+              <option key={option.id} value={option.id}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </Field>
+      ) : null}
     </div>
   );
 }
@@ -146,6 +177,7 @@ function DocumentForm({
   document,
   activityOptions,
   accommodationOptions,
+  transportOptions,
   action,
   submitLabel,
   includeFile = false,
@@ -211,6 +243,7 @@ function DocumentForm({
         document={document}
         activityOptions={activityOptions}
         accommodationOptions={accommodationOptions}
+        transportOptions={transportOptions}
         idPrefix={idPrefix}
         linkType={linkType}
         onLinkTypeChange={setLinkType}
@@ -240,6 +273,7 @@ function DocumentRow({
   document: travelDocument,
   activityOptions,
   accommodationOptions,
+  transportOptions,
 }: DocumentRowProps) {
   const [editing, setEditing] = useState(false);
   const [replacing, setReplacing] = useState(false);
@@ -260,6 +294,7 @@ function DocumentRow({
           document={travelDocument}
           activityOptions={activityOptions}
           accommodationOptions={accommodationOptions}
+          transportOptions={transportOptions}
           action={updateTravelDocumentAction}
           submitLabel="שמירה"
           onCancel={() => setEditing(false)}
@@ -360,6 +395,7 @@ export function TripDocumentSettings({
   documents,
   activityOptions,
   accommodationOptions,
+  transportOptions,
 }: TripDocumentSettingsProps) {
   const [showCreate, setShowCreate] = useState(false);
 
@@ -389,6 +425,7 @@ export function TripDocumentSettings({
             tripId={tripId}
             activityOptions={activityOptions}
             accommodationOptions={accommodationOptions}
+            transportOptions={transportOptions}
             action={createTravelDocumentAction}
             submitLabel="הוספה"
             includeFile
@@ -406,6 +443,7 @@ export function TripDocumentSettings({
               document={document}
               activityOptions={activityOptions}
               accommodationOptions={accommodationOptions}
+              transportOptions={transportOptions}
             />
           ))}
         </ul>

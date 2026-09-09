@@ -6,6 +6,8 @@ import { Accommodation } from "@/models/Accommodation";
 import { TravelDocument } from "@/models/TravelDocument";
 import { resolveAccommodationIdentity } from "@/features/accommodations/resolve-accommodation-identity";
 import { ACTIVITY_TYPE_LABELS } from "@/features/itinerary/activity-types";
+import { TRANSPORT_TYPE_SINGULAR_LABELS } from "@/features/transport/transport-types";
+import type { TransportLinkedDocumentViewModel } from "@/features/transport/types";
 import { formatCalendarDateDisplay } from "@/features/trips/calendar-date";
 import {
   TRAVEL_DOCUMENT_CATEGORY_LABELS,
@@ -20,6 +22,7 @@ import type { TravelDocumentRecord } from "@/models/TravelDocument";
 import type {
   AccommodationLinkOption,
   ActivityLinkOption,
+  TransportLinkOption,
   TravelDocumentContextLink,
   TravelDocumentViewModel,
 } from "./types";
@@ -90,6 +93,28 @@ async function resolveContextLink(
         accommodationId: accommodation._id.toString(),
         title: identity.name,
         subtitle: identity.city,
+      },
+    };
+  }
+
+  if (document.transportId) {
+    const { Transport } = await import("@/models/Transport");
+    const transport = await Transport.findOne({
+      _id: document.transportId.toString(),
+      tripId,
+    }).lean();
+
+    if (!transport) {
+      return {};
+    }
+
+    return {
+      sortDate: transport.departure.date,
+      link: {
+        type: "transport",
+        transportId: transport._id.toString(),
+        title: `${transport.departure.locationName} → ${transport.arrival.locationName}`,
+        subtitle: TRANSPORT_TYPE_SINGULAR_LABELS[transport.type],
       },
     };
   }
@@ -208,4 +233,41 @@ export async function listAccommodationLinkOptions(
   );
 
   return options;
+}
+
+export async function listTransportLinkOptions(
+  tripId: string,
+): Promise<TransportLinkOption[]> {
+  const { listTransportLinkOptions: listOptions } = await import(
+    "@/features/transport/queries"
+  );
+  return listOptions(tripId);
+}
+
+export async function listTravelDocumentsLinkedToTransport(
+  tripId: string,
+  transportId: string,
+): Promise<TransportLinkedDocumentViewModel[]> {
+  await connectDb();
+  const documents = await TravelDocument.find({ tripId, transportId })
+    .sort({ createdAt: -1, _id: -1 })
+    .lean();
+
+  const linked: TransportLinkedDocumentViewModel[] = [];
+
+  for (const document of documents) {
+    const viewModel = await toTravelDocumentViewModel(document);
+    if (!viewModel) {
+      continue;
+    }
+
+    linked.push({
+      id: viewModel.id,
+      title: viewModel.title,
+      categoryLabel: viewModel.categoryLabel,
+      href: viewModel.detailHref,
+    });
+  }
+
+  return linked;
 }

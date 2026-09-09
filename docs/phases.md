@@ -93,4 +93,8 @@ Currency Converter: trip-scoped travel reference converter at `/currency` with F
 
 Weather: trip-scoped travel weather at `/weather` with WeatherAPI.com (server-only), coordinate-based `WeatherLocationRef`, searchable global locations, 3-day forecast, Celsius display, and `localStorage` location preference. See [weather.md](weather.md).
 
+## Phase 14 (Transport)
+
+Transport tool: dedicated `Transport` collection as source of truth for flights, trains, buses, ferries, car/taxi. Owner CRUD at `/transport`; members read-only. Itinerary merges departure-day cards by time without mutating Activity order. Optional `TravelDocument.transportId` link (XOR with activity/accommodation). Travel Hub **תחבורה** tool active under **עוד**. See [transport.md](transport.md).
+
 **UI-not-final principle:** Current feature screens across Tabi (including Phase 13 Weather) are functional but not the final product design. A later dedicated Product Polish phase may significantly redesign cards, layouts, icons, spacing, and tool presentation without changing underlying business architecture.

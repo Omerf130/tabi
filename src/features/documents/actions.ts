@@ -111,6 +111,7 @@ export async function createTravelDocumentAction(
         description: parsed.data.description,
         activityId: parsed.data.activityId,
         accommodationId: parsed.data.accommodationId,
+        transportId: parsed.data.transportId,
       },
       fileBytes: fileResult.fileBytes,
       contentType: fileResult.contentType,

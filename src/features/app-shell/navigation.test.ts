@@ -58,6 +58,9 @@ describe("navigation", () => {
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/weather`, TRIP_A)).toBe(
       "more",
     );
+    expect(getActiveNavSection(`/app/trips/${TRIP_A}/transport`, TRIP_A)).toBe(
+      "more",
+    );
   });
 
   it("returns null for non-matching trip paths", () => {

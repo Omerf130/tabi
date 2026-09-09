@@ -8,6 +8,7 @@ import { TripDocumentSettings } from "@/features/documents/TripDocumentSettings"
 import {
   listAccommodationLinkOptions,
   listActivityLinkOptions,
+  listTransportLinkOptions,
   listTravelDocumentsForTrip,
 } from "@/features/documents/queries";
 import { listRemindersForUserTrip } from "@/features/trips/reminders/queries";
@@ -39,13 +40,14 @@ export default async function TripSettingsPage({
     requireUser(),
   ]);
   const todayJapan = getJapanCalendarDate();
-  const [reminders, accommodations, documents, activityOptions, accommodationOptions] =
+  const [reminders, accommodations, documents, activityOptions, accommodationOptions, transportOptions] =
     await Promise.all([
     listRemindersForUserTrip(trip.id, user.id, todayJapan),
     listAccommodationsForTripSettings(trip.id),
     trip.role === "owner" ? listTravelDocumentsForTrip(trip.id) : Promise.resolve([]),
     trip.role === "owner" ? listActivityLinkOptions(trip.id) : Promise.resolve([]),
     trip.role === "owner" ? listAccommodationLinkOptions(trip.id) : Promise.resolve([]),
+    trip.role === "owner" ? listTransportLinkOptions(trip.id) : Promise.resolve([]),
   ]);
 
   return (
@@ -78,6 +80,7 @@ export default async function TripSettingsPage({
               documents={documents}
               activityOptions={activityOptions}
               accommodationOptions={accommodationOptions}
+              transportOptions={transportOptions}
             />
           ) : null}
           <TripReminderSettings

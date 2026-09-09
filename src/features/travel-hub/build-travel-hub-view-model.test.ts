@@ -63,6 +63,7 @@ describe("buildTravelHubViewModel", () => {
     const listsTool = model.tools.find((tool) => tool.id === "lists");
     const currencyTool = model.tools.find((tool) => tool.id === "currency");
     const weatherTool = model.tools.find((tool) => tool.id === "weather");
+    const transportTool = model.tools.find((tool) => tool.id === "transport");
 
     expect(accommodationsTool?.href).toBe(`/app/trips/${tripId}/accommodations`);
     expect(listsTool?.href).toBe(`/app/trips/${tripId}/lists`);
@@ -70,6 +71,8 @@ describe("buildTravelHubViewModel", () => {
     expect(currencyTool?.status).toBe("active");
     expect(weatherTool?.href).toBe(`/app/trips/${tripId}/weather`);
     expect(weatherTool?.status).toBe("active");
+    expect(transportTool?.href).toBe(`/app/trips/${tripId}/transport`);
+    expect(transportTool?.status).toBe("active");
   });
 
   it("includes contextual accommodation and photo href when available", () => {

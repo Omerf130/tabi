@@ -56,6 +56,32 @@ const optionalTitleSchema = z.preprocess(
   ]),
 );
 
+function countContextLinks(value: {
+  activityId?: string;
+  accommodationId?: string;
+  transportId?: string;
+}): number {
+  return [value.activityId, value.accommodationId, value.transportId].filter(Boolean)
+    .length;
+}
+
+function validateSingleContextLink(
+  value: {
+    activityId?: string;
+    accommodationId?: string;
+    transportId?: string;
+  },
+  ctx: z.RefinementCtx,
+): void {
+  if (countContextLinks(value) > 1) {
+    ctx.addIssue({
+      code: "custom",
+      message: "both links",
+      path: ["activityId"],
+    });
+  }
+}
+
 export const createTravelDocumentMetadataSchema = z
   .object({
     title: optionalTitleSchema,
@@ -63,16 +89,9 @@ export const createTravelDocumentMetadataSchema = z
     description: optionalDescriptionSchema,
     activityId: optionalObjectIdSchema,
     accommodationId: optionalObjectIdSchema,
+    transportId: optionalObjectIdSchema,
   })
-  .superRefine((value, ctx) => {
-    if (value.activityId && value.accommodationId) {
-      ctx.addIssue({
-        code: "custom",
-        message: "both links",
-        path: ["activityId"],
-      });
-    }
-  });
+  .superRefine(validateSingleContextLink);
 
 export const travelDocumentMetadataSchema = z
   .object({
@@ -85,16 +104,9 @@ export const travelDocumentMetadataSchema = z
     description: optionalDescriptionSchema,
     activityId: optionalObjectIdSchema,
     accommodationId: optionalObjectIdSchema,
+    transportId: optionalObjectIdSchema,
   })
-  .superRefine((value, ctx) => {
-    if (value.activityId && value.accommodationId) {
-      ctx.addIssue({
-        code: "custom",
-        message: "both links",
-        path: ["activityId"],
-      });
-    }
-  });
+  .superRefine(validateSingleContextLink);
 
 export const createTravelDocumentSchema = createTravelDocumentMetadataSchema.and(
   z.object({
@@ -125,6 +137,7 @@ export type TravelDocumentMetadataInput = {
   description?: string;
   activityId?: string;
   accommodationId?: string;
+  transportId?: string;
 };
 export type CreateTravelDocumentInput = z.infer<typeof createTravelDocumentSchema>;
 export type UpdateTravelDocumentInput = z.infer<typeof updateTravelDocumentSchema>;
@@ -141,6 +154,7 @@ export function parseTravelDocumentMetadataFromFormData(
     activityId: linkType === "activity" ? formData.get("activityId") : null,
     accommodationId:
       linkType === "accommodation" ? formData.get("accommodationId") : null,
+    transportId: linkType === "transport" ? formData.get("transportId") : null,
   };
 }
 

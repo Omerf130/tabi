@@ -1,3 +1,4 @@
+import type { ItineraryDayItem } from "@/features/transport/merge-itinerary-day-items";
 import type { TripDayTemporalState } from "@/features/trips/trip-days";
 import type { ActivityType } from "./activity-types";
 
@@ -24,6 +25,7 @@ export type TripDayViewModel = {
   headingLabel: string;
   temporalState: TripDayTemporalState;
   activities: ActivityViewModel[];
+  items: ItineraryDayItem[];
 };
 
 export type ActivityFormValues = {

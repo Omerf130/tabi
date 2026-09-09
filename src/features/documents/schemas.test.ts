@@ -9,6 +9,7 @@ const tripId = "507f1f77bcf86cd799439011";
 const documentId = "507f1f77bcf86cd799439012";
 const activityId = "507f1f77bcf86cd799439013";
 const accommodationId = "507f1f77bcf86cd799439014";
+const transportId = "507f1f77bcf86cd799439016";
 
 describe("travel document schemas", () => {
   it("accepts valid metadata", () => {
@@ -86,6 +87,25 @@ describe("travel document schemas", () => {
       category: "other",
       activityId,
       accommodationId,
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts transport link only", () => {
+    const result = travelDocumentMetadataSchema.safeParse({
+      title: "Train ticket",
+      category: "train",
+      transportId,
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects multiple context links", () => {
+    const result = travelDocumentMetadataSchema.safeParse({
+      title: "Doc",
+      category: "other",
+      activityId,
+      transportId,
     });
     expect(result.success).toBe(false);
   });
