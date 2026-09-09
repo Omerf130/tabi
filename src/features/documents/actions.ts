@@ -32,6 +32,7 @@ export type TravelDocumentActionState = {
 function revalidateDocumentPaths(tripId: string, documentId?: string): void {
   revalidatePath(`/app/trips/${tripId}/documents`);
   revalidatePath(`/app/trips/${tripId}/settings`);
+  revalidatePath(`/app/trips/${tripId}/emergency`);
   if (documentId) {
     revalidatePath(`/app/trips/${tripId}/documents/${documentId}`);
   }
@@ -112,6 +113,7 @@ export async function createTravelDocumentAction(
         activityId: parsed.data.activityId,
         accommodationId: parsed.data.accommodationId,
         transportId: parsed.data.transportId,
+        showInEmergency: parsed.data.showInEmergency,
       },
       fileBytes: fileResult.fileBytes,
       contentType: fileResult.contentType,

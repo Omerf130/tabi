@@ -249,6 +249,19 @@ function DocumentForm({
         onLinkTypeChange={setLinkType}
       />
 
+      <Field label="חירום" htmlFor={`${idPrefix}-show-in-emergency`}>
+        <label className={styles.checkboxRow}>
+          <input
+            id={`${idPrefix}-show-in-emergency`}
+            name="showInEmergency"
+            type="checkbox"
+            value="true"
+            defaultChecked={document?.showInEmergency ?? false}
+          />
+          <span>הצג במסך חירום</span>
+        </label>
+      </Field>
+
       {state.error ? (
         <p className={styles.error} role="alert">
           {state.error}

@@ -82,6 +82,11 @@ function validateSingleContextLink(
   }
 }
 
+const showInEmergencySchema = z.preprocess(
+  (value) => value === true || value === "true" || value === "on" || value === "1",
+  z.boolean(),
+);
+
 export const createTravelDocumentMetadataSchema = z
   .object({
     title: optionalTitleSchema,
@@ -90,6 +95,7 @@ export const createTravelDocumentMetadataSchema = z
     activityId: optionalObjectIdSchema,
     accommodationId: optionalObjectIdSchema,
     transportId: optionalObjectIdSchema,
+    showInEmergency: showInEmergencySchema.optional().default(false),
   })
   .superRefine(validateSingleContextLink);
 
@@ -105,6 +111,7 @@ export const travelDocumentMetadataSchema = z
     activityId: optionalObjectIdSchema,
     accommodationId: optionalObjectIdSchema,
     transportId: optionalObjectIdSchema,
+    showInEmergency: showInEmergencySchema.optional().default(false),
   })
   .superRefine(validateSingleContextLink);
 
@@ -138,6 +145,7 @@ export type TravelDocumentMetadataInput = {
   activityId?: string;
   accommodationId?: string;
   transportId?: string;
+  showInEmergency?: boolean;
 };
 export type CreateTravelDocumentInput = z.infer<typeof createTravelDocumentSchema>;
 export type UpdateTravelDocumentInput = z.infer<typeof updateTravelDocumentSchema>;
@@ -155,6 +163,7 @@ export function parseTravelDocumentMetadataFromFormData(
     accommodationId:
       linkType === "accommodation" ? formData.get("accommodationId") : null,
     transportId: linkType === "transport" ? formData.get("transportId") : null,
+    showInEmergency: formData.get("showInEmergency"),
   };
 }
 

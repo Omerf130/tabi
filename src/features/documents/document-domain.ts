@@ -132,6 +132,7 @@ export async function createTravelDocument(input: {
       category: input.metadata.category,
       title: input.metadata.title,
       description: input.metadata.description ?? null,
+      showInEmergency: input.metadata.showInEmergency ?? false,
       file: {
         pathname: storedBlob.pathname,
         contentType: storedBlob.contentType,
@@ -170,6 +171,7 @@ export async function updateTravelDocumentMetadata(input: {
       category: input.metadata.category,
       title: input.metadata.title,
       description: input.metadata.description ?? null,
+      showInEmergency: input.metadata.showInEmergency ?? false,
       ...toLinkFields(input.metadata),
     },
     { new: true, runValidators: true },

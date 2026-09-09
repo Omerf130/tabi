@@ -156,7 +156,29 @@ async function toTravelDocumentViewModel(
     contextLink,
     createdAtLabel: formatCreatedAtLabel(document.createdAt),
     sortDate,
+    showInEmergency: document.showInEmergency ?? false,
   };
+}
+
+export async function listEmergencyDocumentsForTrip(tripId: string) {
+  await connectDb();
+  const documents = await TravelDocument.find({ tripId, showInEmergency: true })
+    .sort({ createdAt: -1, _id: -1 })
+    .lean();
+
+  const viewModels = (
+    await Promise.all(
+      documents.map((document) => toTravelDocumentViewModel(document)),
+    )
+  ).filter((document): document is TravelDocumentViewModel => document !== null);
+
+  return viewModels.map((document) => ({
+    id: document.id,
+    title: document.title,
+    categoryLabel: document.categoryLabel,
+    detailHref: document.detailHref,
+    fileHref: document.fileHref,
+  }));
 }
 
 export async function listTravelDocumentsForTrip(

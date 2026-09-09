@@ -6,7 +6,7 @@ Decisions now must not make that work harder later.
 
 ## Categories (later)
 
-**Offline core** (cache last known trip payload): itinerary, activities, accommodation, addresses, passes, phrasebook (static catalog + favorites), emergency, packing, reminders, last known weather, last known currency rates.
+**Offline core** (cache last known trip payload): itinerary, activities, accommodation, addresses, passes, phrasebook (static catalog + favorites), emergency pack + custom resources snapshot, packing, reminders, last known weather, last known currency rates.
 
 **Explicit downloads:** PDFs, tickets, QR images, vouchers — user-initiated, stored privately, not assumed in the core cache.
 

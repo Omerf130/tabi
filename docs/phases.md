@@ -101,4 +101,8 @@ Transport tool: dedicated `Transport` collection as source of truth for flights,
 
 Travel Phrasebook foundation at `/language` with Hebrew→Japanese V1 static catalog (`he-ja`), client-side search, show-to-local detail route, and personal MongoDB favorites keyed by `userId + targetLanguage + phraseId`. Travel Hub **שפה ותקשורת** tool active under **עוד**. Language-neutral pack registry; no translation APIs or audio in V1. See [language.md](language.md).
 
-**UI-not-final principle:** Current feature screens across Tabi (including Phase 13 Weather and Phase 15 Language) are functional but not the final product design. A later dedicated Product Polish phase may significantly redesign cards, layouts, icons, spacing, and tool presentation without changing underlying business architecture.
+## Phase 16 (Emergency & Assistance)
+
+Emergency hub at `/emergency` with static `EmergencyPack` (`JP` V1), collaborative `TripEmergencyResource`, `TravelDocument.showInEmergency`, current accommodation context, curated phrasebook links, and ephemeral user-triggered geolocation. Travel Hub **חירום ועזרה** active under **עוד**. See [emergency.md](emergency.md).
+
+**UI-not-final principle:** Current feature screens across Tabi (including Phase 13 Weather, Phase 15 Language, and Phase 16 Emergency) are functional but not the final product design. A later dedicated Product Polish phase may significantly redesign cards, layouts, icons, spacing, and tool presentation without changing underlying business architecture.

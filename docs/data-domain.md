@@ -21,6 +21,7 @@ Do not store the whole trip application in one MongoDB document. Each domain bel
 - **TripListItem** — Phase 11; collaborative trip checklists (`listType` + `order` + `isCompleted`), scoped by `tripId`. Default templates seed lazily via `Trip.initializations.listsV1`.
 - **Transport** — Phase 14; trip-scoped segments (`flight`, `train`, `bus`, `ferry`, `car`, `taxi`) with local endpoint date/time/timezone. See [transport.md](transport.md).
 - **PhraseFavorite** — Phase 15; personal phrase favorites keyed by `(userId, targetLanguage, phraseId)`. Phrasebook content itself is static TS data, not MongoDB. See [language.md](language.md).
+- **TripEmergencyResource** — Phase 16; collaborative trip emergency contacts/resources scoped by `tripId`. Built-in official data is static TS `EmergencyPack`. See [emergency.md](emergency.md).
 - Restaurants
 - Passes
 - Reminders

@@ -38,6 +38,7 @@ export type TravelDocumentViewModel = {
   contextLink?: TravelDocumentContextLink;
   createdAtLabel: string;
   sortDate: string;
+  showInEmergency: boolean;
 };
 
 export type TravelDocumentSettingsViewModel = TravelDocumentViewModel;

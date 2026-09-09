@@ -21,6 +21,27 @@ describe("travel document schemas", () => {
     expect(result.success).toBe(true);
   });
 
+  it("defaults showInEmergency to false and accepts true", () => {
+    const defaultResult = travelDocumentMetadataSchema.safeParse({
+      title: "Passport",
+      category: "other",
+    });
+    expect(defaultResult.success).toBe(true);
+    if (defaultResult.success) {
+      expect(defaultResult.data.showInEmergency).toBe(false);
+    }
+
+    const enabledResult = travelDocumentMetadataSchema.safeParse({
+      title: "Passport",
+      category: "other",
+      showInEmergency: true,
+    });
+    expect(enabledResult.success).toBe(true);
+    if (enabledResult.success) {
+      expect(enabledResult.data.showInEmergency).toBe(true);
+    }
+  });
+
   it("rejects invalid category", () => {
     const result = travelDocumentMetadataSchema.safeParse({
       title: "Doc",

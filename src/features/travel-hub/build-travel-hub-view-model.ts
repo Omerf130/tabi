@@ -6,6 +6,7 @@ import {
 } from "@/features/accommodations/constants";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
 import { buildCurrencyHref } from "@/features/currency/constants";
+import { buildEmergencyHref } from "@/features/emergency/constants";
 import { buildLanguageHref } from "@/features/language/constants";
 import { buildTransportHref } from "@/features/transport/constants";
 import { buildWeatherHref } from "@/features/weather/constants";
@@ -46,6 +47,8 @@ function buildToolHref(tripId: string, toolId: (typeof TRAVEL_TOOLS)[number]["id
       return buildTransportHref(tripId);
     case "language":
       return buildLanguageHref(tripId);
+    case "emergency":
+      return buildEmergencyHref(tripId);
     default:
       return undefined;
   }

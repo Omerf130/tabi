@@ -73,11 +73,17 @@ const travelDocumentSchema = new mongoose.Schema(
       ref: "Transport",
       default: null,
     },
+    showInEmergency: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
   },
   { timestamps: true },
 );
 
 travelDocumentSchema.index({ tripId: 1, category: 1, createdAt: -1 });
+travelDocumentSchema.index({ tripId: 1, showInEmergency: 1, createdAt: -1 });
 
 travelDocumentSchema.pre("validate", function validateSingleContextLink() {
   const linkCount = [this.activityId, this.accommodationId, this.transportId].filter(

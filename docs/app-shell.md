@@ -31,7 +31,7 @@ Labels (Hebrew): **בית, מסלול, מסמכים, זיכרונות, עוד**.
 Configuration lives in `src/features/app-shell/navigation.ts`:
 
 - `buildTripNavHref()` — href for each section
-- `getActiveNavSection()` — derives active tab from pathname; `/more`, `/manage`, `/members`, `/settings`, `/accommodations`, `/lists`, `/currency`, `/weather`, `/transport`, and `/language` map to **more**
+- `getActiveNavSection()` — derives active tab from pathname; `/more`, `/manage`, `/members`, `/settings`, `/accommodations`, `/lists`, `/currency`, `/weather`, `/transport`, `/language`, and `/emergency` map to **more**
 - `isSecondaryTripRoute()` — true for any nested trip route except home
 
 **TripPrimaryNav** (Client Component) reads `usePathname()`, builds Link-based items, and passes them to **BottomNav**.
@@ -58,7 +58,7 @@ RTL: the rail sits on the **inline-start** side (right in Hebrew layout).
 1. **Hero** — compact placeholder visual; final artwork deferred
 2. **Contextual accommodation** — current or next stay when applicable (Asia/Tokyo date semantics)
 3. **Smart list attention** — first incomplete list needing attention by trip phase; hidden when nothing needs attention
-4. **Travel tools** — working tools (מקומות לינה, רשימות, מטבע, תחבורה, שפה ותקשורת, מזג אוויר) plus future tools visible but disabled (**בקרוב**): חירום
+4. **Travel tools** — working tools (מקומות לינה, רשימות, מטבע, תחבורה, שפה ותקשורת, מזג אוויר, חירום ועזרה)
 5. **Management entry** — **הגדרות וניהול** → `/manage`
 
 `/app/trips/[tripId]/manage` contains:

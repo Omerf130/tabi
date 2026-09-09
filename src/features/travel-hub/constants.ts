@@ -75,8 +75,8 @@ export const TRAVEL_TOOLS: readonly TravelToolDefinition[] = [
   },
   {
     id: "emergency",
-    label: "חירום",
-    status: "coming_soon",
+    label: "חירום ועזרה",
+    status: "active",
     colorClass: "toolColorEmergency",
   },
 ];
