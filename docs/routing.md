@@ -44,6 +44,8 @@ Trip URLs always include `tripId`. There is no implied “current trip” outsid
 | `/app/trips/[tripId]/transport/new` | Create transport (`?type=flight|train|…`) | 14 |
 | `/app/trips/[tripId]/transport/[transportId]` | Transport detail + linked documents | 14 |
 | `/app/trips/[tripId]/transport/[transportId]/edit` | Edit transport | 14 |
+| `/app/trips/[tripId]/language` | Travel phrasebook — list, search, categories, favorites | 15 |
+| `/app/trips/[tripId]/language/[phraseId]` | Show-to-local phrase detail | 15 |
 | `/app/trips/[tripId]/accommodations` | Accommodation list (read-only for travelers) | 9 |
 | `/app/trips/[tripId]/accommodations/[accommodationId]` | Accommodation detail + Maps / Taxi Mode | 9 |
 | `/app/trips/[tripId]/accommodations/[accommodationId]/taxi` | Taxi Mode full-screen overlay | 9 |

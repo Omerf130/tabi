@@ -25,7 +25,7 @@ export type TravelToolId =
   | "lists"
   | "currency"
   | "transport"
-  | "dictionary"
+  | "language"
   | "weather"
   | "emergency";
 
@@ -62,9 +62,9 @@ export const TRAVEL_TOOLS: readonly TravelToolDefinition[] = [
     colorClass: "toolColorTransport",
   },
   {
-    id: "dictionary",
-    label: "מילון יפני",
-    status: "coming_soon",
+    id: "language",
+    label: "שפה ותקשורת",
+    status: "active",
     colorClass: "toolColorDictionary",
   },
   {

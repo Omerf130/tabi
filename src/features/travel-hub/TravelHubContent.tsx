@@ -30,7 +30,7 @@ function TravelToolIcon({ tool }: { tool: TravelToolViewModel }) {
       return <IconCurrency className={styles.toolIconSvg} />;
     case "transport":
       return <IconTrain className={styles.toolIconSvg} />;
-    case "dictionary":
+    case "language":
       return <IconDictionary className={styles.toolIconSvg} />;
     case "weather":
       return <IconWeather className={styles.toolIconSvg} />;

@@ -83,7 +83,7 @@ Collaborative Trip Lists: four checklist types (`packing`, `before_trip`, `durin
 
 ## Phase 11.5
 
-Travel Hub redesign: `/more` becomes **מרכז הטיול** with hero placeholder, contextual accommodation card, phase-aware smart list attention, colored travel tools grid (working + future disabled tools), and a single management entry to `/manage`. Future tools (transport, dictionary, emergency) remain visible but disabled until their phases. Google Places lodging photos may display via server-mediated proxy when available.
+Travel Hub redesign: `/more` becomes **מרכז הטיול** with hero placeholder, contextual accommodation card, phase-aware smart list attention, colored travel tools grid (working + future disabled tools), and a single management entry to `/manage`. Future tools (emergency) remain visible but disabled until their phases. Google Places lodging photos may display via server-mediated proxy when available.
 
 ## Phase 12
 
@@ -97,4 +97,8 @@ Weather: trip-scoped travel weather at `/weather` with WeatherAPI.com (server-on
 
 Transport tool: dedicated `Transport` collection as source of truth for flights, trains, buses, ferries, car/taxi. Owner CRUD at `/transport`; members read-only. Itinerary merges departure-day cards by time without mutating Activity order. Optional `TravelDocument.transportId` link (XOR with activity/accommodation). Travel Hub **תחבורה** tool active under **עוד**. See [transport.md](transport.md).
 
-**UI-not-final principle:** Current feature screens across Tabi (including Phase 13 Weather) are functional but not the final product design. A later dedicated Product Polish phase may significantly redesign cards, layouts, icons, spacing, and tool presentation without changing underlying business architecture.
+## Phase 15 (Language / Phrasebook)
+
+Travel Phrasebook foundation at `/language` with Hebrew→Japanese V1 static catalog (`he-ja`), client-side search, show-to-local detail route, and personal MongoDB favorites keyed by `userId + targetLanguage + phraseId`. Travel Hub **שפה ותקשורת** tool active under **עוד**. Language-neutral pack registry; no translation APIs or audio in V1. See [language.md](language.md).
+
+**UI-not-final principle:** Current feature screens across Tabi (including Phase 13 Weather and Phase 15 Language) are functional but not the final product design. A later dedicated Product Polish phase may significantly redesign cards, layouts, icons, spacing, and tool presentation without changing underlying business architecture.

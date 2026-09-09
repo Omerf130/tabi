@@ -61,6 +61,15 @@ describe("navigation", () => {
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/transport`, TRIP_A)).toBe(
       "more",
     );
+    expect(getActiveNavSection(`/app/trips/${TRIP_A}/language`, TRIP_A)).toBe(
+      "more",
+    );
+    expect(
+      getActiveNavSection(
+        `/app/trips/${TRIP_A}/language/basics.hello`,
+        TRIP_A,
+      ),
+    ).toBe("more");
   });
 
   it("returns null for non-matching trip paths", () => {
