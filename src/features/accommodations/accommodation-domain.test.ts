@@ -1,11 +1,17 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  AccommodationNotFoundError,
   AccommodationValidationError,
   assertAccommodationDateRange,
   compareAccommodations,
   createAccommodation,
+  deleteAccommodation,
   isAccommodationOccupiedOnDate,
 } from "./accommodation-domain";
+
+const { findOneAndDeleteMock } = vi.hoisted(() => ({
+  findOneAndDeleteMock: vi.fn(),
+}));
 
 vi.mock("@/lib/db/connect", () => ({
   connectDb: vi.fn(),
@@ -14,6 +20,7 @@ vi.mock("@/lib/db/connect", () => ({
 vi.mock("@/models/Accommodation", () => ({
   Accommodation: {
     create: vi.fn(),
+    findOneAndDelete: findOneAndDeleteMock,
   },
 }));
 
@@ -121,5 +128,53 @@ describe("compareAccommodations", () => {
 
     const sorted = [...items].sort(compareAccommodations);
     expect(sorted.map((item) => item.id)).toEqual(["a", "c", "b"]);
+  });
+});
+
+describe("deleteAccommodation", () => {
+  beforeEach(() => {
+    findOneAndDeleteMock.mockReset();
+  });
+
+  it("deletes accommodation scoped to trip", async () => {
+    findOneAndDeleteMock.mockReturnValue({
+      lean: vi.fn().mockResolvedValue({ _id: "acc-1" }),
+    });
+
+    await deleteAccommodation({
+      tripId: "507f1f77bcf86cd799439011",
+      accommodationId: "507f1f77bcf86cd799439012",
+    });
+
+    expect(findOneAndDeleteMock).toHaveBeenCalledWith({
+      _id: "507f1f77bcf86cd799439012",
+      tripId: "507f1f77bcf86cd799439011",
+    });
+  });
+
+  it("throws when accommodation is missing or belongs to another trip", async () => {
+    findOneAndDeleteMock.mockReturnValue({
+      lean: vi.fn().mockResolvedValue(null),
+    });
+
+    await expect(
+      deleteAccommodation({
+        tripId: "507f1f77bcf86cd799439011",
+        accommodationId: "507f1f77bcf86cd799439099",
+      }),
+    ).rejects.toBeInstanceOf(AccommodationNotFoundError);
+  });
+
+  it("deletes only the scoped accommodation record without cascading", async () => {
+    findOneAndDeleteMock.mockReturnValue({
+      lean: vi.fn().mockResolvedValue({ _id: "acc-1" }),
+    });
+
+    await deleteAccommodation({
+      tripId: "507f1f77bcf86cd799439011",
+      accommodationId: "507f1f77bcf86cd799439012",
+    });
+
+    expect(findOneAndDeleteMock).toHaveBeenCalledTimes(1);
   });
 });

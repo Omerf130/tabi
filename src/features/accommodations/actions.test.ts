@@ -29,8 +29,12 @@ vi.mock("./accommodation-domain", () => ({
   },
 }));
 
+const { revalidatePathMock } = vi.hoisted(() => ({
+  revalidatePathMock: vi.fn(),
+}));
+
 vi.mock("next/cache", () => ({
-  revalidatePath: vi.fn(),
+  revalidatePath: revalidatePathMock,
 }));
 
 describe("accommodation actions", () => {
@@ -115,13 +119,36 @@ describe("accommodation actions", () => {
   });
 
   it("allows owner deletion", async () => {
+    const tripId = "507f1f77bcf86cd799439011";
+    const accommodationId = "507f1f77bcf86cd799439012";
+    const formData = new FormData();
+    formData.set("tripId", tripId);
+    formData.set("accommodationId", accommodationId);
+
+    const result = await deleteAccommodationAction({}, formData);
+
+    expect(result.ok).toBe(true);
+    expect(deleteAccommodationMock).toHaveBeenCalledWith({
+      tripId,
+      accommodationId,
+    });
+    expect(revalidatePathMock).toHaveBeenCalledWith(`/app/trips/${tripId}/accommodations`);
+    expect(revalidatePathMock).toHaveBeenCalledWith(`/app/trips/${tripId}/settings`);
+    expect(revalidatePathMock).toHaveBeenCalledWith(`/app/trips/${tripId}/more`);
+    expect(revalidatePathMock).toHaveBeenCalledWith(
+      `/app/trips/${tripId}/accommodations/${accommodationId}`,
+    );
+  });
+
+  it("rejects member deletion via owner authorization", async () => {
+    requireTripOwnerMock.mockRejectedValue(new Error("forbidden"));
     const formData = new FormData();
     formData.set("tripId", "507f1f77bcf86cd799439011");
     formData.set("accommodationId", "507f1f77bcf86cd799439012");
 
     const result = await deleteAccommodationAction({}, formData);
 
-    expect(result.ok).toBe(true);
-    expect(deleteAccommodationMock).toHaveBeenCalled();
+    expect(result.ok).toBeUndefined();
+    expect(deleteAccommodationMock).not.toHaveBeenCalled();
   });
 });

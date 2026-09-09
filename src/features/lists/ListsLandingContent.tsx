@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/icons";
 import { AppPage } from "@/features/app-shell/AppPage";
 import { buildListDetailHref } from "./constants";
+import { ListProgressBar } from "./ListProgressBar";
 import type { TripListSummaryViewModel } from "./types";
 import styles from "./ListsLanding.module.scss";
 
@@ -36,21 +37,11 @@ function ListIcon({
   }
 }
 
-function progressPercent(progress: TripListSummaryViewModel["progress"]): number {
-  if (progress.totalCount === 0) {
-    return 0;
-  }
-  return Math.round((progress.completedCount / progress.totalCount) * 100);
-}
-
 export function ListsLandingContent({ tripId, lists }: ListsLandingContentProps) {
   return (
     <AppPage width="content">
       <ul className={styles.list}>
-        {lists.map((list) => {
-          const percent = progressPercent(list.progress);
-
-          return (
+        {lists.map((list) => (
             <li key={list.type}>
               <Link
                 href={buildListDetailHref(tripId, list.slug)}
@@ -60,26 +51,16 @@ export function ListsLandingContent({ tripId, lists }: ListsLandingContentProps)
                   <ListIcon icon={list.icon} className={styles.cardIcon} aria-hidden />
                   <div className={styles.cardBody}>
                     <h2 className={styles.cardTitle}>{list.title}</h2>
-                    <p className={styles.cardProgress}>{list.progressLabel}</p>
-                    <div
-                      className={styles.progressTrack}
-                      role="progressbar"
-                      aria-valuenow={percent}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                      aria-label={`${list.title}: ${list.progressLabel}`}
-                    >
-                      <div
-                        className={styles.progressFill}
-                        style={{ width: `${percent}%` }}
-                      />
-                    </div>
+                    <ListProgressBar
+                      progress={list.progress}
+                      label={list.progressLabel}
+                      title={list.title}
+                    />
                   </div>
                 </article>
               </Link>
             </li>
-          );
-        })}
+        ))}
       </ul>
     </AppPage>
   );

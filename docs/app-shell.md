@@ -31,7 +31,7 @@ Labels (Hebrew): **בית, מסלול, מסמכים, זיכרונות, עוד**.
 Configuration lives in `src/features/app-shell/navigation.ts`:
 
 - `buildTripNavHref()` — href for each section
-- `getActiveNavSection()` — derives active tab from pathname; `/members` maps to **more**
+- `getActiveNavSection()` — derives active tab from pathname; `/more`, `/manage`, `/members`, `/settings`, `/accommodations`, and `/lists` map to **more**
 - `isSecondaryTripRoute()` — true for any nested trip route except home
 
 **TripPrimaryNav** (Client Component) reads `usePathname()`, builds Link-based items, and passes them to **BottomNav**.
@@ -51,14 +51,25 @@ RTL: the rail sits on the **inline-start** side (right in Hebrew layout).
 - **Other trip pages**: page title is primary; trip name + “הטיולים שלי” chevron link appears below the header.
 - Trip switch is always shown on secondary pages (no trip-count gate).
 
-## More page
+## Travel Hub (More)
 
-`/app/trips/[tripId]/more` lists:
+`/app/trips/[tripId]/more` is **Travel Hub** (מרכז הטיול). Information architecture:
 
+1. **Hero** — compact placeholder visual; final artwork deferred
+2. **Contextual accommodation** — current or next stay when applicable (Asia/Tokyo date semantics)
+3. **Smart list attention** — first incomplete list needing attention by trip phase; hidden when nothing needs attention
+4. **Travel tools** — working tools (מקומות לינה, רשימות) plus future tools visible but disabled (**בקרוב**): מטבע, תחבורה, מילון יפני, מזג אוויר, חירום
+5. **Management entry** — **הגדרות וניהול** → `/manage`
+
+`/app/trips/[tripId]/manage` contains:
+
+- הגדרות הטיול → `/settings`
 - חברי הטיול → `/members`
 - הטיולים שלי → `/app/trips`
 - Signed-in identity (name, email)
 - Logout
+
+Future travel tools are UI-visible only in Phase 11.5; their functionality is intentionally deferred.
 
 ## Placeholder routes
 

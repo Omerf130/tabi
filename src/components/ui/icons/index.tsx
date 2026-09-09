@@ -260,3 +260,41 @@ export function IconCalendar({ className }: IconProps) {
     </svg>
   );
 }
+
+export function IconSettings({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <circle cx="12" cy="12" r="2.75" />
+      <path d="M12 4.5v2M12 17.5v2M4.5 12h2M17.5 12h2M6.4 6.4l1.4 1.4M16.2 16.2l1.4 1.4M6.4 17.6l1.4-1.4M16.2 7.8l1.4-1.4" />
+    </svg>
+  );
+}
+
+export function IconCurrency({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <circle cx="12" cy="12" r="6.5" />
+      <path d="M9.5 10.5h4.5a1.5 1.5 0 1 1 0 3H10.5" />
+      <path d="M12 7.5v9" />
+    </svg>
+  );
+}
+
+export function IconWeather({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <circle cx="12" cy="10" r="3.25" />
+      <path d="M7.5 16.5h9a2.75 2.75 0 0 0 .4-5.47A4 4 0 0 0 8.2 11.2 3.25 3.25 0 0 0 7.5 16.5Z" />
+    </svg>
+  );
+}
+
+export function IconDictionary({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M6.5 5.5h11v13H6.5a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2Z" />
+      <path d="M8.5 5.5V19.5" />
+      <path d="M12 9.5h4M12 12.5h3" />
+    </svg>
+  );
+}

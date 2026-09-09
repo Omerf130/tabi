@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
@@ -12,6 +13,7 @@ import {
   updateAccommodationAction,
   type AccommodationActionState,
 } from "@/features/accommodations/actions";
+import { formatAccommodationDeleteConfirm } from "@/features/accommodations/constants";
 import type { AccommodationSettingsViewModel } from "@/features/accommodations/types";
 import {
   PlaceSearchField,
@@ -299,11 +301,18 @@ function AccommodationRow({
   endDate,
   accommodation,
 }: AccommodationRowProps) {
+  const router = useRouter();
   const [editing, setEditing] = useState(false);
   const [deleteState, deleteAction] = useActionState(
     deleteAccommodationAction,
     initialState,
   );
+
+  useEffect(() => {
+    if (deleteState.ok) {
+      router.refresh();
+    }
+  }, [deleteState.ok, router]);
 
   if (editing) {
     return (
@@ -323,7 +332,7 @@ function AccommodationRow({
   }
 
   function handleDelete() {
-    if (!window.confirm("למחוק את מקום הלינה?")) {
+    if (!window.confirm(formatAccommodationDeleteConfirm())) {
       return;
     }
     const form = document.getElementById(
@@ -361,11 +370,11 @@ function AccommodationRow({
         </Button>
         <Button
           type="button"
-          variant="ghost"
+          variant="danger"
           size="compact"
           onClick={handleDelete}
         >
-          מחיקה
+          מחיקת מקום לינה
         </Button>
       </div>
       <form
@@ -383,6 +392,11 @@ function AccommodationRow({
       {deleteState.error ? (
         <p className={styles.error} role="alert">
           {deleteState.error}
+        </p>
+      ) : null}
+      {deleteState.ok && deleteState.success ? (
+        <p className={styles.success} role="status">
+          {deleteState.success}
         </p>
       ) : null}
     </li>

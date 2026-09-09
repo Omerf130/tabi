@@ -28,15 +28,19 @@ Trip URLs always include `tripId`. There is no implied “current trip” outsid
 | `/app/trips/[tripId]/documents/[documentId]` | Document detail (view/download) | 10 |
 | `/app/trips/[tripId]/documents/[documentId]/file` | Authenticated private document file proxy | 10 |
 | `/app/trips/[tripId]/memories` | Journal (placeholder until Phase 21) | 5 / 21 |
-| `/app/trips/[tripId]/more` | Travel Hub — travel tools, management links, account, logout | 5 / 9 |
+| `/app/trips/[tripId]/more` | Travel Hub (מרכז הטיול) — hero, contextual accommodation, smart list attention, travel tools | 11.5 |
+| `/app/trips/[tripId]/manage` | Management hub — trip settings, members, trips list, account, logout | 11.5 |
 | `/app/trips/[tripId]/lists` | Trip Lists landing — four collaborative checklists | 11 |
 | `/app/trips/[tripId]/lists/packing` | Packing checklist | 11 |
 | `/app/trips/[tripId]/lists/before-trip` | Pre-flight tasks checklist | 11 |
 | `/app/trips/[tripId]/lists/during-trip` | During-trip tasks checklist | 11 |
 | `/app/trips/[tripId]/lists/pre-trip-shopping` | Pre-trip shopping checklist | 11 |
+| `/app/trips/[tripId]/currency` | Travel currency converter (JPY → ILS default) | 12 |
+| `/app/trips/[tripId]/currency/rate` | Server-mediated Frankfurter exchange-rate proxy | 12 |
 | `/app/trips/[tripId]/accommodations` | Accommodation list (read-only for travelers) | 9 |
 | `/app/trips/[tripId]/accommodations/[accommodationId]` | Accommodation detail + Maps / Taxi Mode | 9 |
 | `/app/trips/[tripId]/accommodations/[accommodationId]/taxi` | Taxi Mode full-screen overlay | 9 |
+| `/app/trips/[tripId]/accommodations/[accommodationId]/photo` | Server-mediated Google Places lodging photo proxy | 11.5 |
 | `/app/trips/[tripId]/settings` | Trip settings (owner: cover, accommodations, documents CRUD) | 8B / 9 / 10 |
 | `/app/trips/[tripId]/cover` | Authenticated Trip cover image delivery | 8B |
 | `/app/trips/[tripId]/packing` | Packing lists | 19 |

@@ -33,8 +33,14 @@ describe("navigation", () => {
     );
   });
 
-  it("maps members, accommodations, and lists to more", () => {
+  it("maps travel hub secondary routes to more", () => {
+    expect(getActiveNavSection(`/app/trips/${TRIP_A}/manage`, TRIP_A)).toBe(
+      "more",
+    );
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/members`, TRIP_A)).toBe(
+      "more",
+    );
+    expect(getActiveNavSection(`/app/trips/${TRIP_A}/settings`, TRIP_A)).toBe(
       "more",
     );
     expect(
@@ -46,6 +52,9 @@ describe("navigation", () => {
     expect(
       getActiveNavSection(`/app/trips/${TRIP_A}/lists/packing`, TRIP_A),
     ).toBe("more");
+    expect(getActiveNavSection(`/app/trips/${TRIP_A}/currency`, TRIP_A)).toBe(
+      "more",
+    );
   });
 
   it("returns null for non-matching trip paths", () => {
@@ -55,7 +64,7 @@ describe("navigation", () => {
 
   it("returns null for unknown trip subroutes", () => {
     expect(
-      getActiveNavSection(`/app/trips/${TRIP_A}/settings`, TRIP_A),
+      getActiveNavSection(`/app/trips/${TRIP_A}/unknown`, TRIP_A),
     ).toBeNull();
   });
 

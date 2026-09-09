@@ -16,8 +16,14 @@ export const ACCOMMODATION_MESSAGES = {
   notFound: "מקום הלינה לא נמצא",
   dateOutOfRange: "תאריכי Check-in ו-Check-out חייבים להיות בתוך טווח הטיול",
   invalidDateRange: "תאריך Check-out חייב להיות אחרי תאריך Check-in (לפחות לילה אחד)",
-  deleteConfirm: "למחוק את מקום הלינה?",
+  deleteConfirm: "למחוק את מקום הלינה הזה מהטיול?",
+  deleteConfirmDetail:
+    "פעולה זו מסירה את מקום הלינה מ-Tabi בלבד — היא לא מבטלת את ההזמנה בבית המלון.",
 } as const;
+
+export function formatAccommodationDeleteConfirm(): string {
+  return `${ACCOMMODATION_MESSAGES.deleteConfirm}\n\n${ACCOMMODATION_MESSAGES.deleteConfirmDetail}`;
+}
 
 export function getAccommodationsSettingsHref(tripId: string): string {
   return `/app/trips/${tripId}/settings#accommodations`;
@@ -39,4 +45,11 @@ export function buildAccommodationTaxiHref(
   accommodationId: string,
 ): string {
   return `/app/trips/${tripId}/accommodations/${accommodationId}/taxi`;
+}
+
+export function buildAccommodationPhotoHref(
+  tripId: string,
+  accommodationId: string,
+): string {
+  return `/app/trips/${tripId}/accommodations/${accommodationId}/photo`;
 }

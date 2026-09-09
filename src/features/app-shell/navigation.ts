@@ -52,9 +52,12 @@ export function getActiveNavSection(
   }
   if (
     segment === "more" ||
+    segment === "manage" ||
     segment === "members" ||
+    segment === "settings" ||
     segment === "accommodations" ||
-    segment === "lists"
+    segment === "lists" ||
+    segment === "currency"
   ) {
     return "more";
   }

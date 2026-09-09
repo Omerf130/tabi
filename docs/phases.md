@@ -18,11 +18,11 @@ V1 is **Tabi for Japan**. Japan-specific product features are in scope; a destin
 | 9 | Accommodation & Taxi Mode |
 | 10 | Transportation |
 | 11 | Collaborative Trip Lists (רשימות) |
-| 12 | Documents |
+| 12 | Currency Converter |
 | 13 | Offline Foundation |
 | 14 | Offline Documents |
 | 15 | Weather |
-| 16 | Currency |
+| 16 | Documents |
 | 17 | Dictionary |
 | 18 | Emergency |
 | 19 | Packing |
@@ -76,3 +76,15 @@ Itinerary UX + core activity planning: `Activity` model, single-open day accordi
 ## Phase 8
 
 Trip Home: lifecycle-aware dashboard at `/app/trips/[tripId]` with before/during/after states, countdown, Now/Next Up from today's Activities, and itinerary deep links. Server-rendered; Japan calendar/time semantics. See [trip-home.md](trip-home.md).
+
+## Phase 11
+
+Collaborative Trip Lists: four checklist types (`packing`, `before_trip`, `during_trip`, `pre_trip_shopping`), lazy one-time seeding, landing at `/lists` and detail routes per slug. See [routing.md](routing.md).
+
+## Phase 11.5
+
+Travel Hub redesign: `/more` becomes **מרכז הטיול** with hero placeholder, contextual accommodation card, phase-aware smart list attention, colored travel tools grid (working + future disabled tools), and a single management entry to `/manage`. Future tools (transport, dictionary, weather, emergency) remain visible but disabled until their phases. Google Places lodging photos may display via server-mediated proxy when available.
+
+## Phase 12
+
+Currency Converter: trip-scoped travel reference converter at `/currency` with Frankfurter API v2 (server-only), default **JPY → ILS** at amount **1000**, two-panel UI, searchable picker, session rate cache, and `localStorage` pair preferences. See [currency-converter.md](currency-converter.md).

@@ -27,6 +27,7 @@ export type AccommodationActionState = {
 function revalidateAccommodationPaths(tripId: string): void {
   revalidatePath(`/app/trips/${tripId}/accommodations`);
   revalidatePath(`/app/trips/${tripId}/settings`);
+  revalidatePath(`/app/trips/${tripId}/more`);
 }
 
 export async function createAccommodationAction(
@@ -127,6 +128,9 @@ export async function deleteAccommodationAction(
       accommodationId: parsed.data.accommodationId,
     });
     revalidateAccommodationPaths(parsed.data.tripId);
+    revalidatePath(
+      `/app/trips/${parsed.data.tripId}/accommodations/${parsed.data.accommodationId}`,
+    );
     return { ok: true, success: ACCOMMODATION_MESSAGES.deleted };
   } catch (error) {
     if (error instanceof AccommodationNotFoundError) {

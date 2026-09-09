@@ -89,3 +89,20 @@
 .emptyLink:focus-visible {
   text-decoration: underline;
 }
+
+.manageHint {
+  margin: var(--space-4) 0 0;
+  font-size: var(--text-secondary);
+  text-align: center;
+}
+
+.manageLink {
+  color: var(--color-accent);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+.manageLink:hover,
+.manageLink:focus-visible {
+  text-decoration: underline;
+}

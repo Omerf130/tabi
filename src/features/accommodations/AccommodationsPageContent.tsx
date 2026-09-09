@@ -37,6 +37,7 @@ export function AccommodationsPageContent({
           ) : null}
         </div>
       ) : (
+        <>
         <ul className={styles.list}>
           {accommodations.map((accommodation) => (
             <li key={accommodation.id}>
@@ -65,6 +66,14 @@ export function AccommodationsPageContent({
             </li>
           ))}
         </ul>
+        {isOwner ? (
+          <p className={styles.manageHint}>
+            <Link href={getAccommodationsSettingsHref(tripId)} className={styles.manageLink}>
+              ניהול, עריכה ומחיקת מקומות לינה
+            </Link>
+          </p>
+        ) : null}
+        </>
       )}
     </AppPage>
   );

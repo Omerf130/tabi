@@ -15,6 +15,8 @@ export const PLACES_AUTOCOMPLETE_FIELD_MASK =
 export const PLACES_DETAILS_FIELD_MASK =
   "id,displayName,formattedAddress,googleMapsUri,addressComponents";
 
+export const PLACES_PHOTO_FIELD_MASK = "photos";
+
 export const PLACES_DISPLAY_CACHE_TTL_MS = 60 * 60 * 1000;
 
 export const PLACES_RATE_LIMIT_WINDOW_MS = 60 * 1000;
