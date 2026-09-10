@@ -52,6 +52,7 @@ export async function POST(request: Request) {
     const suggestions = await autocompletePlaces({
       query: parsed.data.input,
       sessionToken: parsed.data.sessionToken,
+      includedPrimaryTypes: parsed.data.includedPrimaryTypes,
     });
     return NextResponse.json({ suggestions });
   } catch (error) {

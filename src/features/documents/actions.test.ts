@@ -12,12 +12,16 @@ const {
   updateTravelDocumentMetadataMock,
   replaceTravelDocumentFileMock,
   deleteTravelDocumentMock,
+  getTravelDocumentForTripMock,
+  resolveDocumentItineraryDatesMock,
 } = vi.hoisted(() => ({
   requireTripOwnerMock: vi.fn(),
   createTravelDocumentMock: vi.fn(),
   updateTravelDocumentMetadataMock: vi.fn(),
   replaceTravelDocumentFileMock: vi.fn(),
   deleteTravelDocumentMock: vi.fn(),
+  getTravelDocumentForTripMock: vi.fn(),
+  resolveDocumentItineraryDatesMock: vi.fn(),
 }));
 
 vi.mock("@/features/trips/authorization", () => ({
@@ -41,6 +45,22 @@ vi.mock("next/cache", () => ({
   revalidatePath: vi.fn(),
 }));
 
+vi.mock("@/features/trip-management/revalidation", () => ({
+  revalidateTripManagement: vi.fn(),
+}));
+
+vi.mock("@/features/itinerary/revalidation", () => ({
+  revalidateItineraryPaths: vi.fn(),
+}));
+
+vi.mock("./queries", () => ({
+  getTravelDocumentForTrip: getTravelDocumentForTripMock,
+}));
+
+vi.mock("./resolve-document-itinerary-dates", () => ({
+  resolveDocumentItineraryDates: resolveDocumentItineraryDatesMock,
+}));
+
 const tripId = "507f1f77bcf86cd799439011";
 const documentId = "507f1f77bcf86cd799439012";
 const activityId = "507f1f77bcf86cd799439013";
@@ -58,6 +78,8 @@ describe("travel document actions", () => {
     updateTravelDocumentMetadataMock.mockResolvedValue(undefined);
     replaceTravelDocumentFileMock.mockResolvedValue(undefined);
     deleteTravelDocumentMock.mockResolvedValue(undefined);
+    getTravelDocumentForTripMock.mockResolvedValue(null);
+    resolveDocumentItineraryDatesMock.mockResolvedValue([]);
   });
 
   it("creates document for owner", async () => {

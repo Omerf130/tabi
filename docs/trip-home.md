@@ -21,7 +21,7 @@ Implemented via [`getTripPhase`](../src/features/trips/trip-phase.ts).
 - Integrated hero with countdown
 - **Daily Itinerary Summary:** Day 1 preview (`היום הראשון`) from `startDate` activities
 - Empty Day 1: `היום הראשון עדיין מחכה לתכנון`
-- CTA → `/itinerary?date={startDate}`
+- CTA → `/itinerary/{startDate}`
 
 ### During trip
 
@@ -30,7 +30,7 @@ Implemented via [`getTripPhase`](../src/features/trips/trip-phase.ts).
 - **Now** / **הבא בתור** emphasis integrated into timeline
 - Untimed activities shown as `ללא שעה`
 - Empty today: `היום עדיין פנוי`
-- CTA → `/itinerary?date={todayJapan}`
+- CTA → `/itinerary/{todayJapan}`
 
 ### After trip
 

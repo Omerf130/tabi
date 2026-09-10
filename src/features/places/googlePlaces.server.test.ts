@@ -4,9 +4,12 @@ import {
   autocompleteGeographicPlaces,
   autocompletePlaces,
   fetchPlaceGeographyDetails,
+  resolveActivityPlaceSnapshot,
   resolveSelectedPlace,
 } from "./googlePlaces.server";
 import {
+  PLACES_ACTIVITY_PRIMARY_TYPES,
+  PLACES_ACTIVITY_SNAPSHOT_FIELD_MASK,
   PLACES_AUTOCOMPLETE_FIELD_MASK,
   PLACES_DETAILS_FIELD_MASK,
   PLACES_DETAILS_GEOGRAPHY_FIELD_MASK,
@@ -159,6 +162,63 @@ describe("googlePlaces.server", () => {
     expect(String(url)).toContain("languageCode=he");
     expect(init.headers["X-Goog-FieldMask"]).toBe(PLACES_DETAILS_GEOGRAPHY_FIELD_MASK);
     expect(JSON.stringify(details)).not.toContain("test-key");
+  });
+
+  it("omits primary type filter for activity POI search", async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      json: async () => ({ suggestions: [] }),
+    });
+
+    await autocompletePlaces({
+      query: "nishiki",
+      sessionToken: "11111111-1111-4111-8111-111111111111",
+      includedPrimaryTypes: PLACES_ACTIVITY_PRIMARY_TYPES,
+    });
+
+    const [, init] = fetchMock.mock.calls[0]!;
+    const body = JSON.parse(String(init.body));
+    expect(body.includedPrimaryTypes).toBeUndefined();
+    expect(body.includedRegionCodes).toEqual([...PLACES_INCLUDED_REGION_CODES]);
+  });
+
+  it("resolves activity place snapshot with geography fields", async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        id: "ChIJNishiki",
+        displayName: { text: "Nishiki Market" },
+        formattedAddress: "609 Nishidaimonjicho, Nakagyo Ward, Kyoto",
+        googleMapsUri: "https://maps.google.com/?cid=456",
+        addressComponents: [
+          { longText: "Kyoto", types: ["locality"] },
+          { longText: "Japan", types: ["country"] },
+        ],
+        location: { latitude: 35.005, longitude: 135.765 },
+      }),
+    });
+
+    const preview = await resolveActivityPlaceSnapshot({
+      placeId: "ChIJNishiki",
+      sessionToken: "11111111-1111-4111-8111-111111111111",
+      primaryText: "Nishiki Market",
+      secondaryText: "Kyoto",
+    });
+
+    expect(preview).toMatchObject({
+      placeId: "ChIJNishiki",
+      primaryText: "Nishiki Market",
+      formattedAddress: "609 Nishidaimonjicho, Nakagyo Ward, Kyoto",
+      city: "Kyoto",
+      country: "Japan",
+      latitude: 35.005,
+      longitude: 135.765,
+      googleMapsUrl: "https://maps.google.com/?cid=456",
+    });
+
+    const [url, init] = fetchMock.mock.calls[0]!;
+    expect(String(url)).toContain("languageCode=en");
+    expect(init.headers["X-Goog-FieldMask"]).toBe(PLACES_ACTIVITY_SNAPSHOT_FIELD_MASK);
   });
 
   it("resolves selected place with one terminating details request", async () => {

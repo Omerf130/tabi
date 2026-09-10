@@ -1,6 +1,7 @@
 import "server-only";
 
 import {
+  PLACES_ACTIVITY_SNAPSHOT_FIELD_MASK,
   PLACES_AUTOCOMPLETE_FIELD_MASK,
   PLACES_AUTOCOMPLETE_MAX_SUGGESTIONS,
   PLACES_DETAILS_FIELD_MASK,
@@ -17,6 +18,7 @@ import {
   extractCityFromAddressComponents,
   extractCityFromSecondaryText,
 } from "./extractCity";
+import { extractCountryFromAddressComponents } from "./extractCountry";
 import {
   getCachedPlaceDisplay,
   setCachedPlaceDisplay,
@@ -146,12 +148,25 @@ async function fetchPlaceDetails(
   return (await response.json()) as GooglePlaceDetailsResponse;
 }
 
+function resolveAutocompletePrimaryTypes(
+  includedPrimaryTypes?: PlacePrimaryTypes,
+): readonly string[] | undefined {
+  if (includedPrimaryTypes === undefined) {
+    return PLACES_LODGING_PRIMARY_TYPES;
+  }
+  if (includedPrimaryTypes.length === 0) {
+    return undefined;
+  }
+  return includedPrimaryTypes;
+}
+
 export async function autocompletePlaces(input: {
   query: string;
   sessionToken: string;
   includedPrimaryTypes?: PlacePrimaryTypes;
 }): Promise<PlaceSuggestion[]> {
   const apiKey = getGooglePlacesApiKey();
+  const includedPrimaryTypes = resolveAutocompletePrimaryTypes(input.includedPrimaryTypes);
 
   const response = await fetch("https://places.googleapis.com/v1/places:autocomplete", {
     method: "POST",
@@ -164,7 +179,7 @@ export async function autocompletePlaces(input: {
       input: input.query,
       sessionToken: input.sessionToken,
       includedRegionCodes: [...PLACES_INCLUDED_REGION_CODES],
-      includedPrimaryTypes: [...(input.includedPrimaryTypes ?? PLACES_LODGING_PRIMARY_TYPES)],
+      ...(includedPrimaryTypes ? { includedPrimaryTypes: [...includedPrimaryTypes] } : {}),
       languageCode: PLACES_SEARCH_LANGUAGE_CODE,
       includeQueryPredictions: false,
     }),
@@ -306,6 +321,44 @@ export async function resolveSelectedPlace(input: {
     displayNameJapanese,
     formattedAddressJapanese,
     city,
+    googleMapsUrl: details.googleMapsUri?.trim() || undefined,
+  };
+}
+
+/** Activity selection: one terminating Place Details request with geography snapshot. */
+export async function resolveActivityPlaceSnapshot(input: {
+  placeId: string;
+  sessionToken: string;
+  primaryText: string;
+  secondaryText?: string;
+}): Promise<ResolvedPlacePreview> {
+  const details = await fetchPlaceDetails(input.placeId, {
+    sessionToken: input.sessionToken,
+    languageCode: PLACES_SEARCH_LANGUAGE_CODE,
+    fieldMask: PLACES_ACTIVITY_SNAPSHOT_FIELD_MASK,
+  });
+
+  const latitude = details.location?.latitude;
+  const longitude = details.location?.longitude;
+  if (typeof latitude !== "number" || typeof longitude !== "number") {
+    throw new GooglePlacesRequestError(PLACES_MESSAGES.resolveFailed);
+  }
+
+  const formattedAddress = details.formattedAddress?.trim();
+  const city =
+    extractCityFromAddressComponents(details.addressComponents) ||
+    extractCityFromSecondaryText(input.secondaryText);
+  const country = extractCountryFromAddressComponents(details.addressComponents);
+
+  return {
+    placeId: input.placeId,
+    primaryText: input.primaryText,
+    secondaryText: input.secondaryText,
+    formattedAddress,
+    city,
+    country,
+    latitude,
+    longitude,
     googleMapsUrl: details.googleMapsUri?.trim() || undefined,
   };
 }

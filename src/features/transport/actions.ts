@@ -1,8 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { revalidateItineraryPaths } from "@/features/itinerary/revalidation";
 import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireTripOwner } from "@/features/trips/authorization";
+import { getTransportForTrip } from "./queries";
 import { TRANSPORT_MESSAGES } from "./constants";
 import {
   createTransportSchema,
@@ -26,10 +28,14 @@ export type TransportActionState = {
   fieldErrors?: Record<string, string>;
 };
 
-function revalidateTransportPaths(tripId: string, transportId?: string): void {
+function revalidateTransportPaths(
+  tripId: string,
+  transportId?: string,
+  departureDates: readonly string[] = [],
+): void {
   revalidatePath(`/app/trips/${tripId}/transport`);
   revalidateTripManagement(tripId, "transport");
-  revalidatePath(`/app/trips/${tripId}/itinerary`);
+  revalidateItineraryPaths(tripId, departureDates);
   revalidatePath(`/app/trips/${tripId}/more`);
   revalidatePath(`/app/trips/${tripId}/documents`);
   revalidatePath(`/app/trips/${tripId}`);
@@ -57,7 +63,7 @@ export async function createTransportAction(
   try {
     const trip = await requireTripOwner(String(formData.get("tripId")));
     const transportId = await createTransport(trip.id, parsed.data);
-    revalidateTransportPaths(trip.id, transportId);
+    revalidateTransportPaths(trip.id, transportId, [parsed.data.departure.date]);
     return { ok: true, success: "נשמר", transportId };
   } catch (error) {
     if (error instanceof TransportValidationError) {
@@ -84,8 +90,13 @@ export async function updateTransportAction(
 
   try {
     const trip = await requireTripOwner(String(formData.get("tripId")));
+    const existing = await getTransportForTrip(trip.id, parsed.data.transportId);
     await updateTransport(trip.id, parsed.data);
-    revalidateTransportPaths(trip.id, parsed.data.transportId);
+    const dates = [
+      parsed.data.departure.date,
+      existing?.departure.date,
+    ].filter((value): value is string => Boolean(value));
+    revalidateTransportPaths(trip.id, parsed.data.transportId, dates);
     return { ok: true, success: "עודכן" };
   } catch (error) {
     if (error instanceof TransportValidationError) {
@@ -113,8 +124,13 @@ export async function deleteTransportAction(
 
   try {
     const trip = await requireTripOwner(parsed.data.tripId);
+    const existing = await getTransportForTrip(trip.id, parsed.data.transportId);
     await deleteTransport(trip.id, parsed.data.transportId);
-    revalidateTransportPaths(trip.id, parsed.data.transportId);
+    revalidateTransportPaths(
+      trip.id,
+      parsed.data.transportId,
+      existing ? [existing.departure.date] : [],
+    );
     return { ok: true, success: "נמחק" };
   } catch (error) {
     if (error instanceof TransportNotFoundError) {

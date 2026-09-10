@@ -27,8 +27,15 @@ There is no `status` field in Phase 7. Completion / “done” states are deferr
 | `order` | number | ≥ 0 |
 | `startTime` | string? | `HH:mm` wall clock, optional |
 | `endTime` | string? | Requires `startTime`; `endTime >= startTime`; no overnight ranges |
-| `locationName` | string? | ≤ 200 chars |
+| `placeSource` | `"google" \| "manual"`? | Missing legacy rows treated as `manual` |
+| `googlePlaceId` | string? | Required when `placeSource === "google"` |
+| `locationName` | string? | ≤ 200 chars; required for Google-backed rows |
 | `address` | string? | ≤ 500 chars |
+| `city` | string? | Persisted Google snapshot |
+| `country` | string? | Persisted Google snapshot |
+| `latitude` | number? | Required for Google-backed rows |
+| `longitude` | number? | Required for Google-backed rows |
+| `googleMapsUrl` | string? | Persisted Google snapshot for navigation |
 | `notes` | string? | ≤ 2000 chars |
 | `createdAt` / `updatedAt` | Date | Mongoose timestamps |
 
@@ -97,41 +104,33 @@ Members see the same accordion navigation; owner controls are presentation-only 
 - Activity count on collapsed rows from grouped in-memory data
 - Activities render only inside the expanded day
 
-### Default expanded day
+### Day workspace editing
 
-On load (server-side):
+Activity owner mutations live on the **Day workspace** (`/itinerary/[date]`), not the trip overview.
 
-1. Valid `?date=` within trip → that day
-2. Else before trip → `startDate`
-3. Else during trip → Japan today (`Asia/Tokyo`)
-4. Else after trip → `endDate`
-
-User expand/collapse is **client local state** — no router history entry per toggle.
+- **Create:** from `+ הוספה ליום → פעילות` or inline `+ הוספת פעילות`; date locked to the current day
+- **Edit:** replaces activity row inline on the day timeline
+- **Move:** separate compact day picker via **העברה ליום אחר**
+- **Reorder/delete:** inline secondary actions row under **פעולות**
+- One active editor at a time; dirty forms require confirmation before discard
+- Mutations revalidate overview + affected day paths; client calls `router.refresh()`
 
 ### Deep linking
 
 ```
-/app/trips/[tripId]/itinerary?date=2026-10-21
+/app/trips/[tripId]/itinerary/2026-10-21
 ```
 
-`id="day-YYYY-MM-DD"` remains a stable DOM anchor only. Hash fragments are not read server-side.
-
-### Inline owner editing
-
-- **Create:** `+ הוספת פעילות` inside expanded day; date locked to that day
-- **Edit:** replaces activity row inline; date not shown
-- **Move:** separate compact day picker via **העברה ליום אחר**
-- **Reorder/delete:** inline secondary actions row under **פעולות**
-- One active editor at a time; dirty forms require confirmation before discard
-- Mutations return `{ ok }` + `revalidatePath`; client calls `router.refresh()` — no page navigation
+Legacy `/itinerary?date=YYYY-MM-DD` redirects to `/itinerary/YYYY-MM-DD`.
 
 ## Routes
 
 | Path | Purpose |
 |---|---|
-| `/app/trips/[tripId]/itinerary?date=` | Main itinerary accordion |
-| `/app/trips/[tripId]/itinerary/activities/new` | Redirect stub → itinerary `?date=` |
-| `/app/trips/[tripId]/itinerary/activities/[activityId]/edit` | Redirect stub → itinerary `?date={activity.date}` |
+| `/app/trips/[tripId]/itinerary` | Read-only trip overview |
+| `/app/trips/[tripId]/itinerary/[date]` | Day workspace (activity CRUD for owners) |
+| `/app/trips/[tripId]/itinerary/activities/new` | Redirect stub → day page |
+| `/app/trips/[tripId]/itinerary/activities/[activityId]/edit` | Redirect stub → activity's day page |
 
 Normal product UX never links to the redirect stubs.
 
@@ -150,7 +149,7 @@ src/features/itinerary/
   reorder-activity.ts
   queries.ts
   actions.ts
-  ItineraryDayAccordion.tsx
+  DayTimeline.client.tsx
   ActivityForm.tsx
   ActivityRow.tsx
   ActivityRowActions.tsx

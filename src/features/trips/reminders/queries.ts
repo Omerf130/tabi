@@ -48,6 +48,20 @@ export async function listRemindersForUserTrip(
   return reminders.map((reminder) => toTripReminderViewModel(reminder, todayJapan));
 }
 
+export async function listRemindersForUserTripDay(
+  tripId: string,
+  userId: string,
+  date: string,
+  todayJapan: string,
+): Promise<TripReminderViewModel[]> {
+  await connectDb();
+  const reminders = await TripReminder.find({ tripId, userId, date })
+    .sort({ isCompleted: 1, time: 1, _id: 1 })
+    .lean();
+
+  return reminders.map((reminder) => toTripReminderViewModel(reminder, todayJapan));
+}
+
 export async function listIncompleteRemindersForUserTripDay(
   tripId: string,
   userId: string,

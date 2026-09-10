@@ -10,6 +10,7 @@ function activity(
     title: "פעילות",
     type: "other",
     typeLabel: "אחר",
+    placeSource: "manual",
     ...overrides,
   };
 }

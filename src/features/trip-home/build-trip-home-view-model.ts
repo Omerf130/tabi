@@ -80,7 +80,7 @@ export function buildTripHomeViewModel({
   if (phase === "upcoming") {
     const countdownDays = getCalendarDaysUntil(todayJapan, trip.startDate);
     const preview = buildUpcomingItineraryPreview(dayActivities);
-    const itineraryHref = `${basePath}?date=${trip.startDate}`;
+    const itineraryHref = `${basePath}/${trip.startDate}`;
     const dailyItinerary: DailyItinerarySummary = {
       title: "היום הראשון",
       subtitle: `${formatTripDayWeekday(trip.startDate)} · ${formatTripDayDateLabel(trip.startDate)}`,
@@ -119,7 +119,7 @@ export function buildTripHomeViewModel({
 
   const dayNumber = getTripDayNumber(trip.startDate, trip.endDate, todayJapan)!;
   const preview = buildActiveItineraryPreview(dayActivities, nowJapanTime);
-  const itineraryHref = `${basePath}?date=${todayJapan}`;
+  const itineraryHref = `${basePath}/${todayJapan}`;
   const dailyItinerary: DailyItinerarySummary = {
     title: "המסלול של היום",
     subtitle: `${formatTripDayWeekday(todayJapan)} · ${formatTripDayDateLabel(todayJapan)}`,

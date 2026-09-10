@@ -18,6 +18,7 @@ function activity(
     type: "other",
     typeLabel: "אחר",
     order: 0,
+    placeSource: "manual",
     ...overrides,
   };
 }
@@ -45,7 +46,7 @@ describe("buildTripHomeViewModel", () => {
     expect(model.dailyItinerary?.dayMeta).toBe("יום 1 מתוך 25");
     expect(model.dailyItinerary?.items[0]?.title).toBe("קיוטו");
     expect(model.dailyItinerary?.ctaHref).toBe(
-      "/app/trips/507f1f77bcf86cd799439011/itinerary?date=2026-10-25",
+      "/app/trips/507f1f77bcf86cd799439011/itinerary/2026-10-25",
     );
     expect(model.dailyItinerary?.ctaLabel).toBe("למסלול המלא");
     expect(model.reminderStrip.reminders).toEqual([]);
@@ -98,7 +99,7 @@ describe("buildTripHomeViewModel", () => {
       "next",
     );
     expect(model.dailyItinerary?.ctaHref).toBe(
-      "/app/trips/507f1f77bcf86cd799439011/itinerary?date=2026-11-01",
+      "/app/trips/507f1f77bcf86cd799439011/itinerary/2026-11-01",
     );
     expect(model.dailyItinerary?.ctaLabel).toBe("למסלול המלא של היום");
   });

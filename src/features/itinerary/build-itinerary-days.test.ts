@@ -57,6 +57,7 @@ describe("buildItineraryDays", () => {
           type: "attraction",
           typeLabel: "אטרקציה",
           order: 0,
+          placeSource: "manual",
         },
         {
           id: "b",
@@ -65,6 +66,7 @@ describe("buildItineraryDays", () => {
           type: "transport",
           typeLabel: "תחבורה",
           order: 0,
+          placeSource: "manual",
         },
       ],
     });
@@ -103,6 +105,7 @@ describe("buildItineraryDays", () => {
           type: "attraction",
           typeLabel: "אטרקציה",
           order: 0,
+          placeSource: "manual",
           startTime: "10:00",
           timeLabel: "10:00",
         },

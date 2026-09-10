@@ -38,8 +38,21 @@ export function buildTransportDetailHref(tripId: string, transportId: string): s
   return `/app/trips/${tripId}/transport/${transportId}`;
 }
 
-export function buildTransportNewHref(tripId: string, type: TransportType): string {
+export function buildTransportNewHref(
+  tripId: string,
+  type: TransportType,
+  options?: {
+    departureDate?: string;
+    fromDay?: string;
+  },
+): string {
   const params = new URLSearchParams({ type });
+  if (options?.departureDate) {
+    params.set("departureDate", options.departureDate);
+  }
+  if (options?.fromDay) {
+    params.set("fromDay", options.fromDay);
+  }
   return `/app/trips/${tripId}/transport/new?${params.toString()}`;
 }
 

@@ -10,6 +10,7 @@ import {
   ActivityValidationError,
 } from "./errors";
 import { listActivitiesForTripDay } from "./queries";
+import { toActivityDocumentFields } from "./activity-document-fields";
 import type { UpdateActivityInput } from "./schemas";
 import { validateActivityTimes } from "./time";
 
@@ -50,6 +51,8 @@ export async function updateActivity(
     order = getNextActivityOrder(destinationActivities);
   }
 
+  const locationFields = toActivityDocumentFields(input);
+
   const updated = await Activity.findOneAndUpdate(
     { _id: input.activityId, tripId: trip.id },
     {
@@ -59,9 +62,8 @@ export async function updateActivity(
       order,
       startTime: input.startTime ?? null,
       endTime: input.endTime ?? null,
-      locationName: input.locationName ?? null,
-      address: input.address ?? null,
       notes: input.notes ?? null,
+      ...locationFields,
     },
     { new: true },
   ).lean();

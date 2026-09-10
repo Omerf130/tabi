@@ -12,7 +12,10 @@ import { ActivityRowActions } from "./ActivityRowActions";
 import { ACTIVITY_MESSAGES } from "./constants";
 import { formatDayItineraryCount } from "./format-day-itinerary-count";
 import { TransportItineraryRow } from "./TransportItineraryRow";
-import { toActivityFormValues } from "./to-activity-view-model";
+import {
+  emptyActivityFormValues,
+  toActivityFormValues,
+} from "./to-activity-view-model";
 import type { ActivityActionState } from "./actions";
 import type { ActivityViewModel, TripDayViewModel } from "./types";
 import styles from "./ItineraryPage.module.scss";
@@ -268,16 +271,10 @@ export function ItineraryDayAccordion({
                       tripDates={tripDates}
                       mode="create"
                       lockDate
-                      defaultValues={{
+                      defaultValues={emptyActivityFormValues({
                         date: day.date,
-                        title: "",
                         type: ACTIVITY_TYPES[0],
-                        startTime: "",
-                        endTime: "",
-                        locationName: "",
-                        address: "",
-                        notes: "",
-                      }}
+                      })}
                       onCancel={handleCancelEditor}
                       onSuccess={handleMutationSuccess}
                       onDirtyChange={(dirty) =>

@@ -14,16 +14,27 @@ Phase 9B introduces a reusable Google Places layer under `src/features/places/`.
 
 ```
 src/features/places/
-  googlePlaces.server.ts   # server-only fetch + normalization
-  placeSession.ts          # UUID session tokens
-  PlaceSearchField.tsx     # reusable client search UI
-  schemas.ts               # API request validation
+  googlePlaces.server.ts          # server-only fetch + normalization
+  placeSession.ts                 # UUID session tokens
+  use-place-autocomplete-search.ts # reusable client autocomplete lifecycle
+  place-autocomplete-race.ts      # stale-response guard
+  PlaceSearchField.tsx            # reusable client search UI
+  schemas.ts                      # API request validation
 ```
 
 Server route handlers:
 
 - `POST /app/api/places/autocomplete`
 - `POST /app/api/places/resolve`
+
+## Autocomplete focus fix
+
+The search input must **never** be disabled while autocomplete requests are loading.
+
+- Root cause: `disabled={disabled || isPending}` removed the input from the tab order and caused focus loss on mobile and desktop.
+- Fix: loading is visual-only (`aria-busy`, subtle spinner). The input stays `disabled={disabled}`.
+- Request lifecycle lives in `usePlaceAutocompleteSearch` (debounce, min length, abort + request-id race protection).
+- `PlaceSearchField` owns UI only: input, listbox, keyboard, selection preview, attribution.
 
 ## Session token lifecycle
 
@@ -47,7 +58,7 @@ Legacy Phase 9 fields (`name`, `city`, …) remain readable for backward compati
 
 ## Japan configuration
 
-- Autocomplete: `includedRegionCodes: ["jp"]`, `includedPrimaryTypes: ["lodging"]` for Accommodation
+- Autocomplete: `includedRegionCodes: ["jp"]`, `includedPrimaryTypes: ["lodging"]` for Accommodation (default when omitted)
 - Search language: `en` for readable suggestions
 - Resolve/read Japanese presentation: `languageCode: "ja"` on Place Details
 
@@ -65,9 +76,37 @@ When Google Places data is shown without an embedded map, display **Powered by G
 - Selected place preview in Settings
 - Traveler accommodation detail (google-backed)
 
-## Future reuse
+## Reuse: PlaceSearchField props
 
-Other place-based features (restaurants, attractions, stations) should import `PlaceSearchField` and `googlePlaces.server.ts` with different `includedPrimaryTypes`.
+| Prop | Purpose |
+|---|---|
+| `includedPrimaryTypes?` | Override Google primary types (Accommodation default: `["lodging"]`) |
+| `placeholder?` | Input placeholder |
+| `selectedPreviewLabel?` | Optional label above selected-place preview |
+
+Autocomplete API accepts optional `includedPrimaryTypes`; when omitted, server defaults to lodging types for backward-compatible Accommodation behavior.
+
+## Future Activity integration (not implemented yet)
+
+**Architecture decision:** Google-backed Activities will persist a **minimal selected-place snapshot**, not `googlePlaceId` alone.
+
+Planned durable fields:
+
+```
+placeSource: "google" | "manual"
+googlePlaceId?
+locationName?
+address?
+city?
+country?
+latitude?
+longitude?
+googleMapsUrl?
+```
+
+Reason: a Google Place is selected once; Tabi should retain enough location data for navigation, show-to-driver, automatic weather, and future routing/distance features without a new Place Details request every time the Activity is consumed.
+
+Exact Google field mask and schema validation will be implemented in the next Activity phase.
 
 ## Expected API usage (one accommodation entry)
 

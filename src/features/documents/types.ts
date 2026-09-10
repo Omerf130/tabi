@@ -43,6 +43,15 @@ export type TravelDocumentViewModel = {
 
 export type TravelDocumentSettingsViewModel = TravelDocumentViewModel;
 
+export type TravelDocumentDayContext = {
+  transportDepartureDate?: string;
+  accommodationCheckIn?: string;
+  accommodationCheckOut?: string;
+};
+
+export type ResolvedTravelDocumentViewModel = TravelDocumentViewModel &
+  TravelDocumentDayContext;
+
 export type ActivityLinkOption = {
   id: string;
   label: string;

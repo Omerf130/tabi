@@ -13,5 +13,5 @@ export default async function NewActivityRedirectPage({
   const { date } = await searchParams;
   const trip = await requireTripOwner(tripId);
   const resolvedDate = resolveDefaultActivityDate(trip, date);
-  redirect(`/app/trips/${tripId}/itinerary?date=${resolvedDate}`);
+  redirect(`/app/trips/${tripId}/itinerary/${resolvedDate}`);
 }

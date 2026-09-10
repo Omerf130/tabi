@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { requireUser } from "@/features/auth/session";
 import { requireTripOwner } from "@/features/trips/authorization";
 import { createActivity } from "./create-activity";
@@ -15,10 +14,12 @@ import { reorderActivity } from "./reorder-activity";
 import {
   createActivitySchema,
   deleteActivitySchema,
+  parseActivityFieldsFromFormData,
   reorderActivitySchema,
   updateActivitySchema,
 } from "./schemas";
 import { updateActivity } from "./update-activity";
+import { revalidateItineraryPaths } from "./revalidation";
 
 export type ActivityFieldErrors = {
   title?: string;
@@ -40,10 +41,6 @@ export type ActivityActionState = {
   fieldErrors?: ActivityFieldErrors;
 };
 
-function revalidateItinerary(tripId: string) {
-  revalidatePath(`/app/trips/${tripId}/itinerary`);
-}
-
 function mapActivityFieldErrors(error: {
   issues: readonly { path: readonly PropertyKey[] }[];
 }): ActivityFieldErrors {
@@ -62,18 +59,6 @@ function mapActivityFieldErrors(error: {
   return fieldErrors;
 }
 
-function readActivityFormFields(formData: FormData) {
-  return {
-    title: formData.get("title"),
-    type: formData.get("type"),
-    date: formData.get("date"),
-    startTime: formData.get("startTime") ?? "",
-    endTime: formData.get("endTime") ?? "",
-    locationName: formData.get("locationName") ?? "",
-    address: formData.get("address") ?? "",
-    notes: formData.get("notes") ?? "",
-  };
-}
 
 export async function createActivityAction(
   _prev: ActivityActionState,
@@ -83,7 +68,7 @@ export async function createActivityAction(
 
   const parsed = createActivitySchema.safeParse({
     tripId: formData.get("tripId"),
-    ...readActivityFormFields(formData),
+    ...parseActivityFieldsFromFormData(formData),
   });
 
   if (!parsed.success) {
@@ -93,7 +78,7 @@ export async function createActivityAction(
   try {
     const trip = await requireTripOwner(parsed.data.tripId);
     const activityId = await createActivity(trip, parsed.data);
-    revalidateItinerary(trip.id);
+    revalidateItineraryPaths(trip.id, [parsed.data.date]);
     return {
       ok: true,
       date: parsed.data.date,
@@ -116,7 +101,7 @@ export async function updateActivityAction(
   const parsed = updateActivitySchema.safeParse({
     tripId: formData.get("tripId"),
     activityId: formData.get("activityId"),
-    ...readActivityFormFields(formData),
+    ...parseActivityFieldsFromFormData(formData),
   });
 
   if (!parsed.success) {
@@ -132,7 +117,10 @@ export async function updateActivityAction(
 
     const previousDate = existing.date;
     const date = await updateActivity(trip, parsed.data);
-    revalidateItinerary(trip.id);
+    revalidateItineraryPaths(
+      trip.id,
+      previousDate !== date ? [date, previousDate] : [date],
+    );
     return {
       ok: true,
       date,
@@ -168,7 +156,7 @@ export async function deleteActivityAction(
   try {
     await requireTripOwner(parsed.data.tripId);
     const date = await deleteActivity(parsed.data);
-    revalidateItinerary(parsed.data.tripId);
+    revalidateItineraryPaths(parsed.data.tripId, [date]);
     return { ok: true, date, activityId: parsed.data.activityId };
   } catch (error) {
     if (error instanceof ActivityNotFoundError) {
@@ -196,9 +184,20 @@ export async function reorderActivityAction(
 
   try {
     await requireTripOwner(parsed.data.tripId);
+    const existing = await getActivityForTrip(
+      parsed.data.tripId,
+      parsed.data.activityId,
+    );
     await reorderActivity(parsed.data);
-    revalidateItinerary(parsed.data.tripId);
-    return { ok: true, activityId: parsed.data.activityId };
+    revalidateItineraryPaths(
+      parsed.data.tripId,
+      existing ? [existing.date] : [],
+    );
+    return {
+      ok: true,
+      activityId: parsed.data.activityId,
+      date: existing?.date,
+    };
   } catch (error) {
     if (error instanceof ActivityNotFoundError) {
       return { error: ACTIVITY_MESSAGES.notFound };

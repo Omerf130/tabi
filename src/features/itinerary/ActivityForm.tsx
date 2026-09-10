@@ -17,6 +17,7 @@ import {
   updateActivityAction,
   type ActivityActionState,
 } from "./actions";
+import { ActivityLocationSection } from "./ActivityLocationSection";
 import type { ActivityFormValues } from "./types";
 import styles from "./ActivityForm.module.scss";
 
@@ -153,30 +154,15 @@ export function ActivityForm({
         </Field>
       </div>
 
-      <Field
-        label="מיקום"
-        htmlFor="locationName"
-        error={state.fieldErrors?.locationName}
-      >
-        <Input
-          id="locationName"
-          name="locationName"
-          defaultValue={defaultValues.locationName}
-          maxLength={200}
-          aria-invalid={state.fieldErrors?.locationName ? true : undefined}
+      <div className={styles.locationBlock}>
+        <p className={styles.locationHeading}>מיקום</p>
+        <ActivityLocationSection
+          tripId={tripId}
+          defaultValues={defaultValues}
+          fieldErrors={state.fieldErrors}
+          onDirtyChange={handleChange}
         />
-      </Field>
-
-      <Field label="כתובת" htmlFor="address" error={state.fieldErrors?.address}>
-        <Input
-          id="address"
-          name="address"
-          defaultValue={defaultValues.address}
-          maxLength={500}
-          dir="auto"
-          aria-invalid={state.fieldErrors?.address ? true : undefined}
-        />
-      </Field>
+      </div>
 
       <Field label="הערות" htmlFor="notes" error={state.fieldErrors?.notes}>
         <Textarea

@@ -12,5 +12,6 @@ export function extractCountryFromAddressComponents(
   }
 
   const match = components.find((component) => component.types?.includes("country"));
-  return match?.longText?.trim() || match?.shortText?.trim();
+  const text = match?.longText?.trim() || match?.shortText?.trim();
+  return text || undefined;
 }

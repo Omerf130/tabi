@@ -16,6 +16,7 @@ function activity(
     type: "other",
     typeLabel: "אחר",
     order: 0,
+    placeSource: "manual",
     ...overrides,
   };
 }

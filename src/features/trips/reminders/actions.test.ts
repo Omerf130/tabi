@@ -11,12 +11,14 @@ const {
   createTripReminderMock,
   completeTripReminderMock,
   deleteTripReminderMock,
+  getReminderForUserMock,
 } = vi.hoisted(() => ({
   requireUserMock: vi.fn(),
   requireTripMemberMock: vi.fn(),
   createTripReminderMock: vi.fn(),
   completeTripReminderMock: vi.fn(),
   deleteTripReminderMock: vi.fn(),
+  getReminderForUserMock: vi.fn(),
 }));
 
 vi.mock("@/features/auth/session", () => ({
@@ -44,6 +46,18 @@ vi.mock("next/cache", () => ({
   revalidatePath: vi.fn(),
 }));
 
+vi.mock("@/features/trip-management/revalidation", () => ({
+  revalidateTripManagement: vi.fn(),
+}));
+
+vi.mock("@/features/itinerary/revalidation", () => ({
+  revalidateItineraryPaths: vi.fn(),
+}));
+
+vi.mock("./queries", () => ({
+  getReminderForUser: getReminderForUserMock,
+}));
+
 describe("trip reminder actions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -56,6 +70,13 @@ describe("trip reminder actions", () => {
     createTripReminderMock.mockResolvedValue("reminder-1");
     completeTripReminderMock.mockResolvedValue(undefined);
     deleteTripReminderMock.mockResolvedValue(undefined);
+    getReminderForUserMock.mockResolvedValue({
+      _id: { toString: () => "507f1f77bcf86cd799439012" },
+      date: "2026-10-25",
+      time: "14:30",
+      text: "Reminder",
+      isCompleted: false,
+    });
   });
 
   it("creates a reminder for the current user", async () => {

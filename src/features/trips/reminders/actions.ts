@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { revalidateItineraryPaths } from "@/features/itinerary/revalidation";
 import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireUser } from "@/features/auth/session";
 import { requireTripMember } from "@/features/trips/authorization";
@@ -13,6 +14,7 @@ import {
   TripReminderValidationError,
   updateTripReminder,
 } from "./reminder-domain";
+import { getReminderForUser } from "./queries";
 import {
   createTripReminderSchema,
   tripReminderMutationSchema,
@@ -26,9 +28,10 @@ export type TripReminderActionState = {
   fieldErrors?: Record<string, string>;
 };
 
-function revalidateTripReminderPaths(tripId: string): void {
+function revalidateTripReminderPaths(tripId: string, dates: readonly string[] = []): void {
   revalidatePath(`/app/trips/${tripId}`);
   revalidateTripManagement(tripId, "reminders");
+  revalidateItineraryPaths(tripId, dates);
 }
 
 export async function createTripReminderAction(
@@ -63,7 +66,7 @@ export async function createTripReminderAction(
       time: parsed.data.time,
       text: parsed.data.text,
     });
-    revalidateTripReminderPaths(trip.id);
+    revalidateTripReminderPaths(trip.id, [parsed.data.date]);
     return { ok: true, success: TRIP_REMINDER_MESSAGES.created };
   } catch (error) {
     if (error instanceof TripReminderValidationError) {
@@ -97,6 +100,11 @@ export async function updateTripReminderAction(
   try {
     const user = await requireUser();
     const trip = await requireTripMember(parsed.data.tripId);
+    const existing = await getReminderForUser(
+      trip.id,
+      user.id,
+      parsed.data.reminderId,
+    );
     await updateTripReminder({
       tripId: trip.id,
       userId: user.id,
@@ -107,7 +115,12 @@ export async function updateTripReminderAction(
       time: parsed.data.time,
       text: parsed.data.text,
     });
-    revalidateTripReminderPaths(trip.id);
+    revalidateTripReminderPaths(
+      trip.id,
+      existing && existing.date !== parsed.data.date
+        ? [parsed.data.date, existing.date]
+        : [parsed.data.date],
+    );
     return { ok: true, success: TRIP_REMINDER_MESSAGES.updated };
   } catch (error) {
     if (error instanceof TripReminderValidationError) {
@@ -136,12 +149,20 @@ export async function completeTripReminderAction(
   try {
     const user = await requireUser();
     await requireTripMember(parsed.data.tripId);
+    const existing = await getReminderForUser(
+      parsed.data.tripId,
+      user.id,
+      parsed.data.reminderId,
+    );
     await completeTripReminder({
       tripId: parsed.data.tripId,
       userId: user.id,
       reminderId: parsed.data.reminderId,
     });
-    revalidateTripReminderPaths(parsed.data.tripId);
+    revalidateTripReminderPaths(
+      parsed.data.tripId,
+      existing ? [existing.date] : [],
+    );
     return { ok: true, success: TRIP_REMINDER_MESSAGES.completed };
   } catch (error) {
     if (error instanceof TripReminderNotFoundError) {
@@ -167,12 +188,20 @@ export async function deleteTripReminderAction(
   try {
     const user = await requireUser();
     await requireTripMember(parsed.data.tripId);
+    const existing = await getReminderForUser(
+      parsed.data.tripId,
+      user.id,
+      parsed.data.reminderId,
+    );
     await deleteTripReminder({
       tripId: parsed.data.tripId,
       userId: user.id,
       reminderId: parsed.data.reminderId,
     });
-    revalidateTripReminderPaths(parsed.data.tripId);
+    revalidateTripReminderPaths(
+      parsed.data.tripId,
+      existing ? [existing.date] : [],
+    );
     return { ok: true, success: TRIP_REMINDER_MESSAGES.deleted };
   } catch (error) {
     if (error instanceof TripReminderNotFoundError) {

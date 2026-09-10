@@ -76,11 +76,13 @@ function TripFields({
   startDate,
   endDate,
   idPrefix,
+  defaultCheckInDate,
 }: {
   accommodation?: AccommodationSettingsViewModel;
   startDate: string;
   endDate: string;
   idPrefix: string;
+  defaultCheckInDate?: string;
 }) {
   return (
     <>
@@ -90,7 +92,7 @@ function TripFields({
             id={`${idPrefix}-checkIn`}
             name="checkInDate"
             type="date"
-            defaultValue={accommodation?.checkInDate}
+            defaultValue={accommodation?.checkInDate ?? defaultCheckInDate}
             min={startDate}
             max={endDate}
             required
@@ -198,7 +200,7 @@ function ManualFields({
   );
 }
 
-function AccommodationForm({
+export function TripAccommodationForm({
   tripId,
   accommodation,
   startDate,
@@ -206,7 +208,9 @@ function AccommodationForm({
   idPrefix,
   action,
   submitLabel,
+  defaultCheckInDate,
   onCancel,
+  onSuccess,
 }: {
   tripId: string;
   accommodation?: AccommodationSettingsViewModel;
@@ -217,13 +221,23 @@ function AccommodationForm({
     | typeof createAccommodationAction
     | typeof updateAccommodationAction;
   submitLabel: string;
+  defaultCheckInDate?: string;
   onCancel?: () => void;
+  onSuccess?: () => void;
 }) {
+  const router = useRouter();
   const [manualMode, setManualMode] = useState(isManualAccommodation(accommodation));
   const [googleSelection, setGoogleSelection] = useState<PlaceSearchSelection | null>(
     toInitialGoogleSelection(accommodation),
   );
   const [state, formAction] = useActionState(action, initialState);
+
+  useEffect(() => {
+    if (state.ok) {
+      onSuccess?.();
+      router.refresh();
+    }
+  }, [onSuccess, router, state.ok]);
 
   const isGoogleMode = !manualMode;
   const canSubmitGoogle = manualMode || Boolean(googleSelection);
@@ -273,6 +287,7 @@ function AccommodationForm({
         startDate={startDate}
         endDate={endDate}
         idPrefix={idPrefix}
+        defaultCheckInDate={defaultCheckInDate}
       />
 
       {state.error ? (
@@ -322,7 +337,7 @@ function AccommodationRow({
   if (editing) {
     return (
       <li className={styles.item}>
-        <AccommodationForm
+        <TripAccommodationForm
           tripId={tripId}
           accommodation={accommodation}
           startDate={startDate}
@@ -440,7 +455,7 @@ export function TripAccommodationSettings({
       ) : (
         <div className={styles.createForm}>
           <p className={styles.createLabel}>הוספת מקום לינה</p>
-          <AccommodationForm
+          <TripAccommodationForm
             tripId={tripId}
             startDate={startDate}
             endDate={endDate}

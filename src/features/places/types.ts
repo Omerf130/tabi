@@ -11,7 +11,11 @@ export type ResolvedPlacePreview = {
   secondaryText?: string;
   displayNameJapanese?: string;
   formattedAddressJapanese?: string;
+  formattedAddress?: string;
   city?: string;
+  country?: string;
+  latitude?: number;
+  longitude?: number;
   googleMapsUrl?: string;
 };
 

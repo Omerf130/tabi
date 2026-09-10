@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AppPage } from "@/features/app-shell/AppPage";
 import { TripHeader } from "@/features/app-shell/TripHeader";
+import {
+  buildItineraryDayHref,
+  parseTransportFromDayParam,
+} from "@/features/itinerary/routes";
 import { parseTransportTypeParam } from "@/features/transport/schemas";
 import { createEmptyTransportFormValues } from "@/features/transport/transport-form-defaults";
 import { TransportForm } from "@/features/transport/TransportForm.client";
@@ -28,10 +32,10 @@ export default async function NewTransportPage({
   searchParams,
 }: {
   params: Promise<{ tripId: string }>;
-  searchParams: Promise<{ type?: string }>;
+  searchParams: Promise<{ type?: string; departureDate?: string; fromDay?: string }>;
 }) {
   const { tripId } = await params;
-  const { type } = await searchParams;
+  const { type, departureDate, fromDay } = await searchParams;
   const trip = await requireTripOwner(tripId);
   const transportType = parseTransportTypeParam(type);
 
@@ -40,6 +44,23 @@ export default async function NewTransportPage({
   }
 
   const defaultValues = createEmptyTransportFormValues(transportType);
+  const resolvedDepartureDate =
+    departureDate &&
+    parseTransportFromDayParam(departureDate, trip.startDate, trip.endDate);
+  if (resolvedDepartureDate) {
+    defaultValues.departureDate = resolvedDepartureDate;
+    defaultValues.arrivalDate = resolvedDepartureDate;
+  }
+
+  const resolvedFromDay = parseTransportFromDayParam(
+    fromDay,
+    trip.startDate,
+    trip.endDate,
+  );
+  const successHref = resolvedFromDay
+    ? buildItineraryDayHref(tripId, resolvedFromDay)
+    : undefined;
+  const backHref = successHref ?? `/app/trips/${tripId}/transport`;
 
   return (
     <>
@@ -47,10 +68,15 @@ export default async function NewTransportPage({
         title={`הוספת ${TRANSPORT_TYPE_SINGULAR_LABELS[transportType]}`}
         tripName={trip.name}
         showTripSwitch
-        backHref={`/app/trips/${tripId}/transport`}
+        backHref={backHref}
       />
       <AppPage width="content">
-        <TransportForm tripId={trip.id} defaultValues={defaultValues} mode="create" />
+        <TransportForm
+          tripId={trip.id}
+          defaultValues={defaultValues}
+          mode="create"
+          successHref={successHref}
+        />
       </AppPage>
     </>
   );

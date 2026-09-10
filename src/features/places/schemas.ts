@@ -18,6 +18,11 @@ const placeIdSchema = z
   .trim()
   .refine(isValidGooglePlaceId, { message: "Invalid place id" });
 
+const includedPrimaryTypesSchema = z
+  .array(z.string().trim().min(1).max(64))
+  .max(5)
+  .optional();
+
 export const placesAutocompleteRequestSchema = z.object({
   tripId: tripIdSchema,
   input: z
@@ -26,6 +31,7 @@ export const placesAutocompleteRequestSchema = z.object({
     .min(PLACES_AUTOCOMPLETE_MIN_INPUT_LENGTH)
     .max(PLACES_AUTOCOMPLETE_MAX_INPUT_LENGTH),
   sessionToken: sessionTokenSchema,
+  includedPrimaryTypes: includedPrimaryTypesSchema,
 });
 
 export const placesResolveRequestSchema = z.object({
@@ -34,6 +40,7 @@ export const placesResolveRequestSchema = z.object({
   sessionToken: sessionTokenSchema,
   primaryText: z.string().trim().min(1).max(200),
   secondaryText: z.string().trim().max(300).optional(),
+  purpose: z.enum(["accommodation", "activity"]).optional(),
 });
 
 export type PlacesAutocompleteRequest = z.infer<

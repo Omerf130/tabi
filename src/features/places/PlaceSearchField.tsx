@@ -1,22 +1,16 @@
 "use client";
 
+import { useCallback, useId, useState } from "react";
+import type {
+  PlacePrimaryTypes,
+  PlaceSuggestion,
+  ResolvedPlacePreview,
+} from "@/features/places/types";
 import {
-  useCallback,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-  useTransition,
-} from "react";
-import type { ResolvedPlacePreview, PlaceSuggestion } from "@/features/places/types";
-import {
-  PLACES_AUTOCOMPLETE_DEBOUNCE_MS,
   PLACES_AUTOCOMPLETE_MIN_INPUT_LENGTH,
 } from "@/features/places/constants";
-import {
-  createPlaceSessionToken,
-  isValidPlaceSessionToken,
-} from "@/features/places/placeSession";
+import { isValidPlaceSessionToken } from "@/features/places/placeSession";
+import { usePlaceAutocompleteSearch } from "@/features/places/use-place-autocomplete-search";
 import { GooglePlacesAttribution } from "./GooglePlacesAttribution";
 import styles from "./placeSearch.module.scss";
 
@@ -26,6 +20,11 @@ type PlaceSearchFieldProps = {
   tripId: string;
   inputId?: string;
   label?: string;
+  placeholder?: string;
+  selectedPreviewLabel?: string;
+  includedPrimaryTypes?: PlacePrimaryTypes;
+  resolvePurpose?: "accommodation" | "activity";
+  includeHiddenFields?: boolean;
   initialSelection?: PlaceSearchSelection | null;
   onSelectionChange: (selection: PlaceSearchSelection | null) => void;
   disabled?: boolean;
@@ -35,110 +34,60 @@ export function PlaceSearchField({
   tripId,
   inputId,
   label = "חפשו את מקום הלינה",
+  placeholder = "Hotel Gracery Shinjuku...",
+  selectedPreviewLabel,
+  includedPrimaryTypes,
+  resolvePurpose = "accommodation",
+  includeHiddenFields = true,
   initialSelection = null,
   onSelectionChange,
   disabled = false,
 }: PlaceSearchFieldProps) {
   const generatedId = useId();
   const fieldId = inputId ?? generatedId;
+  const listboxId = `${fieldId}-suggestions`;
   const [query, setQuery] = useState("");
-  const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
   const [selection, setSelection] = useState<PlaceSearchSelection | null>(
     initialSelection,
   );
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [status, setStatus] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
-  const sessionTokenRef = useRef(createPlaceSessionToken());
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const listRef = useRef<HTMLUListElement>(null);
+  const [resolveStatus, setResolveStatus] = useState<string | null>(null);
+  const [resolveError, setResolveError] = useState<string | null>(null);
 
-  const resetSession = useCallback(() => {
-    sessionTokenRef.current = createPlaceSessionToken();
-  }, []);
+  const {
+    suggestions,
+    isLoading,
+    status,
+    error,
+    getSessionToken,
+    resetSession,
+  } = usePlaceAutocompleteSearch({
+    tripId,
+    query,
+    enabled: !disabled && !selection,
+    includedPrimaryTypes,
+  });
 
   const clearSelection = useCallback(() => {
     setSelection(null);
     onSelectionChange(null);
     setQuery("");
-    setSuggestions([]);
     setActiveIndex(-1);
-    setStatus(null);
-    setError(null);
+    setResolveStatus(null);
+    setResolveError(null);
     resetSession();
   }, [onSelectionChange, resetSession]);
 
   const trimmedQuery = query.trim();
-  const canSearch =
-    !disabled &&
-    !selection &&
-    trimmedQuery.length >= PLACES_AUTOCOMPLETE_MIN_INPUT_LENGTH;
-
-  useEffect(() => {
-    if (!canSearch) {
-      return;
-    }
-
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
-
-    debounceRef.current = setTimeout(() => {
-      startTransition(async () => {
-        setStatus("טוען הצעות...");
-        setError(null);
-
-        try {
-          const response = await fetch("/app/api/places/autocomplete", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              tripId,
-              input: trimmedQuery,
-              sessionToken: sessionTokenRef.current,
-            }),
-          });
-
-          const payload = (await response.json()) as {
-            suggestions?: PlaceSuggestion[];
-            error?: string;
-          };
-
-          if (!response.ok) {
-            setSuggestions([]);
-            setError(payload.error ?? "לא ניתן לטעון הצעות");
-            setStatus(null);
-            return;
-          }
-
-          setSuggestions(payload.suggestions ?? []);
-          setStatus(
-            payload.suggestions?.length
-              ? null
-              : "לא נמצאו תוצאות. נסו חיפוש אחר או הזנה ידנית.",
-          );
-        } catch {
-          setSuggestions([]);
-          setError("לא ניתן לטעון הצעות");
-          setStatus(null);
-        }
-      });
-    }, PLACES_AUTOCOMPLETE_DEBOUNCE_MS);
-
-    return () => {
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
-      }
-    };
-  }, [canSearch, trimmedQuery, tripId]);
+  const showSuggestions = suggestions.length > 0;
+  const activeDescendantId =
+    activeIndex >= 0 ? `${listboxId}-option-${activeIndex}` : undefined;
 
   async function selectSuggestion(suggestion: PlaceSuggestion) {
-    setError(null);
-    setStatus("טוען פרטי מקום...");
-    setSuggestions([]);
+    setResolveError(null);
+    setResolveStatus("טוען פרטי מקום...");
 
-    if (!isValidPlaceSessionToken(sessionTokenRef.current)) {
+    if (!isValidPlaceSessionToken(getSessionToken())) {
       resetSession();
     }
 
@@ -149,9 +98,10 @@ export function PlaceSearchField({
         body: JSON.stringify({
           tripId,
           placeId: suggestion.placeId,
-          sessionToken: sessionTokenRef.current,
+          sessionToken: getSessionToken(),
           primaryText: suggestion.primaryText,
           secondaryText: suggestion.secondaryText,
+          purpose: resolvePurpose,
         }),
       });
 
@@ -161,8 +111,8 @@ export function PlaceSearchField({
       };
 
       if (!response.ok || !payload.preview) {
-        setError(payload.error ?? "לא ניתן לטעון פרטי המקום");
-        setStatus(null);
+        setResolveError(payload.error ?? "לא ניתן לטעון פרטי המקום");
+        setResolveStatus(null);
         resetSession();
         return;
       }
@@ -170,16 +120,22 @@ export function PlaceSearchField({
       setSelection(payload.preview);
       onSelectionChange(payload.preview);
       setQuery("");
-      setStatus(null);
+      setActiveIndex(-1);
+      setResolveStatus(null);
       resetSession();
     } catch {
-      setError("לא ניתן לטעון פרטי המקום");
-      setStatus(null);
+      setResolveError("לא ניתן לטעון פרטי המקום");
+      setResolveStatus(null);
       resetSession();
     }
   }
 
   function handleInputKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Escape") {
+      setActiveIndex(-1);
+      return;
+    }
+
     if (!suggestions.length) {
       return;
     }
@@ -201,22 +157,13 @@ export function PlaceSearchField({
         void selectSuggestion(suggestion);
       }
     }
-
-    if (event.key === "Escape") {
-      setSuggestions([]);
-      setActiveIndex(-1);
-    }
   }
 
   function handleQueryChange(value: string) {
     setQuery(value);
     setActiveIndex(-1);
-
-    if (value.trim().length < PLACES_AUTOCOMPLETE_MIN_INPUT_LENGTH) {
-      setSuggestions([]);
-      setStatus(null);
-      setError(null);
-    }
+    setResolveError(null);
+    setResolveStatus(null);
   }
 
   if (selection) {
@@ -224,12 +171,20 @@ export function PlaceSearchField({
       <div className={styles.selectedCard}>
         <div className={styles.selectedHeader}>
           <div>
+            {selectedPreviewLabel ? (
+              <p className={styles.selectedPreviewLabel}>{selectedPreviewLabel}</p>
+            ) : null}
             <p className={styles.selectedName} dir="auto">
               {selection.primaryText}
             </p>
             {selection.secondaryText ? (
               <p className={styles.selectedMeta} dir="auto">
                 {selection.secondaryText}
+              </p>
+            ) : null}
+            {selection.formattedAddress ? (
+              <p className={styles.selectedMeta} dir="auto">
+                {selection.formattedAddress}
               </p>
             ) : null}
           </div>
@@ -244,11 +199,18 @@ export function PlaceSearchField({
           ) : null}
         </div>
         <GooglePlacesAttribution />
-        <input type="hidden" name="placeSource" value="google" />
-        <input type="hidden" name="googlePlaceId" value={selection.placeId} />
+        {includeHiddenFields ? (
+          <>
+            <input type="hidden" name="placeSource" value="google" />
+            <input type="hidden" name="googlePlaceId" value={selection.placeId} />
+          </>
+        ) : null}
       </div>
     );
   }
+
+  const combinedStatus = resolveStatus ?? status;
+  const combinedError = resolveError ?? error;
 
   return (
     <div className={styles.searchField}>
@@ -263,17 +225,32 @@ export function PlaceSearchField({
           value={query}
           onChange={(event) => handleQueryChange(event.target.value)}
           onKeyDown={handleInputKeyDown}
-          placeholder="Hotel Gracery Shinjuku..."
+          placeholder={placeholder}
           autoComplete="off"
-          disabled={disabled || isPending}
+          disabled={disabled}
           dir="auto"
+          role="combobox"
+          aria-expanded={showSuggestions}
+          aria-controls={showSuggestions ? listboxId : undefined}
+          aria-activedescendant={activeDescendantId}
+          aria-autocomplete="list"
+          aria-busy={isLoading || Boolean(resolveStatus)}
         />
-        {suggestions.length > 0 ? (
-          <ul className={styles.suggestions} ref={listRef} role="listbox">
+        {isLoading ? (
+          <span className={styles.loadingIndicator} aria-hidden="true" />
+        ) : null}
+        {showSuggestions ? (
+          <ul
+            className={styles.suggestions}
+            id={listboxId}
+            role="listbox"
+            aria-label={label}
+          >
             {suggestions.map((suggestion, index) => (
               <li key={suggestion.placeId} role="presentation">
                 <button
                   type="button"
+                  id={`${listboxId}-option-${index}`}
                   className={styles.suggestionButton}
                   data-active={index === activeIndex ? "true" : undefined}
                   onClick={() => void selectSuggestion(suggestion)}
@@ -294,13 +271,13 @@ export function PlaceSearchField({
           </ul>
         ) : null}
       </div>
-      {status ? <p className={styles.status}>{status}</p> : null}
-      {error ? (
+      {combinedStatus ? <p className={styles.status}>{combinedStatus}</p> : null}
+      {combinedError ? (
         <p className={`${styles.status} ${styles.statusError}`} role="alert">
-          {error}
+          {combinedError}
         </p>
       ) : null}
-      {suggestions.length > 0 || trimmedQuery.length >= PLACES_AUTOCOMPLETE_MIN_INPUT_LENGTH ? (
+      {showSuggestions || trimmedQuery.length >= PLACES_AUTOCOMPLETE_MIN_INPUT_LENGTH ? (
         <GooglePlacesAttribution />
       ) : null}
     </div>

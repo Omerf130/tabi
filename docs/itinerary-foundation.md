@@ -1,6 +1,24 @@
 # Itinerary foundation
 
-Phase 6 establishes how Tabi derives, identifies, and displays the calendar days of a Trip. Phase 7 adds Activities; Phase 7B presents them in a single-open day accordion with inline owner editing. See [activity-model.md](activity-model.md).
+Phase 6 establishes how Tabi derives, identifies, and displays the calendar days of a Trip. Phase 7 adds Activities. The day-centric UX separates **trip overview**, **day workspace**, and **trip-wide management**.
+
+See also [activity-model.md](activity-model.md).
+
+## Three surfaces
+
+| Surface | Route | Responsibility |
+|---|---|---|
+| Trip overview | `/app/trips/[tripId]/itinerary` | Read-only scan of all trip days |
+| Day workspace | `/app/trips/[tripId]/itinerary/[date]` | Planning workspace for one day |
+| Trip-wide management | `/manage/*`, `/transport`, `/accommodations`, `/documents`, … | Inventory and settings |
+
+## One source of truth
+
+Tabi does **not** duplicate entities per day.
+
+- Activities, Accommodations, Transport, TravelDocuments, and TripReminders remain single persisted records.
+- Day pages **compose** existing entities; they do not create shadow copies.
+- No `TripDay` collection.
 
 ## Canonical trip dates
 
@@ -12,19 +30,11 @@ Phase 6 establishes how Tabi derives, identifies, and displays the calendar days
 
 ## Derived days (no TripDay collection)
 
-Tabi does **not** persist one MongoDB document per calendar day.
-
 Days are **derived in memory** from the Trip date range:
 
 ```
 startDate → startDate+1 → … → endDate  (inclusive)
 ```
-
-Benefits:
-
-- Empty days require no stored rows
-- Extending trip dates automatically exposes new days
-- No sync problem between Trip dates and a day table
 
 ## Day identity
 
@@ -35,12 +45,12 @@ Within a trip, a day is identified by its canonical date string:
 ```
 
 - Day number is 1-based from `startDate`
-- DOM anchor: `id="day-2026-10-25"` (stable; not used for server routing)
-- Deep link: `/app/trips/[tripId]/itinerary?date=2026-10-25`
+- Overview links and day routes use `/app/trips/[tripId]/itinerary/2026-10-25`
+- Legacy `/itinerary?date=YYYY-MM-DD` redirects to `/itinerary/YYYY-MM-DD`
 
-## Future Activity relationship
+## Activity relationship
 
-Phase 7 Activities reference:
+Activities reference:
 
 ```
 tripId + date (YYYY-MM-DD) + order
@@ -52,77 +62,101 @@ Index:
 { tripId: 1, date: 1, order: 1 }
 ```
 
-Activities are validated to fall within the Trip date range at write time. Full rules: [activity-model.md](activity-model.md).
+Activities are validated to fall within the Trip date range at write time.
 
-## Optional sparse day metadata (later)
+## Accommodation occupancy semantics
 
-If day-level title/city/notes become necessary, use **sparse documents** keyed by `(tripId, date)` with a unique compound index — not one document per calendar day by default.
+An accommodation is visible on calendar day `D` when:
 
-Phase 6 persists no day metadata.
+```
+checkInDate <= D < checkOutDate
+```
+
+Check-in day is included. Check-out day is excluded.
+
+Example: check-in Oct 25, check-out Oct 29 → visible Oct 25–28, not Oct 29.
+
+## TravelDocument day relevance
+
+A document appears on a Day page **only** when linked to a relevant entity:
+
+| Link type | Day relevance rule |
+|---|---|
+| Activity | `activity.date === D` |
+| Transport | `transport.departure.date === D` |
+| Accommodation | occupancy rule above |
+
+**Standalone documents** (no link) do **not** appear on Day pages. Upload date / `createdAt` is never used for day relevance.
+
+Maximum one link target: `activityId` XOR `accommodationId` XOR `transportId`.
+
+## Personal reminders
+
+Trip reminders are scoped to:
+
+```
+tripId + userId + date + time + text
+```
+
+Both owners and members manage **only their own** reminders.
+
+## Trip overview data model
+
+`/itinerary` uses `DaySummaryViewModel` built from trip-level datasets:
+
+- activities grouped by date
+- transports grouped by departure date
+- accommodations filtered in memory by occupancy
+- linked documents counted by day relevance rules
+- incomplete reminder indicator for the current user
+
+Long trips (up to 180 days) use a fixed number of queries, not one query per day.
+
+## Day workspace data model
+
+`/itinerary/[date]` validates:
+
+- `YYYY-MM-DD` format
+- date within Trip inclusive range
+
+Otherwise `notFound()`.
+
+The day workspace loads only what that day needs:
+
+- activities for the date
+- transports departing on the date
+- accommodations occupied on the date
+- day-relevant linked documents
+- current user's reminders for the date
+
+Timeline order uses `mergeItineraryDayItems()` (manual activity order + transport insertion by departure time).
 
 ## Maximum trip duration
 
 V1 limit: **180 inclusive days**.
 
-Enforced on trip creation (Zod) and defensively in `getInclusiveDateRange()`.
-
 ## Timezone rules
-
-Two distinct concepts:
 
 | Concern | Approach |
 |---|---|
-| Calendar-date arithmetic | UTC-probed string math (`addCalendarDays`, range generation) |
-| “Today” while traveling | `getJapanCalendarDate()` using `Asia/Tokyo` (`TRIP_CALENDAR_TIMEZONE`) |
-
-Hebrew display uses `Intl` with `timeZone: "UTC"` from parsed date parts so the stored day never shifts.
+| Calendar-date arithmetic | UTC-probed string math |
+| “Today” while traveling | `getJapanCalendarDate()` using `Asia/Tokyo` |
 
 ## Temporal day state
 
-Each day may be classified relative to Japan today:
-
-- `past`
-- `today`
-- `future`
-
-Pure utility: `getTripDayTemporalState(date, todayJapan)` — injectable for tests.
-
-## Date-change policy (future)
-
-When trip date editing is implemented:
-
-- **Extend:** new days appear automatically (derived)
-- **Shorten or shift:** **block** the change if Activities or sparse day metadata exist outside the new range; never silently delete orphaned data
-
-## Itinerary presentation (Phase 7B)
-
-- All trip days visible as compact collapsed rows
-- At most one expanded day; activities shown only when expanded
-- Default expanded day: first / Japan today / last (by trip phase), overridable by valid `?date=`
-- User accordion toggles are client-local (no history entry per toggle)
-- Owner inline create/edit inside expanded day; members read-only
-
-## Phase 6 scope
-
-Implemented:
-
-- Derived day list on `/app/trips/[tripId]/itinerary`
-- Hash-addressable day section ids
-- Today badge via temporal state
-
-Phase 7/7B adds Activities and accordion UX — see [activity-model.md](activity-model.md).
-
-Not implemented (Phase 8+):
-
-- Activity status / completion
-- Day metadata persistence/editing
-- Programmatic scroll-to-day
-- Trip date editing
+Each day may be classified relative to Japan today: `past`, `today`, `future`.
 
 ## Source layout
 
 ```
-src/features/trips/trip-days.ts       # domain utilities
-src/features/trips/calendar-date.ts   # low-level date primitives
-src/features/itinerary/               # view model + server UI
+src/features/trips/trip-days.ts
+src/features/trips/calendar-date.ts
+src/features/itinerary/
+  routes.ts
+  build-itinerary-overview.ts
+  build-day-workspace.ts
+  day-document-relevance.ts
+  load-itinerary-trip-data.ts
+  DayPageContent.tsx
+  ItineraryPageContent.tsx
 ```

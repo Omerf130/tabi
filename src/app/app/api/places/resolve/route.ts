@@ -4,6 +4,7 @@ import { requireTripOwner } from "@/features/trips/authorization";
 import {
   GooglePlacesConfigError,
   GooglePlacesRequestError,
+  resolveActivityPlaceSnapshot,
   resolveSelectedPlace,
 } from "@/features/places/googlePlaces.server";
 import {
@@ -49,12 +50,20 @@ export async function POST(request: Request) {
   }
 
   try {
-    const preview = await resolveSelectedPlace({
-      placeId: parsed.data.placeId,
-      sessionToken: parsed.data.sessionToken,
-      primaryText: parsed.data.primaryText,
-      secondaryText: parsed.data.secondaryText,
-    });
+    const preview =
+      parsed.data.purpose === "activity"
+        ? await resolveActivityPlaceSnapshot({
+            placeId: parsed.data.placeId,
+            sessionToken: parsed.data.sessionToken,
+            primaryText: parsed.data.primaryText,
+            secondaryText: parsed.data.secondaryText,
+          })
+        : await resolveSelectedPlace({
+            placeId: parsed.data.placeId,
+            sessionToken: parsed.data.sessionToken,
+            primaryText: parsed.data.primaryText,
+            secondaryText: parsed.data.secondaryText,
+          });
     return NextResponse.json({ preview });
   } catch (error) {
     if (error instanceof GooglePlacesConfigError) {

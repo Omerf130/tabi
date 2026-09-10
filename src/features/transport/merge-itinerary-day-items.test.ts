@@ -15,6 +15,7 @@ function activity(
     type: "attraction",
     typeLabel: "אטרקציה",
     order,
+    placeSource: "manual",
     startTime,
     timeLabel: startTime,
   };

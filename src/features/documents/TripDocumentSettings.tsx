@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
@@ -54,7 +55,12 @@ type DocumentFormProps = {
   ) => Promise<TravelDocumentActionState>;
   submitLabel: string;
   includeFile?: boolean;
+  initialLinkType?: DocumentLinkType;
+  initialActivityId?: string;
+  initialAccommodationId?: string;
+  initialTransportId?: string;
   onCancel?: () => void;
+  onSuccess?: () => void;
 };
 
 type DocumentRowProps = {
@@ -88,6 +94,9 @@ function ContextLinkFields({
   idPrefix,
   linkType,
   onLinkTypeChange,
+  initialActivityId,
+  initialAccommodationId,
+  initialTransportId,
 }: {
   document?: TravelDocumentSettingsViewModel;
   activityOptions: ActivityLinkOption[];
@@ -96,6 +105,9 @@ function ContextLinkFields({
   idPrefix: string;
   linkType: DocumentLinkType;
   onLinkTypeChange: (value: DocumentLinkType) => void;
+  initialActivityId?: string;
+  initialAccommodationId?: string;
+  initialTransportId?: string;
 }) {
   return (
     <div className={styles.linkFields}>
@@ -120,7 +132,11 @@ function ContextLinkFields({
           <select
             id={`${idPrefix}-activity`}
             name="activityId"
-            defaultValue={document?.contextLink?.type === "activity" ? document.contextLink.activityId : ""}
+            defaultValue={
+              document?.contextLink?.type === "activity"
+                ? document.contextLink.activityId
+                : initialActivityId ?? ""
+            }
           >
             <option value="">בחרו פעילות</option>
             {activityOptions.map((option) => (
@@ -140,7 +156,7 @@ function ContextLinkFields({
             defaultValue={
               document?.contextLink?.type === "accommodation"
                 ? document.contextLink.accommodationId
-                : ""
+                : initialAccommodationId ?? ""
             }
           >
             <option value="">בחרו מקום לינה</option>
@@ -161,7 +177,7 @@ function ContextLinkFields({
             defaultValue={
               document?.contextLink?.type === "transport"
                 ? document.contextLink.transportId
-                : ""
+                : initialTransportId ?? ""
             }
           >
             <option value="">בחרו קטע תחבורה</option>
@@ -177,7 +193,7 @@ function ContextLinkFields({
   );
 }
 
-function DocumentForm({
+export function TripDocumentForm({
   tripId,
   document,
   activityOptions,
@@ -186,11 +202,26 @@ function DocumentForm({
   action,
   submitLabel,
   includeFile = false,
+  initialLinkType,
+  initialActivityId,
+  initialAccommodationId,
+  initialTransportId,
   onCancel,
+  onSuccess,
 }: DocumentFormProps) {
+  const router = useRouter();
   const [state, formAction] = useActionState(action, initialState);
-  const [linkType, setLinkType] = useState(getInitialLinkType(document));
+  const [linkType, setLinkType] = useState<DocumentLinkType>(
+    document ? getInitialLinkType(document) : initialLinkType ?? "none",
+  );
   const idPrefix = document ? `edit-${document.id}` : "create";
+
+  useEffect(() => {
+    if (state.ok) {
+      onSuccess?.();
+      router.refresh();
+    }
+  }, [onSuccess, router, state.ok]);
 
   return (
     <form action={formAction} className={styles.editForm}>
@@ -252,6 +283,9 @@ function DocumentForm({
         idPrefix={idPrefix}
         linkType={linkType}
         onLinkTypeChange={setLinkType}
+        initialActivityId={initialActivityId}
+        initialAccommodationId={initialAccommodationId}
+        initialTransportId={initialTransportId}
       />
 
       <Field label="חירום" htmlFor={`${idPrefix}-show-in-emergency`}>
@@ -307,7 +341,7 @@ function DocumentRow({
   if (editing) {
     return (
       <li className={styles.item}>
-        <DocumentForm
+        <TripDocumentForm
           tripId={tripId}
           document={travelDocument}
           activityOptions={activityOptions}
@@ -440,7 +474,7 @@ export function TripDocumentSettings({
       ) : (
         <div className={styles.createForm}>
           <p className={styles.createLabel}>הוספת מסמך</p>
-          <DocumentForm
+          <TripDocumentForm
             tripId={tripId}
             activityOptions={activityOptions}
             accommodationOptions={accommodationOptions}

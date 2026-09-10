@@ -32,6 +32,8 @@ type TransportFormProps = {
   mode: "create" | "edit";
   transportId?: string;
   onCancel?: () => void;
+  onSuccess?: () => void;
+  successHref?: string;
 };
 
 function TimezoneSelect({
@@ -206,6 +208,8 @@ export function TransportForm({
   mode,
   transportId,
   onCancel,
+  onSuccess,
+  successHref,
 }: TransportFormProps) {
   const router = useRouter();
   const action = mode === "create" ? createTransportAction : updateTransportAction;
@@ -216,14 +220,19 @@ export function TransportForm({
     if (!state.ok) {
       return;
     }
+    if (onSuccess) {
+      onSuccess();
+      router.refresh();
+      return;
+    }
     if (mode === "create" && state.transportId) {
-      router.push(buildTransportDetailHref(tripId, state.transportId));
+      router.push(successHref ?? buildTransportDetailHref(tripId, state.transportId));
       return;
     }
     if (mode === "edit" && transportId) {
       router.push(buildTransportDetailHref(tripId, transportId));
     }
-  }, [mode, router, state.ok, state.transportId, transportId, tripId]);
+  }, [mode, onSuccess, router, state.ok, state.transportId, successHref, transportId, tripId]);
 
   return (
     <form action={formAction} className={styles.form}>

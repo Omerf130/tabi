@@ -15,5 +15,5 @@ export default async function EditActivityRedirectPage({
     notFound();
   }
 
-  redirect(`/app/trips/${tripId}/itinerary?date=${activity.date}`);
+  redirect(`/app/trips/${tripId}/itinerary/${activity.date}`);
 }

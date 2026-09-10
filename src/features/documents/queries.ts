@@ -181,6 +181,13 @@ export async function listEmergencyDocumentsForTrip(tripId: string) {
   }));
 }
 
+export async function listTravelDocumentRecordsForTrip(tripId: string) {
+  await connectDb();
+  return TravelDocument.find({ tripId })
+    .sort({ createdAt: -1, _id: -1 })
+    .lean();
+}
+
 export async function listTravelDocumentsForTrip(
   tripId: string,
 ): Promise<TravelDocumentViewModel[]> {

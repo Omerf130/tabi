@@ -10,6 +10,7 @@ import {
   ActivityNotFoundError,
   ActivityValidationError,
 } from "./errors";
+import { toActivityDocumentFields } from "./activity-document-fields";
 import { listActivitiesForTripDay } from "./queries";
 import type { CreateActivityInput } from "./schemas";
 import { validateActivityTimes } from "./time";
@@ -25,11 +26,9 @@ function assertDateWithinTrip(trip: TripDateRange, date: string): void {
   }
 }
 
-function normalizeOptionalFields(input: {
+function normalizeCoreFields(input: {
   startTime?: string;
   endTime?: string;
-  locationName?: string;
-  address?: string;
   notes?: string;
 }) {
   if (!validateActivityTimes(input.startTime, input.endTime)) {
@@ -39,8 +38,6 @@ function normalizeOptionalFields(input: {
   return {
     startTime: input.startTime ?? null,
     endTime: input.endTime ?? null,
-    locationName: input.locationName ?? null,
-    address: input.address ?? null,
     notes: input.notes ?? null,
   };
 }
@@ -50,7 +47,8 @@ export async function createActivity(
   input: CreateActivityInput,
 ): Promise<string> {
   assertDateWithinTrip(trip, input.date);
-  const optionalFields = normalizeOptionalFields(input);
+  const coreFields = normalizeCoreFields(input);
+  const locationFields = toActivityDocumentFields(input);
 
   await connectDb();
   const dayActivities = await listActivitiesForTripDay(trip.id, input.date);
@@ -62,7 +60,8 @@ export async function createActivity(
     title: input.title,
     type: input.type,
     order,
-    ...optionalFields,
+    ...coreFields,
+    ...locationFields,
   });
 
   return activity._id.toString();

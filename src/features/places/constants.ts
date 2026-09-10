@@ -9,6 +9,16 @@ export const PLACES_DISPLAY_LANGUAGE_CODE = "ja";
 /** Lodging bias for Accommodation; other features may override via request. */
 export const PLACES_LODGING_PRIMARY_TYPES = ["lodging"] as const;
 
+/**
+ * Activity POI search: empty array means no primary-type filter (Japan region only).
+ * Passed explicitly from Activity PlaceSearchField; Accommodation omits the prop instead.
+ */
+export const PLACES_ACTIVITY_PRIMARY_TYPES = [] as const;
+
+/** Place Details fields for Activity location snapshot (one terminating request). */
+export const PLACES_ACTIVITY_SNAPSHOT_FIELD_MASK =
+  "id,displayName,formattedAddress,googleMapsUri,addressComponents,location";
+
 /** Geographic bias for weather location search fallback. */
 export const PLACES_GEOGRAPHIC_PRIMARY_TYPES = [
   "locality",

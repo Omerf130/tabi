@@ -8,6 +8,7 @@ import {
   updateActivityAction,
   type ActivityActionState,
 } from "./actions";
+import { appendActivityFormValuesToFormData } from "./append-activity-form-values";
 import { toActivityFormValues } from "./to-activity-view-model";
 import type { ActivityViewModel } from "./types";
 import styles from "./ItineraryPage.module.scss";
@@ -50,8 +51,7 @@ export function ActivityMovePanel({
       formData.set("date", targetDate);
       formData.set("startTime", values.startTime);
       formData.set("endTime", values.endTime);
-      formData.set("locationName", values.locationName);
-      formData.set("address", values.address);
+      appendActivityFormValuesToFormData(formData, values);
       formData.set("notes", values.notes);
       formAction(formData);
     });

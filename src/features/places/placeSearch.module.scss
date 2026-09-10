@@ -13,6 +13,30 @@
   position: relative;
 }
 
+.inputWrap:has(.loadingIndicator) .input {
+  padding-inline-end: calc(var(--space-3) + 1.25rem);
+}
+
+.loadingIndicator {
+  position: absolute;
+  inset-inline-end: var(--space-3);
+  top: 50%;
+  width: 1rem;
+  height: 1rem;
+  margin-top: -0.5rem;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-text-muted);
+  border-radius: 50%;
+  animation: placeSearchSpin 0.8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes placeSearchSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .input {
   width: 100%;
   min-height: var(--size-touch-min);
@@ -99,6 +123,12 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-3);
+}
+
+.selectedPreviewLabel {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
 }
 
 .selectedName {

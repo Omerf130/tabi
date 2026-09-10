@@ -6,11 +6,15 @@ import { ACTIVITY_TYPES } from "@/features/itinerary/activity-types";
 import { isValidWallClockTime } from "@/features/itinerary/time";
 import {
   ACTIVITY_ADDRESS_MAX_LENGTH,
+  ACTIVITY_CITY_MAX_LENGTH,
+  ACTIVITY_COUNTRY_MAX_LENGTH,
+  ACTIVITY_GOOGLE_MAPS_URL_MAX_LENGTH,
   ACTIVITY_LOCATION_MAX_LENGTH,
   ACTIVITY_NOTES_MAX_LENGTH,
   ACTIVITY_TITLE_MAX_LENGTH,
   ACTIVITY_TITLE_MIN_LENGTH,
 } from "@/features/itinerary/constants";
+import { ACTIVITY_PLACE_SOURCES } from "@/features/itinerary/activity-place-types";
 
 const activitySchema = new mongoose.Schema(
   {
@@ -65,6 +69,16 @@ const activitySchema = new mongoose.Schema(
         message: "Invalid endTime",
       },
     },
+    placeSource: {
+      type: String,
+      enum: ACTIVITY_PLACE_SOURCES,
+      default: null,
+    },
+    googlePlaceId: {
+      type: String,
+      trim: true,
+      default: null,
+    },
     locationName: {
       type: String,
       trim: true,
@@ -75,6 +89,32 @@ const activitySchema = new mongoose.Schema(
       type: String,
       trim: true,
       maxlength: ACTIVITY_ADDRESS_MAX_LENGTH,
+      default: null,
+    },
+    city: {
+      type: String,
+      trim: true,
+      maxlength: ACTIVITY_CITY_MAX_LENGTH,
+      default: null,
+    },
+    country: {
+      type: String,
+      trim: true,
+      maxlength: ACTIVITY_COUNTRY_MAX_LENGTH,
+      default: null,
+    },
+    latitude: {
+      type: Number,
+      default: null,
+    },
+    longitude: {
+      type: Number,
+      default: null,
+    },
+    googleMapsUrl: {
+      type: String,
+      trim: true,
+      maxlength: ACTIVITY_GOOGLE_MAPS_URL_MAX_LENGTH,
       default: null,
     },
     notes: {

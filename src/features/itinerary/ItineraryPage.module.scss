@@ -29,6 +29,250 @@
   flex-direction: column;
 }
 
+.focusedDayCard {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-4);
+  margin-block: var(--space-2);
+  border: 1px solid var(--color-shell-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-subtle);
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
+}
+
+.focusedDayCard:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.focusedDayCard:hover {
+  background: var(--color-surface);
+  border-color: var(--color-primary-muted, var(--color-shell-border));
+}
+
+.focusedDayMain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+}
+
+.focusedDayIdentity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.focusedDayNumber {
+  font-size: var(--text-section);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.focusedDayMeta {
+  font-size: var(--text-secondary);
+  color: var(--color-text-muted);
+}
+
+.focusedDayCard[data-temporal="today"] .focusedDayNumber {
+  color: var(--color-primary);
+}
+
+.focusedWeather {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-body);
+  color: var(--color-text);
+  min-width: 0;
+}
+
+.focusedWeatherIcon {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.focusedWeatherText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.focusedAccommodation {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-secondary);
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.focusedAccommodationIcon {
+  flex-shrink: 0;
+}
+
+.focusedNextSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.focusedNextHeading {
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+}
+
+.focusedNextList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.focusedNextRow {
+  display: grid;
+  grid-template-columns: 3.25rem 1fr;
+  gap: var(--space-2);
+  align-items: baseline;
+  min-width: 0;
+}
+
+.focusedNextTime {
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+  text-align: end;
+}
+
+.focusedNextTimePlaceholder {
+  display: block;
+}
+
+.focusedNextTitle {
+  font-size: var(--text-secondary);
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.focusedIndicators {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.focusedIndicator {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.focusedDayChevron {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-block-start: 0.35rem;
+  color: var(--color-text-muted);
+  transform: rotate(-90deg);
+}
+
+[dir="rtl"] .focusedDayChevron {
+  transform: rotate(90deg);
+}
+
+.daySummaryLink {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--size-touch-min);
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--color-shell-border);
+  color: inherit;
+  text-decoration: none;
+}
+
+.daySummaryLink:last-child {
+  border-bottom: none;
+}
+
+.daySummaryLink:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.daySummaryLink:hover {
+  background: var(--color-surface-subtle);
+}
+
+.daySummaryMain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+.daySummaryIdentity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.daySummaryContext {
+  font-size: var(--text-secondary);
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.daySummaryChevron {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-block-start: 0.35rem;
+  color: var(--color-text-muted);
+  transform: rotate(-90deg);
+}
+
+[dir="rtl"] .daySummaryChevron {
+  transform: rotate(90deg);
+}
+
+.reminderIndicator {
+  font-size: 0.65rem;
+  color: var(--color-primary);
+}
+
+.daySummaryLink[data-temporal="today"] .dayNumber {
+  color: var(--color-primary);
+}
+
+.timelineSection {
+  margin-block-end: var(--space-6);
+}
+
+.timelineSection .sectionTitle {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+}
+
 .day {
   border-bottom: 1px solid var(--color-shell-border);
 }
@@ -229,6 +473,23 @@
   line-height: var(--line-height-body);
 }
 
+.activityLocationActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-block-start: var(--space-1);
+}
+
+.activityLocationAction {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--color-link);
+  font-size: var(--text-caption);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .activityNotes {
   margin: 0;
   font-size: var(--text-caption);
@@ -335,12 +596,34 @@
   .dayNumber {
     font-size: var(--text-section);
   }
+
+  .focusedDayCard {
+    padding: var(--space-5);
+  }
+
+  .focusedDayNumber {
+    font-size: 1.375rem;
+  }
+}
+
+@media (max-width: 430px) {
+  .focusedNextRow {
+    grid-template-columns: 2.75rem 1fr;
+  }
+
+  .focusedDayCard {
+    padding: var(--space-3);
+  }
 }
 
 .transportRowLink {
   display: block;
   color: inherit;
   text-decoration: none;
+}
+
+.transportRowLink:hover .activityTitle {
+  color: var(--color-primary);
 }
 
 .transportTimeMeta {

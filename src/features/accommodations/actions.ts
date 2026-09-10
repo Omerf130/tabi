@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { revalidateItineraryPaths } from "@/features/itinerary/revalidation";
 import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireTripOwner } from "@/features/trips/authorization";
 import { ACCOMMODATION_MESSAGES } from "./constants";
@@ -28,6 +29,7 @@ export type AccommodationActionState = {
 function revalidateAccommodationPaths(tripId: string): void {
   revalidatePath(`/app/trips/${tripId}/accommodations`);
   revalidateTripManagement(tripId, "accommodations");
+  revalidateItineraryPaths(tripId);
   revalidatePath(`/app/trips/${tripId}/more`);
 }
 

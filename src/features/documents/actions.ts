@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { revalidateItineraryPaths } from "@/features/itinerary/revalidation";
 import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireTripOwner } from "@/features/trips/authorization";
 import { TRAVEL_DOCUMENT_MESSAGES } from "./constants";
@@ -21,7 +22,9 @@ import {
   updateTravelDocumentSchema,
 } from "./schemas";
 import { sanitizeOriginalFilename } from "./sanitize-filename";
+import { resolveDocumentItineraryDates } from "./resolve-document-itinerary-dates";
 import { validateTravelDocumentFile } from "./validate-travel-document-file";
+import { getTravelDocumentForTrip } from "./queries";
 
 export type TravelDocumentActionState = {
   ok?: boolean;
@@ -30,9 +33,14 @@ export type TravelDocumentActionState = {
   fieldErrors?: Record<string, string>;
 };
 
-function revalidateDocumentPaths(tripId: string, documentId?: string): void {
+async function revalidateDocumentPaths(
+  tripId: string,
+  documentId?: string,
+  itineraryDates: readonly string[] = [],
+): Promise<void> {
   revalidatePath(`/app/trips/${tripId}/documents`);
   revalidateTripManagement(tripId, "documents");
+  revalidateItineraryPaths(tripId, itineraryDates);
   revalidatePath(`/app/trips/${tripId}/emergency`);
   if (documentId) {
     revalidatePath(`/app/trips/${tripId}/documents/${documentId}`);
@@ -121,7 +129,12 @@ export async function createTravelDocumentAction(
       sizeBytes: fileResult.sizeBytes,
       originalFilename: fileResult.originalFilename,
     });
-    revalidateDocumentPaths(trip.id, documentId);
+    const itineraryDates = await resolveDocumentItineraryDates(trip.id, {
+      activityId: parsed.data.activityId,
+      accommodationId: parsed.data.accommodationId,
+      transportId: parsed.data.transportId,
+    });
+    await revalidateDocumentPaths(trip.id, documentId, itineraryDates);
     return { ok: true, success: TRAVEL_DOCUMENT_MESSAGES.created };
   } catch (error) {
     if (error instanceof TravelDocumentValidationError) {
@@ -152,12 +165,37 @@ export async function updateTravelDocumentAction(
 
   try {
     const trip = await requireTripOwner(parsed.data.tripId);
+    const existing = await getTravelDocumentForTrip(trip.id, parsed.data.documentId);
     await updateTravelDocumentMetadata({
       tripId: trip.id,
       documentId: parsed.data.documentId,
       metadata: parsed.data,
     });
-    revalidateDocumentPaths(trip.id, parsed.data.documentId);
+    const previousDates = existing?.contextLink
+      ? await resolveDocumentItineraryDates(trip.id, {
+          activityId:
+            existing.contextLink.type === "activity"
+              ? existing.contextLink.activityId
+              : undefined,
+          accommodationId:
+            existing.contextLink.type === "accommodation"
+              ? existing.contextLink.accommodationId
+              : undefined,
+          transportId:
+            existing.contextLink.type === "transport"
+              ? existing.contextLink.transportId
+              : undefined,
+        })
+      : [];
+    const nextDates = await resolveDocumentItineraryDates(trip.id, {
+      activityId: parsed.data.activityId,
+      accommodationId: parsed.data.accommodationId,
+      transportId: parsed.data.transportId,
+    });
+    await revalidateDocumentPaths(trip.id, parsed.data.documentId, [
+      ...previousDates,
+      ...nextDates,
+    ]);
     return { ok: true, success: TRAVEL_DOCUMENT_MESSAGES.updated };
   } catch (error) {
     if (error instanceof TravelDocumentValidationError) {
@@ -198,7 +236,24 @@ export async function replaceTravelDocumentFileAction(
       sizeBytes: fileResult.sizeBytes,
       originalFilename: fileResult.originalFilename,
     });
-    revalidateDocumentPaths(trip.id, parsed.data.documentId);
+    const existing = await getTravelDocumentForTrip(trip.id, parsed.data.documentId);
+    const itineraryDates = existing?.contextLink
+      ? await resolveDocumentItineraryDates(trip.id, {
+          activityId:
+            existing.contextLink.type === "activity"
+              ? existing.contextLink.activityId
+              : undefined,
+          accommodationId:
+            existing.contextLink.type === "accommodation"
+              ? existing.contextLink.accommodationId
+              : undefined,
+          transportId:
+            existing.contextLink.type === "transport"
+              ? existing.contextLink.transportId
+              : undefined,
+        })
+      : [];
+    await revalidateDocumentPaths(trip.id, parsed.data.documentId, itineraryDates);
     return { ok: true, success: TRAVEL_DOCUMENT_MESSAGES.replaced };
   } catch (error) {
     if (error instanceof TravelDocumentNotFoundError) {
@@ -223,11 +278,28 @@ export async function deleteTravelDocumentAction(
 
   try {
     const trip = await requireTripOwner(parsed.data.tripId);
+    const existing = await getTravelDocumentForTrip(trip.id, parsed.data.documentId);
     await deleteTravelDocument({
       tripId: trip.id,
       documentId: parsed.data.documentId,
     });
-    revalidateDocumentPaths(trip.id, parsed.data.documentId);
+    const itineraryDates = existing?.contextLink
+      ? await resolveDocumentItineraryDates(trip.id, {
+          activityId:
+            existing.contextLink.type === "activity"
+              ? existing.contextLink.activityId
+              : undefined,
+          accommodationId:
+            existing.contextLink.type === "accommodation"
+              ? existing.contextLink.accommodationId
+              : undefined,
+          transportId:
+            existing.contextLink.type === "transport"
+              ? existing.contextLink.transportId
+              : undefined,
+        })
+      : [];
+    await revalidateDocumentPaths(trip.id, parsed.data.documentId, itineraryDates);
     return { ok: true, success: TRAVEL_DOCUMENT_MESSAGES.deleted };
   } catch (error) {
     if (error instanceof TravelDocumentNotFoundError) {
