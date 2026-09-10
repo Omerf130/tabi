@@ -1,0 +1,259 @@
+.screen {
+  --welcome-text: #ffffff;
+  --welcome-text-muted: rgb(255 255 255 / 82%);
+  --welcome-cta-bg: #ffffff;
+  --welcome-cta-text: #0f1728;
+  --welcome-focus: rgb(255 255 255 / 92%);
+  --welcome-max-content: 26rem;
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  overflow: hidden;
+  color: var(--welcome-text);
+  background: #1a2740;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.backdropBlur {
+  position: absolute;
+  inset: -8%;
+  background-image: url("/destination-visuals/homeApp.png");
+  background-size: cover;
+  background-position: center 35%;
+  filter: blur(28px) saturate(1.05);
+  transform: scale(1.08);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.backgroundImage {
+  object-fit: cover;
+  object-position: 50% 18%;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgb(8 18 38 / 28%) 0%,
+      rgb(8 18 38 / 8%) 24%,
+      transparent 42%
+    ),
+    linear-gradient(
+      0deg,
+      rgb(8 18 38 / 42%) 0%,
+      rgb(8 18 38 / 16%) 28%,
+      transparent 52%
+    );
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(2rem, 8vh, 4rem);
+  width: min(100%, 40rem);
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding:
+    calc(env(safe-area-inset-top, 0px) + clamp(2.5rem, 8vh, 4.5rem))
+    clamp(1.25rem, 5vw, 2rem)
+    calc(env(safe-area-inset-bottom, 0px) + clamp(1.5rem, 5vh, 2.5rem));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .content {
+    animation: welcomeEnter 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@keyframes welcomeEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.brandBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.875rem;
+  text-align: center;
+}
+
+.brandMark {
+  width: 1.75rem;
+  height: auto;
+  color: var(--welcome-text);
+  opacity: 0.96;
+}
+
+.brandName {
+  margin: 0;
+  font-size: clamp(2.5rem, 9vw, 3.25rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.tagline {
+  margin: 0;
+  max-width: 16rem;
+  font-size: clamp(1rem, 3.8vw, 1.125rem);
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0.01em;
+  color: var(--welcome-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+  width: 100%;
+  max-width: var(--welcome-max-content);
+  margin-inline: auto;
+}
+
+.primaryCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding-inline: 1.5rem;
+  border-radius: 999px;
+  background: var(--welcome-cta-bg);
+  color: var(--welcome-cta-text);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.primaryCta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgb(0 0 0 / 18%);
+}
+
+.primaryCta:focus-visible {
+  outline: 2px solid var(--welcome-focus);
+  outline-offset: 3px;
+}
+
+.signIn {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--welcome-text-muted);
+}
+
+.signInLink {
+  color: var(--welcome-text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.signInLink:focus-visible {
+  outline: 2px solid var(--welcome-focus);
+  outline-offset: 3px;
+  border-radius: 0.125rem;
+}
+
+@media (min-width: 768px) {
+  .backgroundImage {
+    object-position: 50% 24%;
+  }
+
+  .content {
+    width: min(100%, 34rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .backdropBlur {
+    opacity: 1;
+  }
+
+  .backgroundImage {
+    object-position: 48% 32%;
+  }
+
+  .screen {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .content {
+    align-self: stretch;
+    justify-self: start;
+    width: min(100%, 36rem);
+    margin-inline: clamp(2rem, 8vw, 6rem) auto;
+    padding-top: calc(env(safe-area-inset-top, 0px) + clamp(3rem, 10vh, 5rem));
+  }
+
+  .brandBlock {
+    align-items: flex-start;
+    text-align: start;
+  }
+
+  .tagline {
+    max-width: 18rem;
+  }
+
+  .actions {
+    margin-inline: 0;
+  }
+}
+
+@media (min-width: 1440px) {
+  .backgroundImage {
+    object-position: 46% 36%;
+  }
+
+  .content {
+    width: min(100%, 40rem);
+    margin-inline: clamp(3rem, 10vw, 8rem) auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content {
+    animation: none;
+  }
+
+  .primaryCta {
+    transition: none;
+  }
+
+  .primaryCta:hover {
+    transform: none;
+  }
+}

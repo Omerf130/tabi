@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { LandingPage } from "@/features/marketing/LandingPage";
+import { WelcomeScreen } from "@/features/welcome/WelcomeScreen";
 
 export const metadata: Metadata = {
-  title: "Tabi — תכנון וליווי טיול",
+  title: "Tabi — Your journey. Perfectly planned.",
   description:
-    "Tabi מרכזת את המסלול, ההזמנות, הלינה, התחבורה והמסמכים — לפני שיוצאים וגם בזמן הטיול.",
+    "Plan and travel with everything in one place — itinerary, stays, transport, and documents.",
 };
 
 export default function HomePage() {
-  return <LandingPage />;
+  return <WelcomeScreen />;
 }
