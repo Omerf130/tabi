@@ -1,4 +1,5 @@
 import type { AccommodationViewModel } from "@/features/accommodations/types";
+import type { PlacePhotoPresentation } from "@/features/place-images/types";
 import type { ContextualAccommodationVariant } from "./select-contextual-accommodation";
 import type { AttentionListResult } from "./select-attention-list";
 import type { TravelToolDefinition } from "./constants";
@@ -9,7 +10,7 @@ export type ContextualAccommodationCard = {
   title: string;
   detailHref: string;
   taxiHref: string;
-  photoHref?: string;
+  placePhoto?: PlacePhotoPresentation;
   mapsHref?: string;
   showGoogleAttribution: boolean;
 };

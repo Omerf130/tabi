@@ -48,12 +48,31 @@ Status is not persisted on Trip.
 
 ## Creation
 
+Create trip is a four-step client wizard at `/app/trips/new` (Destination → Dates → Trip Details → Ready). No MongoDB writes occur until the final **Create trip** action.
+
+The client sends only:
+
+- `googlePlaceId`
+- `name`
+- `startDate`
+- `endDate`
+
+`createTripWizardAction` re-resolves the Google Place server-side, derives a canonical `destination` snapshot, classifies a visual group from `countryCode`, and picks `coverVisualKey` from the product registry. The client cannot set destination metadata, visual group, or cover key.
+
 `createTripWithOwnerMembership` uses a MongoDB transaction:
 
-1. insert Trip
+1. insert Trip (including `destination` and `coverVisualKey` when resolved)
 2. insert TripMember with `role: "owner"`
 
 Both succeed or neither remains.
+
+### Trip destination and cover visuals
+
+- **`destination`** — server-authoritative snapshot: `googlePlaceId`, `displayName`, `secondaryLabel`, `country`, `countryCode`, `latitude`, `longitude`
+- **`coverVisualKey`** — product-owned registry key (e.g. `japan-01`, `europe-03`, `fallback-01`); chosen once at creation
+- **`coverImage`** — optional user-uploaded cover; takes precedence over `coverVisualKey` in card/display resolution
+
+Visual resolution order: `coverImage` → `coverVisualKey` → neutral fallback (`homeApp.png`).
 
 ## Authorization
 
@@ -71,10 +90,10 @@ Cross-trip isolation: User A visiting `/app/trips/{TripB}` gets the same not-fou
 
 | Path | Behavior |
 |---|---|
-| `/app` | 0 trips → `/app/trips/new`; 1 → `/app/trips/[id]`; 2+ → `/app/trips` |
-| `/app/trips` | trip list |
+| `/app` | My Trips account home (0, 1, or many trips) |
+| `/app/trips` | redirects to `/app` |
 | `/app/trips/new` | create trip |
-| `/app/trips/[tripId]` | temporary trip proof page |
+| `/app/trips/[tripId]` | trip home / workspace entry |
 
 No active-trip cookie. `[tripId]` in the URL is the workspace context.
 

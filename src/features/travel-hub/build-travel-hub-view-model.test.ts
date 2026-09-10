@@ -104,11 +104,15 @@ describe("buildTravelHubViewModel", () => {
       ],
       lists: [],
       todayJapan: "2026-10-01",
-      accommodationPhotoAvailable: true,
+      accommodationPhotoPresentation: {
+        hasPhoto: true,
+        photoHref: `/app/trips/${tripId}/accommodations/acc-google/photo`,
+        authorAttributions: [],
+      },
     });
 
     expect(model.contextualAccommodation?.title).toBe("הלינה הבאה שלך");
-    expect(model.contextualAccommodation?.photoHref).toBe(
+    expect(model.contextualAccommodation?.placePhoto?.photoHref).toBe(
       `/app/trips/${tripId}/accommodations/acc-google/photo`,
     );
     expect(model.contextualAccommodation?.showGoogleAttribution).toBe(true);

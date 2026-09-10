@@ -40,7 +40,7 @@ export function TripHeader({
       {showTripSwitch && tripName ? (
         <div className={styles.contextRow}>
           <span className={styles.tripName}>{tripName}</span>
-          <Link href="/app/trips" className={styles.switchLink}>
+          <Link href="/app" className={styles.switchLink}>
             <span className={styles.switchLabel}>הטיולים שלי</span>
             <IconChevron className={styles.switchGlyph} aria-hidden />
           </Link>

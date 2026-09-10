@@ -1,16 +1,34 @@
 import "server-only";
 
 import mongoose from "mongoose";
+import { classifyDestinationVisualGroup } from "@/features/destination-visuals/classify-visual-group";
+import {
+  getVisualGroupForKey,
+  isValidVisualKey,
+} from "@/features/destination-visuals/registry";
+import { pickVisualKeyForGroup } from "@/features/destination-visuals/pick-visual-key";
+import { resolveDestinationSnapshot } from "@/features/places/resolve-destination-snapshot";
 import { connectDb } from "@/lib/db/connect";
 import { Trip } from "@/models/Trip";
 import { TripMember } from "@/models/TripMember";
-import type { CreateTripInput } from "./schemas";
+import type { CreateTripWizardInput } from "./schemas";
 
 export async function createTripWithOwnerMembership(
   userId: string,
-  input: CreateTripInput,
+  input: CreateTripWizardInput,
 ): Promise<string> {
   await connectDb();
+
+  const destination = await resolveDestinationSnapshot(input.googlePlaceId);
+  const visualGroup = classifyDestinationVisualGroup(destination.countryCode);
+  const coverVisualKey = pickVisualKeyForGroup(visualGroup);
+
+  if (
+    !isValidVisualKey(coverVisualKey) ||
+    getVisualGroupForKey(coverVisualKey) !== visualGroup
+  ) {
+    throw new Error("Invalid cover visual selection");
+  }
 
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -23,6 +41,8 @@ export async function createTripWithOwnerMembership(
           startDate: input.startDate,
           endDate: input.endDate,
           createdBy: userId,
+          destination,
+          coverVisualKey,
         },
       ],
       { session },

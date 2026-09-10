@@ -6,7 +6,6 @@ import {
   PLACES_AUTOCOMPLETE_MAX_SUGGESTIONS,
   PLACES_DETAILS_FIELD_MASK,
   PLACES_DETAILS_GEOGRAPHY_FIELD_MASK,
-  PLACES_PHOTO_FIELD_MASK,
   PLACES_DISPLAY_LANGUAGE_CODE,
   PLACES_GEOGRAPHIC_PRIMARY_TYPES,
   PLACES_INCLUDED_REGION_CODES,
@@ -23,10 +22,6 @@ import {
   getCachedPlaceDisplay,
   setCachedPlaceDisplay,
 } from "./placeDisplayCache";
-import {
-  getCachedPlacePhotoName,
-  setCachedPlacePhotoName,
-} from "./placePhotoCache";
 import type {
   PlaceDisplaySnapshot,
   PlacePrimaryTypes,
@@ -78,10 +73,6 @@ type GooglePlaceDetailsResponse = {
   };
   types?: string[];
   primaryType?: string;
-};
-
-type GooglePlacePhotoResponse = {
-  photos?: Array<{ name?: string }>;
 };
 
 type GoogleAutocompletePrediction = {
@@ -440,56 +431,3 @@ export function getGooglePlacesApiKeyForTests(): string | undefined {
   return process.env.GOOGLE_PLACES_API_KEY?.trim();
 }
 
-async function fetchPlacePhotos(placeId: string): Promise<GooglePlacePhotoResponse> {
-  const apiKey = getGooglePlacesApiKey();
-  const encodedPlaceId = encodeURIComponent(placeId);
-  const url = new URL(
-    `https://places.googleapis.com/v1/places/${encodedPlaceId}`,
-  );
-
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Goog-Api-Key": apiKey,
-      "X-Goog-FieldMask": PLACES_PHOTO_FIELD_MASK,
-    },
-    cache: "no-store",
-  });
-
-  if (!response.ok) {
-    throw new GooglePlacesRequestError(PLACES_MESSAGES.resolveFailed);
-  }
-
-  return (await response.json()) as GooglePlacePhotoResponse;
-}
-
-export async function getPlacePrimaryPhotoName(placeId: string): Promise<string | null> {
-  const cached = getCachedPlacePhotoName(placeId);
-  if (cached !== undefined) {
-    return cached;
-  }
-
-  try {
-    const details = await fetchPlacePhotos(placeId);
-    const photoName = details.photos?.[0]?.name?.trim() ?? null;
-    setCachedPlacePhotoName(placeId, photoName);
-    return photoName;
-  } catch {
-    setCachedPlacePhotoName(placeId, null);
-    return null;
-  }
-}
-
-export async function fetchPlacePhotoMedia(
-  photoName: string,
-  options: { maxHeightPx?: number; maxWidthPx?: number } = {},
-): Promise<Response> {
-  const apiKey = getGooglePlacesApiKey();
-  const url = new URL(`https://places.googleapis.com/v1/${photoName}/media`);
-  url.searchParams.set("maxHeightPx", String(options.maxHeightPx ?? 480));
-  url.searchParams.set("maxWidthPx", String(options.maxWidthPx ?? 720));
-  url.searchParams.set("key", apiKey);
-
-  return fetch(url, { cache: "no-store" });
-}

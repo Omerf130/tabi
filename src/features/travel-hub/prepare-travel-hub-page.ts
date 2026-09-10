@@ -2,7 +2,9 @@ import "server-only";
 
 import type { AccommodationViewModel } from "@/features/accommodations/types";
 import type { TripListSummaryViewModel } from "@/features/lists/types";
-import { getPlacePrimaryPhotoName } from "@/features/places/googlePlaces.server";
+import { buildAccommodationPhotoHref } from "@/features/place-images/build-place-photo-href";
+import { getPlacePhotoPresentation } from "@/features/place-images/get-place-photo-presentation";
+import { createPlacePhotoRequestContext } from "@/features/place-images/request-dedupe";
 import { getJapanCalendarDate } from "@/features/trips/calendar-date";
 import { buildTravelHubViewModel } from "./build-travel-hub-view-model";
 import { selectContextualAccommodation } from "./select-contextual-accommodation";
@@ -28,16 +30,24 @@ export async function prepareTravelHubPage(
     todayJapan,
   );
 
-  let accommodationPhotoAvailable = false;
+  const photoContext = createPlacePhotoRequestContext();
+  let accommodationPhotoPresentation = null;
+
   const googlePlaceId = contextualSelection?.accommodation.googlePlaceId;
-  if (googlePlaceId) {
-    const photoName = await getPlacePrimaryPhotoName(googlePlaceId);
-    accommodationPhotoAvailable = Boolean(photoName);
+  if (googlePlaceId && contextualSelection) {
+    accommodationPhotoPresentation = await getPlacePhotoPresentation({
+      googlePlaceId,
+      photoHref: buildAccommodationPhotoHref(
+        input.tripId,
+        contextualSelection.accommodation.id,
+      ),
+      context: photoContext,
+    });
   }
 
   return buildTravelHubViewModel({
     ...input,
     todayJapan,
-    accommodationPhotoAvailable,
+    accommodationPhotoPresentation,
   });
 }

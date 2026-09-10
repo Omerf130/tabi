@@ -1,0 +1,501 @@
+.screen {
+  --my-trips-text: #0f1728;
+  --my-trips-text-muted: #5c6678;
+  --my-trips-surface: #f7f8fb;
+  --my-trips-card-bg: #ffffff;
+  --my-trips-primary: #1a2740;
+  --my-trips-primary-hover: #243352;
+  --my-trips-focus: #1a2740;
+  --my-trips-max: 72rem;
+
+  min-height: 100dvh;
+  background: var(--my-trips-surface);
+  color: var(--my-trips-text);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding:
+    calc(env(safe-area-inset-top, 0px) + 1rem)
+    clamp(1.25rem, 4vw, 2rem)
+    1rem;
+  background: rgb(255 255 255 / 88%);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgb(15 23 40 / 6%);
+}
+
+.headerBrand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.headerMark {
+  width: 1.25rem;
+  height: auto;
+  color: var(--my-trips-primary);
+}
+
+.headerName {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.headerActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.newTripButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding-inline: 1rem;
+  border-radius: 999px;
+  background: var(--my-trips-primary);
+  color: #ffffff;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.newTripButton:hover {
+  background: var(--my-trips-primary-hover);
+  transform: translateY(-1px);
+}
+
+.newTripButton:focus-visible {
+  outline: 2px solid var(--my-trips-focus);
+  outline-offset: 3px;
+}
+
+.accountMenu {
+  position: relative;
+}
+
+.accountTrigger {
+  list-style: none;
+  cursor: pointer;
+}
+
+.accountTrigger::-webkit-details-marker {
+  display: none;
+}
+
+.accountAvatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  background: rgb(26 39 64 / 8%);
+  color: var(--my-trips-primary);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.accountTrigger:focus-visible .accountAvatar {
+  outline: 2px solid var(--my-trips-focus);
+  outline-offset: 3px;
+}
+
+.accountPanel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  inset-inline-end: 0;
+  z-index: 2;
+  min-width: 11rem;
+  padding: 0.875rem;
+  border-radius: 1rem;
+  background: #ffffff;
+  border: 1px solid rgb(15 23 40 / 8%);
+  box-shadow: 0 16px 40px rgb(15 23 40 / 10%);
+}
+
+.accountName {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--my-trips-text);
+}
+
+.accountSignOut {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  width: 100%;
+  padding-inline: 0.875rem;
+  border: 1px solid rgb(15 23 40 / 10%);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--my-trips-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.accountSignOut:hover {
+  background: rgb(15 23 40 / 4%);
+}
+
+.accountSignOut:focus-visible {
+  outline: 2px solid var(--my-trips-focus);
+  outline-offset: 2px;
+}
+
+.main {
+  width: min(100%, var(--my-trips-max));
+  margin-inline: auto;
+  padding:
+    clamp(1.5rem, 4vh, 2.5rem)
+    clamp(1.25rem, 4vw, 2.5rem)
+    calc(env(safe-area-inset-bottom, 0px) + 2rem);
+}
+
+.pageIntro {
+  margin-bottom: clamp(1.5rem, 4vh, 2.25rem);
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.pageSubtitle {
+  margin: 0.625rem 0 0;
+  max-width: 28rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--my-trips-text-muted);
+}
+
+.mainEmpty .pageIntro {
+  text-align: center;
+}
+
+.mainEmpty .emptyState {
+  justify-items: center;
+}
+
+.mainEmpty .emptyCopy {
+  align-items: center;
+  text-align: center;
+  margin-inline: auto;
+}
+
+.emptyState {
+  display: grid;
+  gap: clamp(1.5rem, 4vh, 2rem);
+  width: 100%;
+}
+
+.emptyVisual {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: clamp(14rem, 42vw, 22rem);
+  border-radius: 1.5rem;
+  background: #1a2740;
+}
+
+.emptyImage {
+  object-fit: cover;
+  object-position: center 35%;
+}
+
+.emptyOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgb(8 18 38 / 10%) 0%,
+    rgb(8 18 38 / 42%) 100%
+  );
+}
+
+.emptyCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.875rem;
+  max-width: 28rem;
+}
+
+.emptyTitle {
+  margin: 0;
+  font-size: clamp(1.5rem, 4.5vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.emptyBody {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--my-trips-text-muted);
+}
+
+.emptyCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  margin-top: 0.25rem;
+  padding-inline: 1.5rem;
+  border-radius: 999px;
+  background: var(--my-trips-primary);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.emptyCta:hover {
+  background: var(--my-trips-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgb(26 39 64 / 18%);
+}
+
+.emptyCta:focus-visible {
+  outline: 2px solid var(--my-trips-focus);
+  outline-offset: 3px;
+}
+
+.collection {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.75rem, 4vh, 2.5rem);
+}
+
+.collectionSectionTitle {
+  margin: 0 0 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--my-trips-text-muted);
+}
+
+.collectionGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+.tripCardLink {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.tripCard {
+  overflow: hidden;
+  border-radius: 1.25rem;
+  background: var(--my-trips-card-bg);
+  box-shadow: 0 10px 30px rgb(15 23 40 / 8%);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.tripCardLink:hover .tripCard,
+.tripCardLink:focus-visible .tripCard {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgb(15 23 40 / 12%);
+}
+
+.tripCardLink:focus-visible .tripCard {
+  outline: 2px solid var(--my-trips-focus);
+  outline-offset: 3px;
+}
+
+.tripCardMedia {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: #1a2740;
+}
+
+.tripCardImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+.tripCardOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 35%,
+    rgb(8 18 38 / 72%) 100%
+  );
+}
+
+.tripCardBody {
+  position: relative;
+  margin-top: -4.5rem;
+  padding: 0 1.125rem 1.125rem;
+  color: #ffffff;
+}
+
+.tripCardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.tripCardName {
+  margin: 0;
+  font-size: clamp(1.25rem, 3.5vw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.tripCardPhase {
+  flex-shrink: 0;
+  padding: 0.3rem 0.625rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 16%);
+  backdrop-filter: blur(8px);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.tripCardDates,
+.tripCardRole {
+  margin: 0.5rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: rgb(255 255 255 / 86%);
+}
+
+.tripCardRole {
+  font-size: 0.8125rem;
+  color: rgb(255 255 255 / 72%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .main {
+    animation: myTripsEnter 640ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .tripCardLink {
+    animation: myTripsCardEnter 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .tripCardLink:nth-child(2) {
+    animation-delay: 60ms;
+  }
+
+  .tripCardLink:nth-child(3) {
+    animation-delay: 120ms;
+  }
+}
+
+@keyframes myTripsEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes myTripsCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .collectionGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .mainEmpty .pageIntro {
+    text-align: start;
+  }
+
+  .mainEmpty .emptyState {
+    justify-items: stretch;
+  }
+
+  .mainEmpty .emptyCopy {
+    align-items: flex-start;
+    text-align: start;
+    margin-inline: 0;
+  }
+
+  .emptyState {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: center;
+  }
+}
+
+@media (min-width: 1024px) {
+  .main {
+    padding-inline: clamp(2rem, 5vw, 3rem);
+  }
+
+  .collectionGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .emptyVisual {
+    min-height: 24rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .collectionGrid {
+    gap: 1.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main,
+  .tripCardLink,
+  .emptyCta,
+  .newTripButton,
+  .tripCard {
+    animation: none;
+    transition: none;
+  }
+
+  .tripCardLink:hover .tripCard,
+  .emptyCta:hover,
+  .newTripButton:hover {
+    transform: none;
+  }
+}

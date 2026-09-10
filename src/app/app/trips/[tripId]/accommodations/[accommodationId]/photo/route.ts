@@ -1,8 +1,6 @@
-import { getAccommodationForTrip } from "@/features/accommodations/queries";
-import {
-  fetchPlacePhotoMedia,
-  getPlacePrimaryPhotoName,
-} from "@/features/places/googlePlaces.server";
+import { requireUser } from "@/features/auth/session";
+import { servePlacePhotoResponse } from "@/features/place-images/serve-place-photo";
+import { resolveAccommodationGooglePlaceIdForPhoto } from "@/features/place-images/resolve-photo-entity";
 import { requireTripMember } from "@/features/trips/authorization";
 
 export async function GET(
@@ -11,28 +9,18 @@ export async function GET(
 ): Promise<Response> {
   const { tripId, accommodationId } = await context.params;
   await requireTripMember(tripId);
+  const user = await requireUser();
 
-  const accommodation = await getAccommodationForTrip(tripId, accommodationId);
-  if (!accommodation?.googlePlaceId) {
+  const googlePlaceId = await resolveAccommodationGooglePlaceIdForPhoto(
+    tripId,
+    accommodationId,
+  );
+  if (!googlePlaceId) {
     return new Response(null, { status: 404 });
   }
 
-  const photoName = await getPlacePrimaryPhotoName(accommodation.googlePlaceId);
-  if (!photoName) {
-    return new Response(null, { status: 404 });
-  }
-
-  const mediaResponse = await fetchPlacePhotoMedia(photoName);
-  if (!mediaResponse.ok) {
-    return new Response(null, { status: 404 });
-  }
-
-  const bytes = await mediaResponse.arrayBuffer();
-
-  return new Response(bytes, {
-    headers: {
-      "Content-Type": mediaResponse.headers.get("Content-Type") ?? "image/jpeg",
-      "Cache-Control": "private, max-age=3600",
-    },
+  return servePlacePhotoResponse({
+    googlePlaceId,
+    userId: user.id,
   });
 }

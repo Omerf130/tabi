@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/icons";
 import { AppPage } from "@/features/app-shell/AppPage";
 import { ListProgressBar } from "@/features/lists/ListProgressBar";
-import { GooglePlacesAttribution } from "@/features/places/GooglePlacesAttribution";
 import { AccommodationPhoto } from "./AccommodationPhoto";
 import type { TravelHubViewModel, TravelToolViewModel } from "./types";
 import styles from "./TravelHub.module.scss";
@@ -103,7 +102,10 @@ export function TravelHubContent({ model }: TravelHubContentProps) {
             </h3>
             <article className={styles.accommodationCard}>
               <div className={styles.accommodationTop}>
-                <AccommodationPhoto photoHref={contextualAccommodation.photoHref} />
+                <AccommodationPhoto
+                  placePhoto={contextualAccommodation.placePhoto}
+                  showGoogleAttribution={contextualAccommodation.showGoogleAttribution}
+                />
                 <div className={styles.accommodationIdentity}>
                   <h4 className={styles.accommodationName} dir="auto">
                     {contextualAccommodation.accommodation.name}
@@ -111,9 +113,6 @@ export function TravelHubContent({ model }: TravelHubContentProps) {
                   <p className={styles.accommodationLocation}>
                     {contextualAccommodation.accommodation.city}, Japan
                   </p>
-                  {contextualAccommodation.showGoogleAttribution ? (
-                    <GooglePlacesAttribution className={styles.accommodationAttribution} />
-                  ) : null}
                 </div>
               </div>
               <div className={styles.accommodationDivider} aria-hidden />

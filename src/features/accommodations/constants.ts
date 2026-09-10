@@ -47,9 +47,4 @@ export function buildAccommodationTaxiHref(
   return `/app/trips/${tripId}/accommodations/${accommodationId}/taxi`;
 }
 
-export function buildAccommodationPhotoHref(
-  tripId: string,
-  accommodationId: string,
-): string {
-  return `/app/trips/${tripId}/accommodations/${accommodationId}/photo`;
-}
+export { buildAccommodationPhotoHref } from "@/features/place-images/build-place-photo-href";

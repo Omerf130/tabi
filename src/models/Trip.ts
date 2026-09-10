@@ -3,6 +3,44 @@ import "server-only";
 import mongoose, { type InferSchemaType, type Model } from "mongoose";
 import { isValidCalendarDateString } from "@/features/trips/calendar-date";
 
+const tripDestinationSchema = new mongoose.Schema(
+  {
+    googlePlaceId: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    displayName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    secondaryLabel: {
+      type: String,
+      trim: true,
+    },
+    country: {
+      type: String,
+      trim: true,
+    },
+    countryCode: {
+      type: String,
+      trim: true,
+      uppercase: true,
+      maxlength: 2,
+    },
+    latitude: {
+      type: Number,
+      required: true,
+    },
+    longitude: {
+      type: Number,
+      required: true,
+    },
+  },
+  { _id: false },
+);
+
 const tripCoverImageSchema = new mongoose.Schema(
   {
     pathname: {
@@ -59,6 +97,14 @@ const tripSchema = new mongoose.Schema(
       type: tripCoverImageSchema,
       default: null,
     },
+    destination: {
+      type: tripDestinationSchema,
+      default: undefined,
+    },
+    coverVisualKey: {
+      type: String,
+      trim: true,
+    },
     initializations: {
       type: {
         listsV1: {
@@ -72,6 +118,7 @@ const tripSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
+export type TripDestinationDocument = InferSchemaType<typeof tripDestinationSchema>;
 export type TripCoverImageDocument = InferSchemaType<typeof tripCoverImageSchema>;
 
 export type TripDocument = InferSchemaType<typeof tripSchema> & {

@@ -1,32 +1,29 @@
 "use client";
 
-import { useState } from "react";
 import { IconAccommodation } from "@/components/ui/icons";
+import { PlaceImage } from "@/features/place-images/PlaceImage";
+import type { PlacePhotoPresentation } from "@/features/place-images/types";
 import styles from "./TravelHub.module.scss";
 
 type AccommodationPhotoProps = {
-  photoHref?: string;
+  placePhoto?: PlacePhotoPresentation;
+  showGoogleAttribution?: boolean;
 };
 
-export function AccommodationPhoto({ photoHref }: AccommodationPhotoProps) {
-  const [hasError, setHasError] = useState(false);
-  const showPhoto = Boolean(photoHref) && !hasError;
-
+export function AccommodationPhoto({
+  placePhoto,
+  showGoogleAttribution = false,
+}: AccommodationPhotoProps) {
   return (
-    <div className={styles.accommodationPhotoFrame}>
-      {showPhoto ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={photoHref}
-          alt=""
-          className={styles.accommodationPhoto}
-          onError={() => setHasError(true)}
-        />
-      ) : (
-        <div className={styles.accommodationPhotoFallback} aria-hidden>
-          <IconAccommodation className={styles.accommodationPhotoIcon} />
-        </div>
-      )}
-    </div>
+    <PlaceImage
+      photoHref={placePhoto?.photoHref}
+      authorAttributions={placePhoto?.authorAttributions ?? []}
+      showPoweredByGoogle={showGoogleAttribution}
+      fallbackIcon={IconAccommodation}
+      frameClassName={styles.accommodationPhotoFrame}
+      imageClassName={styles.accommodationPhoto}
+      fallbackClassName={styles.accommodationPhotoFallback}
+      attributionClassName={styles.accommodationAttribution}
+    />
   );
 }

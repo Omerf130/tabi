@@ -1,9 +1,9 @@
 import {
   buildAccommodationDetailHref,
-  buildAccommodationPhotoHref,
   buildAccommodationTaxiHref,
   buildAccommodationListHref,
 } from "@/features/accommodations/constants";
+import type { PlacePhotoPresentation } from "@/features/place-images/types";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
 import { buildCurrencyHref } from "@/features/currency/constants";
 import { buildEmergencyHref } from "@/features/emergency/constants";
@@ -30,7 +30,7 @@ type BuildTravelHubViewModelInput = {
   accommodations: readonly AccommodationViewModel[];
   lists: readonly TripListSummaryViewModel[];
   todayJapan?: string;
-  accommodationPhotoAvailable?: boolean;
+  accommodationPhotoPresentation?: PlacePhotoPresentation | null;
 };
 
 function buildToolHref(tripId: string, toolId: (typeof TRAVEL_TOOLS)[number]["id"]): string | undefined {
@@ -63,7 +63,7 @@ export function buildTravelHubViewModel({
   accommodations,
   lists,
   todayJapan = getJapanCalendarDate(),
-  accommodationPhotoAvailable = false,
+  accommodationPhotoPresentation = null,
 }: BuildTravelHubViewModelInput): TravelHubViewModel {
   const tripPhase = getTripPhase(startDate, endDate, todayJapan);
   const contextualSelection = selectContextualAccommodation(
@@ -85,10 +85,10 @@ export function buildTravelHubViewModel({
           tripId,
           contextualSelection.accommodation.id,
         ),
-        photoHref:
-          accommodationPhotoAvailable &&
-          contextualSelection.accommodation.googlePlaceId
-            ? buildAccommodationPhotoHref(tripId, contextualSelection.accommodation.id)
+        placePhoto:
+          accommodationPhotoPresentation?.hasPhoto &&
+          accommodationPhotoPresentation.photoHref
+            ? accommodationPhotoPresentation
             : undefined,
         mapsHref: contextualSelection.accommodation.googleMapsUrl,
         showGoogleAttribution: contextualSelection.accommodation.usesGoogleAttribution,
