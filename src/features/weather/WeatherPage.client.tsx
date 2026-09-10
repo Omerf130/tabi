@@ -1,29 +1,32 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { IconChevron } from "@/components/ui/icons";
+import { IconBack, IconSearch, IconWeather } from "@/components/ui/icons";
+import { buildTravelWeatherAdvice } from "./build-travel-weather-advice";
 import {
   WEATHER_MESSAGES,
   buildWeatherSnapshotHref,
   makeWeatherLocationKey,
 } from "./constants";
 import {
-  formatForecastDayLabel,
-  formatLocationLabel,
+  formatForecastRowLabel,
+  formatHighLowRange,
   formatObservedAt,
-  formatRainChance,
   formatTemperatureC,
+  formatWeatherHeroDate,
 } from "./format-weather";
+import { buildNearTermWeatherColumns, shouldShowNearTermStrip } from "./get-near-term-hourly";
+import { getWeatherForecastDaysForDisplay } from "./get-weather-forecast-days";
+import { WeatherAdviceIcon } from "./WeatherAdviceIcon";
 import {
   getWeatherLocationPreferenceSnapshot,
   subscribeToWeatherLocationPreference,
   writeWeatherLocationPreference,
 } from "./weather-preferences";
 import { WeatherLocationSearch } from "./WeatherLocationSearch.client";
-import type { WeatherLocationRef, WeatherPageInitialData, WeatherSnapshot } from "./types";
+import type { WeatherLocationRef, WeatherPageProps, WeatherSnapshot } from "./types";
 import styles from "./WeatherView.module.scss";
-
-type WeatherPageProps = WeatherPageInitialData;
 
 function createInitialSnapshotState(
   location: WeatherLocationRef,
@@ -51,8 +54,43 @@ function locationsMatchCoordinates(
   return left.latitude === right.latitude && left.longitude === right.longitude;
 }
 
+function WeatherIcon({ iconUrl, className }: { iconUrl: string; className?: string }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element -- WeatherAPI CDN icon
+    <img src={iconUrl} alt="" aria-hidden className={className} />
+  );
+}
+
+function WeatherSkeleton() {
+  return (
+    <div className={styles.skeletonLayout} aria-busy="true" aria-label="טוען מזג אוויר">
+      <div className={styles.skeletonLocation}>
+        <div className={`${styles.skeletonBlock} ${styles.skeletonLocationName}`} />
+        <div className={`${styles.skeletonBlock} ${styles.skeletonLocationDate}`} />
+      </div>
+      <div className={styles.skeletonHero}>
+        <div className={`${styles.skeletonBlock} ${styles.skeletonIcon}`} />
+        <div className={styles.skeletonHeroText}>
+          <div className={`${styles.skeletonBlock} ${styles.skeletonTemp}`} />
+          <div className={`${styles.skeletonBlock} ${styles.skeletonLine}`} />
+          <div className={`${styles.skeletonBlock} ${styles.skeletonLineShort}`} />
+        </div>
+      </div>
+      <div className={styles.skeletonHourly}>
+        <div className={`${styles.skeletonBlock} ${styles.skeletonHourlyCol}`} />
+        <div className={`${styles.skeletonBlock} ${styles.skeletonHourlyCol}`} />
+        <div className={`${styles.skeletonBlock} ${styles.skeletonHourlyCol}`} />
+        <div className={`${styles.skeletonBlock} ${styles.skeletonHourlyCol}`} />
+      </div>
+      <div className={`${styles.skeletonBlock} ${styles.skeletonAdvice}`} />
+      <div className={`${styles.skeletonBlock} ${styles.skeletonForecastCard}`} />
+    </div>
+  );
+}
+
 export function WeatherPage({
   tripId,
+  backHref,
   defaultLocation,
   initialSnapshot,
 }: WeatherPageProps) {
@@ -163,133 +201,167 @@ export function WeatherPage({
     void fetchSnapshot(location, false, true);
   }
 
-  const locationLabel = formatLocationLabel(
-    location.label,
-    location.region,
-    location.country,
-  );
+  const showSkeleton = isFetching && !snapshot;
+  const advice = snapshot ? buildTravelWeatherAdvice(snapshot) : null;
+  const forecastDays = snapshot ? getWeatherForecastDaysForDisplay(snapshot) : [];
+  const nearTermColumns = snapshot ? buildNearTermWeatherColumns(snapshot) : [];
+  const showNearTermStrip = snapshot ? shouldShowNearTermStrip(snapshot) : false;
 
   return (
     <div className={styles.weather}>
-      <div className={styles.locationBar}>
+      <header className={styles.weatherHeader}>
+        <Link href={backHref} className={styles.backLink} aria-label="חזרה">
+          <IconBack className={styles.backGlyph} aria-hidden />
+        </Link>
+        <div className={styles.weatherHeaderTitleGroup}>
+          <IconWeather className={styles.weatherHeaderIcon} aria-hidden />
+          <h1 className={styles.weatherHeaderTitle}>מזג אוויר</h1>
+        </div>
         <button
           type="button"
-          className={styles.locationButton}
+          className={styles.headerSearchButton}
           onClick={() => setSearchOpen(true)}
           aria-haspopup="dialog"
           aria-expanded={searchOpen}
-          aria-label={`${WEATHER_MESSAGES.changeLocation}: ${locationLabel}`}
-          disabled={isFetching}
+          aria-label={WEATHER_MESSAGES.searchLocation}
         >
-          <span className={styles.locationText}>
-            <span className={styles.locationLabel}>{location.label}</span>
-            <span className={styles.locationMeta}>{locationLabel}</span>
-          </span>
-          <IconChevron className={styles.locationChevron} aria-hidden />
+          <IconSearch className={styles.headerSearchIcon} aria-hidden />
         </button>
+      </header>
+
+      <div className={styles.locationBlock}>
+        <h2 className={styles.locationName}>{location.label}</h2>
+        {snapshot ? (
+          <p className={styles.locationDate}>{formatWeatherHeroDate(snapshot.observedAt)}</p>
+        ) : (
+          <p className={styles.locationDatePlaceholder} aria-hidden />
+        )}
       </div>
 
       {loadFailed ? (
-        <div className={styles.errorBlock}>
+        <div className={styles.errorBlock} role="alert">
           <p className={styles.errorText}>{WEATHER_MESSAGES.loadFailed}</p>
           <button type="button" className={styles.retryButton} onClick={handleRetry}>
             {WEATHER_MESSAGES.retry}
           </button>
         </div>
+      ) : showSkeleton ? (
+        <WeatherSkeleton />
       ) : snapshot ? (
-        <>
-          <section className={styles.currentCard} aria-label="מזג אוויר נוכחי">
-            <div className={styles.currentMain}>
-              <div>
-                <p className={styles.currentTemp}>
-                  {formatTemperatureC(snapshot.current.temperatureC)}
-                </p>
-                <p className={styles.currentCondition}>{snapshot.current.condition.label}</p>
-              </div>
-              {snapshot.current.condition.iconUrl ? (
-                // Provider CDN icon; isolated for future visual redesign.
-                // eslint-disable-next-line @next/next/no-img-element -- WeatherAPI CDN icon
-                <img
-                  src={snapshot.current.condition.iconUrl}
-                  alt=""
-                  className={styles.currentIcon}
-                />
-              ) : null}
-            </div>
-            <p className={styles.feelsLike}>
-              {WEATHER_MESSAGES.feelsLike} {formatTemperatureC(snapshot.current.feelsLikeC)}
-            </p>
-          </section>
-
-          <section className={styles.todayCard} aria-label={WEATHER_MESSAGES.today}>
-            <h2 className={styles.sectionTitle}>{WEATHER_MESSAGES.today}</h2>
-            <div className={styles.statsRow}>
-              <div className={styles.stat}>
-                <p className={styles.statLabel}>מינימום</p>
-                <p className={styles.statValue}>
-                  {formatTemperatureC(snapshot.today.minTemperatureC)}
-                </p>
-              </div>
-              <div className={styles.stat}>
-                <p className={styles.statLabel}>מקסימום</p>
-                <p className={styles.statValue}>
-                  {formatTemperatureC(snapshot.today.maxTemperatureC)}
-                </p>
-              </div>
-              {formatRainChance(snapshot.today.chanceOfRainPercent) ? (
-                <div className={styles.stat}>
-                  <p className={styles.statLabel}>{WEATHER_MESSAGES.rainChance}</p>
-                  <p className={styles.statValue}>
-                    {formatRainChance(snapshot.today.chanceOfRainPercent)}
+        <div className={styles.weatherBody}>
+          <div className={styles.primaryStack}>
+            <section className={styles.currentSection} aria-label="מזג אוויר נוכחי">
+              <div className={styles.currentHero}>
+                {snapshot.current.condition.iconUrl ? (
+                  <div className={styles.currentIconWrap}>
+                    <WeatherIcon
+                      iconUrl={snapshot.current.condition.iconUrl}
+                      className={styles.currentIcon}
+                    />
+                  </div>
+                ) : null}
+                <div className={styles.currentDetails}>
+                  <p className={styles.currentTemp}>
+                    {formatTemperatureC(snapshot.current.temperatureC)}
+                  </p>
+                  <p className={styles.currentCondition}>{snapshot.current.condition.label}</p>
+                  <p className={styles.currentHighLow}>
+                    {formatHighLowRange(
+                      snapshot.today.maxTemperatureC,
+                      snapshot.today.minTemperatureC,
+                    )}
                   </p>
                 </div>
-              ) : null}
-            </div>
-          </section>
+              </div>
+            </section>
 
-          {snapshot.forecast.length > 0 ? (
-            <section className={styles.forecastCard} aria-label={WEATHER_MESSAGES.forecast}>
-              <h2 className={styles.sectionTitle}>{WEATHER_MESSAGES.forecast}</h2>
-              <ul className={styles.forecastList}>
-                {snapshot.forecast.map((day) => (
-                  <li key={day.date} className={styles.forecastItem}>
-                    <p className={styles.forecastDay}>{formatForecastDayLabel(day.date)}</p>
-                    <div className={styles.forecastMiddle}>
-                      {day.condition.iconUrl ? (
-                        // eslint-disable-next-line @next/next/no-img-element -- WeatherAPI CDN icon
-                        <img
-                          src={day.condition.iconUrl}
-                          alt=""
-                          className={styles.forecastIcon}
+            {showNearTermStrip ? (
+              <section className={styles.hourlySection} aria-label="תחזית לטווח קצר">
+                <div
+                  className={styles.hourlyStrip}
+                  style={{
+                    gridTemplateColumns: `repeat(${nearTermColumns.length}, minmax(0, 1fr))`,
+                  }}
+                >
+                  {nearTermColumns.map((column) => (
+                    <div
+                      key={`${column.label}-${column.temperatureC}`}
+                      className={styles.hourlyColumn}
+                    >
+                      <span className={styles.hourlyLabel}>{column.label}</span>
+                      {column.condition.iconUrl ? (
+                        <WeatherIcon
+                          iconUrl={column.condition.iconUrl}
+                          className={styles.hourlyIcon}
                         />
                       ) : null}
-                      <p className={styles.forecastCondition}>{day.condition.label}</p>
+                      <span className={styles.hourlyTemp}>
+                        {formatTemperatureC(column.temperatureC)}
+                      </span>
+                      <span className={styles.srOnly}>{column.condition.label}</span>
                     </div>
-                    <div className={styles.forecastTemps}>
-                      <p className={styles.forecastTempRange}>
-                        {formatTemperatureC(day.maxTemperatureC)} /{" "}
-                        {formatTemperatureC(day.minTemperatureC)}
-                      </p>
-                      {formatRainChance(day.chanceOfRainPercent) ? (
-                        <p className={styles.forecastRain}>
-                          {WEATHER_MESSAGES.rainChance}{" "}
-                          {formatRainChance(day.chanceOfRainPercent)}
-                        </p>
-                      ) : null}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ) : null}
+                  ))}
+                </div>
+              </section>
+            ) : null}
 
-          <p className={styles.freshness}>
-            {WEATHER_MESSAGES.updated} · {formatObservedAt(snapshot.observedAt)}
-          </p>
-          {refreshFailed ? (
-            <p className={styles.refreshNotice}>{WEATHER_MESSAGES.refreshFailed}</p>
-          ) : null}
-        </>
+            {advice ? (
+              <section className={styles.adviceCard} aria-label={advice.title}>
+                <div className={styles.adviceIconWrap} aria-hidden>
+                  <WeatherAdviceIcon kind={advice.icon} className={styles.adviceIcon} />
+                </div>
+                <div className={styles.adviceText}>
+                  <h3 className={styles.adviceTitle}>{advice.title}</h3>
+                  <p className={styles.adviceMessage}>{advice.message}</p>
+                </div>
+              </section>
+            ) : null}
+          </div>
+
+          <div className={styles.secondaryStack}>
+            <section
+              className={styles.forecastCard}
+              aria-labelledby="weather-forecast-title"
+            >
+              <h2 id="weather-forecast-title" className={styles.forecastTitle}>
+                {WEATHER_MESSAGES.forecast}
+              </h2>
+              {forecastDays.length > 0 ? (
+                <ul className={styles.forecastList}>
+                  {forecastDays.map((day) => (
+                    <li key={day.date} className={styles.forecastRow}>
+                      <span className={styles.forecastDate}>{formatForecastRowLabel(day.date)}</span>
+                      <span className={styles.forecastIconCell}>
+                        {day.condition.iconUrl ? (
+                          <WeatherIcon
+                            iconUrl={day.condition.iconUrl}
+                            className={styles.forecastIcon}
+                          />
+                        ) : null}
+                        <span className={styles.srOnly}>{day.condition.label}</span>
+                      </span>
+                      <span className={styles.forecastHigh}>
+                        {formatTemperatureC(day.maxTemperatureC)}
+                      </span>
+                      <span className={styles.forecastLow}>
+                        {formatTemperatureC(day.minTemperatureC)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </section>
+
+            <footer className={styles.metaFooter}>
+              <p className={styles.freshness}>
+                {WEATHER_MESSAGES.updated} · {formatObservedAt(snapshot.observedAt)}
+              </p>
+              {refreshFailed ? (
+                <p className={styles.refreshNotice}>{WEATHER_MESSAGES.refreshFailed}</p>
+              ) : null}
+            </footer>
+          </div>
+        </div>
       ) : null}
 
       {searchOpen ? (

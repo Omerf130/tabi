@@ -38,6 +38,7 @@ const snapshot: WeatherSnapshot = {
       chanceOfRainPercent: 60,
     },
   ],
+  hourly: [],
   observedAt: "2026-10-26 09:00",
 };
 

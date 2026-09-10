@@ -5,6 +5,10 @@
   padding-block: var(--space-5);
 }
 
+.page[data-density="compact"] {
+  padding-block: var(--space-3);
+}
+
 .page[data-width="content"] {
   max-width: var(--layout-content-max);
 }

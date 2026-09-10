@@ -29,6 +29,20 @@ const samplePayload: WeatherApiForecastResponse = {
           daily_chance_of_rain: 10,
           condition: { code: 1000, text: "Sunny", icon: "//cdn.weatherapi.com/weather/64x64/day/113.png" },
         },
+        hour: [
+          {
+            time: "2026-09-09 12:00",
+            temp_c: 24,
+            is_day: 1,
+            condition: { code: 1000, text: "Sunny", icon: "//cdn.weatherapi.com/weather/64x64/day/113.png" },
+          },
+          {
+            time: "2026-09-09 15:00",
+            temp_c: 26,
+            is_day: 1,
+            condition: { code: 1003, text: "Partly cloudy", icon: "//cdn.weatherapi.com/weather/64x64/day/116.png" },
+          },
+        ],
       },
       {
         date: "2026-09-10",
@@ -71,6 +85,8 @@ describe("normalizeWeatherSnapshot", () => {
     expect(snapshot.today.maxTemperatureC).toBe(28);
     expect(snapshot.forecast).toHaveLength(2);
     expect(snapshot.forecast[0]?.chanceOfRainPercent).toBe(40);
+    expect(snapshot.hourly).toHaveLength(2);
+    expect(snapshot.hourly[0]?.temperatureC).toBe(24);
   });
 
   it("builds provider query from coordinates only", () => {

@@ -27,11 +27,19 @@ export type WeatherDaySummary = {
   chanceOfRainPercent: number | null;
 };
 
+export type WeatherHourSummary = {
+  time: string;
+  temperatureC: number;
+  condition: WeatherCondition;
+  isDay: boolean;
+};
+
 export type WeatherSnapshot = {
   location: WeatherLocationRef;
   current: WeatherCurrent;
   today: WeatherDaySummary;
   forecast: WeatherDaySummary[];
+  hourly: WeatherHourSummary[];
   observedAt: string;
 };
 
@@ -39,4 +47,8 @@ export type WeatherPageInitialData = {
   tripId: string;
   defaultLocation: WeatherLocationRef;
   initialSnapshot: WeatherSnapshot | null;
+};
+
+export type WeatherPageProps = WeatherPageInitialData & {
+  backHref: string;
 };

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { AppPage } from "@/features/app-shell/AppPage";
-import { TripHeader } from "@/features/app-shell/TripHeader";
 import { WeatherPage } from "@/features/weather/WeatherPage.client";
 import { prepareWeatherPage } from "@/features/weather/queries";
 import { requireTripMember } from "@/features/trips/authorization";
@@ -21,20 +20,15 @@ export default async function TripWeatherPage({
   params: Promise<{ tripId: string }>;
 }) {
   const { tripId } = await params;
-  const trip = await requireTripMember(tripId);
-  const initialData = await prepareWeatherPage(trip.id);
+  await requireTripMember(tripId);
+  const initialData = await prepareWeatherPage(tripId);
 
   return (
-    <>
-      <TripHeader
-        title="מזג אוויר"
-        tripName={trip.name}
-        showTripSwitch
+    <AppPage width="content" density="compact">
+      <WeatherPage
+        {...initialData}
         backHref={`/app/trips/${tripId}/more`}
       />
-      <AppPage width="content">
-        <WeatherPage {...initialData} />
-      </AppPage>
-    </>
+    </AppPage>
   );
 }

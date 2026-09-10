@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, useTransition } from "react";
+import { IconSearch } from "@/components/ui/icons";
 import {
   WEATHER_MESSAGES,
   WEATHER_SEARCH_DEBOUNCE_MS,
@@ -150,15 +151,18 @@ export function WeatherLocationSearch({
           </button>
         </div>
 
-        <input
-          type="search"
-          className={styles.searchInput}
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder={WEATHER_MESSAGES.searchPlaceholder}
-          autoComplete="off"
-          enterKeyHint="search"
-        />
+        <div className={styles.searchFieldWrap}>
+          <IconSearch className={styles.searchFieldIcon} aria-hidden />
+          <input
+            type="search"
+            className={styles.searchInput}
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={WEATHER_MESSAGES.searchPlaceholder}
+            autoComplete="off"
+            enterKeyHint="search"
+          />
+        </div>
 
         {error ? <p className={styles.emptyResults}>{error}</p> : null}
         {status ? <p className={styles.searchStatus}>{status}</p> : null}

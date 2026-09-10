@@ -4,6 +4,7 @@ import type {
   WeatherCondition,
   WeatherCurrent,
   WeatherDaySummary,
+  WeatherHourSummary,
   WeatherLocationRef,
   WeatherSnapshot,
 } from "./types";
@@ -29,9 +30,17 @@ type WeatherApiDay = {
   condition?: WeatherApiCondition;
 };
 
+type WeatherApiHour = {
+  time?: string;
+  temp_c?: number;
+  is_day?: number;
+  condition?: WeatherApiCondition;
+};
+
 type WeatherApiForecastDay = {
   date?: string;
   day?: WeatherApiDay;
+  hour?: WeatherApiHour[];
 };
 
 type WeatherApiLocation = {
@@ -80,6 +89,36 @@ function normalizeCondition(condition: WeatherApiCondition | undefined): Weather
     label: resolveConditionLabel(code, providerText),
     iconUrl: normalizeIconUrl(condition?.icon),
   };
+}
+
+function normalizeHourSummary(hour: WeatherApiHour): WeatherHourSummary | null {
+  if (!hour.time) {
+    return null;
+  }
+
+  return {
+    time: hour.time,
+    temperatureC: hour.temp_c ?? 0,
+    condition: normalizeCondition(hour.condition),
+    isDay: hour.is_day === 1,
+  };
+}
+
+function normalizeHourlyFromForecast(
+  forecastDays: WeatherApiForecastDay[],
+): WeatherHourSummary[] {
+  const hours: WeatherHourSummary[] = [];
+
+  for (const day of forecastDays.slice(0, 2)) {
+    for (const hour of day.hour ?? []) {
+      const normalized = normalizeHourSummary(hour);
+      if (normalized) {
+        hours.push(normalized);
+      }
+    }
+  }
+
+  return hours;
 }
 
 function normalizeDaySummary(day: WeatherApiForecastDay): WeatherDaySummary | null {
@@ -168,6 +207,7 @@ export function normalizeWeatherSnapshot(
     current,
     today,
     forecast,
+    hourly: normalizeHourlyFromForecast(forecastDays),
     observedAt: currentPayload.last_updated ?? new Date().toISOString(),
   };
 }

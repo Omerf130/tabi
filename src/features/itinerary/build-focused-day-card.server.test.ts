@@ -99,6 +99,7 @@ describe("buildFocusedDayCard", () => {
         chanceOfRainPercent: 10,
       },
       forecast: [],
+      hourly: [],
       observedAt: "2026-10-26 09:00",
     });
   });
@@ -141,6 +142,7 @@ describe("buildFocusedDayCard", () => {
         chanceOfRainPercent: 10,
       },
       forecast: [],
+      hourly: [],
       observedAt: "2026-10-20 09:00",
     });
 
