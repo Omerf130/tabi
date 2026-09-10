@@ -81,6 +81,13 @@ describe("buildTravelHubViewModel", () => {
     expect(emergencyTool?.href).toBe(`/app/trips/${tripId}/emergency`);
     expect(emergencyTool?.status).toBe("active");
     expect(emergencyTool?.label).toBe("חירום ועזרה");
+
+    const manageTool = model.tools.find((tool) => tool.id === "manage");
+
+    expect(model.tools).toHaveLength(8);
+    expect(manageTool?.href).toBe(`/app/trips/${tripId}/manage`);
+    expect(manageTool?.status).toBe("active");
+    expect(manageTool?.label).toBe("הגדרות וניהול");
   });
 
   it("includes contextual accommodation and photo href when available", () => {
@@ -137,16 +144,4 @@ describe("buildTravelHubViewModel", () => {
     expect(model.attentionList?.href).toBe(`/app/trips/${tripId}/lists/packing`);
   });
 
-  it("points management entry to manage route", () => {
-    const model = buildTravelHubViewModel({
-      tripId,
-      startDate: "2026-10-25",
-      endDate: "2026-11-18",
-      accommodations: [],
-      lists: [],
-      todayJapan: "2026-10-01",
-    });
-
-    expect(model.manageHref).toBe(`/app/trips/${tripId}/manage`);
-  });
 });

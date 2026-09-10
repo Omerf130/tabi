@@ -11,5 +11,5 @@ export const TRIP_REMINDER_MESSAGES = {
 } as const;
 
 export function getTripRemindersSettingsHref(tripId: string): string {
-  return `/app/trips/${tripId}/settings#reminders`;
+  return `/app/trips/${tripId}/manage/reminders`;
 }

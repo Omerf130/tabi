@@ -3,8 +3,8 @@ import {
   IconAccommodation,
   IconCurrency,
   IconDictionary,
+  IconGear,
   IconGrid,
-  IconSettings,
   IconShield,
   IconTrain,
   IconWeather,
@@ -36,6 +36,8 @@ function TravelToolIcon({ tool }: { tool: TravelToolViewModel }) {
       return <IconWeather className={styles.toolIconSvg} />;
     case "emergency":
       return <IconShield className={styles.toolIconSvg} />;
+    case "manage":
+      return <IconGear className={styles.toolIconSvg} />;
     default:
       return <IconGrid className={styles.toolIconSvg} />;
   }
@@ -170,13 +172,6 @@ export function TravelHubContent({ model }: TravelHubContentProps) {
               <TravelToolCard key={tool.id} tool={tool} />
             ))}
           </div>
-        </section>
-
-        <section className={styles.managementSection} aria-labelledby="management-entry-title">
-          <Link href={model.manageHref} className={styles.managementEntry}>
-            <IconSettings className={styles.managementIcon} aria-hidden />
-            <span id="management-entry-title">הגדרות וניהול</span>
-          </Link>
         </section>
       </div>
     </AppPage>

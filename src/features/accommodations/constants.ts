@@ -26,7 +26,7 @@ export function formatAccommodationDeleteConfirm(): string {
 }
 
 export function getAccommodationsSettingsHref(tripId: string): string {
-  return `/app/trips/${tripId}/settings#accommodations`;
+  return `/app/trips/${tripId}/manage/accommodations`;
 }
 
 export function buildAccommodationListHref(tripId: string): string {

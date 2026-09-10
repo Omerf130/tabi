@@ -27,5 +27,4 @@ export type TravelHubViewModel = {
   contextualAccommodation: ContextualAccommodationCard | null;
   attentionList: AttentionListCard | null;
   tools: TravelToolViewModel[];
-  manageHref: string;
 };

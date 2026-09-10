@@ -27,7 +27,8 @@ export type TravelToolId =
   | "transport"
   | "language"
   | "weather"
-  | "emergency";
+  | "emergency"
+  | "manage";
 
 export type TravelToolDefinition = {
   id: TravelToolId;
@@ -78,6 +79,12 @@ export const TRAVEL_TOOLS: readonly TravelToolDefinition[] = [
     label: "חירום ועזרה",
     status: "active",
     colorClass: "toolColorEmergency",
+  },
+  {
+    id: "manage",
+    label: "הגדרות וניהול",
+    status: "active",
+    colorClass: "toolColorManage",
   },
 ];
 

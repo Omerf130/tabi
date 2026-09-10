@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireTripOwner } from "@/features/trips/authorization";
 import {
   cleanupTripCoverPathname,
@@ -57,7 +58,7 @@ export async function uploadTripCoverAction(
     }
 
     revalidatePath(`/app/trips/${tripId}`);
-    revalidatePath(`/app/trips/${tripId}/settings`);
+    revalidateTripManagement(tripId, "details");
     return { ok: true, success: TRIP_COVER_MESSAGES.uploaded };
   } catch {
     return { error: TRIP_COVER_MESSAGES.generic };
@@ -74,7 +75,7 @@ export async function removeTripCoverAction(
     await requireTripOwner(tripId);
     await removeTripCoverImage(tripId);
     revalidatePath(`/app/trips/${tripId}`);
-    revalidatePath(`/app/trips/${tripId}/settings`);
+    revalidateTripManagement(tripId, "details");
     return { ok: true, success: TRIP_COVER_MESSAGES.removed };
   } catch {
     return { error: TRIP_COVER_MESSAGES.generic };

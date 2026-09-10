@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireUser } from "@/features/auth/session";
 import { getRequestOrigin } from "@/lib/http/get-request-origin";
 import { requireTripOwner } from "@/features/trips/authorization";
@@ -59,6 +60,7 @@ export async function createTripInviteAction(
       origin,
     );
     revalidatePath(`/app/trips/${parsed.data.tripId}/members`);
+    revalidateTripManagement(parsed.data.tripId, "members");
     return { inviteUrl };
   } catch {
     return { error: INVITE_MESSAGES.generic };
@@ -114,6 +116,7 @@ export async function revokeTripInvitationAction(
     await requireTripOwner(parsed.data.tripId);
     await revokeTripInvitation(parsed.data.tripId, parsed.data.invitationId);
     revalidatePath(`/app/trips/${parsed.data.tripId}/members`);
+    revalidateTripManagement(parsed.data.tripId, "members");
     return {};
   } catch {
     return { error: INVITE_MESSAGES.generic };

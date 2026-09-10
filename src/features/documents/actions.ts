@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireTripOwner } from "@/features/trips/authorization";
 import { TRAVEL_DOCUMENT_MESSAGES } from "./constants";
 import {
@@ -31,7 +32,7 @@ export type TravelDocumentActionState = {
 
 function revalidateDocumentPaths(tripId: string, documentId?: string): void {
   revalidatePath(`/app/trips/${tripId}/documents`);
-  revalidatePath(`/app/trips/${tripId}/settings`);
+  revalidateTripManagement(tripId, "documents");
   revalidatePath(`/app/trips/${tripId}/emergency`);
   if (documentId) {
     revalidatePath(`/app/trips/${tripId}/documents/${documentId}`);

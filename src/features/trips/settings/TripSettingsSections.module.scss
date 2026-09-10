@@ -60,3 +60,15 @@
   flex-direction: column;
   gap: var(--space-6);
 }
+
+.workspaceSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.workspaceSection + .workspaceSection {
+  margin-block-start: var(--space-6);
+  padding-block-start: var(--space-6);
+  border-top: 1px solid var(--color-border);
+}

@@ -168,7 +168,7 @@ describe("buildTripHomeViewModel", () => {
       { id: "r2", time: "17:30", text: "להתקשר למסעדה" },
     ]);
     expect(model.reminderStrip.settingsHref).toBe(
-      "/app/trips/507f1f77bcf86cd799439011/settings#reminders",
+      "/app/trips/507f1f77bcf86cd799439011/manage/reminders",
     );
   });
 

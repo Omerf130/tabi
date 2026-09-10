@@ -37,6 +37,9 @@ describe("navigation", () => {
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/manage`, TRIP_A)).toBe(
       "more",
     );
+    expect(
+      getActiveNavSection(`/app/trips/${TRIP_A}/manage/details`, TRIP_A),
+    ).toBe("more");
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/members`, TRIP_A)).toBe(
       "more",
     );

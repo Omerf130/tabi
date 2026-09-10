@@ -19,6 +19,10 @@ import {
   PlaceSearchField,
   type PlaceSearchSelection,
 } from "@/features/places/PlaceSearchField";
+import {
+  getTripSettingsSectionClassName,
+  type TripSettingsVariant,
+} from "@/features/trips/settings/section-variant";
 import sectionStyles from "@/features/trips/settings/TripSettingsSections.module.scss";
 import styles from "./TripAccommodationSettings.module.scss";
 
@@ -29,6 +33,7 @@ type TripAccommodationSettingsProps = {
   startDate: string;
   endDate: string;
   accommodations: AccommodationSettingsViewModel[];
+  variant?: TripSettingsVariant;
 };
 
 type AccommodationRowProps = {
@@ -408,13 +413,14 @@ export function TripAccommodationSettings({
   startDate,
   endDate,
   accommodations,
+  variant = "stack",
 }: TripAccommodationSettingsProps) {
   const [showCreate, setShowCreate] = useState(false);
 
   return (
     <section
       id="accommodations"
-      className={sectionStyles.section}
+      className={getTripSettingsSectionClassName(variant)}
       aria-labelledby="trip-accommodations-title"
     >
       <div className={sectionStyles.header}>

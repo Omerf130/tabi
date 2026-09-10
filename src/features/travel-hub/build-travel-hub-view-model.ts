@@ -49,6 +49,8 @@ function buildToolHref(tripId: string, toolId: (typeof TRAVEL_TOOLS)[number]["id
       return buildLanguageHref(tripId);
     case "emergency":
       return buildEmergencyHref(tripId);
+    case "manage":
+      return TRAVEL_HUB_MANAGE_HREF(tripId);
     default:
       return undefined;
   }
@@ -111,6 +113,5 @@ export function buildTravelHubViewModel({
     contextualAccommodation,
     attentionList,
     tools,
-    manageHref: TRAVEL_HUB_MANAGE_HREF(tripId),
   };
 }

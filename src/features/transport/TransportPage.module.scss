@@ -117,6 +117,12 @@
   background: var(--color-surface-muted);
 }
 
+.embedded {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
 @media (max-width: 480px) {
   .addGrid {
     grid-template-columns: 1fr;

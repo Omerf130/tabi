@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireUser } from "@/features/auth/session";
 import { requireTripOwner } from "@/features/trips/authorization";
 import { changeTripMemberRole } from "./change-role";
@@ -38,6 +39,7 @@ export async function changeTripMemberRoleAction(
       parsed.data.role,
     );
     revalidatePath(`/app/trips/${parsed.data.tripId}/members`);
+    revalidateTripManagement(parsed.data.tripId, "members");
     return { success: MEMBER_MESSAGES.roleChanged };
   } catch (error) {
     if (error instanceof LastOwnerError) {
@@ -69,6 +71,7 @@ export async function removeTripMemberAction(
     await requireTripOwner(parsed.data.tripId);
     await removeTripMember(parsed.data.tripId, parsed.data.membershipId);
     revalidatePath(`/app/trips/${parsed.data.tripId}/members`);
+    revalidateTripManagement(parsed.data.tripId, "members");
     return { success: MEMBER_MESSAGES.removed };
   } catch (error) {
     if (error instanceof LastOwnerError) {

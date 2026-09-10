@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { TripHeader } from "@/features/app-shell/TripHeader";
+import { redirect } from "next/navigation";
 import { requireTripMember } from "@/features/trips/authorization";
-import { MembersPageContent } from "@/features/trips/members/MembersPageContent";
+import { buildTripManagementHref } from "@/features/trip-management/constants";
 
 export async function generateMetadata({
   params,
@@ -19,17 +19,6 @@ export default async function TripMembersPage({
   params: Promise<{ tripId: string }>;
 }) {
   const { tripId } = await params;
-  const trip = await requireTripMember(tripId);
-
-  return (
-    <>
-      <TripHeader
-        title="חברי הטיול"
-        tripName={trip.name}
-        showTripSwitch
-        backHref={`/app/trips/${tripId}/more`}
-      />
-      <MembersPageContent tripId={tripId} />
-    </>
-  );
+  await requireTripMember(tripId);
+  redirect(buildTripManagementHref(tripId, "members"));
 }

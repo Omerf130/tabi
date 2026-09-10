@@ -1,14 +1,25 @@
 import type { TripWorkspace } from "@/features/trips/public-trip";
 import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
+import {
+  getTripSettingsSectionClassName,
+  type TripSettingsVariant,
+} from "./section-variant";
 import styles from "./TripSettingsSections.module.scss";
 
 type TripDetailsSectionProps = {
   trip: TripWorkspace;
+  variant?: TripSettingsVariant;
 };
 
-export function TripDetailsSection({ trip }: TripDetailsSectionProps) {
+export function TripDetailsSection({
+  trip,
+  variant = "stack",
+}: TripDetailsSectionProps) {
   return (
-    <section className={styles.section} aria-labelledby="trip-details-title">
+    <section
+      className={getTripSettingsSectionClassName(variant)}
+      aria-labelledby="trip-details-title"
+    >
       <div className={styles.header}>
         <h2 id="trip-details-title" className={styles.title}>
           פרטי הטיול

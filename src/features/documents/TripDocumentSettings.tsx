@@ -24,6 +24,10 @@ import type {
   TransportLinkOption,
   TravelDocumentSettingsViewModel,
 } from "@/features/documents/types";
+import {
+  getTripSettingsSectionClassName,
+  type TripSettingsVariant,
+} from "@/features/trips/settings/section-variant";
 import sectionStyles from "@/features/trips/settings/TripSettingsSections.module.scss";
 import styles from "./TripDocumentSettings.module.scss";
 
@@ -35,6 +39,7 @@ type TripDocumentSettingsProps = {
   activityOptions: ActivityLinkOption[];
   accommodationOptions: AccommodationLinkOption[];
   transportOptions: TransportLinkOption[];
+  variant?: TripSettingsVariant;
 };
 
 type DocumentFormProps = {
@@ -409,13 +414,14 @@ export function TripDocumentSettings({
   activityOptions,
   accommodationOptions,
   transportOptions,
+  variant = "stack",
 }: TripDocumentSettingsProps) {
   const [showCreate, setShowCreate] = useState(false);
 
   return (
     <section
       id="documents"
-      className={sectionStyles.section}
+      className={getTripSettingsSectionClassName(variant)}
       aria-labelledby="trip-documents-title"
     >
       <div className={sectionStyles.header}>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
@@ -14,6 +14,10 @@ import {
   type TripReminderActionState,
 } from "@/features/trips/reminders/actions";
 import type { TripReminderViewModel } from "@/features/trips/reminders/types";
+import {
+  getTripSettingsSectionClassName,
+  type TripSettingsVariant,
+} from "@/features/trips/settings/section-variant";
 import sectionStyles from "@/features/trips/settings/TripSettingsSections.module.scss";
 import styles from "./TripReminderSettings.module.scss";
 
@@ -24,6 +28,7 @@ type TripReminderSettingsProps = {
   startDate: string;
   endDate: string;
   reminders: TripReminderViewModel[];
+  variant?: TripSettingsVariant;
 };
 
 type ReminderRowProps = {
@@ -162,7 +167,10 @@ export function TripReminderSettings({
   startDate,
   endDate,
   reminders,
+  variant = "stack",
 }: TripReminderSettingsProps) {
+  const [showCreate, setShowCreate] = useState(false);
+  const createRef = useRef<HTMLDivElement>(null);
   const [createState, createAction] = useActionState(
     createTripReminderAction,
     initialState,
@@ -170,10 +178,17 @@ export function TripReminderSettings({
   const upcoming = reminders.filter((reminder) => !reminder.isCompleted);
   const completed = reminders.filter((reminder) => reminder.isCompleted);
 
+  const openCreate = () => {
+    setShowCreate(true);
+    requestAnimationFrame(() => {
+      createRef.current?.querySelector<HTMLElement>("input, textarea")?.focus();
+    });
+  };
+
   return (
     <section
       id="reminders"
-      className={sectionStyles.section}
+      className={getTripSettingsSectionClassName(variant)}
       aria-labelledby="trip-reminders-title"
     >
       <div className={sectionStyles.header}>
@@ -185,37 +200,55 @@ export function TripReminderSettings({
         </p>
       </div>
 
-      <form action={createAction} className={styles.createForm}>
-        <input type="hidden" name="tripId" value={tripId} />
-        <p className={styles.createLabel}>+ תזכורת חדשה</p>
-        <div className={styles.formRow}>
-          <Field label="תאריך" htmlFor="reminder-date">
-            <Input
-              id="reminder-date"
-              name="date"
-              type="date"
-              min={startDate}
-              max={endDate}
-              required
-            />
-          </Field>
-          <Field label="שעה" htmlFor="reminder-time">
-            <Input id="reminder-time" name="time" type="time" required />
-          </Field>
+      {!showCreate ? (
+        <Button type="button" variant="ghost" onClick={openCreate}>
+          + תזכורת חדשה
+        </Button>
+      ) : (
+        <div ref={createRef}>
+          <form action={createAction} className={styles.createForm}>
+            <input type="hidden" name="tripId" value={tripId} />
+            <p className={styles.createLabel}>תזכורת חדשה</p>
+            <div className={styles.formRow}>
+              <Field label="תאריך" htmlFor="reminder-date">
+                <Input
+                  id="reminder-date"
+                  name="date"
+                  type="date"
+                  min={startDate}
+                  max={endDate}
+                  required
+                />
+              </Field>
+              <Field label="שעה" htmlFor="reminder-time">
+                <Input id="reminder-time" name="time" type="time" required />
+              </Field>
+            </div>
+            <Field label="תוכן התזכורת" htmlFor="reminder-text">
+              <Textarea id="reminder-text" name="text" rows={2} required />
+            </Field>
+            {createState.error ? (
+              <p className={styles.error} role="alert">
+                {createState.error}
+              </p>
+            ) : null}
+            {createState.success ? (
+              <p className={styles.success}>{createState.success}</p>
+            ) : null}
+            <div className={styles.rowActions}>
+              <AuthSubmitButton>הוספה</AuthSubmitButton>
+              <Button
+                type="button"
+                variant="ghost"
+                size="compact"
+                onClick={() => setShowCreate(false)}
+              >
+                ביטול
+              </Button>
+            </div>
+          </form>
         </div>
-        <Field label="תוכן התזכורת" htmlFor="reminder-text">
-          <Textarea id="reminder-text" name="text" rows={2} required />
-        </Field>
-        {createState.error ? (
-          <p className={styles.error} role="alert">
-            {createState.error}
-          </p>
-        ) : null}
-        {createState.success ? (
-          <p className={styles.success}>{createState.success}</p>
-        ) : null}
-        <AuthSubmitButton>הוספה</AuthSubmitButton>
-      </form>
+      )}
 
       {upcoming.length > 0 ? (
         <ul className={styles.list}>

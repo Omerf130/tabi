@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireTripOwner } from "@/features/trips/authorization";
 import { TRANSPORT_MESSAGES } from "./constants";
 import {
@@ -27,6 +28,7 @@ export type TransportActionState = {
 
 function revalidateTransportPaths(tripId: string, transportId?: string): void {
   revalidatePath(`/app/trips/${tripId}/transport`);
+  revalidateTripManagement(tripId, "transport");
   revalidatePath(`/app/trips/${tripId}/itinerary`);
   revalidatePath(`/app/trips/${tripId}/more`);
   revalidatePath(`/app/trips/${tripId}/documents`);

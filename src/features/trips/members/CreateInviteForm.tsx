@@ -16,9 +16,10 @@ const initialState: CreateInviteActionState = {};
 
 type CreateInviteFormProps = {
   tripId: string;
+  onCancel?: () => void;
 };
 
-export function CreateInviteForm({ tripId }: CreateInviteFormProps) {
+export function CreateInviteForm({ tripId, onCancel }: CreateInviteFormProps) {
   const [state, action, pending] = useActionState(
     createTripInviteAction,
     initialState,
@@ -43,9 +44,16 @@ export function CreateInviteForm({ tripId }: CreateInviteFormProps) {
             {state.error}
           </p>
         ) : null}
-        <Button type="submit" loading={pending}>
-          יצירת קישור הזמנה
-        </Button>
+        <div className={styles.actionsRow}>
+          <Button type="submit" loading={pending}>
+            יצירת קישור הזמנה
+          </Button>
+          {onCancel ? (
+            <Button type="button" variant="ghost" onClick={onCancel}>
+              ביטול
+            </Button>
+          ) : null}
+        </div>
       </form>
       {state.inviteUrl ? (
         <div className={styles.newInvite}>

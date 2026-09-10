@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
 import { AuthSubmitButton } from "@/features/auth/AuthSubmitButton";
@@ -10,6 +10,10 @@ import {
   type TripCoverActionState,
 } from "@/features/trips/cover/actions";
 import { getTripCoverPath } from "@/features/trips/cover/constants";
+import {
+  getTripSettingsSectionClassName,
+  type TripSettingsVariant,
+} from "@/features/trips/settings/section-variant";
 import sectionStyles from "@/features/trips/settings/TripSettingsSections.module.scss";
 import styles from "./TripCoverSettings.module.scss";
 
@@ -19,13 +23,17 @@ type TripCoverSettingsProps = {
   tripId: string;
   hasCover: boolean;
   isOwner: boolean;
+  variant?: TripSettingsVariant;
 };
 
 export function TripCoverSettings({
   tripId,
   hasCover,
   isOwner,
+  variant = "stack",
 }: TripCoverSettingsProps) {
+  const [showUpload, setShowUpload] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadState, uploadAction] = useActionState(
     uploadTripCoverAction,
     initialState,
@@ -35,8 +43,15 @@ export function TripCoverSettings({
     initialState,
   );
 
+  const openUpload = () => {
+    setShowUpload(true);
+    requestAnimationFrame(() => {
+      fileInputRef.current?.focus();
+    });
+  };
+
   return (
-    <section className={sectionStyles.section}>
+    <section className={getTripSettingsSectionClassName(variant)}>
       <div className={styles.header}>
         <h2 className={sectionStyles.title}>תמונת הטיול</h2>
         <p className={sectionStyles.hint}>
@@ -59,27 +74,44 @@ export function TripCoverSettings({
 
       {isOwner ? (
         <div className={styles.actions}>
-          <form action={uploadAction} className={styles.uploadForm}>
-            <input type="hidden" name="tripId" value={tripId} />
-            <Field label="העלאת תמונה" htmlFor="trip-cover">
-              <input
-                id="trip-cover"
-                name="cover"
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                className={styles.fileInput}
-              />
-            </Field>
-            {uploadState.error ? (
-              <p className={styles.error} role="alert">
-                {uploadState.error}
-              </p>
-            ) : null}
-            {uploadState.success ? (
-              <p className={styles.success}>{uploadState.success}</p>
-            ) : null}
-            <AuthSubmitButton>{hasCover ? "החלפה" : "העלאה"}</AuthSubmitButton>
-          </form>
+          {!showUpload ? (
+            <Button type="button" variant="ghost" onClick={openUpload}>
+              {hasCover ? "+ החלפת תמונה" : "+ העלאת תמונה"}
+            </Button>
+          ) : (
+            <form action={uploadAction} className={styles.uploadForm}>
+              <input type="hidden" name="tripId" value={tripId} />
+              <Field label="העלאת תמונה" htmlFor="trip-cover">
+                <input
+                  ref={fileInputRef}
+                  id="trip-cover"
+                  name="cover"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className={styles.fileInput}
+                />
+              </Field>
+              {uploadState.error ? (
+                <p className={styles.error} role="alert">
+                  {uploadState.error}
+                </p>
+              ) : null}
+              {uploadState.success ? (
+                <p className={styles.success}>{uploadState.success}</p>
+              ) : null}
+              <div className={styles.uploadActions}>
+                <AuthSubmitButton>{hasCover ? "החלפה" : "העלאה"}</AuthSubmitButton>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="compact"
+                  onClick={() => setShowUpload(false)}
+                >
+                  ביטול
+                </Button>
+              </div>
+            </form>
+          )}
 
           {hasCover ? (
             <form action={removeAction}>

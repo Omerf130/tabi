@@ -133,7 +133,9 @@ describe("accommodation actions", () => {
       accommodationId,
     });
     expect(revalidatePathMock).toHaveBeenCalledWith(`/app/trips/${tripId}/accommodations`);
-    expect(revalidatePathMock).toHaveBeenCalledWith(`/app/trips/${tripId}/settings`);
+    expect(revalidatePathMock).toHaveBeenCalledWith(
+      `/app/trips/${tripId}/manage/accommodations`,
+    );
     expect(revalidatePathMock).toHaveBeenCalledWith(`/app/trips/${tripId}/more`);
     expect(revalidatePathMock).toHaveBeenCalledWith(
       `/app/trips/${tripId}/accommodations/${accommodationId}`,

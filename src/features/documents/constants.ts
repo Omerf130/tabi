@@ -92,7 +92,7 @@ export function getTravelDocumentDetailPath(
 }
 
 export function getTravelDocumentsSettingsHref(tripId: string): string {
-  return `/app/trips/${tripId}/settings#documents`;
+  return `/app/trips/${tripId}/manage/documents`;
 }
 
 export function isPdfContentType(contentType: string): boolean {

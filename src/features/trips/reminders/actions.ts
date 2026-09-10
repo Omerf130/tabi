@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireUser } from "@/features/auth/session";
 import { requireTripMember } from "@/features/trips/authorization";
 import { TRIP_REMINDER_MESSAGES } from "./constants";
@@ -27,7 +28,7 @@ export type TripReminderActionState = {
 
 function revalidateTripReminderPaths(tripId: string): void {
   revalidatePath(`/app/trips/${tripId}`);
-  revalidatePath(`/app/trips/${tripId}/settings`);
+  revalidateTripManagement(tripId, "reminders");
 }
 
 export async function createTripReminderAction(
