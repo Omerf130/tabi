@@ -94,6 +94,27 @@ export async function listTripListsSummary(
   });
 }
 
+export async function listTripListItemsForTypes(
+  tripId: string,
+  listTypes: readonly TripListType[],
+): Promise<TripListItemViewModel[]> {
+  await connectDb();
+  await ensureTripListsSeeded(tripId);
+
+  if (listTypes.length === 0) {
+    return [];
+  }
+
+  const items = await TripListItem.find({
+    tripId,
+    listType: { $in: listTypes },
+  }).lean();
+
+  return sortTripListItemsForDisplay(
+    items.map((item) => toItemViewModel(item)),
+  );
+}
+
 export async function getTripListDetail(
   tripId: string,
   listType: TripListType,

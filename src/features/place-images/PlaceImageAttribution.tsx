@@ -1,16 +1,19 @@
 import { GooglePlacesAttribution } from "@/features/places/GooglePlacesAttribution";
+import type { PlaceImagePresentationMode } from "./place-image-presentation";
 import type { PlacePhotoAuthorAttribution } from "./types";
 import styles from "./PlaceImage.module.scss";
 
 type PlaceImageAttributionProps = {
   authorAttributions: readonly PlacePhotoAuthorAttribution[];
   showPoweredByGoogle?: boolean;
+  presentation?: PlaceImagePresentationMode;
   className?: string;
 };
 
 export function PlaceImageAttribution({
   authorAttributions,
   showPoweredByGoogle = false,
+  presentation = "default",
   className,
 }: PlaceImageAttributionProps) {
   const hasAuthorAttribution = authorAttributions.length > 0;
@@ -19,8 +22,18 @@ export function PlaceImageAttribution({
     return null;
   }
 
+  const isCompact = presentation === "compact";
+
   return (
-    <div className={[styles.attributionWrap, className].filter(Boolean).join(" ")}>
+    <div
+      className={[
+        styles.attributionWrap,
+        isCompact ? styles.attributionWrapCompact : null,
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
       {hasAuthorAttribution ? (
         <ul className={styles.authorAttributions}>
           {authorAttributions.map((attribution) => (

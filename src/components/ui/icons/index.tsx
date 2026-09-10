@@ -261,6 +261,32 @@ export function IconCalendar({ className }: IconProps) {
   );
 }
 
+export function IconBell({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M12 5.5a3.5 3.5 0 0 0-3.5 3.5v2.5L7 13.5h10l-1.5-2V9a3.5 3.5 0 0 0-3.5-3.5Z" />
+      <path d="M10 16.5a2 2 0 0 0 4 0" />
+    </svg>
+  );
+}
+
+export function IconNavigation({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M12 4.5 19 19 12 15.5 5 19Z" />
+    </svg>
+  );
+}
+
+export function IconMapPin({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M12 20.5s6-5.2 6-10a6 6 0 1 0-12 0c0 4.8 6 10 6 10Z" />
+      <circle cx="12" cy="10.5" r="2.25" />
+    </svg>
+  );
+}
+
 export function IconSettings({ className }: IconProps) {
   return (
     <svg {...stroke} className={className}>

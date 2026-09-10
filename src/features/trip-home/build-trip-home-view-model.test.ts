@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { buildTripHomeViewModel } from "./build-trip-home-view-model";
+import { NEUTRAL_FALLBACK_VISUAL_SRC } from "@/features/destination-visuals/registry";
 import type { ActivityViewModel } from "@/features/itinerary/types";
+import { buildTripHomeViewModel } from "./build-trip-home-view-model";
 
 const trip = {
   id: "507f1f77bcf86cd799439011",
@@ -24,7 +25,7 @@ function activity(
 }
 
 describe("buildTripHomeViewModel", () => {
-  it("builds before-trip Day 1 preview and start-date CTA", () => {
+  it("builds before-trip Day 1 preview and itinerary CTA", () => {
     const model = buildTripHomeViewModel({
       trip,
       todayJapan: "2026-10-01",
@@ -41,16 +42,18 @@ describe("buildTripHomeViewModel", () => {
     });
 
     expect(model.phase).toBe("upcoming");
-    expect(model.countdownDays).toBe(24);
-    expect(model.dailyItinerary?.title).toBe("היום הראשון");
-    expect(model.dailyItinerary?.dayMeta).toBe("יום 1 מתוך 25");
-    expect(model.dailyItinerary?.items[0]?.title).toBe("קיוטו");
-    expect(model.dailyItinerary?.ctaHref).toBe(
+    if (model.phase !== "upcoming") {
+      return;
+    }
+
+    expect(model.hero.countdownDays).toBe(24);
+    expect(model.beforeJourney.dayOne.dayMeta).toBe("יום 1 מתוך 25");
+    expect(model.beforeJourney.dayOne.items[0]?.title).toBe("קיוטו");
+    expect(model.beforeJourney.itineraryCta.href).toBe(
       "/app/trips/507f1f77bcf86cd799439011/itinerary/2026-10-25",
     );
-    expect(model.dailyItinerary?.ctaLabel).toBe("למסלול המלא");
-    expect(model.reminderStrip.reminders).toEqual([]);
-    expect(model.reminderStrip.emptyMessage).toBe("אין תזכורות חדשות");
+    expect(model.beforeJourney.preparation).toBeNull();
+    expect(model.beforeJourney.upcomingReminders).toBeNull();
   });
 
   it("builds before-trip empty Day 1 state", () => {
@@ -61,13 +64,59 @@ describe("buildTripHomeViewModel", () => {
       dayActivities: [],
     });
 
-    expect(model.dailyItinerary?.isEmpty).toBe(true);
-    expect(model.dailyItinerary?.emptyMessage).toBe(
+    expect(model.phase).toBe("upcoming");
+    if (model.phase !== "upcoming") {
+      return;
+    }
+
+    expect(model.beforeJourney.dayOne.isEmpty).toBe(true);
+    expect(model.beforeJourney.dayOne.emptyMessage).toBe(
       "היום הראשון עדיין מחכה לתכנון",
     );
   });
 
-  it("builds during-trip daily summary with Now and Next Up", () => {
+  it("includes preparation and upcoming reminders when provided", () => {
+    const model = buildTripHomeViewModel({
+      trip,
+      todayJapan: "2026-10-01",
+      nowJapanTime: "10:00",
+      preparation: {
+        totalCount: 12,
+        completedCount: 8,
+        remainingCount: 4,
+        percentage: 67,
+        progressLabel: "8 מתוך 12 הושלמו",
+        previewItems: [
+          {
+            id: "i1",
+            text: "passport",
+            isCompleted: true,
+            listType: "before_trip",
+          },
+        ],
+        listsHref: "/app/trips/507f1f77bcf86cd799439011/lists",
+      },
+      upcomingReminders: [
+        {
+          id: "r1",
+          date: "2026-10-20",
+          time: "10:00",
+          text: "לקנות SIM",
+          dateLabel: "20 באוק׳",
+        },
+      ],
+    });
+
+    expect(model.phase).toBe("upcoming");
+    if (model.phase !== "upcoming") {
+      return;
+    }
+
+    expect(model.beforeJourney.preparation?.percentage).toBe(67);
+    expect(model.beforeJourney.upcomingReminders).toHaveLength(1);
+  });
+
+  it("builds during-trip sections with now and up next cards", () => {
     const model = buildTripHomeViewModel({
       trip,
       todayJapan: "2026-11-01",
@@ -90,70 +139,37 @@ describe("buildTripHomeViewModel", () => {
     });
 
     expect(model.phase).toBe("active");
-    expect(model.currentDay?.dayNumber).toBe(8);
-    expect(model.dailyItinerary?.title).toBe("המסלול של היום");
-    expect(model.dailyItinerary?.items.find((item) => item.id === "now")?.emphasis).toBe(
-      "now",
-    );
-    expect(model.dailyItinerary?.items.find((item) => item.id === "next")?.emphasis).toBe(
-      "next",
-    );
-    expect(model.dailyItinerary?.ctaHref).toBe(
+    if (model.phase !== "active") {
+      return;
+    }
+
+    expect(model.hero.currentDay?.dayNumber).toBe(8);
+    expect(model.todaysPlan.title).toBe("המסלול של היום");
+    expect(model.now?.id).toBe("now");
+    expect(model.upNext?.id).toBe("next");
+    expect(model.todaysPlan.items.some((item) => item.id === "now")).toBe(false);
+    expect(model.todaysPlan.items.some((item) => item.id === "next")).toBe(false);
+    expect(model.todaysPlan.ctaHref).toBe(
       "/app/trips/507f1f77bcf86cd799439011/itinerary/2026-11-01",
     );
-    expect(model.dailyItinerary?.ctaLabel).toBe("למסלול המלא של היום");
   });
 
-  it("marks an active empty day in the daily itinerary section", () => {
+  it("omits important today when there are no reminders", () => {
     const model = buildTripHomeViewModel({
       trip,
       todayJapan: "2026-11-01",
       nowJapanTime: "10:00",
-      dayActivities: [],
     });
 
-    expect(model.dailyItinerary?.isEmpty).toBe(true);
-    expect(model.dailyItinerary?.emptyMessage).toBe("היום עדיין פנוי");
-    expect(model.dailyItinerary?.ctaLabel).toBe("למסלול של היום");
+    expect(model.phase).toBe("active");
+    if (model.phase !== "active") {
+      return;
+    }
+
+    expect(model.importantToday).toBeNull();
   });
 
-  it("includes untimed activities in the active daily preview", () => {
-    const model = buildTripHomeViewModel({
-      trip,
-      todayJapan: "2026-11-01",
-      nowJapanTime: "10:00",
-      dayActivities: [
-        activity({ id: "u1", title: "זמן חופשי", order: 0 }),
-        activity({ id: "u2", title: "קניות", order: 1 }),
-        activity({ id: "u3", title: "טיול", order: 2 }),
-      ],
-    });
-
-    expect(model.dailyItinerary?.items.map((item) => item.title)).toEqual([
-      "זמן חופשי",
-      "קניות",
-      "טיול",
-    ]);
-    expect(model.dailyItinerary?.items.every((item) => item.isUntimed)).toBe(true);
-    expect(model.dailyItinerary?.overflowCount).toBe(0);
-  });
-
-  it("builds after-trip state without a daily itinerary preview", () => {
-    const model = buildTripHomeViewModel({
-      trip,
-      todayJapan: "2026-12-01",
-      nowJapanTime: "10:00",
-    });
-
-    expect(model.phase).toBe("completed");
-    expect(model.statusLine).toBe("הטיול הסתיים");
-    expect(model.dailyItinerary).toBeUndefined();
-    expect(model.itineraryHref).toBe(
-      "/app/trips/507f1f77bcf86cd799439011/itinerary",
-    );
-  });
-
-  it("includes today's reminders in the reminder strip", () => {
+  it("includes today's reminders in important today", () => {
     const model = buildTripHomeViewModel({
       trip,
       todayJapan: "2026-11-01",
@@ -164,35 +180,72 @@ describe("buildTripHomeViewModel", () => {
       ],
     });
 
-    expect(model.reminderStrip.reminders).toEqual([
+    expect(model.phase).toBe("active");
+    if (model.phase !== "active") {
+      return;
+    }
+
+    expect(model.importantToday?.reminders).toEqual([
       { id: "r1", time: "14:00", text: "להזמין מונית" },
       { id: "r2", time: "17:30", text: "להתקשר למסעדה" },
     ]);
-    expect(model.reminderStrip.settingsHref).toBe(
-      "/app/trips/507f1f77bcf86cd799439011/manage/reminders",
-    );
   });
 
-  it("includes cover href when provided", () => {
+  it("builds after-trip state without finance or highlights", () => {
     const model = buildTripHomeViewModel({
       trip,
-      coverImageHref: "/app/trips/507f1f77bcf86cd799439011/cover",
+      todayJapan: "2026-12-01",
+      nowJapanTime: "10:00",
+    });
+
+    expect(model.phase).toBe("completed");
+    if (model.phase !== "completed") {
+      return;
+    }
+
+    expect(model.hero.completionMessage).toBe("איזה טיול.");
+    expect(model.hero.durationLabel).toBe("25 ימים ביפן 2026");
+    expect(model.hero.tripIdentityLabel).toBe("יפן 2026");
+    expect(model.memories.href).toBe(
+      "/app/trips/507f1f77bcf86cd799439011/memories",
+    );
+    expect(model.memories.description).toBe("הרגעים מהטיול יחכו לך כאן.");
+    expect(model.itineraryRevisit.href).toBe(
+      "/app/trips/507f1f77bcf86cd799439011/itinerary",
+    );
+    expect(model.itineraryRevisit.title).toBe("המסלול של הטיול");
+    expect(model).not.toHaveProperty("finance");
+    expect(model).not.toHaveProperty("highlights");
+  });
+
+  it("uses coverVisualKey when no uploaded cover exists", () => {
+    const model = buildTripHomeViewModel({
+      trip: {
+        ...trip,
+        coverVisualKey: "japan-01",
+      },
       todayJapan: "2026-10-01",
       nowJapanTime: "10:00",
     });
 
-    expect(model.coverImageHref).toBe(
+    expect(model.hero.heroImageSrc).not.toBe(NEUTRAL_FALLBACK_VISUAL_SRC);
+    expect(model.hero.hasPersistedCover).toBe(false);
+  });
+
+  it("uses uploaded cover when present", () => {
+    const model = buildTripHomeViewModel({
+      trip: {
+        ...trip,
+        coverImage: { pathname: "x", contentType: "image/jpeg" },
+        coverVisualKey: "japan-01",
+      },
+      todayJapan: "2026-10-01",
+      nowJapanTime: "10:00",
+    });
+
+    expect(model.hero.heroImageSrc).toBe(
       "/app/trips/507f1f77bcf86cd799439011/cover",
     );
-  });
-
-  it("omits cover href when not provided", () => {
-    const model = buildTripHomeViewModel({
-      trip,
-      todayJapan: "2026-10-01",
-      nowJapanTime: "10:00",
-    });
-
-    expect(model.coverImageHref).toBeUndefined();
+    expect(model.hero.hasPersistedCover).toBe(true);
   });
 });

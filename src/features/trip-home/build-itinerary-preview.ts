@@ -1,7 +1,17 @@
 import { compareWallClockTimes } from "@/features/itinerary/time";
 import type { ActivityViewModel } from "@/features/itinerary/types";
 import { resolveNowAndNextUp } from "./resolve-now-and-next-up";
-import type { DailyItineraryPreviewItem, ItineraryPreviewEmphasis } from "./types";
+
+export type ItineraryPreviewEmphasis = "now" | "next";
+
+export type DailyItineraryPreviewItem = {
+  id: string;
+  title: string;
+  displayTime?: string;
+  isUntimed: boolean;
+  emphasis?: ItineraryPreviewEmphasis;
+  locationName?: string;
+};
 
 export const DAILY_ITINERARY_PREVIEW_MAX = 4;
 

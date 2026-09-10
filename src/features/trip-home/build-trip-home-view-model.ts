@@ -1,26 +1,49 @@
+import type { AccommodationViewModel } from "@/features/accommodations/types";
+import { resolveTripVisualSrc } from "@/features/destination-visuals/resolve-trip-visual-src";
 import type { ActivityViewModel } from "@/features/itinerary/types";
+import type { PlacePhotoPresentation } from "@/features/place-images/types";
 import {
   formatCalendarDateRangeDisplay,
   getJapanCalendarDate,
 } from "@/features/trips/calendar-date";
 import { getCalendarDaysUntil } from "@/features/trips/calendar-day-diff";
 import { getJapanWallClockTime } from "@/features/trips/japan-wall-clock";
+import { getTripRemindersSettingsHref } from "@/features/trips/reminders/constants";
+import type { UpcomingHomeReminderItem } from "@/features/trips/reminders/select-upcoming-home-reminders";
+import type { TodayHomeReminderItem } from "@/features/trips/reminders/select-today-home-reminders";
 import { getTripPhase } from "@/features/trips/trip-phase";
 import {
   formatTripDayDateLabel,
-  formatTripDayHeading,
   formatTripDayWeekday,
   getTripDayCount,
   getTripDayNumber,
 } from "@/features/trips/trip-days";
+import type { TransportItineraryItemViewModel } from "@/features/transport/types";
 import {
-  buildActiveItineraryPreview,
-  buildUpcomingItineraryPreview,
-} from "./build-itinerary-preview";
-import type { DailyItinerarySummary, TripHomeReminderStrip, TripHomeViewModel } from "./types";
-import { HOME_REMINDER_EMPTY_MESSAGE } from "@/features/trips/reminders/select-today-home-reminders";
-import { getTripRemindersSettingsHref } from "@/features/trips/reminders/constants";
-import type { TodayHomeReminderItem } from "@/features/trips/reminders/select-today-home-reminders";
+  buildAfterTripDurationLabel,
+  resolveAfterTripIdentityLabel,
+} from "./build-after-trip-hero";
+import { buildDayOneHomePreview } from "./build-day-one-home-preview";
+import {
+  buildActiveHomeItineraryPreview,
+} from "./build-home-itinerary-preview";
+import type { HomePreparationViewModel } from "./build-home-preparation";
+import { resolveNowAndNextUp } from "./resolve-now-and-next-up";
+import type {
+  TripHomeActiveViewModel,
+  TripHomeBeforeJourneyViewModel,
+  TripHomeCompletedViewModel,
+  TripHomeDayOnePreview,
+  TripHomeHeroViewModel,
+  TripHomeItinerarySection,
+  TripHomeUpcomingViewModel,
+  TripHomeViewModel,
+} from "./types";
+
+const EMPTY_PHOTO: PlacePhotoPresentation = {
+  hasPhoto: false,
+  authorAttributions: [],
+};
 
 type BuildTripHomeViewModelInput = {
   trip: {
@@ -28,10 +51,25 @@ type BuildTripHomeViewModelInput = {
     name: string;
     startDate: string;
     endDate: string;
+    coverImage?: unknown;
+    coverVisualKey?: string | null;
+    destination?: {
+      displayName: string;
+      country?: string;
+    };
   };
-  coverImageHref?: string;
   dayActivities?: readonly ActivityViewModel[];
+  dayTransports?: readonly TransportItineraryItemViewModel[];
   todayReminders?: readonly TodayHomeReminderItem[];
+  upcomingReminders?: readonly UpcomingHomeReminderItem[];
+  preparation?: HomePreparationViewModel | null;
+  dayOnePhotoPresentation?: PlacePhotoPresentation;
+  accommodations?: readonly AccommodationViewModel[];
+  tonightAccommodation?: AccommodationViewModel | null;
+  nowPhotoPresentation?: PlacePhotoPresentation;
+  upNextPhotoPresentation?: PlacePhotoPresentation;
+  tonightPhotoPresentation?: PlacePhotoPresentation;
+  weather?: TripHomeHeroViewModel["weather"];
   todayJapan?: string;
   nowJapanTime?: string;
 };
@@ -46,107 +84,278 @@ function formatCountdownLabel(daysUntilStart: number): string {
   return `עוד ${daysUntilStart} ימים`;
 }
 
-export function buildTripHomeViewModel({
-  trip,
-  coverImageHref,
-  dayActivities = [],
-  todayReminders = [],
-  todayJapan = getJapanCalendarDate(),
-  nowJapanTime = getJapanWallClockTime(),
-}: BuildTripHomeViewModelInput): TripHomeViewModel {
-  const phase = getTripPhase(trip.startDate, trip.endDate, todayJapan);
-  const dateRangeLabel = formatCalendarDateRangeDisplay(
-    trip.startDate,
-    trip.endDate,
-  );
-  const totalDays = getTripDayCount(trip.startDate, trip.endDate);
-  const basePath = `/app/trips/${trip.id}/itinerary`;
-  const reminderStrip: TripHomeReminderStrip = {
-    reminders: todayReminders.map((reminder) => ({
-      id: reminder.id,
-      time: reminder.time,
-      text: reminder.text,
-    })),
-    settingsHref: getTripRemindersSettingsHref(trip.id),
-    emptyMessage: HOME_REMINDER_EMPTY_MESSAGE,
-  };
-  const shared = {
+function buildHeroBase(
+  input: BuildTripHomeViewModelInput,
+): TripHomeHeroViewModel {
+  const { trip } = input;
+  const visual = resolveTripVisualSrc({
+    tripId: trip.id,
+    hasCoverImage: Boolean(trip.coverImage),
+    coverVisualKey: trip.coverVisualKey,
+  });
+
+  return {
     tripName: trip.name,
-    totalDays,
-    coverImageHref,
-    reminderStrip,
+    dateRangeLabel: formatCalendarDateRangeDisplay(
+      trip.startDate,
+      trip.endDate,
+    ),
+    heroImageSrc: visual.imageSrc,
+    hasPersistedCover: visual.hasPersistedCover,
   };
+}
 
-  if (phase === "upcoming") {
-    const countdownDays = getCalendarDaysUntil(todayJapan, trip.startDate);
-    const preview = buildUpcomingItineraryPreview(dayActivities);
-    const itineraryHref = `${basePath}/${trip.startDate}`;
-    const dailyItinerary: DailyItinerarySummary = {
-      title: "היום הראשון",
-      subtitle: `${formatTripDayWeekday(trip.startDate)} · ${formatTripDayDateLabel(trip.startDate)}`,
-      dayMeta: `יום 1 מתוך ${totalDays}`,
-      items: preview.items,
-      overflowCount: preview.overflowCount,
-      isEmpty: dayActivities.length === 0,
-      emptyMessage: "היום הראשון עדיין מחכה לתכנון",
-      ctaLabel: "למסלול המלא",
-      ctaHref: itineraryHref,
-    };
+function buildDayOnePreviewSection(
+  tripId: string,
+  startDate: string,
+  totalDays: number,
+  preview: ReturnType<typeof buildDayOneHomePreview>,
+  photoPresentation: PlacePhotoPresentation,
+): TripHomeDayOnePreview {
+  return {
+    weekdayLabel: formatTripDayWeekday(startDate),
+    dateLabel: formatTripDayDateLabel(startDate),
+    dayMeta: `יום 1 מתוך ${totalDays}`,
+    items: preview.items,
+    overflowCount: preview.overflowCount,
+    isEmpty: preview.isEmpty,
+    emptyMessage: "היום הראשון עדיין מחכה לתכנון",
+    photoPresentation,
+    dayHref: `/app/trips/${tripId}/itinerary/${startDate}`,
+  };
+}
 
-    return {
-      ...shared,
-      phase,
-      dateRangeLabel,
-      itineraryHref,
-      primaryCtaLabel: "למסלול",
-      countdownDays,
-      countdownLabel: formatCountdownLabel(countdownDays),
-      dailyItinerary,
-    };
-  }
+function buildBeforeJourney(
+  input: BuildTripHomeViewModelInput,
+  totalDays: number,
+): TripHomeBeforeJourneyViewModel {
+  const {
+    trip,
+    dayActivities = [],
+    dayTransports = [],
+    upcomingReminders = [],
+    preparation = null,
+    dayOnePhotoPresentation = EMPTY_PHOTO,
+    accommodations = [],
+  } = input;
 
-  if (phase === "completed") {
-    return {
-      ...shared,
-      phase,
-      dateRangeLabel,
-      itineraryHref: basePath,
-      primaryCtaLabel: "למסלול",
-      statusLine: "הטיול הסתיים",
-      closingLine: "תודה על הטיול המשותף",
-    };
-  }
+  const dayOnePreview = buildDayOneHomePreview(
+    trip.startDate,
+    dayActivities,
+    dayTransports,
+    accommodations,
+  );
+  const itineraryHref = `/app/trips/${trip.id}/itinerary/${trip.startDate}`;
 
-  const dayNumber = getTripDayNumber(trip.startDate, trip.endDate, todayJapan)!;
-  const preview = buildActiveItineraryPreview(dayActivities, nowJapanTime);
-  const itineraryHref = `${basePath}/${todayJapan}`;
-  const dailyItinerary: DailyItinerarySummary = {
+  return {
+    preparation,
+    upcomingReminders:
+      upcomingReminders.length > 0 ? [...upcomingReminders] : null,
+    remindersSettingsHref: getTripRemindersSettingsHref(trip.id),
+    dayOne: buildDayOnePreviewSection(
+      trip.id,
+      trip.startDate,
+      totalDays,
+      dayOnePreview,
+      dayOnePhotoPresentation,
+    ),
+    itineraryCta: {
+      label: "למסלול המלא",
+      href: itineraryHref,
+    },
+  };
+}
+
+function buildTodaysPlanSection(
+  tripId: string,
+  todayJapan: string,
+  dayNumber: number,
+  totalDays: number,
+  preview: ReturnType<typeof buildActiveHomeItineraryPreview>,
+): TripHomeItinerarySection {
+  const itineraryHref = `/app/trips/${tripId}/itinerary/${todayJapan}`;
+
+  return {
     title: "המסלול של היום",
     subtitle: `${formatTripDayWeekday(todayJapan)} · ${formatTripDayDateLabel(todayJapan)}`,
     dayMeta: `יום ${dayNumber} מתוך ${totalDays}`,
     items: preview.items,
     overflowCount: preview.overflowCount,
-    isEmpty: dayActivities.length === 0,
+    isEmpty: preview.isEmpty,
     emptyMessage: "היום עדיין פנוי",
-    ctaLabel:
-      dayActivities.length === 0 ? "למסלול של היום" : "למסלול המלא של היום",
+    ctaLabel: preview.isEmpty ? "למסלול של היום" : "למסלול המלא של היום",
     ctaHref: itineraryHref,
   };
+}
+
+function toActivityCard(
+  activity: ActivityViewModel,
+  photoPresentation: PlacePhotoPresentation,
+): TripHomeActiveViewModel["now"] {
+  return {
+    id: activity.id,
+    title: activity.title,
+    timeLabel: activity.startTime
+      ? activity.endTime
+        ? `${activity.startTime}–${activity.endTime}`
+        : activity.startTime
+      : undefined,
+    locationName: activity.locationName,
+    googleMapsUrl: activity.googleMapsUrl,
+    photoPresentation,
+  };
+}
+
+export function buildTripHomeViewModel(
+  input: BuildTripHomeViewModelInput,
+): TripHomeViewModel {
+  const {
+    trip,
+    dayActivities = [],
+    dayTransports = [],
+    todayReminders = [],
+    preparation = null,
+    dayOnePhotoPresentation = EMPTY_PHOTO,
+    tonightAccommodation = null,
+    nowPhotoPresentation = EMPTY_PHOTO,
+    upNextPhotoPresentation = EMPTY_PHOTO,
+    tonightPhotoPresentation = EMPTY_PHOTO,
+    weather,
+    todayJapan = getJapanCalendarDate(),
+    nowJapanTime = getJapanWallClockTime(),
+  } = input;
+
+  const phase = getTripPhase(trip.startDate, trip.endDate, todayJapan);
+  const totalDays = getTripDayCount(trip.startDate, trip.endDate);
+  const remindersSettingsHref = getTripRemindersSettingsHref(trip.id);
+  const heroBase = buildHeroBase(input);
+
+  if (phase === "upcoming") {
+    const countdownDays = getCalendarDaysUntil(todayJapan, trip.startDate);
+
+    return {
+      phase: "upcoming",
+      hero: {
+        ...heroBase,
+        countdownDays,
+        countdownLabel: formatCountdownLabel(countdownDays),
+      },
+      beforeJourney: buildBeforeJourney(
+        {
+          ...input,
+          preparation,
+          dayOnePhotoPresentation,
+        },
+        totalDays,
+      ),
+    } satisfies TripHomeUpcomingViewModel;
+  }
+
+  if (phase === "completed") {
+    const destination = trip.destination ?? null;
+
+    return {
+      phase: "completed",
+      hero: {
+        ...heroBase,
+        tripIdentityLabel: resolveAfterTripIdentityLabel(trip.name, destination),
+        completionMessage: "איזה טיול.",
+        durationLabel: buildAfterTripDurationLabel(
+          trip.startDate,
+          trip.endDate,
+          destination,
+          trip.name,
+        ),
+      },
+      memories: {
+        href: `/app/trips/${trip.id}/memories`,
+        title: "זיכרונות",
+        description: "הרגעים מהטיול יחכו לך כאן.",
+      },
+      itineraryRevisit: {
+        href: `/app/trips/${trip.id}/itinerary`,
+        title: "המסלול של הטיול",
+        description: "עברו שוב על הימים והרגעים",
+      },
+    } satisfies TripHomeCompletedViewModel;
+  }
+
+  const dayNumber = getTripDayNumber(trip.startDate, trip.endDate, todayJapan)!;
+  const { nowActivity, nextActivity } = resolveNowAndNextUp(
+    dayActivities,
+    nowJapanTime,
+  );
+  const excludeIds = new Set<string>();
+  if (nowActivity) {
+    excludeIds.add(nowActivity.id);
+  }
+  if (nextActivity) {
+    excludeIds.add(nextActivity.id);
+  }
+
+  const preview = buildActiveHomeItineraryPreview(
+    dayActivities,
+    dayTransports,
+    nowJapanTime,
+    excludeIds,
+  );
+
+  const importantToday =
+    todayReminders.length > 0
+      ? {
+          reminders: todayReminders.map((reminder) => ({
+            id: reminder.id,
+            time: reminder.time,
+            text: reminder.text,
+          })),
+          settingsHref: remindersSettingsHref,
+        }
+      : null;
+
+  let now: TripHomeActiveViewModel["now"] = null;
+  if (nowActivity) {
+    now = toActivityCard(nowActivity, nowPhotoPresentation);
+  }
+
+  let upNext: TripHomeActiveViewModel["upNext"] = null;
+  if (nextActivity) {
+    upNext = toActivityCard(nextActivity, upNextPhotoPresentation);
+  }
+
+  let tonight: TripHomeActiveViewModel["tonight"] = null;
+  if (tonightAccommodation) {
+    tonight = {
+      id: tonightAccommodation.id,
+      name: tonightAccommodation.name,
+      city: tonightAccommodation.city,
+      stayContext: tonightAccommodation.dateRangeLabel,
+      googleMapsUrl: tonightAccommodation.googleMapsUrl,
+      photoPresentation: tonightPhotoPresentation,
+    };
+  }
 
   return {
-    ...shared,
-    phase,
-    dateRangeLabel,
-    itineraryHref,
-    primaryCtaLabel: "למסלול של היום",
-    currentDay: {
-      date: todayJapan,
+    phase: "active",
+    hero: {
+      ...heroBase,
+      currentDay: {
+        dayNumber,
+        totalDays,
+        weekdayLabel: formatTripDayWeekday(todayJapan),
+        dateLabel: formatTripDayDateLabel(todayJapan),
+      },
+      weather,
+    },
+    importantToday,
+    todaysPlan: buildTodaysPlanSection(
+      trip.id,
+      todayJapan,
       dayNumber,
       totalDays,
-      weekdayLabel: formatTripDayWeekday(todayJapan),
-      dateLabel: formatTripDayDateLabel(todayJapan),
-      headingLabel: formatTripDayHeading(todayJapan),
-    },
-    dailyItinerary,
-  };
+      preview,
+    ),
+    now,
+    upNext,
+    tonight,
+  } satisfies TripHomeActiveViewModel;
 }

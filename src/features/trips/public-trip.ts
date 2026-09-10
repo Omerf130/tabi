@@ -10,6 +10,11 @@ export type TripListItem = {
   phase: TripPhase;
 };
 
+export type TripWorkspaceDestination = {
+  displayName: string;
+  country?: string;
+};
+
 export type TripWorkspace = {
   id: string;
   name: string;
@@ -17,6 +22,8 @@ export type TripWorkspace = {
   endDate: string;
   role: TripMemberRole;
   coverImage?: TripCoverImage;
+  coverVisualKey?: string | null;
+  destination?: TripWorkspaceDestination;
 };
 
 export type TripCoverImage = {
@@ -32,6 +39,11 @@ type TripRecord = {
   coverImage?: {
     pathname: string;
     contentType: string;
+  } | null;
+  coverVisualKey?: string | null;
+  destination?: {
+    displayName: string;
+    country?: string | null;
   } | null;
 };
 
@@ -64,6 +76,13 @@ export function toTripWorkspace(
       ? {
           pathname: trip.coverImage.pathname,
           contentType: trip.coverImage.contentType,
+        }
+      : undefined,
+    coverVisualKey: trip.coverVisualKey ?? null,
+    destination: trip.destination
+      ? {
+          displayName: trip.destination.displayName,
+          country: trip.destination.country ?? undefined,
         }
       : undefined,
   };

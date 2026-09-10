@@ -3,6 +3,7 @@
 import type { ComponentType } from "react";
 import { useState } from "react";
 import { PlaceImageAttribution } from "./PlaceImageAttribution";
+import type { PlaceImagePresentationMode } from "./place-image-presentation";
 import type { PlacePhotoAuthorAttribution } from "./types";
 import styles from "./PlaceImage.module.scss";
 
@@ -10,6 +11,7 @@ type PlaceImageProps = {
   photoHref?: string;
   authorAttributions?: readonly PlacePhotoAuthorAttribution[];
   showPoweredByGoogle?: boolean;
+  presentation?: PlaceImagePresentationMode;
   fallbackIcon: ComponentType<{ className?: string }>;
   frameClassName?: string;
   imageClassName?: string;
@@ -22,6 +24,7 @@ export function PlaceImage({
   photoHref,
   authorAttributions = [],
   showPoweredByGoogle = false,
+  presentation = "default",
   fallbackIcon: FallbackIcon,
   frameClassName,
   imageClassName,
@@ -31,9 +34,14 @@ export function PlaceImage({
 }: PlaceImageProps) {
   const [hasError, setHasError] = useState(false);
   const showPhoto = Boolean(photoHref) && !hasError;
+  const isCompact = presentation === "compact";
 
   return (
-    <div className={styles.root}>
+    <div
+      className={[styles.root, isCompact ? styles.rootCompact : null]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <div className={[styles.frame, frameClassName].filter(Boolean).join(" ")}>
         {showPhoto ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -57,6 +65,7 @@ export function PlaceImage({
       <PlaceImageAttribution
         authorAttributions={authorAttributions}
         showPoweredByGoogle={showPoweredByGoogle}
+        presentation={presentation}
         className={attributionClassName}
       />
     </div>

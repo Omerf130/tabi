@@ -8,16 +8,17 @@ import {
   useRef,
   useState,
 } from "react";
+import { IconBell, IconChevron } from "@/components/ui/icons";
 import {
   canOpenReminderPanel,
   getNextReminderIndex,
   REMINDER_ROTATION_MS,
   shouldAutoRotateReminders,
 } from "./home-reminder-rotation";
-import type { TripHomeReminderItem, TripHomeReminderStrip } from "./types";
-import styles from "./HomeReminderStrip.module.scss";
+import type { TripHomeImportantToday } from "./types";
+import styles from "./TripHomeContent.module.scss";
 
-type HomeReminderStripProps = TripHomeReminderStrip;
+type ImportantTodaySectionProps = TripHomeImportantToday;
 
 function usePrefersReducedMotion(): boolean {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -34,7 +35,7 @@ function usePrefersReducedMotion(): boolean {
 }
 
 type ReminderPanelProps = {
-  reminders: TripHomeReminderItem[];
+  reminders: TripHomeImportantToday["reminders"];
   settingsHref: string;
   titleId: string;
   onClose: () => void;
@@ -68,7 +69,7 @@ function ReminderPanel({
   return (
     <dialog
       ref={dialogRef}
-      className={styles.panel}
+      className={styles.reminderPanel}
       aria-labelledby={titleId}
       onCancel={(event) => {
         event.preventDefault();
@@ -80,31 +81,31 @@ function ReminderPanel({
         }
       }}
     >
-      <div className={styles.panelInner}>
-        <div className={styles.panelHeader}>
-          <h2 id={titleId} className={styles.panelTitle}>
-            התזכורות שלי להיום
-          </h2>
+      <div className={styles.reminderPanelInner}>
+        <div className={styles.reminderPanelHeader}>
+          <h3 id={titleId} className={styles.reminderPanelTitle}>
+            חשוב להיום
+          </h3>
           <button
             type="button"
-            className={styles.panelClose}
+            className={styles.reminderPanelClose}
             onClick={onClose}
             aria-label="סגירה"
           >
             ×
           </button>
         </div>
-        <ul className={styles.panelList}>
+        <ul className={styles.reminderPanelList}>
           {reminders.map((reminder) => (
-            <li key={reminder.id} className={styles.panelItem}>
-              <p className={styles.panelItemTime}>{reminder.time}</p>
-              <p className={styles.panelItemText} dir="auto">
+            <li key={reminder.id} className={styles.reminderPanelItem}>
+              <p className={styles.reminderMeta}>{reminder.time}</p>
+              <p className={styles.reminderText} dir="auto">
                 {reminder.text}
               </p>
             </li>
           ))}
         </ul>
-        <Link href={settingsHref} className={styles.panelManageLink}>
+        <Link href={settingsHref} className={styles.sectionLink}>
           לניהול התזכורות
         </Link>
       </div>
@@ -112,11 +113,10 @@ function ReminderPanel({
   );
 }
 
-export function HomeReminderStrip({
+export function ImportantTodaySection({
   reminders,
   settingsHref,
-  emptyMessage,
-}: HomeReminderStripProps) {
+}: ImportantTodaySectionProps) {
   const titleId = useId();
   const prefersReducedMotion = usePrefersReducedMotion();
   const [visibleIndex, setVisibleIndex] = useState(0);
@@ -132,7 +132,7 @@ export function HomeReminderStrip({
     }, REMINDER_ROTATION_MS);
 
     return () => window.clearInterval(timer);
-  }, [prefersReducedMotion, reminders]);
+  }, [prefersReducedMotion, reminders.length]);
 
   const openPanel = useCallback(() => {
     if (canOpenReminderPanel(reminders.length)) {
@@ -144,45 +144,47 @@ export function HomeReminderStrip({
     setPanelOpen(false);
   }, []);
 
-  if (reminders.length === 0) {
-    return (
-      <div className={styles.strip} data-empty="true">
-        <span className={styles.icon} aria-hidden>
-          🔔
-        </span>
-        <span className={styles.emptyMessage}>{emptyMessage}</span>
-      </div>
-    );
-  }
-
   const currentReminder = reminders[visibleIndex] ?? reminders[0]!;
 
   return (
-    <>
+    <div className={styles.duringImportantToday}>
       <button
         type="button"
-        className={styles.strip}
+        className={styles.duringImportantTodayTrigger}
         onClick={openPanel}
-        aria-label={`תזכורות להיום: ${currentReminder.text}`}
+        aria-label={`חשוב להיום: ${currentReminder.text}`}
       >
-        <span className={styles.icon} aria-hidden>
-          🔔
+        <span className={styles.duringBlockHeader}>
+          <span className={styles.duringBlockHeaderStart}>
+            <IconBell className={styles.duringBlockIcon} aria-hidden />
+            <span className={styles.duringBlockTitle}>חשוב להיום</span>
+          </span>
+          <IconChevron className={styles.duringBlockChevron} aria-hidden />
         </span>
-        <span className={styles.content}>
-          <span
-            key={currentReminder.id}
-            className={
-              prefersReducedMotion ? styles.reminderBlock : styles.reminderBlockAnimated
-            }
-          >
-            <span className={styles.time}>{currentReminder.time}</span>
-            <span className={styles.text} dir="auto">
+
+        <span className={styles.duringImportantTodayBody}>
+          <span className={styles.duringImportantTodayDot} aria-hidden />
+          <span className={styles.duringImportantTodayCopy}>
+            <span
+              key={currentReminder.id}
+              className={
+                prefersReducedMotion
+                  ? styles.duringImportantTodayText
+                  : styles.duringImportantTodayTextAnimated
+              }
+              dir="auto"
+            >
               {currentReminder.text}
             </span>
+            <span className={styles.duringImportantTodayTime}>
+              {currentReminder.time}
+            </span>
           </span>
-        </span>
-        <span className={styles.chevron} aria-hidden>
-          ‹
+          {reminders.length > 1 ? (
+            <span className={styles.duringImportantTodayCount}>
+              +{reminders.length - 1}
+            </span>
+          ) : null}
         </span>
       </button>
 
@@ -194,6 +196,6 @@ export function HomeReminderStrip({
           onClose={closePanel}
         />
       ) : null}
-    </>
+    </div>
   );
 }
