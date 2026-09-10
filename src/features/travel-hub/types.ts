@@ -4,14 +4,28 @@ import type { ContextualAccommodationVariant } from "./select-contextual-accommo
 import type { AttentionListResult } from "./select-attention-list";
 import type { TravelToolDefinition } from "./constants";
 
+export type TravelHubHeroViewModel = {
+  heroImageSrc: string;
+  title: string;
+  subtitle: string;
+};
+
+export type TravelHubMyTripCard = {
+  href: string;
+  name: string;
+  dateRangeLabel: string;
+  metaLabel: string;
+  statusLabel: string;
+  heroImageSrc: string;
+};
+
 export type ContextualAccommodationCard = {
   accommodation: AccommodationViewModel;
   variant: ContextualAccommodationVariant;
   title: string;
   detailHref: string;
-  taxiHref: string;
+  listHref: string;
   placePhoto?: PlacePhotoPresentation;
-  mapsHref?: string;
   showGoogleAttribution: boolean;
 };
 
@@ -25,6 +39,8 @@ export type TravelToolViewModel = TravelToolDefinition & {
 
 export type TravelHubViewModel = {
   tripId: string;
+  hero: TravelHubHeroViewModel;
+  myTrip: TravelHubMyTripCard;
   contextualAccommodation: ContextualAccommodationCard | null;
   attentionList: AttentionListCard | null;
   tools: TravelToolViewModel[];

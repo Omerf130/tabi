@@ -33,6 +33,7 @@ export type TravelToolId =
 export type TravelToolDefinition = {
   id: TravelToolId;
   label: string;
+  description: string;
   status: "active" | "coming_soon";
   colorClass: string;
 };
@@ -41,50 +42,58 @@ export const TRAVEL_TOOLS: readonly TravelToolDefinition[] = [
   {
     id: "accommodations",
     label: "מקומות לינה",
+    description: "ההזמנות שלך",
     status: "active",
     colorClass: "toolColorAccommodations",
   },
   {
     id: "lists",
     label: "רשימות",
+    description: "ציוד, קניות ועוד",
     status: "active",
     colorClass: "toolColorLists",
   },
   {
     id: "currency",
     label: "מטבע",
+    description: "המרת מטבע מהירה",
     status: "active",
     colorClass: "toolColorCurrency",
   },
   {
     id: "transport",
     label: "תחבורה",
+    description: "טיסות, רכבות ועוד",
     status: "active",
     colorClass: "toolColorTransport",
   },
   {
-    id: "language",
-    label: "שפה ותקשורת",
-    status: "active",
-    colorClass: "toolColorDictionary",
-  },
-  {
     id: "weather",
     label: "מזג אוויר",
+    description: "תחזית ליעדים",
     status: "active",
     colorClass: "toolColorWeather",
   },
   {
-    id: "emergency",
-    label: "חירום ועזרה",
+    id: "language",
+    label: "שפה ותקשורת",
+    description: "מידע שימושי",
     status: "active",
-    colorClass: "toolColorEmergency",
+    colorClass: "toolColorDictionary",
   },
   {
     id: "manage",
     label: "הגדרות וניהול",
+    description: "פרטי טיול והרשאות",
     status: "active",
     colorClass: "toolColorManage",
+  },
+  {
+    id: "emergency",
+    label: "חירום ועזרה",
+    description: "מידע ואנשי קשר",
+    status: "active",
+    colorClass: "toolColorEmergency",
   },
 ];
 

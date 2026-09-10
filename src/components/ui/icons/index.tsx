@@ -305,6 +305,14 @@ export function IconGear({ className }: IconProps) {
   );
 }
 
+export function IconProgress({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M6 19V11M12 19V7M18 19v-6" />
+    </svg>
+  );
+}
+
 export function IconCurrency({ className }: IconProps) {
   return (
     <svg {...stroke} className={className}>
