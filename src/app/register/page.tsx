@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Card } from "@/components/ui/Card/Card";
+import { AuthDivider } from "@/features/auth/AuthDivider";
+import { AuthPageShell } from "@/features/auth/AuthPageShell";
+import { GoogleSignInButton } from "@/features/auth/GoogleSignInButton";
 import { RegisterForm } from "@/features/auth/RegisterForm";
 import { sanitizeReturnTo } from "@/features/auth/return-to";
 import { getCurrentUser } from "@/features/auth/session";
-import styles from "@/features/auth/AuthForm.module.scss";
 
 export const metadata: Metadata = {
-  title: "הרשמה · Tabi",
+  title: "Create account · Tabi",
 };
 
 export default async function RegisterPage({
@@ -24,30 +25,22 @@ export default async function RegisterPage({
     redirect(nextPath ?? "/app");
   }
 
+  const loginHref = nextPath
+    ? `/login?next=${encodeURIComponent(nextPath)}`
+    : "/login";
+
   return (
-    <main className={styles.page}>
-      <div className={styles.inner}>
-        <div className={styles.intro}>
-          <p className={styles.brand}>Tabi</p>
-          <h1 className={styles.title}>יצירת חשבון</h1>
-          <p className={styles.lede}>התחילו לתכנן את הטיול ביפן.</p>
-        </div>
-        <Card>
-          <RegisterForm nextPath={nextPath} />
-        </Card>
-        <p className={styles.switch}>
-          כבר רשומים?{" "}
-          <Link
-            href={
-              nextPath
-                ? `/login?next=${encodeURIComponent(nextPath)}`
-                : "/login"
-            }
-          >
-            כניסה
-          </Link>
-        </p>
-      </div>
-    </main>
+    <AuthPageShell
+      title="Create your account"
+      footer={
+        <>
+          Already have an account? <Link href={loginHref}>Sign in</Link>
+        </>
+      }
+    >
+      <GoogleSignInButton nextPath={nextPath} />
+      <AuthDivider />
+      <RegisterForm nextPath={nextPath} />
+    </AuthPageShell>
   );
 }

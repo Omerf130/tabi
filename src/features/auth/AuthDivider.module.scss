@@ -1,0 +1,18 @@
+.divider {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.line {
+  height: 1px;
+  background: rgb(15 23 40 / 10%);
+}
+
+.label {
+  font-size: 0.875rem;
+  line-height: 1;
+  color: #5c6678;
+  text-transform: lowercase;
+}

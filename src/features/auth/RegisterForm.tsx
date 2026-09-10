@@ -24,44 +24,52 @@ export function RegisterForm({ nextPath }: RegisterFormProps) {
           {state.error}
         </p>
       ) : null}
-      <Field label="שם" htmlFor="name" error={state.fieldErrors?.name}>
-        <Input
-          id="name"
-          name="name"
-          autoComplete="name"
-          required
-          minLength={2}
-          maxLength={80}
-          aria-invalid={state.fieldErrors?.name ? true : undefined}
-        />
-      </Field>
-      <Field label="אימייל" htmlFor="email" error={state.fieldErrors?.email}>
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          required
-          aria-invalid={state.fieldErrors?.email ? true : undefined}
-        />
-      </Field>
-      <Field
-        label="סיסמה"
-        htmlFor="password"
-        error={state.fieldErrors?.password}
-      >
-        <Input
-          id="password"
-          name="password"
-          type="password"
-          autoComplete="new-password"
-          required
-          minLength={8}
-          maxLength={256}
-          aria-invalid={state.fieldErrors?.password ? true : undefined}
-        />
-      </Field>
-      <AuthSubmitButton>הרשמה</AuthSubmitButton>
+      <div className={styles.authField}>
+        <Field label="Name" htmlFor="name" error={state.fieldErrors?.name}>
+          <Input
+            id="name"
+            name="name"
+            autoComplete="name"
+            required
+            minLength={2}
+            maxLength={80}
+            aria-invalid={state.fieldErrors?.name ? true : undefined}
+          />
+        </Field>
+      </div>
+      <div className={styles.authField}>
+        <Field label="Email" htmlFor="email" error={state.fieldErrors?.email}>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            aria-invalid={state.fieldErrors?.email ? true : undefined}
+          />
+        </Field>
+      </div>
+      <div className={styles.authField}>
+        <Field
+          label="Password"
+          htmlFor="password"
+          error={state.fieldErrors?.password}
+        >
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            autoComplete="new-password"
+            required
+            minLength={8}
+            maxLength={256}
+            aria-invalid={state.fieldErrors?.password ? true : undefined}
+          />
+        </Field>
+      </div>
+      <div className={styles.authSubmit}>
+        <AuthSubmitButton>Create account</AuthSubmitButton>
+      </div>
     </form>
   );
 }

@@ -1,10 +1,12 @@
 export const AUTH_MESSAGES = {
-  generic: "משהו השתבש. נסו שוב.",
-  invalidCredentials: "אימייל או סיסמה אינם נכונים",
-  duplicateEmail: "כתובת האימייל כבר רשומה",
-  name: "נא להזין שם תקין",
-  email: "נא להזין אימייל תקין",
-  password: "הסיסמה חייבת להכיל בין 8 ל-256 תווים",
+  generic: "Something went wrong. Please try again.",
+  invalidCredentials: "Email or password is incorrect",
+  duplicateEmail: "This email is already registered",
+  name: "Please enter a valid name",
+  email: "Please enter a valid email",
+  password: "Password must be between 8 and 256 characters",
+  googleSignInFailed:
+    "We couldn't sign you in with Google. Please try again.",
 } as const;
 
 export function isDuplicateKeyError(error: unknown): boolean {

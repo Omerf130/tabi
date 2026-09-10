@@ -1,10 +1,14 @@
 import styles from "./WelcomeScreen.module.scss";
 
+type TabiBrandMarkProps = {
+  className?: string;
+};
+
 /** Minimal mountain mark — no dedicated Tabi logo asset exists in the project. */
-export function TabiBrandMark() {
+export function TabiBrandMark({ className }: TabiBrandMarkProps) {
   return (
     <svg
-      className={styles.brandMark}
+      className={[styles.brandMark, className].filter(Boolean).join(" ")}
       viewBox="0 0 32 28"
       aria-hidden="true"
       focusable="false"

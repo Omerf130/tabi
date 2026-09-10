@@ -12,7 +12,8 @@ export function toPublicUser(user: {
   name: string;
   email: string;
   role: PlatformRole;
-  passwordHash?: string;
+  passwordHash?: string | null;
+  googleSubject?: string | null;
 }): PublicUser {
   return {
     id: user._id.toString(),

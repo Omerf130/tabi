@@ -1,0 +1,204 @@
+.screen {
+  --auth-text: #0f1728;
+  --auth-text-muted: #5c6678;
+  --auth-surface: #ffffff;
+  --auth-border: rgb(15 23 40 / 10%);
+  --auth-focus: #1a2740;
+  --auth-primary: #1a2740;
+  --auth-primary-hover: #243352;
+  --auth-danger: #b42318;
+  --auth-max-form: 22rem;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--auth-surface);
+  color: var(--auth-text);
+}
+
+.visualPanel {
+  display: none;
+}
+
+.formPanel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  padding:
+    calc(env(safe-area-inset-top, 0px) + clamp(1.75rem, 6vh, 2.5rem))
+    clamp(1.25rem, 5vw, 2rem)
+    calc(env(safe-area-inset-bottom, 0px) + clamp(1.5rem, 5vh, 2rem));
+}
+
+.formInner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4vh, 2rem);
+  width: min(100%, var(--auth-max-form));
+  margin-inline: auto;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.headerMark {
+  width: 1.5rem;
+  height: auto;
+  color: var(--auth-primary);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.625rem, 5vw, 1.875rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.footer {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--auth-text-muted);
+}
+
+.footer a {
+  color: var(--auth-text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.footer a:focus-visible {
+  outline: 2px solid var(--auth-focus);
+  outline-offset: 3px;
+  border-radius: 0.125rem;
+}
+
+@media (min-width: 1024px) {
+  .screen {
+    flex-direction: row;
+  }
+
+  .visualPanel {
+    position: relative;
+    display: flex;
+    flex: 1.05;
+    align-items: flex-end;
+    min-height: 100dvh;
+    overflow: hidden;
+    background: #1a2740;
+  }
+
+  .visualBackdrop {
+    position: absolute;
+    inset: 0;
+  }
+
+  .visualBlur {
+    position: absolute;
+    inset: -8%;
+    background-image: url("/destination-visuals/homeApp.png");
+    background-size: cover;
+    background-position: center 35%;
+    filter: blur(28px) saturate(1.05);
+    transform: scale(1.08);
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  .visualImage {
+    object-fit: cover;
+    object-position: 48% 32%;
+  }
+
+  .visualOverlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        180deg,
+        rgb(8 18 38 / 28%) 0%,
+        rgb(8 18 38 / 8%) 24%,
+        transparent 42%
+      ),
+      linear-gradient(
+        0deg,
+        rgb(8 18 38 / 52%) 0%,
+        rgb(8 18 38 / 18%) 32%,
+        transparent 58%
+      );
+  }
+
+  .visualBrand {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding:
+      calc(env(safe-area-inset-bottom, 0px) + clamp(2rem, 6vh, 3rem))
+      clamp(2rem, 6vw, 4rem);
+    color: #ffffff;
+  }
+
+  .visualMark {
+    width: 1.75rem;
+    height: auto;
+    color: #ffffff;
+    opacity: 0.96;
+  }
+
+  .visualName {
+    margin: 0;
+    font-size: clamp(2.25rem, 4vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .visualTagline {
+    margin: 0;
+    max-width: 16rem;
+    font-size: 1.0625rem;
+    line-height: 1.45;
+    color: rgb(255 255 255 / 82%);
+  }
+
+  .formPanel {
+    flex: 0.95;
+    justify-content: center;
+    padding-inline: clamp(2rem, 6vw, 5rem);
+  }
+
+  .formInner {
+    margin-inline: 0;
+  }
+
+  .header {
+    align-items: flex-start;
+    text-align: start;
+  }
+}
+
+@media (min-width: 1440px) {
+  .visualImage {
+    object-position: 46% 36%;
+  }
+
+  .formPanel {
+    padding-inline: clamp(3rem, 8vw, 6rem);
+  }
+}

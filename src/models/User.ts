@@ -12,7 +12,8 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-    passwordHash: { type: String, required: true, select: false },
+    passwordHash: { type: String, select: false },
+    googleSubject: { type: String, trim: true },
     role: {
       type: String,
       enum: ["user", "admin"] as const,
@@ -21,6 +22,14 @@ const userSchema = new mongoose.Schema(
     },
   },
   { timestamps: true },
+);
+
+userSchema.index(
+  { googleSubject: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { googleSubject: { $type: "string" } },
+  },
 );
 
 export type UserDocument = InferSchemaType<typeof userSchema> & {
