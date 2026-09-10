@@ -16,6 +16,7 @@ import {
 } from "@/features/trips/trip-days";
 import { resolveDocumentDayRelevance } from "./day-document-relevance";
 import { getAdjacentTripDates, buildItineraryOverviewHref } from "./routes";
+import type { CurrencyOption } from "@/features/currency/types";
 import type { ActivityViewModel, DayWorkspaceViewModel } from "./types";
 
 type BuildDayWorkspaceInput = {
@@ -30,6 +31,8 @@ type BuildDayWorkspaceInput = {
   documents: readonly ResolvedTravelDocumentViewModel[];
   reminders: readonly TripReminderViewModel[];
   todayJapan?: string;
+  financeBaseCurrency?: string;
+  currencies?: readonly CurrencyOption[];
 };
 
 function filterDocumentsForDay(
@@ -66,6 +69,8 @@ export function buildDayWorkspaceViewModel({
   documents,
   reminders,
   todayJapan = getJapanCalendarDate(),
+  financeBaseCurrency = "ILS",
+  currencies = [],
 }: BuildDayWorkspaceInput): DayWorkspaceViewModel {
   const tripDates = getInclusiveDateRange(startDate, endDate);
   const { previousDate, nextDate } = getAdjacentTripDates(tripDates, date);
@@ -92,5 +97,7 @@ export function buildDayWorkspaceViewModel({
     completedReminders,
     tripDates,
     isOwner,
+    financeBaseCurrency,
+    currencies,
   };
 }

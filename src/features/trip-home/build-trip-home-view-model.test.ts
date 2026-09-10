@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { buildTestNoExpensesRecap } from "@/features/finance/after-trip-finance-recap-fixture";
 import { NEUTRAL_FALLBACK_VISUAL_SRC } from "@/features/destination-visuals/registry";
 import type { ActivityViewModel } from "@/features/itinerary/types";
 import { buildTripHomeViewModel } from "./build-trip-home-view-model";
@@ -191,11 +192,12 @@ describe("buildTripHomeViewModel", () => {
     ]);
   });
 
-  it("builds after-trip state without finance or highlights", () => {
+  it("builds after-trip state with finance recap and without highlights", () => {
     const model = buildTripHomeViewModel({
       trip,
       todayJapan: "2026-12-01",
       nowJapanTime: "10:00",
+      financeRecap: buildTestNoExpensesRecap(),
     });
 
     expect(model.phase).toBe("completed");
@@ -210,11 +212,11 @@ describe("buildTripHomeViewModel", () => {
       "/app/trips/507f1f77bcf86cd799439011/memories",
     );
     expect(model.memories.description).toBe("הרגעים מהטיול יחכו לך כאן.");
+    expect(model.financeRecap.variant).toBe("noExpenses");
     expect(model.itineraryRevisit.href).toBe(
       "/app/trips/507f1f77bcf86cd799439011/itinerary",
     );
     expect(model.itineraryRevisit.title).toBe("המסלול של הטיול");
-    expect(model).not.toHaveProperty("finance");
     expect(model).not.toHaveProperty("highlights");
   });
 

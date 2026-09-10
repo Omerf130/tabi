@@ -18,6 +18,16 @@ vi.mock("@/lib/db/connect", () => ({
   connectDb: vi.fn(),
 }));
 
+vi.mock("@/lib/db/transaction", () => ({
+  withTransaction: vi.fn(async (fn: (session: unknown) => Promise<unknown>) => fn({})),
+}));
+
+vi.mock("@/features/finance/finance-linked-expense-domain", () => ({
+  deleteLinkedTripExpenseForSource: vi.fn(),
+  resolveTransportExpenseCategory: vi.fn(() => "transport"),
+  syncLinkedTripExpense: vi.fn(),
+}));
+
 vi.mock("@/models/Transport", () => ({
   Transport: {
     create: transportCreateMock,
@@ -59,12 +69,16 @@ const validInput = {
 describe("transport domain", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    transportCreateMock.mockResolvedValue({ _id: { toString: () => transportId } });
+    transportCreateMock.mockResolvedValue([
+      { _id: { toString: () => transportId } },
+    ]);
     transportFindOneAndUpdateMock.mockReturnValue({
       lean: vi.fn().mockResolvedValue({ _id: transportId }),
     });
     transportFindOneAndDeleteMock.mockReturnValue({
-      lean: vi.fn().mockResolvedValue({ _id: transportId }),
+      session: vi.fn().mockReturnValue({
+        lean: vi.fn().mockResolvedValue({ _id: transportId }),
+      }),
     });
   });
 

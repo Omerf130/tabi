@@ -1,6 +1,13 @@
 import "server-only";
 
+import type { EntityCostInput } from "@/features/finance/finance-linked-expense-domain";
+import {
+  deleteLinkedTripExpenseForSource,
+  resolveTransportExpenseCategory,
+  syncLinkedTripExpense,
+} from "@/features/finance/finance-linked-expense-domain";
 import { connectDb } from "@/lib/db/connect";
+import { withTransaction } from "@/lib/db/transaction";
 import { Transport } from "@/models/Transport";
 import { TRANSPORT_MESSAGES } from "./constants";
 import type { CreateTransportInput, UpdateTransportInput } from "./schemas";
@@ -86,64 +93,109 @@ function assertValidChronology(input: CreateTransportInput): void {
 export async function createTransport(
   tripId: string,
   input: CreateTransportInput,
+  cost?: EntityCostInput | null,
 ): Promise<string> {
   assertValidChronology(input);
-  await connectDb();
 
-  const created = await Transport.create({
-    tripId,
-    type: input.type,
-    departure: {
-      ...input.departure,
-      locationCode: input.departure.locationCode ?? null,
-    },
-    arrival: {
-      ...input.arrival,
-      locationCode: input.arrival.locationCode ?? null,
-    },
-    bookingReference: input.bookingReference ?? null,
-    notes: input.notes ?? null,
-    details: normalizeDetails(input),
+  return withTransaction(async (session) => {
+    await connectDb();
+
+    const [created] = await Transport.create(
+      [
+        {
+          tripId,
+          type: input.type,
+          departure: {
+            ...input.departure,
+            locationCode: input.departure.locationCode ?? null,
+          },
+          arrival: {
+            ...input.arrival,
+            locationCode: input.arrival.locationCode ?? null,
+          },
+          bookingReference: input.bookingReference ?? null,
+          notes: input.notes ?? null,
+          details: normalizeDetails(input),
+        },
+      ],
+      { session },
+    );
+
+    const transportId = created._id.toString();
+
+    if (cost) {
+      await syncLinkedTripExpense({
+        tripId,
+        sourceType: "transport",
+        sourceId: transportId,
+        category: resolveTransportExpenseCategory(input.type),
+        expenseDate: input.departure.date,
+        cost,
+        session,
+      });
+    }
+
+    return transportId;
   });
-
-  return created._id.toString();
 }
 
 export async function updateTransport(
   tripId: string,
   input: UpdateTransportInput,
+  costSync?: EntityCostInput | null,
 ): Promise<void> {
   assertValidChronology(input);
-  await connectDb();
 
-  const updated = await Transport.findOneAndUpdate(
-    { _id: input.transportId, tripId },
-    {
-      type: input.type,
-      departure: {
-        ...input.departure,
-        locationCode: input.departure.locationCode ?? null,
-      },
-      arrival: {
-        ...input.arrival,
-        locationCode: input.arrival.locationCode ?? null,
-      },
-      bookingReference: input.bookingReference ?? null,
-      notes: input.notes ?? null,
-      details: normalizeDetails(input),
-    },
-    { new: true },
-  ).lean();
+  await withTransaction(async (session) => {
+    await connectDb();
 
-  if (!updated) {
-    throw new TransportNotFoundError();
-  }
+    const updated = await Transport.findOneAndUpdate(
+      { _id: input.transportId, tripId },
+      {
+        type: input.type,
+        departure: {
+          ...input.departure,
+          locationCode: input.departure.locationCode ?? null,
+        },
+        arrival: {
+          ...input.arrival,
+          locationCode: input.arrival.locationCode ?? null,
+        },
+        bookingReference: input.bookingReference ?? null,
+        notes: input.notes ?? null,
+        details: normalizeDetails(input),
+      },
+      { new: true, session },
+    ).lean();
+
+    if (!updated) {
+      throw new TransportNotFoundError();
+    }
+
+    if (costSync !== undefined) {
+      await syncLinkedTripExpense({
+        tripId,
+        sourceType: "transport",
+        sourceId: input.transportId,
+        category: resolveTransportExpenseCategory(input.type),
+        expenseDate: input.departure.date,
+        cost: costSync,
+        session,
+      });
+    }
+  });
 }
 
 export async function deleteTransport(tripId: string, transportId: string): Promise<void> {
-  await connectDb();
-  const deleted = await Transport.findOneAndDelete({ _id: transportId, tripId }).lean();
-  if (!deleted) {
-    throw new TransportNotFoundError();
-  }
+  await withTransaction(async (session) => {
+    await connectDb();
+    const deleted = await Transport.findOneAndDelete({ _id: transportId, tripId })
+      .session(session)
+      .lean();
+    if (!deleted) {
+      throw new TransportNotFoundError();
+    }
+
+    await deleteLinkedTripExpenseForSource(tripId, "transport", transportId, session);
+  });
 }

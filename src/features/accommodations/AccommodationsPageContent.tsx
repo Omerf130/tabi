@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/Card/Card";
 import { IconChevron } from "@/components/ui/icons";
 import { AppPage } from "@/features/app-shell/AppPage";
+import { formatEntityLinkedCostDisplay } from "@/features/finance/entity-linked-cost-presentation";
 import {
   buildAccommodationDetailHref,
   getAccommodationsSettingsHref,
@@ -58,6 +59,11 @@ export function AccommodationsPageContent({
                         {accommodation.nightCount}{" "}
                         {accommodation.nightCount === 1 ? "לילה" : "לילות"}
                       </p>
+                      {accommodation.linkedCost ? (
+                        <p className={styles.cardMeta}>
+                          {formatEntityLinkedCostDisplay(accommodation.linkedCost)}
+                        </p>
+                      ) : null}
                     </div>
                     <IconChevron className={styles.cardChevron} aria-hidden />
                   </div>

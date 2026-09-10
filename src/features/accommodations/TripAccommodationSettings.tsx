@@ -23,6 +23,8 @@ import {
   getTripSettingsSectionClassName,
   type TripSettingsVariant,
 } from "@/features/trips/settings/section-variant";
+import type { CurrencyOption } from "@/features/currency/types";
+import { EntityCostFields } from "@/features/finance/EntityCostFields.client";
 import sectionStyles from "@/features/trips/settings/TripSettingsSections.module.scss";
 import styles from "./TripAccommodationSettings.module.scss";
 
@@ -34,6 +36,8 @@ type TripAccommodationSettingsProps = {
   endDate: string;
   accommodations: AccommodationSettingsViewModel[];
   variant?: TripSettingsVariant;
+  financeBaseCurrency?: string;
+  currencies?: readonly CurrencyOption[];
 };
 
 type AccommodationRowProps = {
@@ -41,6 +45,8 @@ type AccommodationRowProps = {
   startDate: string;
   endDate: string;
   accommodation: AccommodationSettingsViewModel;
+  financeBaseCurrency: string;
+  currencies: readonly CurrencyOption[];
 };
 
 function toInitialGoogleSelection(
@@ -211,6 +217,8 @@ export function TripAccommodationForm({
   defaultCheckInDate,
   onCancel,
   onSuccess,
+  financeBaseCurrency = "ILS",
+  currencies = [],
 }: {
   tripId: string;
   accommodation?: AccommodationSettingsViewModel;
@@ -224,6 +232,8 @@ export function TripAccommodationForm({
   defaultCheckInDate?: string;
   onCancel?: () => void;
   onSuccess?: () => void;
+  financeBaseCurrency?: string;
+  currencies?: readonly CurrencyOption[];
 }) {
   const router = useRouter();
   const [manualMode, setManualMode] = useState(isManualAccommodation(accommodation));
@@ -290,6 +300,15 @@ export function TripAccommodationForm({
         defaultCheckInDate={defaultCheckInDate}
       />
 
+      {currencies.length > 0 ? (
+        <EntityCostFields
+          baseCurrency={financeBaseCurrency}
+          currencies={currencies}
+          linkedCost={accommodation?.linkedCost}
+          idPrefix={`${idPrefix}-cost`}
+        />
+      ) : null}
+
       {state.error ? (
         <p className={styles.error} role="alert">
           {state.error}
@@ -320,6 +339,8 @@ function AccommodationRow({
   startDate,
   endDate,
   accommodation,
+  financeBaseCurrency,
+  currencies,
 }: AccommodationRowProps) {
   const router = useRouter();
   const [editing, setEditing] = useState(false);
@@ -346,6 +367,8 @@ function AccommodationRow({
           action={updateAccommodationAction}
           submitLabel="שמירה"
           onCancel={() => setEditing(false)}
+          financeBaseCurrency={financeBaseCurrency}
+          currencies={currencies}
         />
       </li>
     );
@@ -429,6 +452,8 @@ export function TripAccommodationSettings({
   endDate,
   accommodations,
   variant = "stack",
+  financeBaseCurrency = "ILS",
+  currencies = [],
 }: TripAccommodationSettingsProps) {
   const [showCreate, setShowCreate] = useState(false);
 
@@ -463,6 +488,8 @@ export function TripAccommodationSettings({
             action={createAccommodationAction}
             submitLabel="הוספה"
             onCancel={() => setShowCreate(false)}
+            financeBaseCurrency={financeBaseCurrency}
+            currencies={currencies}
           />
         </div>
       )}
@@ -476,6 +503,8 @@ export function TripAccommodationSettings({
               startDate={startDate}
               endDate={endDate}
               accommodation={accommodation}
+              financeBaseCurrency={financeBaseCurrency}
+              currencies={currencies}
             />
           ))}
         </ul>

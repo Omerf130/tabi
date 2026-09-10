@@ -28,7 +28,7 @@ import { progressPercent } from "@/features/lists/ListProgressBar";
 
 import { AccommodationPhoto } from "./AccommodationPhoto";
 
-import { FinancePreviewCard } from "./FinancePreviewCard";
+import { FinanceSummaryCard } from "./FinanceSummaryCard";
 
 import type { TravelHubViewModel, TravelToolViewModel } from "./types";
 
@@ -420,7 +420,7 @@ export function TravelHubContent({ model }: TravelHubContentProps) {
 
 
 
-        <FinancePreviewCard />
+        <FinanceSummaryCard finance={model.finance} />
 
 
 

@@ -1,6 +1,9 @@
 import "server-only";
 
+import type { ActivityCostCategory } from "@/features/finance/entity-cost-schema";
+import { syncLinkedTripExpense } from "@/features/finance/finance-linked-expense-domain";
 import { connectDb } from "@/lib/db/connect";
+import { withTransaction } from "@/lib/db/transaction";
 import { Activity } from "@/models/Activity";
 import { isDateWithinTrip } from "@/features/trips/trip-days";
 import { getNextActivityOrder } from "./activity-order";
@@ -20,9 +23,16 @@ type TripDateRange = {
   endDate: string;
 };
 
+export type ActivityCostInput = {
+  amount: number;
+  currency: string;
+  category: ActivityCostCategory;
+};
+
 export async function updateActivity(
   trip: TripDateRange,
   input: UpdateActivityInput,
+  costSync?: ActivityCostInput | null,
 ): Promise<string> {
   if (!isDateWithinTrip(trip.startDate, trip.endDate, input.date)) {
     throw new ActivityDateOutOfRangeError();
@@ -32,45 +42,61 @@ export async function updateActivity(
     throw new ActivityValidationError("invalid activity times");
   }
 
-  await connectDb();
-  const existing = await Activity.findOne({
-    _id: input.activityId,
-    tripId: trip.id,
-  }).lean();
+  return withTransaction(async (session) => {
+    await connectDb();
+    const existing = await Activity.findOne({
+      _id: input.activityId,
+      tripId: trip.id,
+    })
+      .session(session)
+      .lean();
 
-  if (!existing) {
-    throw new ActivityNotFoundError();
-  }
+    if (!existing) {
+      throw new ActivityNotFoundError();
+    }
 
-  let order = existing.order;
-  if (existing.date !== input.date) {
-    const destinationActivities = await listActivitiesForTripDay(
-      trip.id,
-      input.date,
-    );
-    order = getNextActivityOrder(destinationActivities);
-  }
+    let order = existing.order;
+    if (existing.date !== input.date) {
+      const destinationActivities = await listActivitiesForTripDay(
+        trip.id,
+        input.date,
+      );
+      order = getNextActivityOrder(destinationActivities);
+    }
 
-  const locationFields = toActivityDocumentFields(input);
+    const locationFields = toActivityDocumentFields(input);
 
-  const updated = await Activity.findOneAndUpdate(
-    { _id: input.activityId, tripId: trip.id },
-    {
-      date: input.date,
-      title: input.title,
-      type: input.type,
-      order,
-      startTime: input.startTime ?? null,
-      endTime: input.endTime ?? null,
-      notes: input.notes ?? null,
-      ...locationFields,
-    },
-    { new: true },
-  ).lean();
+    const updated = await Activity.findOneAndUpdate(
+      { _id: input.activityId, tripId: trip.id },
+      {
+        date: input.date,
+        title: input.title,
+        type: input.type,
+        order,
+        startTime: input.startTime ?? null,
+        endTime: input.endTime ?? null,
+        notes: input.notes ?? null,
+        ...locationFields,
+      },
+      { new: true, session },
+    ).lean();
 
-  if (!updated) {
-    throw new ActivityNotFoundError();
-  }
+    if (!updated) {
+      throw new ActivityNotFoundError();
+    }
 
-  return updated.date;
+    if (costSync !== undefined) {
+      await syncLinkedTripExpense({
+        tripId: trip.id,
+        sourceType: "activity",
+        sourceId: input.activityId,
+        category: costSync?.category ?? "activities",
+        expenseDate: input.date,
+        cost: costSync ? { amount: costSync.amount, currency: costSync.currency } : null,
+        session,
+      });
+    }
+
+    return updated.date;
+  });
 }

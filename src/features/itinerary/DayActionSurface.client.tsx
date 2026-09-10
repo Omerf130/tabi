@@ -68,6 +68,9 @@ type DayActionSurfaceProps = {
   reminders: readonly TripReminderViewModel[];
   onStateChange: (state: DayActionState) => void;
   onClose: () => void;
+  showCostFields?: boolean;
+  financeBaseCurrency?: string;
+  currencies?: readonly import("@/features/currency/types").CurrencyOption[];
 };
 
 function ReminderCreateForm({
@@ -220,6 +223,9 @@ export function DayActionSurface({
   reminders,
   onStateChange,
   onClose,
+  showCostFields = false,
+  financeBaseCurrency = "ILS",
+  currencies = [],
 }: DayActionSurfaceProps) {
   const router = useRouter();
   const titleId = useId();
@@ -374,6 +380,9 @@ export function DayActionSurface({
               onCancel={requestClose}
               onSuccess={handleMutationSuccess}
               onDirtyChange={setDirty}
+              showCostFields={showCostFields}
+              financeBaseCurrency={financeBaseCurrency}
+              currencies={currencies}
             />
           ) : null}
 
@@ -389,6 +398,10 @@ export function DayActionSurface({
               onCancel={requestClose}
               onSuccess={handleMutationSuccess}
               onDirtyChange={setDirty}
+              showCostFields={showCostFields}
+              financeBaseCurrency={financeBaseCurrency}
+              currencies={currencies}
+              linkedCost={activity.linkedCost}
             />
           ) : null}
 

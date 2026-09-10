@@ -11,6 +11,7 @@ import { listRemindersForUserTripDay } from "@/features/trips/reminders/queries"
 import { buildDayDocumentLinkOptions } from "./build-day-document-link-options";
 import { buildDayWorkspaceViewModel } from "./build-day-workspace";
 import { loadItineraryTripData } from "./load-itinerary-trip-data";
+import { prepareEntityCostFormContext } from "@/features/finance/linked-expense-queries";
 import { listActivitiesForTripDay } from "./queries";
 import { buildItineraryDayHref, parseItineraryDateParam } from "./routes";
 import { DayPageShell } from "./DayPageShell.client";
@@ -39,17 +40,21 @@ export async function DayPageContent({ trip, date }: DayPageContentProps) {
     return null;
   }
 
-  const [activities, transports, tripData, reminders] = await Promise.all([
-    listActivitiesForTripDay(trip.id, validatedDate),
-    listTransportsForItineraryDay(
-      trip.id,
-      validatedDate,
-      trip.startDate,
-      trip.endDate,
-    ),
-    loadItineraryTripData(trip.id, trip.startDate, trip.endDate),
-    listRemindersForUserTripDay(trip.id, user.id, validatedDate, todayJapan),
-  ]);
+  const [activities, transports, tripData, reminders, financeContext] =
+    await Promise.all([
+      listActivitiesForTripDay(trip.id, validatedDate),
+      listTransportsForItineraryDay(
+        trip.id,
+        validatedDate,
+        trip.startDate,
+        trip.endDate,
+      ),
+      loadItineraryTripData(trip.id, trip.startDate, trip.endDate),
+      listRemindersForUserTripDay(trip.id, user.id, validatedDate, todayJapan),
+      trip.role === "owner"
+        ? prepareEntityCostFormContext(trip.id)
+        : Promise.resolve(null),
+    ]);
 
   const day = buildDayWorkspaceViewModel({
     tripId: trip.id,
@@ -63,6 +68,8 @@ export async function DayPageContent({ trip, date }: DayPageContentProps) {
     documents: tripData.documents,
     reminders,
     todayJapan,
+    financeBaseCurrency: financeContext?.baseCurrency ?? "ILS",
+    currencies: financeContext?.currencies ?? [],
   });
 
   const documentLinkOptions = buildDayDocumentLinkOptions(

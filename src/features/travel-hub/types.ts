@@ -1,4 +1,5 @@
 import type { AccommodationViewModel } from "@/features/accommodations/types";
+import type { TravelHubFinanceSummary } from "@/features/finance/types";
 import type { PlacePhotoPresentation } from "@/features/place-images/types";
 import type { ContextualAccommodationVariant } from "./select-contextual-accommodation";
 import type { AttentionListResult } from "./select-attention-list";
@@ -43,5 +44,6 @@ export type TravelHubViewModel = {
   myTrip: TravelHubMyTripCard;
   contextualAccommodation: ContextualAccommodationCard | null;
   attentionList: AttentionListCard | null;
+  finance: TravelHubFinanceSummary;
   tools: TravelToolViewModel[];
 };

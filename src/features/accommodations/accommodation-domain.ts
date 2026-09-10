@@ -1,8 +1,14 @@
 import "server-only";
 
+import type { EntityCostInput } from "@/features/finance/finance-linked-expense-domain";
+import {
+  deleteLinkedTripExpenseForSource,
+  syncLinkedTripExpense,
+} from "@/features/finance/finance-linked-expense-domain";
 import { compareCalendarDates } from "@/features/trips/calendar-date";
 import { getTripDayCount } from "@/features/trips/trip-days";
 import { connectDb } from "@/lib/db/connect";
+import { withTransaction } from "@/lib/db/transaction";
 import { Accommodation } from "@/models/Accommodation";
 import { isDateWithinTrip } from "@/features/trips/trip-days";
 import { ACCOMMODATION_MESSAGES } from "./constants";
@@ -119,6 +125,7 @@ export async function createAccommodation(input: {
   startDate: string;
   endDate: string;
   fields: AccommodationFieldsInput;
+  cost?: EntityCostInput | null;
 }): Promise<string> {
   assertAccommodationDateRange(
     input.fields.checkInDate,
@@ -127,13 +134,34 @@ export async function createAccommodation(input: {
     input.endDate,
   );
 
-  await connectDb();
-  const created = await Accommodation.create({
-    tripId: input.tripId,
-    ...toAccommodationDocumentFields(input.fields),
-  });
+  return withTransaction(async (session) => {
+    await connectDb();
+    const [created] = await Accommodation.create(
+      [
+        {
+          tripId: input.tripId,
+          ...toAccommodationDocumentFields(input.fields),
+        },
+      ],
+      { session },
+    );
 
-  return created._id.toString();
+    const accommodationId = created._id.toString();
+
+    if (input.cost) {
+      await syncLinkedTripExpense({
+        tripId: input.tripId,
+        sourceType: "accommodation",
+        sourceId: accommodationId,
+        category: "accommodation",
+        expenseDate: input.fields.checkInDate,
+        cost: input.cost,
+        session,
+      });
+    }
+
+    return accommodationId;
+  });
 }
 
 export async function updateAccommodation(input: {
@@ -142,6 +170,7 @@ export async function updateAccommodation(input: {
   startDate: string;
   endDate: string;
   fields: AccommodationFieldsInput;
+  costSync?: EntityCostInput | null;
 }): Promise<void> {
   assertAccommodationDateRange(
     input.fields.checkInDate,
@@ -150,31 +179,56 @@ export async function updateAccommodation(input: {
     input.endDate,
   );
 
-  await connectDb();
-  const updated = await Accommodation.findOneAndUpdate(
-    { _id: input.accommodationId, tripId: input.tripId },
-    toAccommodationDocumentFields(input.fields),
-    { new: true },
-  ).lean();
+  await withTransaction(async (session) => {
+    await connectDb();
+    const updated = await Accommodation.findOneAndUpdate(
+      { _id: input.accommodationId, tripId: input.tripId },
+      toAccommodationDocumentFields(input.fields),
+      { new: true, session },
+    ).lean();
 
-  if (!updated) {
-    throw new AccommodationNotFoundError();
-  }
+    if (!updated) {
+      throw new AccommodationNotFoundError();
+    }
+
+    if (input.costSync !== undefined) {
+      await syncLinkedTripExpense({
+        tripId: input.tripId,
+        sourceType: "accommodation",
+        sourceId: input.accommodationId,
+        category: "accommodation",
+        expenseDate: input.fields.checkInDate,
+        cost: input.costSync,
+        session,
+      });
+    }
+  });
 }
 
 export async function deleteAccommodation(input: {
   tripId: string;
   accommodationId: string;
 }): Promise<void> {
-  await connectDb();
-  const deleted = await Accommodation.findOneAndDelete({
-    _id: input.accommodationId,
-    tripId: input.tripId,
-  }).lean();
+  await withTransaction(async (session) => {
+    await connectDb();
+    const deleted = await Accommodation.findOneAndDelete({
+      _id: input.accommodationId,
+      tripId: input.tripId,
+    })
+      .session(session)
+      .lean();
 
-  if (!deleted) {
-    throw new AccommodationNotFoundError();
-  }
+    if (!deleted) {
+      throw new AccommodationNotFoundError();
+    }
+
+    await deleteLinkedTripExpenseForSource(
+      input.tripId,
+      "accommodation",
+      input.accommodationId,
+      session,
+    );
+  });
 }
 
 export function compareAccommodations<

@@ -9,6 +9,7 @@ import {
 } from "@/features/transport/transport-form-defaults";
 import { TransportForm } from "@/features/transport/TransportForm.client";
 import { TRANSPORT_TYPE_SINGULAR_LABELS } from "@/features/transport/transport-types";
+import { prepareEntityCostFormContext } from "@/features/finance/linked-expense-queries";
 import { requireTripOwner } from "@/features/trips/authorization";
 
 export async function generateMetadata({
@@ -41,6 +42,7 @@ export default async function EditTransportPage({
   const defaultValues = transport
     ? toTransportFormValues(transport)
     : createEmptyTransportFormValues("flight");
+  const financeContext = await prepareEntityCostFormContext(trip.id);
 
   return (
     <>
@@ -56,6 +58,9 @@ export default async function EditTransportPage({
           defaultValues={defaultValues}
           mode="edit"
           transportId={transport.id}
+          financeBaseCurrency={financeContext.baseCurrency}
+          currencies={financeContext.currencies}
+          linkedCost={transport.linkedCost}
         />
       </AppPage>
     </>

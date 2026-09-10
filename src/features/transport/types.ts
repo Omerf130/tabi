@@ -1,3 +1,4 @@
+import type { EntityLinkedCostViewModel } from "@/features/finance/types";
 import type { TrainCategory, TransportType } from "./transport-types";
 
 export type TransportEndpoint = {
@@ -51,6 +52,7 @@ export type TransportRecord = {
   notes?: string;
   details: FlatTransportDetails;
   createdAt: string;
+  linkedCost?: EntityLinkedCostViewModel;
 };
 
 export type TransportCardViewModel = {
@@ -62,6 +64,7 @@ export type TransportCardViewModel = {
   dateLabel: string;
   timeRangeLabel: string;
   detailHref: string;
+  linkedCost?: EntityLinkedCostViewModel;
 };
 
 export type TransportDetailViewModel = TransportRecord & {
@@ -91,6 +94,7 @@ export type TransportItineraryItemViewModel = {
   timeLabel: string;
   departureTime: string;
   detailHref: string;
+  linkedCost?: EntityLinkedCostViewModel;
 };
 
 export type TransportFormValues = {

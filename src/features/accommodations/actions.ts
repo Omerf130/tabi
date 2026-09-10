@@ -4,6 +4,12 @@ import { revalidatePath } from "next/cache";
 import { revalidateItineraryPaths } from "@/features/itinerary/revalidation";
 import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireTripOwner } from "@/features/trips/authorization";
+import { parseSimpleEntityCostFromFormData } from "@/features/finance/entity-cost-schema";
+import {
+  FinanceExpenseValidationError,
+  FrankfurterRequestError,
+} from "@/features/finance/finance-expense-domain";
+import { revalidateFinancePaths } from "@/features/finance/revalidation";
 import { ACCOMMODATION_MESSAGES } from "./constants";
 import {
   AccommodationNotFoundError,
@@ -50,6 +56,11 @@ export async function createAccommodationAction(
     };
   }
 
+  const costParsed = parseSimpleEntityCostFromFormData(formData);
+  if (!costParsed.ok) {
+    return { error: costParsed.error };
+  }
+
   try {
     const trip = await requireTripOwner(parsed.data.tripId);
     await createAccommodation({
@@ -57,12 +68,20 @@ export async function createAccommodationAction(
       startDate: trip.startDate,
       endDate: trip.endDate,
       fields: parsed.data,
+      cost: costParsed.value.hasCost ? costParsed.value : null,
     });
     revalidateAccommodationPaths(trip.id);
+    revalidateFinancePaths(trip.id);
     return { ok: true, success: ACCOMMODATION_MESSAGES.created };
   } catch (error) {
     if (error instanceof AccommodationValidationError) {
       return { error: error.message };
+    }
+    if (error instanceof FinanceExpenseValidationError) {
+      return { error: error.message };
+    }
+    if (error instanceof FrankfurterRequestError) {
+      return { error: ACCOMMODATION_MESSAGES.generic };
     }
     return { error: ACCOMMODATION_MESSAGES.generic };
   }
@@ -86,6 +105,13 @@ export async function updateAccommodationAction(
     };
   }
 
+  const costSync = formData.has("costAmount")
+    ? parseSimpleEntityCostFromFormData(formData)
+    : null;
+  if (costSync && !costSync.ok) {
+    return { error: costSync.error };
+  }
+
   try {
     const trip = await requireTripOwner(parsed.data.tripId);
     await updateAccommodation({
@@ -94,11 +120,19 @@ export async function updateAccommodationAction(
       startDate: trip.startDate,
       endDate: trip.endDate,
       fields: parsed.data,
+      costSync: costSync
+        ? costSync.value.hasCost
+          ? costSync.value
+          : null
+        : undefined,
     });
     revalidateAccommodationPaths(trip.id);
     revalidatePath(
       `/app/trips/${trip.id}/accommodations/${parsed.data.accommodationId}`,
     );
+    if (costSync) {
+      revalidateFinancePaths(trip.id);
+    }
     return { ok: true, success: ACCOMMODATION_MESSAGES.updated };
   } catch (error) {
     if (error instanceof AccommodationValidationError) {
@@ -106,6 +140,12 @@ export async function updateAccommodationAction(
     }
     if (error instanceof AccommodationNotFoundError) {
       return { error: error.message };
+    }
+    if (error instanceof FinanceExpenseValidationError) {
+      return { error: error.message };
+    }
+    if (error instanceof FrankfurterRequestError) {
+      return { error: ACCOMMODATION_MESSAGES.generic };
     }
     return { error: ACCOMMODATION_MESSAGES.generic };
   }
@@ -131,6 +171,7 @@ export async function deleteAccommodationAction(
       accommodationId: parsed.data.accommodationId,
     });
     revalidateAccommodationPaths(parsed.data.tripId);
+    revalidateFinancePaths(parsed.data.tripId);
     revalidatePath(
       `/app/trips/${parsed.data.tripId}/accommodations/${parsed.data.accommodationId}`,
     );

@@ -5,6 +5,12 @@ import { revalidateItineraryPaths } from "@/features/itinerary/revalidation";
 import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireTripOwner } from "@/features/trips/authorization";
 import { getTransportForTrip } from "./queries";
+import { parseSimpleEntityCostFromFormData } from "@/features/finance/entity-cost-schema";
+import {
+  FinanceExpenseValidationError,
+  FrankfurterRequestError,
+} from "@/features/finance/finance-expense-domain";
+import { revalidateFinancePaths } from "@/features/finance/revalidation";
 import { TRANSPORT_MESSAGES } from "./constants";
 import {
   createTransportSchema,
@@ -60,14 +66,30 @@ export async function createTransportAction(
     };
   }
 
+  const costParsed = parseSimpleEntityCostFromFormData(formData);
+  if (!costParsed.ok) {
+    return { error: costParsed.error };
+  }
+
   try {
     const trip = await requireTripOwner(String(formData.get("tripId")));
-    const transportId = await createTransport(trip.id, parsed.data);
+    const transportId = await createTransport(
+      trip.id,
+      parsed.data,
+      costParsed.value.hasCost ? costParsed.value : null,
+    );
     revalidateTransportPaths(trip.id, transportId, [parsed.data.departure.date]);
+    revalidateFinancePaths(trip.id);
     return { ok: true, success: "נשמר", transportId };
   } catch (error) {
     if (error instanceof TransportValidationError) {
       return { error: error.message };
+    }
+    if (error instanceof FinanceExpenseValidationError) {
+      return { error: error.message };
+    }
+    if (error instanceof FrankfurterRequestError) {
+      return { error: TRANSPORT_MESSAGES.saveFailed };
     }
     return { error: TRANSPORT_MESSAGES.saveFailed };
   }
@@ -88,15 +110,33 @@ export async function updateTransportAction(
     };
   }
 
+  const costSync = formData.has("costAmount")
+    ? parseSimpleEntityCostFromFormData(formData)
+    : null;
+  if (costSync && !costSync.ok) {
+    return { error: costSync.error };
+  }
+
   try {
     const trip = await requireTripOwner(String(formData.get("tripId")));
     const existing = await getTransportForTrip(trip.id, parsed.data.transportId);
-    await updateTransport(trip.id, parsed.data);
+    await updateTransport(
+      trip.id,
+      parsed.data,
+      costSync
+        ? costSync.value.hasCost
+          ? costSync.value
+          : null
+        : undefined,
+    );
     const dates = [
       parsed.data.departure.date,
       existing?.departure.date,
     ].filter((value): value is string => Boolean(value));
     revalidateTransportPaths(trip.id, parsed.data.transportId, dates);
+    if (costSync) {
+      revalidateFinancePaths(trip.id);
+    }
     return { ok: true, success: "עודכן" };
   } catch (error) {
     if (error instanceof TransportValidationError) {
@@ -104,6 +144,12 @@ export async function updateTransportAction(
     }
     if (error instanceof TransportNotFoundError) {
       return { error: error.message };
+    }
+    if (error instanceof FinanceExpenseValidationError) {
+      return { error: error.message };
+    }
+    if (error instanceof FrankfurterRequestError) {
+      return { error: TRANSPORT_MESSAGES.saveFailed };
     }
     return { error: TRANSPORT_MESSAGES.saveFailed };
   }
@@ -131,6 +177,7 @@ export async function deleteTransportAction(
       parsed.data.transportId,
       existing ? [existing.departure.date] : [],
     );
+    revalidateFinancePaths(trip.id);
     return { ok: true, success: "נמחק" };
   } catch (error) {
     if (error instanceof TransportNotFoundError) {

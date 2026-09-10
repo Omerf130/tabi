@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/Card/Card";
 import { IconChevron } from "@/components/ui/icons";
 import { AppPage } from "@/features/app-shell/AppPage";
+import { formatEntityLinkedCostDisplay } from "@/features/finance/entity-linked-cost-presentation";
 import {
   buildTransportNewHref,
   getAddTransportTypeLabel,
@@ -61,6 +62,11 @@ export function TransportPageContent({
                             {transport.metaLabel ? (
                               <p className={styles.cardMeta} dir="auto">
                                 {transport.metaLabel}
+                              </p>
+                            ) : null}
+                            {transport.linkedCost ? (
+                              <p className={styles.cardMeta}>
+                                {formatEntityLinkedCostDisplay(transport.linkedCost)}
                               </p>
                             ) : null}
                             <p className={styles.cardDate}>{transport.dateLabel}</p>

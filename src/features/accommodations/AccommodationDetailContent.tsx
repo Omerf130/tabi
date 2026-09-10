@@ -57,6 +57,12 @@ export function AccommodationDetailContent({
               </dd>
             </div>
           ) : null}
+          {accommodation.linkedCost ? (
+            <div className={styles.detailItem}>
+              <dt>עלות</dt>
+              <dd>{accommodation.linkedCost.label}</dd>
+            </div>
+          ) : null}
           {accommodation.bookingReference ? (
             <div className={styles.detailItem}>
               <dt>מספר הזמנה</dt>

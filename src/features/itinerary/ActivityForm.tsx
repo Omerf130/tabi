@@ -17,6 +17,9 @@ import {
   updateActivityAction,
   type ActivityActionState,
 } from "./actions";
+import type { CurrencyOption } from "@/features/currency/types";
+import { EntityCostFields } from "@/features/finance/EntityCostFields.client";
+import type { EntityLinkedCostViewModel } from "@/features/finance/types";
 import { ActivityLocationSection } from "./ActivityLocationSection";
 import type { ActivityFormValues } from "./types";
 import styles from "./ActivityForm.module.scss";
@@ -33,6 +36,10 @@ type ActivityFormProps = {
   onCancel?: () => void;
   onSuccess?: (result: ActivityActionState) => void;
   onDirtyChange?: (dirty: boolean) => void;
+  showCostFields?: boolean;
+  financeBaseCurrency?: string;
+  currencies?: readonly CurrencyOption[];
+  linkedCost?: EntityLinkedCostViewModel | null;
 };
 
 export function ActivityForm({
@@ -45,6 +52,10 @@ export function ActivityForm({
   onCancel,
   onSuccess,
   onDirtyChange,
+  showCostFields = false,
+  financeBaseCurrency = "ILS",
+  currencies = [],
+  linkedCost,
 }: ActivityFormProps) {
   const action = mode === "create" ? createActivityAction : updateActivityAction;
   const [state, formAction] = useActionState(action, initialState);
@@ -175,6 +186,16 @@ export function ActivityForm({
           aria-invalid={state.fieldErrors?.notes ? true : undefined}
         />
       </Field>
+
+      {showCostFields && currencies.length > 0 ? (
+        <EntityCostFields
+          baseCurrency={financeBaseCurrency}
+          currencies={currencies}
+          linkedCost={linkedCost}
+          showCategory
+          idPrefix={`activity-${activityId ?? "create"}`}
+        />
+      ) : null}
 
       <div className={styles.actions}>
         <AuthSubmitButton>

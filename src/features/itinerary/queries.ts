@@ -1,5 +1,6 @@
 import "server-only";
 
+import { attachLinkedCostsToIds } from "@/features/finance/linked-expense-queries";
 import { connectDb } from "@/lib/db/connect";
 import { Activity } from "@/models/Activity";
 import { toActivityViewModel } from "./to-activity-view-model";
@@ -13,7 +14,8 @@ export async function listActivitiesForTrip(
     .sort({ date: 1, order: 1, createdAt: 1, _id: 1 })
     .lean();
 
-  return activities.map((activity) => toActivityViewModel(activity));
+  const viewModels = activities.map((activity) => toActivityViewModel(activity));
+  return attachLinkedCostsToIds(tripId, "activity", viewModels);
 }
 
 export async function getActivityForTrip(
@@ -26,7 +28,9 @@ export async function getActivityForTrip(
     return null;
   }
 
-  return toActivityViewModel(activity);
+  const viewModel = toActivityViewModel(activity);
+  const [withCost] = await attachLinkedCostsToIds(tripId, "activity", [viewModel]);
+  return withCost;
 }
 
 export async function listActivitiesForTripDay(
@@ -38,5 +42,6 @@ export async function listActivitiesForTripDay(
     .sort({ order: 1, createdAt: 1, _id: 1 })
     .lean();
 
-  return activities.map((activity) => toActivityViewModel(activity));
+  const viewModels = activities.map((activity) => toActivityViewModel(activity));
+  return attachLinkedCostsToIds(tripId, "activity", viewModels);
 }

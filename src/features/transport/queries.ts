@@ -1,5 +1,6 @@
 import "server-only";
 
+import { attachLinkedCostsToIds } from "@/features/finance/linked-expense-queries";
 import { isDateWithinTrip } from "@/features/trips/trip-days";
 import { connectDb } from "@/lib/db/connect";
 import { Transport } from "@/models/Transport";
@@ -38,18 +39,24 @@ export async function getTransportForTrip(
 ): Promise<TransportRecord | null> {
   await connectDb();
   const document = await Transport.findOne({ _id: transportId, tripId }).lean();
-  return document ? toTransportRecord(document) : null;
+  if (!document) {
+    return null;
+  }
+  const record = toTransportRecord(document);
+  const [withCost] = await attachLinkedCostsToIds(tripId, "transport", [record]);
+  return withCost;
 }
 
 export async function listTransportCardsForTrip(
   tripId: string,
 ): Promise<Record<TransportType, TransportCardViewModel[]>> {
   const records = await listTransportsForTrip(tripId);
+  const recordsWithCosts = await attachLinkedCostsToIds(tripId, "transport", records);
   const grouped = Object.fromEntries(
     TRANSPORT_TYPES.map((type) => [type, [] as TransportCardViewModel[]]),
   ) as Record<TransportType, TransportCardViewModel[]>;
 
-  for (const record of records) {
+  for (const record of recordsWithCosts) {
     grouped[record.type].push(toTransportCardViewModel(tripId, record));
   }
 
@@ -74,9 +81,11 @@ export async function listTransportsForItineraryDay(
     .sort({ "departure.time": 1, createdAt: 1, _id: 1 })
     .lean();
 
-  return documents
-    .map(toTransportRecord)
-    .map((record) => toTransportItineraryItemViewModel(tripId, record));
+  const records = documents.map(toTransportRecord);
+  const recordsWithCosts = await attachLinkedCostsToIds(tripId, "transport", records);
+  return recordsWithCosts.map((record) =>
+    toTransportItineraryItemViewModel(tripId, record),
+  );
 }
 
 export async function listTransportsForItineraryTrip(
@@ -92,10 +101,11 @@ export async function listTransportsForItineraryTrip(
     .sort({ "departure.date": 1, "departure.time": 1, createdAt: 1, _id: 1 })
     .lean();
 
+  const records = documents.map(toTransportRecord);
+  const recordsWithCosts = await attachLinkedCostsToIds(tripId, "transport", records);
   const grouped = new Map<string, TransportItineraryItemViewModel[]>();
 
-  for (const document of documents) {
-    const record = toTransportRecord(document);
+  for (const record of recordsWithCosts) {
     const item = toTransportItineraryItemViewModel(tripId, record);
     const existing = grouped.get(record.departure.date) ?? [];
     existing.push(item);

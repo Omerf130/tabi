@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { IconActivityTransport } from "@/components/ui/icons";
+import { formatEntityLinkedCostDisplay } from "@/features/finance/entity-linked-cost-presentation";
 import type { TransportItineraryItemViewModel } from "@/features/transport/types";
 import styles from "./ItineraryPage.module.scss";
 
@@ -31,6 +32,11 @@ export function TransportItineraryRow({
                 {transport.metaLabel ? (
                   <p className={styles.activityLocation} dir="auto">
                     {transport.metaLabel}
+                  </p>
+                ) : null}
+                {transport.linkedCost ? (
+                  <p className={styles.activityNotes}>
+                    {formatEntityLinkedCostDisplay(transport.linkedCost)}
                   </p>
                 ) : null}
                 <p className={styles.transportTimeMeta}>{transport.timeLabel}</p>

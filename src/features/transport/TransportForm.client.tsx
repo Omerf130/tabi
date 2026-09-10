@@ -8,6 +8,9 @@ import { Input } from "@/components/ui/Input/Input";
 import { Select } from "@/components/ui/Select/Select";
 import { Textarea } from "@/components/ui/Textarea/Textarea";
 import { AuthSubmitButton } from "@/features/auth/AuthSubmitButton";
+import type { CurrencyOption } from "@/features/currency/types";
+import { EntityCostFields } from "@/features/finance/EntityCostFields.client";
+import type { EntityLinkedCostViewModel } from "@/features/finance/types";
 import {
   createTransportAction,
   updateTransportAction,
@@ -34,6 +37,9 @@ type TransportFormProps = {
   onCancel?: () => void;
   onSuccess?: () => void;
   successHref?: string;
+  financeBaseCurrency?: string;
+  currencies?: readonly CurrencyOption[];
+  linkedCost?: EntityLinkedCostViewModel | null;
 };
 
 function TimezoneSelect({
@@ -210,6 +216,9 @@ export function TransportForm({
   onCancel,
   onSuccess,
   successHref,
+  financeBaseCurrency = "ILS",
+  currencies = [],
+  linkedCost,
 }: TransportFormProps) {
   const router = useRouter();
   const action = mode === "create" ? createTransportAction : updateTransportAction;
@@ -393,6 +402,15 @@ export function TransportForm({
           />
         </Field>
       </section>
+
+      {currencies.length > 0 ? (
+        <EntityCostFields
+          baseCurrency={financeBaseCurrency}
+          currencies={currencies}
+          linkedCost={linkedCost}
+          idPrefix={`transport-${transportId ?? "create"}`}
+        />
+      ) : null}
 
       <div className={styles.actions}>
         {onCancel ? (

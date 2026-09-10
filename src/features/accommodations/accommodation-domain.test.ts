@@ -17,6 +17,15 @@ vi.mock("@/lib/db/connect", () => ({
   connectDb: vi.fn(),
 }));
 
+vi.mock("@/lib/db/transaction", () => ({
+  withTransaction: vi.fn(async (fn: (session: unknown) => Promise<unknown>) => fn({})),
+}));
+
+vi.mock("@/features/finance/finance-linked-expense-domain", () => ({
+  deleteLinkedTripExpenseForSource: vi.fn(),
+  syncLinkedTripExpense: vi.fn(),
+}));
+
 vi.mock("@/models/Accommodation", () => ({
   Accommodation: {
     create: vi.fn(),
@@ -138,7 +147,9 @@ describe("deleteAccommodation", () => {
 
   it("deletes accommodation scoped to trip", async () => {
     findOneAndDeleteMock.mockReturnValue({
-      lean: vi.fn().mockResolvedValue({ _id: "acc-1" }),
+      session: vi.fn().mockReturnValue({
+        lean: vi.fn().mockResolvedValue({ _id: "acc-1" }),
+      }),
     });
 
     await deleteAccommodation({
@@ -154,7 +165,9 @@ describe("deleteAccommodation", () => {
 
   it("throws when accommodation is missing or belongs to another trip", async () => {
     findOneAndDeleteMock.mockReturnValue({
-      lean: vi.fn().mockResolvedValue(null),
+      session: vi.fn().mockReturnValue({
+        lean: vi.fn().mockResolvedValue(null),
+      }),
     });
 
     await expect(
@@ -167,7 +180,9 @@ describe("deleteAccommodation", () => {
 
   it("deletes only the scoped accommodation record without cascading", async () => {
     findOneAndDeleteMock.mockReturnValue({
-      lean: vi.fn().mockResolvedValue({ _id: "acc-1" }),
+      session: vi.fn().mockReturnValue({
+        lean: vi.fn().mockResolvedValue({ _id: "acc-1" }),
+      }),
     });
 
     await deleteAccommodation({

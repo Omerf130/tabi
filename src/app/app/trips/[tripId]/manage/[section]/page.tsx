@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { listAccommodationsForTripSettings } from "@/features/accommodations/queries";
+import { prepareEntityCostFormContext } from "@/features/finance/linked-expense-queries";
 import { TripAccommodationSettings } from "@/features/accommodations/TripAccommodationSettings";
 import { TripDocumentSettings } from "@/features/documents/TripDocumentSettings";
 import {
@@ -78,7 +79,10 @@ export default async function TripManageSectionPage({
       );
 
     case "accommodations": {
-      const accommodations = await listAccommodationsForTripSettings(trip.id);
+      const [accommodations, financeContext] = await Promise.all([
+        listAccommodationsForTripSettings(trip.id),
+        prepareEntityCostFormContext(trip.id),
+      ]);
       return (
         <TripAccommodationSettings
           tripId={trip.id}
@@ -86,6 +90,8 @@ export default async function TripManageSectionPage({
           endDate={trip.endDate}
           accommodations={accommodations}
           variant="workspace"
+          financeBaseCurrency={financeContext.baseCurrency}
+          currencies={financeContext.currencies}
         />
       );
     }

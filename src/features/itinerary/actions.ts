@@ -19,6 +19,16 @@ import {
   updateActivitySchema,
 } from "./schemas";
 import { updateActivity } from "./update-activity";
+import {
+  parseActivityEntityCostFromFormData,
+  type ParsedEntityCost,
+} from "@/features/finance/entity-cost-schema";
+import type { ActivityCostInput } from "./create-activity";
+import {
+  FinanceExpenseValidationError,
+  FrankfurterRequestError,
+} from "@/features/finance/finance-expense-domain";
+import { revalidateFinancePaths } from "@/features/finance/revalidation";
 import { revalidateItineraryPaths } from "./revalidation";
 
 export type ActivityFieldErrors = {
@@ -40,6 +50,16 @@ export type ActivityActionState = {
   error?: string;
   fieldErrors?: ActivityFieldErrors;
 };
+
+function toActivityCostInput(
+  value: Extract<ParsedEntityCost, { hasCost: true }>,
+): ActivityCostInput {
+  return {
+    amount: value.amount,
+    currency: value.currency,
+    category: value.category ?? "activities",
+  };
+}
 
 function mapActivityFieldErrors(error: {
   issues: readonly { path: readonly PropertyKey[] }[];
@@ -75,10 +95,20 @@ export async function createActivityAction(
     return { fieldErrors: mapActivityFieldErrors(parsed.error) };
   }
 
+  const costParsed = parseActivityEntityCostFromFormData(formData);
+  if (!costParsed.ok) {
+    return { error: costParsed.error };
+  }
+
   try {
     const trip = await requireTripOwner(parsed.data.tripId);
-    const activityId = await createActivity(trip, parsed.data);
+    const activityId = await createActivity(
+      trip,
+      parsed.data,
+      costParsed.value.hasCost ? toActivityCostInput(costParsed.value) : null,
+    );
     revalidateItineraryPaths(trip.id, [parsed.data.date]);
+    revalidateFinancePaths(trip.id);
     return {
       ok: true,
       date: parsed.data.date,
@@ -87,6 +117,12 @@ export async function createActivityAction(
   } catch (error) {
     if (error instanceof ActivityDateOutOfRangeError) {
       return { fieldErrors: { date: ACTIVITY_MESSAGES.dateOutOfRange } };
+    }
+    if (error instanceof FinanceExpenseValidationError) {
+      return { error: error.message };
+    }
+    if (error instanceof FrankfurterRequestError) {
+      return { error: ACTIVITY_MESSAGES.generic };
     }
     return { error: ACTIVITY_MESSAGES.generic };
   }
@@ -108,6 +144,13 @@ export async function updateActivityAction(
     return { fieldErrors: mapActivityFieldErrors(parsed.error) };
   }
 
+  const costSync = formData.has("costAmount")
+    ? parseActivityEntityCostFromFormData(formData)
+    : null;
+  if (costSync && !costSync.ok) {
+    return { error: costSync.error };
+  }
+
   try {
     const trip = await requireTripOwner(parsed.data.tripId);
     const existing = await getActivityForTrip(trip.id, parsed.data.activityId);
@@ -116,11 +159,22 @@ export async function updateActivityAction(
     }
 
     const previousDate = existing.date;
-    const date = await updateActivity(trip, parsed.data);
+    const date = await updateActivity(
+      trip,
+      parsed.data,
+      costSync
+        ? costSync.value.hasCost
+          ? toActivityCostInput(costSync.value)
+          : null
+        : undefined,
+    );
     revalidateItineraryPaths(
       trip.id,
       previousDate !== date ? [date, previousDate] : [date],
     );
+    if (costSync) {
+      revalidateFinancePaths(trip.id);
+    }
     return {
       ok: true,
       date,
@@ -133,6 +187,12 @@ export async function updateActivityAction(
     }
     if (error instanceof ActivityDateOutOfRangeError) {
       return { fieldErrors: { date: ACTIVITY_MESSAGES.dateOutOfRange } };
+    }
+    if (error instanceof FinanceExpenseValidationError) {
+      return { error: error.message };
+    }
+    if (error instanceof FrankfurterRequestError) {
+      return { error: ACTIVITY_MESSAGES.generic };
     }
     return { error: ACTIVITY_MESSAGES.generic };
   }
@@ -157,6 +217,7 @@ export async function deleteActivityAction(
     await requireTripOwner(parsed.data.tripId);
     const date = await deleteActivity(parsed.data);
     revalidateItineraryPaths(parsed.data.tripId, [date]);
+    revalidateFinancePaths(parsed.data.tripId);
     return { ok: true, date, activityId: parsed.data.activityId };
   } catch (error) {
     if (error instanceof ActivityNotFoundError) {

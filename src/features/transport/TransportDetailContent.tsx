@@ -142,6 +142,12 @@ export function TransportDetailContent({
               {transport.arrivalTimeLabel} ({transport.arrivalTimezoneLabel})
             </dd>
           </div>
+          {transport.linkedCost ? (
+            <div className={styles.detailItem}>
+              <dt>עלות</dt>
+              <dd>{transport.linkedCost.label}</dd>
+            </div>
+          ) : null}
           <DetailRow label="מספר הזמנה" value={transport.bookingReference} />
           <DetailRow label="הערות" value={transport.notes} />
           <FlightDetails transport={transport} />

@@ -29,6 +29,7 @@ import {
 } from "./build-home-itinerary-preview";
 import type { HomePreparationViewModel } from "./build-home-preparation";
 import { resolveNowAndNextUp } from "./resolve-now-and-next-up";
+import type { AfterTripFinanceRecapViewModel } from "@/features/finance/types";
 import type {
   TripHomeActiveViewModel,
   TripHomeBeforeJourneyViewModel,
@@ -72,6 +73,7 @@ type BuildTripHomeViewModelInput = {
   weather?: TripHomeHeroViewModel["weather"];
   todayJapan?: string;
   nowJapanTime?: string;
+  financeRecap?: AfterTripFinanceRecapViewModel;
 };
 
 function formatCountdownLabel(daysUntilStart: number): string {
@@ -254,6 +256,10 @@ export function buildTripHomeViewModel(
   if (phase === "completed") {
     const destination = trip.destination ?? null;
 
+    if (!input.financeRecap) {
+      throw new Error("Completed trip home requires financeRecap");
+    }
+
     return {
       phase: "completed",
       hero: {
@@ -272,6 +278,7 @@ export function buildTripHomeViewModel(
         title: "זיכרונות",
         description: "הרגעים מהטיול יחכו לך כאן.",
       },
+      financeRecap: input.financeRecap,
       itineraryRevisit: {
         href: `/app/trips/${trip.id}/itinerary`,
         title: "המסלול של הטיול",

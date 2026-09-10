@@ -48,6 +48,8 @@ export function TripHomeContent({ model }: TripHomeContentProps) {
 
           memories={model.memories}
 
+          financeRecap={model.financeRecap}
+
           itineraryRevisit={model.itineraryRevisit}
 
         />

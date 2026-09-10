@@ -31,6 +31,7 @@ import { getTripPhase } from "@/features/trips/trip-phase";
 import { formatTemperatureC } from "@/features/weather/format-weather";
 import { getWeatherSnapshot } from "@/features/weather/queries";
 import { WeatherApiRequestError } from "@/features/weather/weatherapi.server";
+import { prepareAfterTripFinanceRecap } from "@/features/finance/queries";
 import { buildTripHomeViewModel } from "./build-trip-home-view-model";
 import { buildDayOneHomePreview } from "./build-day-one-home-preview";
 import { resolveTripHomePreviewContext } from "./resolve-trip-home-preview-context";
@@ -150,10 +151,12 @@ export async function prepareTripHomePage(
   }
 
   if (phase === "completed") {
+    const financeRecap = await prepareAfterTripFinanceRecap(trip.id);
     return buildTripHomeViewModel({
       trip,
       todayJapan,
       nowJapanTime,
+      financeRecap,
     });
   }
 

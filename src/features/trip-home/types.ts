@@ -1,3 +1,4 @@
+import type { AfterTripFinanceRecapViewModel } from "@/features/finance/types";
 import type { PlacePhotoPresentation } from "@/features/place-images/types";
 import type { UpcomingHomeReminderItem } from "@/features/trips/reminders/select-upcoming-home-reminders";
 import type { TripPhase } from "@/features/trips/trip-phase";
@@ -124,6 +125,7 @@ export type TripHomeCompletedViewModel = {
   phase: "completed";
   hero: TripHomeHeroViewModel;
   memories: TripHomeMemoriesEntry;
+  financeRecap: AfterTripFinanceRecapViewModel;
   itineraryRevisit: TripHomeItineraryRevisit;
 };
 

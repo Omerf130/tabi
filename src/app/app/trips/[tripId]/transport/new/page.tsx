@@ -10,6 +10,7 @@ import { parseTransportTypeParam } from "@/features/transport/schemas";
 import { createEmptyTransportFormValues } from "@/features/transport/transport-form-defaults";
 import { TransportForm } from "@/features/transport/TransportForm.client";
 import { TRANSPORT_TYPE_SINGULAR_LABELS } from "@/features/transport/transport-types";
+import { prepareEntityCostFormContext } from "@/features/finance/linked-expense-queries";
 import { requireTripOwner } from "@/features/trips/authorization";
 
 export async function generateMetadata({
@@ -61,6 +62,7 @@ export default async function NewTransportPage({
     ? buildItineraryDayHref(tripId, resolvedFromDay)
     : undefined;
   const backHref = successHref ?? `/app/trips/${tripId}/transport`;
+  const financeContext = await prepareEntityCostFormContext(trip.id);
 
   return (
     <>
@@ -76,6 +78,8 @@ export default async function NewTransportPage({
           defaultValues={defaultValues}
           mode="create"
           successHref={successHref}
+          financeBaseCurrency={financeContext.baseCurrency}
+          currencies={financeContext.currencies}
         />
       </AppPage>
     </>

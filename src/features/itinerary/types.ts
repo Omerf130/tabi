@@ -4,6 +4,8 @@ import type { ItineraryDayItem } from "@/features/transport/merge-itinerary-day-
 import type { TransportItineraryItemViewModel } from "@/features/transport/types";
 import type { TripReminderViewModel } from "@/features/trips/reminders/types";
 import type { TripDayTemporalState } from "@/features/trips/trip-days";
+import type { EntityLinkedCostViewModel } from "@/features/finance/types";
+import type { CurrencyOption } from "@/features/currency/types";
 import type { ActivityType } from "./activity-types";
 import type { ActivityPlaceSource } from "./activity-place-types";
 
@@ -27,6 +29,7 @@ export type ActivityViewModel = {
   longitude?: number;
   googleMapsUrl?: string;
   notes?: string;
+  linkedCost?: EntityLinkedCostViewModel;
 };
 
 export type TripDayViewModel = {
@@ -120,4 +123,6 @@ export type DayWorkspaceViewModel = {
   completedReminders: TripReminderViewModel[];
   tripDates: string[];
   isOwner: boolean;
+  financeBaseCurrency: string;
+  currencies: readonly CurrencyOption[];
 };

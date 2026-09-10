@@ -1,5 +1,6 @@
 import "server-only";
 
+import { attachLinkedCostsToIds } from "@/features/finance/linked-expense-queries";
 import { connectDb } from "@/lib/db/connect";
 import { Accommodation } from "@/models/Accommodation";
 import {
@@ -88,9 +89,10 @@ export async function listAccommodationsForTrip(
     .sort({ checkInDate: 1, _id: 1 })
     .lean();
 
-  return Promise.all(
+  const viewModels = await Promise.all(
     accommodations.map((accommodation) => toAccommodationViewModel(accommodation)),
   );
+  return attachLinkedCostsToIds(tripId, "accommodation", viewModels);
 }
 
 export async function listAccommodationsForTripSettings(
@@ -101,11 +103,12 @@ export async function listAccommodationsForTripSettings(
     .sort({ checkInDate: 1, _id: 1 })
     .lean();
 
-  return Promise.all(
+  const viewModels = await Promise.all(
     accommodations.map((accommodation) =>
       toAccommodationSettingsViewModel(accommodation),
     ),
   );
+  return attachLinkedCostsToIds(tripId, "accommodation", viewModels);
 }
 
 export async function getAccommodationForTrip(
@@ -122,7 +125,9 @@ export async function getAccommodationForTrip(
     return null;
   }
 
-  return toAccommodationViewModel(accommodation);
+  const viewModel = await toAccommodationViewModel(accommodation);
+  const [withCost] = await attachLinkedCostsToIds(tripId, "accommodation", [viewModel]);
+  return withCost;
 }
 
 export async function getAccommodationForTripSettings(

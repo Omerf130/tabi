@@ -70,6 +70,9 @@ export function ActivityRow({ activity, isOwner, actions }: ActivityRowProps) {
                     ) : null}
                   </div>
                 ) : null}
+                {activity.linkedCost ? (
+                  <p className={styles.activityNotes}>{activity.linkedCost.label}</p>
+                ) : null}
                 {activity.notes ? (
                   <p className={styles.activityNotes} dir="auto">
                     {activity.notes}

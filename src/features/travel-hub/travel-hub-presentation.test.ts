@@ -10,7 +10,7 @@ import { buildAccommodationListHref } from "@/features/accommodations/constants"
 
 import { getActiveNavSection } from "@/features/app-shell/navigation";
 
-import { FINANCE_PREVIEW_COPY } from "./FinancePreviewCard";
+import { buildFinanceHref } from "@/features/finance/constants";
 
 import { buildTravelHubViewModel } from "./build-travel-hub-view-model";
 
@@ -19,6 +19,17 @@ import { TRAVEL_TOOLS } from "./constants";
 
 
 const tripId = "507f1f77bcf86cd799439011";
+
+const emptyFinance = {
+  href: buildFinanceHref(tripId),
+  hasBudget: false,
+  hasExpenses: false,
+  baseCurrency: "ILS",
+  totalExpenses: 0,
+  budgetAmount: null,
+  remainingBudget: null,
+  percentConsumed: null,
+};
 
 const featureRoot = dirname(fileURLToPath(import.meta.url));
 
@@ -64,35 +75,19 @@ describe("travel hub presentation", () => {
 
 
 
-  it("includes finance preview copy with a בקרוב badge and no fake amounts", () => {
+  it("renders live finance summary card linked to Finance route", () => {
+    const source = readFileSync(join(featureRoot, "FinanceSummaryCard.tsx"), "utf8");
 
-    const joined = Object.values(FINANCE_PREVIEW_COPY).join(" ");
-
-    expect(joined).toContain("בקרוב");
-
-    expect(joined).not.toMatch(/₪|\d/);
-
+    expect(source).toContain("<Link");
+    expect(source).toContain("finance.href");
+    expect(source).not.toContain("בקרוב");
   });
 
-
-
-  it("renders finance preview as non-interactive informational content", () => {
-
-    const source = readFileSync(join(featureRoot, "FinancePreviewCard.tsx"), "utf8");
-
-    expect(source).not.toMatch(/<Link|<a |<button|href=/);
-
-    expect(source).toContain("<article");
-
-  });
-
-
-
-  it("does not introduce finance routes or apis", () => {
+  it("keeps finance out of the travel tools grid while the summary card remains", () => {
+    expect(TRAVEL_TOOLS.map((tool) => tool.id)).not.toContain("finance");
     expect(
       existsSync(join(process.cwd(), "src/app/app/trips/[tripId]/finance")),
-    ).toBe(false);
-    expect(TRAVEL_TOOLS.map((tool) => tool.id)).not.toContain("finance");
+    ).toBe(true);
   });
 
 
@@ -109,6 +104,7 @@ describe("travel hub presentation", () => {
       accommodations: [],
       lists: [],
       todayJapan: "2026-10-01",
+      finance: emptyFinance,
     });
 
     const hrefById = Object.fromEntries(model.tools.map((tool) => [tool.id, tool.href]));
@@ -162,6 +158,7 @@ describe("travel hub presentation", () => {
       ],
       lists: [],
       todayJapan: "2026-10-01",
+      finance: emptyFinance,
     });
 
 
@@ -199,6 +196,7 @@ describe("travel hub presentation", () => {
         },
       ],
       todayJapan: "2026-10-01",
+      finance: emptyFinance,
     });
 
 
@@ -224,6 +222,7 @@ describe("travel hub presentation", () => {
       accommodations: [],
       lists: [],
       todayJapan: "2026-12-01",
+      finance: emptyFinance,
     });
 
     expect(model.myTrip.href).toBe(`/app/trips/${tripId}`);

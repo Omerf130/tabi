@@ -120,6 +120,7 @@ export function toTransportCardViewModel(
     dateLabel: formatCalendarDateDisplay(record.departure.date),
     timeRangeLabel: formatTransportTimeRangeLabel(record.departure, record.arrival),
     detailHref: buildTransportDetailHref(tripId, record.id),
+    linkedCost: record.linkedCost,
   };
 }
 
@@ -139,6 +140,7 @@ export function toTransportItineraryItemViewModel(
     timeLabel: formatTransportTimeRangeLabel(record.departure, record.arrival),
     departureTime: record.departure.time,
     detailHref: buildTransportDetailHref(tripId, record.id),
+    linkedCost: record.linkedCost,
   };
 }
 

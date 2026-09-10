@@ -61,7 +61,8 @@ export function getActiveNavSection(
     segment === "weather" ||
     segment === "transport" ||
     segment === "language" ||
-    segment === "emergency"
+    segment === "emergency" ||
+    segment === "finance"
   ) {
     return "more";
   }

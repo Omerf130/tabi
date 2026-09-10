@@ -1,7 +1,10 @@
 import "server-only";
 
 import mongoose from "mongoose";
+import type { ActivityCostCategory } from "@/features/finance/entity-cost-schema";
+import { syncLinkedTripExpense } from "@/features/finance/finance-linked-expense-domain";
 import { connectDb } from "@/lib/db/connect";
+import { withTransaction } from "@/lib/db/transaction";
 import { Activity } from "@/models/Activity";
 import { isDateWithinTrip } from "@/features/trips/trip-days";
 import { getNextActivityOrder } from "./activity-order";
@@ -42,29 +45,57 @@ function normalizeCoreFields(input: {
   };
 }
 
+export type ActivityCostInput = {
+  amount: number;
+  currency: string;
+  category: ActivityCostCategory;
+};
+
 export async function createActivity(
   trip: TripDateRange & { id: string },
   input: CreateActivityInput,
+  cost?: ActivityCostInput | null,
 ): Promise<string> {
   assertDateWithinTrip(trip, input.date);
   const coreFields = normalizeCoreFields(input);
   const locationFields = toActivityDocumentFields(input);
 
-  await connectDb();
-  const dayActivities = await listActivitiesForTripDay(trip.id, input.date);
-  const order = getNextActivityOrder(dayActivities);
+  return withTransaction(async (session) => {
+    await connectDb();
+    const dayActivities = await listActivitiesForTripDay(trip.id, input.date);
+    const order = getNextActivityOrder(dayActivities);
 
-  const activity = await Activity.create({
-    tripId: new mongoose.Types.ObjectId(trip.id),
-    date: input.date,
-    title: input.title,
-    type: input.type,
-    order,
-    ...coreFields,
-    ...locationFields,
+    const [activity] = await Activity.create(
+      [
+        {
+          tripId: new mongoose.Types.ObjectId(trip.id),
+          date: input.date,
+          title: input.title,
+          type: input.type,
+          order,
+          ...coreFields,
+          ...locationFields,
+        },
+      ],
+      { session },
+    );
+
+    const activityId = activity._id.toString();
+
+    if (cost) {
+      await syncLinkedTripExpense({
+        tripId: trip.id,
+        sourceType: "activity",
+        sourceId: activityId,
+        category: cost.category,
+        expenseDate: input.date,
+        cost: { amount: cost.amount, currency: cost.currency },
+        session,
+      });
+    }
+
+    return activityId;
   });
-
-  return activity._id.toString();
 }
 
 export async function getActivityDateForTrip(
