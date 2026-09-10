@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { ItineraryPageContent } from "@/features/itinerary/ItineraryPageContent";
 import {
   buildItineraryDayHref,
   parseItineraryDateParam,
 } from "@/features/itinerary/routes";
-import { TripHeader } from "@/features/app-shell/TripHeader";
+import { resolveInitialItineraryDay } from "@/features/itinerary/resolve-initial-itinerary-day";
 import { requireTripMember } from "@/features/trips/authorization";
 
 export async function generateMetadata({
@@ -29,17 +28,13 @@ export default async function ItineraryPage({
   const { date } = await searchParams;
   const trip = await requireTripMember(tripId);
 
-  if (date) {
-    const resolvedDate = parseItineraryDateParam(date, trip.startDate, trip.endDate);
-    if (resolvedDate) {
-      redirect(buildItineraryDayHref(tripId, resolvedDate));
-    }
-  }
-
-  return (
-    <>
-      <TripHeader title="מסלול" tripName={trip.name} showTripSwitch />
-      <ItineraryPageContent trip={trip} />
-    </>
+  const requestedDate = date
+    ? parseItineraryDateParam(date, trip.startDate, trip.endDate)
+    : null;
+  const canonicalDate = resolveInitialItineraryDay(
+    trip,
+    requestedDate,
   );
+
+  redirect(buildItineraryDayHref(tripId, canonicalDate));
 }

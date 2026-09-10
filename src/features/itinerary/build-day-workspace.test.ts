@@ -113,6 +113,8 @@ describe("buildDayWorkspaceViewModel", () => {
     expect(day.completedReminders).toHaveLength(1);
     expect(day.documents).toHaveLength(1);
     expect(day.accommodations).toHaveLength(1);
+    expect(day.dayHeader.dayNumber).toBe(2);
+    expect(day.dayHeader.weekdayLabel).toBeTruthy();
   });
 
   it("preserves mergeItineraryDayItems transport insertion behavior", () => {

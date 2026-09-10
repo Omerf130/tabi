@@ -11,6 +11,7 @@ import {
 } from "@/features/places/constants";
 import { isValidPlaceSessionToken } from "@/features/places/placeSession";
 import { usePlaceAutocompleteSearch } from "@/features/places/use-place-autocomplete-search";
+import { IconCheck, IconMapPin, IconSearch } from "@/components/ui/icons";
 import { GooglePlacesAttribution } from "./GooglePlacesAttribution";
 import styles from "./placeSearch.module.scss";
 
@@ -28,6 +29,8 @@ type PlaceSearchFieldProps = {
   initialSelection?: PlaceSearchSelection | null;
   onSelectionChange: (selection: PlaceSearchSelection | null) => void;
   disabled?: boolean;
+  presentation?: "default" | "planner";
+  hideLabel?: boolean;
 };
 
 export function PlaceSearchField({
@@ -42,7 +45,10 @@ export function PlaceSearchField({
   initialSelection = null,
   onSelectionChange,
   disabled = false,
+  presentation = "default",
+  hideLabel = false,
 }: PlaceSearchFieldProps) {
+  const isPlanner = presentation === "planner";
   const generatedId = useId();
   const fieldId = inputId ?? generatedId;
   const listboxId = `${fieldId}-suggestions`;
@@ -167,10 +173,49 @@ export function PlaceSearchField({
   }
 
   if (selection) {
+    if (isPlanner) {
+      return (
+        <div className={styles.plannerSelected}>
+          <div className={styles.plannerSelectedRow}>
+            <IconCheck className={styles.plannerSelectedCheck} aria-hidden />
+            <div className={styles.plannerSelectedText}>
+              {selectedPreviewLabel ? (
+                <p className={styles.plannerSelectedHint}>{selectedPreviewLabel}</p>
+              ) : null}
+              <p className={styles.plannerSelectedName} dir="auto">
+                {selection.primaryText}
+              </p>
+              {selection.secondaryText ? (
+                <p className={styles.plannerSelectedAddress} dir="auto">
+                  {selection.secondaryText}
+                </p>
+              ) : null}
+            </div>
+            {!disabled ? (
+              <button
+                type="button"
+                className={styles.plannerChangeButton}
+                onClick={clearSelection}
+              >
+                שינוי מקום
+              </button>
+            ) : null}
+          </div>
+          <GooglePlacesAttribution />
+          {includeHiddenFields ? (
+            <>
+              <input type="hidden" name="placeSource" value="google" />
+              <input type="hidden" name="googlePlaceId" value={selection.placeId} />
+            </>
+          ) : null}
+        </div>
+      );
+    }
+
     return (
       <div className={styles.selectedCard}>
         <div className={styles.selectedHeader}>
-          <div>
+          <div className={styles.selectedBody}>
             {selectedPreviewLabel ? (
               <p className={styles.selectedPreviewLabel}>{selectedPreviewLabel}</p>
             ) : null}
@@ -212,11 +257,90 @@ export function PlaceSearchField({
   const combinedStatus = resolveStatus ?? status;
   const combinedError = resolveError ?? error;
 
+  if (isPlanner) {
+    return (
+      <div className={styles.plannerSearch}>
+        {!hideLabel ? (
+          <label className={styles.labelPlanner} htmlFor={fieldId}>
+            {label}
+          </label>
+        ) : null}
+        <div className={styles.plannerSearchBar}>
+          <IconSearch className={styles.plannerSearchIcon} aria-hidden />
+          <input
+            id={fieldId}
+            className={styles.plannerSearchInput}
+            type="search"
+            value={query}
+            onChange={(event) => handleQueryChange(event.target.value)}
+            onKeyDown={handleInputKeyDown}
+            placeholder={placeholder}
+            autoComplete="off"
+            disabled={disabled}
+            dir="auto"
+            role="combobox"
+            aria-expanded={showSuggestions}
+            aria-controls={showSuggestions ? listboxId : undefined}
+            aria-activedescendant={activeDescendantId}
+            aria-autocomplete="list"
+            aria-busy={isLoading || Boolean(resolveStatus)}
+          />
+          {isLoading ? <span className={styles.plannerSearchSpinner} aria-hidden /> : null}
+        </div>
+        {showSuggestions ? (
+          <ul
+            className={styles.plannerResults}
+            id={listboxId}
+            role="listbox"
+            aria-label={label}
+          >
+            {suggestions.map((suggestion, index) => (
+              <li key={suggestion.placeId} role="presentation">
+                <button
+                  type="button"
+                  id={`${listboxId}-option-${index}`}
+                  className={styles.plannerResultRow}
+                  data-active={index === activeIndex ? "true" : undefined}
+                  onClick={() => void selectSuggestion(suggestion)}
+                  role="option"
+                  aria-selected={index === activeIndex}
+                >
+                  <IconMapPin className={styles.plannerResultIcon} aria-hidden />
+                  <span className={styles.plannerResultText}>
+                    <span className={styles.plannerResultName} dir="auto">
+                      {suggestion.primaryText}
+                    </span>
+                    {suggestion.secondaryText ? (
+                      <span className={styles.plannerResultAddress} dir="auto">
+                        {suggestion.secondaryText}
+                      </span>
+                    ) : null}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+        {combinedStatus ? <p className={styles.status}>{combinedStatus}</p> : null}
+        {combinedError ? (
+          <p className={`${styles.status} ${styles.statusError}`} role="alert">
+            {combinedError}
+          </p>
+        ) : null}
+        {showSuggestions || trimmedQuery.length >= PLACES_AUTOCOMPLETE_MIN_INPUT_LENGTH ? (
+          <GooglePlacesAttribution />
+        ) : null}
+      </div>
+    );
+  }
+
   return (
     <div className={styles.searchField}>
-      <label className={styles.label} htmlFor={fieldId}>
-        {label}
-      </label>
+      {!hideLabel ? (
+        <label className={styles.label} htmlFor={fieldId}>
+          {label}
+        </label>
+      ) : null}
       <div className={styles.inputWrap}>
         <input
           id={fieldId}

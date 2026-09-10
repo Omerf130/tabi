@@ -16,6 +16,7 @@ type EntityCostFieldsProps = {
   currencies: readonly CurrencyOption[];
   linkedCost?: EntityLinkedCostViewModel | null;
   showCategory?: boolean;
+  showHelper?: boolean;
   idPrefix?: string;
 };
 
@@ -24,6 +25,7 @@ export function EntityCostFields({
   currencies,
   linkedCost,
   showCategory = false,
+  showHelper = true,
   idPrefix = "entity-cost",
 }: EntityCostFieldsProps) {
   const [currency, setCurrency] = useState(linkedCost?.currency ?? baseCurrency);
@@ -40,7 +42,9 @@ export function EntityCostFields({
       <h3 id={`${idPrefix}-title`} className={styles.title}>
         {FINANCE_MESSAGES.entityCostSectionTitle}
       </h3>
-      <p className={styles.helper}>{FINANCE_MESSAGES.entityCostHelper}</p>
+      {showHelper ? (
+        <p className={styles.helper}>{FINANCE_MESSAGES.entityCostHelper}</p>
+      ) : null}
 
       <input type="hidden" name="costCurrency" value={currency} />
       {showCategory ? <input type="hidden" name="costCategory" value={category} /> : null}

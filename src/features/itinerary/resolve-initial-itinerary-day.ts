@@ -21,7 +21,7 @@ export function resolveInitialItineraryDay(
   }
 
   if (phase === "completed") {
-    return trip.endDate;
+    return trip.startDate;
   }
 
   if (isDateWithinTrip(trip.startDate, trip.endDate, todayJapan)) {

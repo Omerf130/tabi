@@ -1,6 +1,11 @@
 import type { TransportType } from "@/features/transport/transport-types";
 
-export type DayAddMenuAction = "activity" | "transport" | "document" | "reminder";
+export type DayAddMenuAction =
+  | "activity"
+  | "transport"
+  | "accommodation"
+  | "document"
+  | "reminder";
 
 export type DayActionState =
   | { kind: "closed" }
@@ -11,6 +16,7 @@ export type DayActionState =
   | { kind: "transport-type" }
   | { kind: "transport-create"; transportType: TransportType }
   | { kind: "transport-edit"; transportId: string }
+  | { kind: "accommodation-create" }
   | { kind: "document-create" }
   | { kind: "reminder-create" }
   | { kind: "reminder-edit"; reminderId: string };

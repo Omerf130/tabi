@@ -1,16 +1,15 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { PLACES_ACTIVITY_PRIMARY_TYPES } from "@/features/places/constants";
+import addItemStyles from "./AddItemFlow.module.scss";
 import {
   PlaceSearchField,
   type PlaceSearchSelection,
 } from "@/features/places/PlaceSearchField";
 import {
   clearGoogleActivityFields,
-  isGoogleBackedActivity,
   toActivityFormValuesFromGoogleSelection,
   toActivityPlaceSearchSelectionFromFormValues,
 } from "./activity-place-domain";
@@ -18,26 +17,33 @@ import type { ActivityFieldErrors } from "./actions";
 import type { ActivityFormValues } from "./types";
 import styles from "./ActivityForm.module.scss";
 
+export type ActivityPlaceMode = "google" | "manual";
+
 type ActivityLocationSectionProps = {
   tripId: string;
   defaultValues: ActivityFormValues;
+  placeMode: ActivityPlaceMode;
   fieldErrors?: ActivityFieldErrors;
   onDirtyChange?: () => void;
+  onGoogleSelectionChange?: (input: {
+    hasSelection: boolean;
+    locationName?: string;
+  }) => void;
+  plannerPresentation?: boolean;
 };
 
 export function ActivityLocationSection({
   tripId,
   defaultValues,
+  placeMode,
   fieldErrors,
   onDirtyChange,
+  onGoogleSelectionChange,
+  plannerPresentation = false,
 }: ActivityLocationSectionProps) {
   const initialGoogleSelection =
     toActivityPlaceSearchSelectionFromFormValues(defaultValues);
 
-  const [manualMode, setManualMode] = useState(
-    defaultValues.placeSource !== "google" || !defaultValues.googlePlaceId,
-  );
-  const [googleSearchKey, setGoogleSearchKey] = useState(0);
   const [googleFields, setGoogleFields] = useState<
     Pick<
       ActivityFormValues,
@@ -62,39 +68,34 @@ export function ActivityLocationSection({
       onDirtyChange?.();
       if (!selection) {
         setGoogleFields(clearGoogleActivityFields());
+        onGoogleSelectionChange?.({ hasSelection: false });
         return;
       }
-      setGoogleFields(toActivityFormValuesFromGoogleSelection(selection));
+      const fields = toActivityFormValuesFromGoogleSelection(selection);
+      setGoogleFields(fields);
+      onGoogleSelectionChange?.({
+        hasSelection: true,
+        locationName: fields.locationName,
+      });
     },
-    [onDirtyChange],
+    [onDirtyChange, onGoogleSelectionChange],
   );
 
-  const switchToManual = () => {
-    onDirtyChange?.();
-    setManualMode(true);
-    setGoogleFields(clearGoogleActivityFields());
-  };
-
-  const switchToGoogle = () => {
-    onDirtyChange?.();
-    setManualMode(false);
-    setGoogleSearchKey((current) => current + 1);
-  };
-
-  if (!manualMode) {
-    return (
-      <div className={styles.locationSection}>
+  if (placeMode === "google") {
+    const googleFieldsBlock = (
+      <>
         <PlaceSearchField
-          key={`activity-place-search-${googleSearchKey}`}
           tripId={tripId}
           inputId="activity-place-search"
           label="חיפוש מקום"
-          placeholder="Nishiki Market..."
+          placeholder="חיפוש מקום..."
           includedPrimaryTypes={PLACES_ACTIVITY_PRIMARY_TYPES}
           resolvePurpose="activity"
           includeHiddenFields={false}
           initialSelection={initialGoogleSelection}
           onSelectionChange={handleGoogleSelectionChange}
+          presentation={plannerPresentation ? "planner" : "default"}
+          hideLabel={plannerPresentation}
         />
         <input type="hidden" name="placeSource" value="google" />
         <input type="hidden" name="googlePlaceId" value={googleFields.googlePlaceId} />
@@ -105,14 +106,67 @@ export function ActivityLocationSection({
         <input type="hidden" name="latitude" value={googleFields.latitude} />
         <input type="hidden" name="longitude" value={googleFields.longitude} />
         <input type="hidden" name="googleMapsUrl" value={googleFields.googleMapsUrl} />
+      </>
+    );
+
+    if (plannerPresentation) {
+      return (
+        <>
+          {googleFieldsBlock}
+          {fieldErrors?.locationName ? (
+            <p className={addItemStyles.overlayError} role="alert">
+              {fieldErrors.locationName}
+            </p>
+          ) : null}
+        </>
+      );
+    }
+
+    return (
+      <div className={styles.locationSection}>
+        {googleFieldsBlock}
         {fieldErrors?.locationName ? (
           <p className={styles.formError} role="alert">
             {fieldErrors.locationName}
           </p>
         ) : null}
-        <button type="button" className={styles.manualToggle} onClick={switchToManual}>
-          הזנה ידנית
-        </button>
+      </div>
+    );
+  }
+
+  if (plannerPresentation) {
+    return (
+      <div className={addItemStyles.blockField}>
+        <input type="hidden" name="placeSource" value="manual" />
+        <label className={addItemStyles.pairLabel} htmlFor="locationName">
+          שם המקום
+        </label>
+        <input
+          id="locationName"
+          className={addItemStyles.blockInput}
+          name="locationName"
+          defaultValue={defaultValues.locationName}
+          maxLength={200}
+          dir="auto"
+          aria-invalid={fieldErrors?.locationName ? true : undefined}
+        />
+        <label className={addItemStyles.pairLabel} htmlFor="address">
+          כתובת
+        </label>
+        <input
+          id="address"
+          className={addItemStyles.blockInput}
+          name="address"
+          defaultValue={defaultValues.address}
+          maxLength={500}
+          dir="auto"
+          aria-invalid={fieldErrors?.address ? true : undefined}
+        />
+        {fieldErrors?.locationName || fieldErrors?.address ? (
+          <p className={addItemStyles.overlayError} role="alert">
+            {fieldErrors.locationName ?? fieldErrors.address}
+          </p>
+        ) : null}
       </div>
     );
   }
@@ -120,20 +174,23 @@ export function ActivityLocationSection({
   return (
     <div className={styles.locationSection}>
       <input type="hidden" name="placeSource" value="manual" />
-      <Field
-        label="שם המקום"
-        htmlFor="locationName"
-        error={fieldErrors?.locationName}
-      >
+      <div className={styles.typeField}>
+        <label className={styles.fieldLabel} htmlFor="locationName">
+          שם המקום
+        </label>
         <Input
           id="locationName"
           name="locationName"
           defaultValue={defaultValues.locationName}
           maxLength={200}
+          dir="auto"
           aria-invalid={fieldErrors?.locationName ? true : undefined}
         />
-      </Field>
-      <Field label="כתובת" htmlFor="address" error={fieldErrors?.address}>
+      </div>
+      <div className={styles.typeField}>
+        <label className={styles.fieldLabel} htmlFor="address">
+          כתובת
+        </label>
         <Input
           id="address"
           name="address"
@@ -142,16 +199,12 @@ export function ActivityLocationSection({
           dir="auto"
           aria-invalid={fieldErrors?.address ? true : undefined}
         />
-      </Field>
-      {isGoogleBackedActivity(defaultValues) || defaultValues.googlePlaceId ? (
-        <button type="button" className={styles.manualToggle} onClick={switchToGoogle}>
-          חיפוש מקום ב-Google
-        </button>
-      ) : (
-        <button type="button" className={styles.manualToggle} onClick={switchToGoogle}>
-          חיפוש מקום
-        </button>
-      )}
+      </div>
+      {fieldErrors?.address ? (
+        <p className={styles.formError} role="alert">
+          {fieldErrors.address}
+        </p>
+      ) : null}
     </div>
   );
 }

@@ -2,7 +2,8 @@ import Link from "next/link";
 import { IconActivityTransport } from "@/components/ui/icons";
 import { formatEntityLinkedCostDisplay } from "@/features/finance/entity-linked-cost-presentation";
 import type { TransportItineraryItemViewModel } from "@/features/transport/types";
-import styles from "./ItineraryPage.module.scss";
+import actionStyles from "./ItineraryPage.module.scss";
+import styles from "./ItineraryExperience.module.scss";
 
 type TransportItineraryRowProps = {
   transport: TransportItineraryItemViewModel;
@@ -16,46 +17,73 @@ export function TransportItineraryRow({
   onEdit,
 }: TransportItineraryRowProps) {
   return (
-    <article className={styles.activity}>
-      <div className={styles.activityRow}>
-        <p className={styles.activityTime}>{transport.departureTime}</p>
-        <div className={styles.activityBody}>
-          <div className={styles.activityMain}>
-            <span className={styles.activityIconWrap} aria-label={transport.typeLabel}>
-              <IconActivityTransport className={styles.activityIcon} aria-hidden />
-            </span>
-            <div className={styles.activityText}>
-              <Link href={transport.detailHref} className={styles.transportRowLink}>
-                <h3 className={styles.activityTitle} dir="auto">
-                  {transport.routeLabel}
-                </h3>
-                {transport.metaLabel ? (
-                  <p className={styles.activityLocation} dir="auto">
-                    {transport.metaLabel}
-                  </p>
+    <li className={styles.timelineEntry}>
+      <time className={styles.timelineTime}>{transport.departureTime}</time>
+
+      <div className={styles.timelineTrack} aria-hidden>
+        <span className={`${styles.timelineDot} ${styles.timelineDotTransport}`} />
+      </div>
+
+      <div className={styles.timelineCardWrap}>
+        <article className={styles.timelineCard}>
+          <div className={styles.timelineCardBodyNoPhoto}>
+            <div className={styles.timelineCardContent}>
+              <div className={styles.timelineCardHeader}>
+                <div className={styles.timelineCardTitleRow}>
+                  <span
+                    className={styles.timelineCardIconWrap}
+                    data-type="transport"
+                    aria-label={transport.typeLabel}
+                  >
+                    <IconActivityTransport
+                      className={styles.timelineCardIcon}
+                      aria-hidden
+                    />
+                  </span>
+                  <Link href={transport.detailHref} className={styles.timelineCardLink}>
+                    <h3 className={styles.timelineCardTitle} dir="auto">
+                      {transport.routeLabel}
+                    </h3>
+                  </Link>
+                </div>
+                {isOwner && onEdit ? (
+                  <div className={actionStyles.activityActionsSlot}>
+                    <div className={actionStyles.activityActions}>
+                      <div className={actionStyles.activityActionRow}>
+                        <button
+                          type="button"
+                          className={actionStyles.actionLink}
+                          onClick={onEdit}
+                        >
+                          עריכה
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 ) : null}
-                {transport.linkedCost ? (
-                  <p className={styles.activityNotes}>
-                    {formatEntityLinkedCostDisplay(transport.linkedCost)}
-                  </p>
-                ) : null}
-                <p className={styles.transportTimeMeta}>{transport.timeLabel}</p>
-              </Link>
+              </div>
+
+              <p className={styles.timelineCardMeta}>{transport.typeLabel}</p>
+
+              {transport.metaLabel ? (
+                <p className={styles.timelineCardLocation} dir="auto">
+                  {transport.metaLabel}
+                </p>
+              ) : null}
+
+              {transport.timeLabel ? (
+                <p className={styles.timelineCardMeta}>{transport.timeLabel}</p>
+              ) : null}
+
+              {transport.linkedCost ? (
+                <p className={styles.timelineCardCost}>
+                  {formatEntityLinkedCostDisplay(transport.linkedCost)}
+                </p>
+              ) : null}
             </div>
           </div>
-          {isOwner && onEdit ? (
-            <div className={styles.activityActionsSlot}>
-              <div className={styles.activityActions}>
-                <div className={styles.activityActionRow}>
-                  <button type="button" className={styles.actionLink} onClick={onEdit}>
-                    עריכה
-                  </button>
-                </div>
-              </div>
-            </div>
-          ) : null}
-        </div>
+        </article>
       </div>
-    </article>
+    </li>
   );
 }

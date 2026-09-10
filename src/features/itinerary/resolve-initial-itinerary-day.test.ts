@@ -31,9 +31,9 @@ describe("resolveInitialItineraryDay", () => {
     );
   });
 
-  it("defaults to last day after trip", () => {
+  it("defaults to first day after trip", () => {
     expect(resolveInitialItineraryDay(trip, null, "2026-12-01")).toBe(
-      "2026-11-18",
+      "2026-10-25",
     );
   });
 });

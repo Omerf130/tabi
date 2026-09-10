@@ -17,7 +17,11 @@ import {
 import { resolveDocumentDayRelevance } from "./day-document-relevance";
 import { getAdjacentTripDates, buildItineraryOverviewHref } from "./routes";
 import type { CurrencyOption } from "@/features/currency/types";
-import type { ActivityViewModel, DayWorkspaceViewModel } from "./types";
+import type {
+  ActivityViewModel,
+  DayWorkspaceViewModel,
+  ItineraryDayHeaderViewModel,
+} from "./types";
 
 type BuildDayWorkspaceInput = {
   tripId: string;
@@ -33,6 +37,10 @@ type BuildDayWorkspaceInput = {
   todayJapan?: string;
   financeBaseCurrency?: string;
   currencies?: readonly CurrencyOption[];
+  dayHeader?: Pick<
+    ItineraryDayHeaderViewModel,
+    "locationLabel" | "weather" | "accommodationContext"
+  >;
 };
 
 function filterDocumentsForDay(
@@ -71,20 +79,25 @@ export function buildDayWorkspaceViewModel({
   todayJapan = getJapanCalendarDate(),
   financeBaseCurrency = "ILS",
   currencies = [],
+  dayHeader,
 }: BuildDayWorkspaceInput): DayWorkspaceViewModel {
   const tripDates = getInclusiveDateRange(startDate, endDate);
   const { previousDate, nextDate } = getAdjacentTripDates(tripDates, date);
   const items = mergeItineraryDayItems(activities, transports);
   const incompleteReminders = reminders.filter((reminder) => !reminder.isCompleted);
   const completedReminders = reminders.filter((reminder) => reminder.isCompleted);
+  const dayNumber = getTripDayNumber(startDate, endDate, date)!;
+  const weekdayLabel = formatTripDayWeekday(date);
+  const dateLabel = formatTripDayDateLabel(date);
+  const temporalState = getTripDayTemporalState(date, todayJapan);
 
   return {
     date,
-    dayNumber: getTripDayNumber(startDate, endDate, date)!,
-    weekdayLabel: formatTripDayWeekday(date),
-    dateLabel: formatTripDayDateLabel(date),
+    dayNumber,
+    weekdayLabel,
+    dateLabel,
     headingLabel: formatTripDayHeading(date),
-    temporalState: getTripDayTemporalState(date, todayJapan),
+    temporalState,
     previousDate,
     nextDate,
     overviewHref: buildItineraryOverviewHref(tripId),
@@ -99,5 +112,14 @@ export function buildDayWorkspaceViewModel({
     isOwner,
     financeBaseCurrency,
     currencies,
+    dayHeader: {
+      dayNumber,
+      weekdayLabel,
+      dateLabel,
+      isToday: temporalState === "today",
+      locationLabel: dayHeader?.locationLabel,
+      weather: dayHeader?.weather,
+      accommodationContext: dayHeader?.accommodationContext,
+    },
   };
 }

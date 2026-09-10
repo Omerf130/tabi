@@ -5,20 +5,29 @@ import { ACTIVITY_TYPE_ICONS } from "./activity-type-icons";
 import { isGoogleBackedActivity } from "./activity-place-domain";
 import { ActivityShowDriverOverlay } from "./ActivityShowDriverOverlay.client";
 import type { ActivityViewModel } from "./types";
-import styles from "./ItineraryPage.module.scss";
+import actionStyles from "./ItineraryPage.module.scss";
+import styles from "./ItineraryExperience.module.scss";
 
 type ActivityRowProps = {
   activity: ActivityViewModel;
   isOwner: boolean;
   actions?: ReactNode;
+  photoHref?: string;
 };
 
-export function ActivityRow({ activity, isOwner, actions }: ActivityRowProps) {
+export function ActivityRow({
+  activity,
+  isOwner,
+  actions,
+  photoHref,
+}: ActivityRowProps) {
   const Icon = ACTIVITY_TYPE_ICONS[activity.type];
   const [showDriver, setShowDriver] = useState(false);
+  const hasPhoto = Boolean(photoHref);
   const locationLine = [activity.locationName, activity.address]
     .filter(Boolean)
     .join(" · ");
+  const contextLine = [activity.city, activity.country].filter(Boolean).join(", ");
   const canNavigate = Boolean(activity.googleMapsUrl?.trim());
   const canShowDriver =
     isGoogleBackedActivity(activity) &&
@@ -26,32 +35,62 @@ export function ActivityRow({ activity, isOwner, actions }: ActivityRowProps) {
 
   return (
     <>
-      <article className={styles.activity}>
-        <div className={styles.activityRow}>
-          {activity.timeLabel ? (
-            <p className={styles.activityTime}>{activity.timeLabel}</p>
-          ) : (
-            <span className={styles.activityTimePlaceholder} aria-hidden />
-          )}
-          <div className={styles.activityBody}>
-            <div className={styles.activityMain}>
-              <span className={styles.activityIconWrap} aria-label={activity.typeLabel}>
-                <Icon className={styles.activityIcon} aria-hidden />
-              </span>
-              <div className={styles.activityText}>
-                <h3 className={styles.activityTitle} dir="auto">
-                  {activity.title}
-                </h3>
+      <li className={styles.timelineEntry}>
+        {activity.timeLabel ? (
+          <time className={styles.timelineTime} dateTime={activity.startTime}>
+            {activity.timeLabel}
+          </time>
+        ) : (
+          <span className={styles.timelineTimePlaceholder} aria-hidden />
+        )}
+
+        <div className={styles.timelineTrack} aria-hidden>
+          <span className={styles.timelineDot} />
+        </div>
+
+        <div className={styles.timelineCardWrap}>
+          <article className={styles.timelineCard}>
+            <div
+              className={
+                hasPhoto ? styles.timelineCardBody : styles.timelineCardBodyNoPhoto
+              }
+            >
+              <div className={styles.timelineCardContent}>
+                <div className={styles.timelineCardHeader}>
+                  <div className={styles.timelineCardTitleRow}>
+                    <span
+                      className={styles.timelineCardIconWrap}
+                      data-type={activity.type}
+                      aria-label={activity.typeLabel}
+                    >
+                      <Icon className={styles.timelineCardIcon} aria-hidden />
+                    </span>
+                    <h3 className={styles.timelineCardTitle} dir="auto">
+                      {activity.title}
+                    </h3>
+                  </div>
+                  {isOwner && actions ? (
+                    <div className={actionStyles.activityActionsSlot}>{actions}</div>
+                  ) : null}
+                </div>
+
+                {contextLine ? (
+                  <p className={styles.timelineCardMeta} dir="auto">
+                    {contextLine}
+                  </p>
+                ) : null}
+
                 {locationLine ? (
-                  <p className={styles.activityLocation} dir="auto">
+                  <p className={styles.timelineCardLocation} dir="auto">
                     {locationLine}
                   </p>
                 ) : null}
+
                 {canNavigate || canShowDriver ? (
-                  <div className={styles.activityLocationActions}>
+                  <div className={styles.timelineLocationActions}>
                     {canNavigate ? (
                       <a
-                        className={styles.activityLocationAction}
+                        className={styles.timelineLocationAction}
                         href={activity.googleMapsUrl}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -62,7 +101,7 @@ export function ActivityRow({ activity, isOwner, actions }: ActivityRowProps) {
                     {canShowDriver ? (
                       <button
                         type="button"
-                        className={styles.activityLocationAction}
+                        className={styles.timelineLocationAction}
                         onClick={() => setShowDriver(true)}
                       >
                         הצג לנהג
@@ -70,22 +109,33 @@ export function ActivityRow({ activity, isOwner, actions }: ActivityRowProps) {
                     ) : null}
                   </div>
                 ) : null}
+
                 {activity.linkedCost ? (
-                  <p className={styles.activityNotes}>{activity.linkedCost.label}</p>
+                  <p className={styles.timelineCardCost}>{activity.linkedCost.label}</p>
                 ) : null}
+
                 {activity.notes ? (
-                  <p className={styles.activityNotes} dir="auto">
+                  <p className={styles.timelineCardNotes} dir="auto">
                     {activity.notes}
                   </p>
                 ) : null}
               </div>
+
+              {hasPhoto ? (
+                <div className={styles.timelineCardThumb}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={photoHref}
+                    alt=""
+                    className={styles.timelineCardThumbImage}
+                  />
+                </div>
+              ) : null}
             </div>
-            {isOwner && actions ? (
-              <div className={styles.activityActionsSlot}>{actions}</div>
-            ) : null}
-          </div>
+          </article>
         </div>
-      </article>
+      </li>
+
       {showDriver ? (
         <ActivityShowDriverOverlay
           activity={activity}

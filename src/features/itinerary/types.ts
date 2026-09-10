@@ -104,6 +104,32 @@ export type FocusedDayCardViewModel = {
   incompleteReminderCount: number;
 };
 
+export type ItineraryHeroViewModel = {
+  title: string;
+  identityLabel: string;
+  dateRangeLabel: string;
+  heroImageSrc: string;
+};
+
+export type ItineraryDayStripItem = {
+  date: string;
+  dayNumber: number;
+  shortDateLabel: string;
+  href: string;
+  isSelected: boolean;
+  isToday: boolean;
+};
+
+export type ItineraryDayHeaderViewModel = {
+  dayNumber: number;
+  weekdayLabel: string;
+  dateLabel: string;
+  isToday: boolean;
+  locationLabel?: string;
+  weather?: FocusedDayWeatherViewModel;
+  accommodationContext?: string;
+};
+
 export type DayWorkspaceViewModel = {
   date: string;
   dayNumber: number;
@@ -125,4 +151,5 @@ export type DayWorkspaceViewModel = {
   isOwner: boolean;
   financeBaseCurrency: string;
   currencies: readonly CurrencyOption[];
+  dayHeader: ItineraryDayHeaderViewModel;
 };

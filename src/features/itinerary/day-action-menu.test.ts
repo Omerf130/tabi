@@ -5,29 +5,31 @@ import { DAY_ADD_MENU_OPTIONS, getDayActionSurfaceTitle } from "./day-action-men
 import { isDayActionOpen } from "./day-action-surface.types";
 
 describe("day add menu", () => {
-  it("offers activity, transport, document, and reminder only", () => {
+  it("offers activity, transport, accommodation, document, and reminder", () => {
     expect(DAY_ADD_MENU_OPTIONS.map((option) => option.id)).toEqual([
       "activity",
       "transport",
-      "document",
+      "accommodation",
       "reminder",
+      "document",
     ]);
     expect(DAY_ADD_MENU_OPTIONS.map((option) => option.label)).toEqual([
       "פעילות",
       "תחבורה",
-      "מסמך",
+      "מקום לינה",
       "תזכורת",
+      "מסמך",
     ]);
-    expect(DAY_ADD_MENU_OPTIONS.map((option) => option.label)).not.toContain("לינה");
   });
 
-  it("uses the owner menu title", () => {
-    expect(getDayActionSurfaceTitle({ kind: "menu" })).toBe("מה תרצה להוסיף?");
+  it("uses the planner chooser title", () => {
+    expect(getDayActionSurfaceTitle({ kind: "menu" })).toBe("הוספה ליום");
   });
 
   it("tracks open action surface states", () => {
     expect(isDayActionOpen({ kind: "closed" })).toBe(false);
     expect(isDayActionOpen({ kind: "activity-create" })).toBe(true);
+    expect(isDayActionOpen({ kind: "accommodation-create" })).toBe(true);
     expect(isDayActionOpen({ kind: "transport-create", transportType: "train" })).toBe(
       true,
     );

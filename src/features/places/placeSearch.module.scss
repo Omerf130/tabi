@@ -9,6 +9,13 @@
   font-weight: var(--font-weight-medium);
 }
 
+.labelPlanner {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a2740;
+}
+
 .inputWrap {
   position: relative;
 }
@@ -125,6 +132,11 @@
   gap: var(--space-3);
 }
 
+.selectedBody {
+  min-width: 0;
+  flex: 1;
+}
+
 .selectedPreviewLabel {
   margin: 0 0 var(--space-1);
   font-size: var(--text-caption);
@@ -170,4 +182,184 @@
 
 .hidden {
   display: none;
+}
+
+/* Add Item planner place search */
+.plannerSearch {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+}
+
+.plannerSearchBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.plannerSearchIcon {
+  position: absolute;
+  inset-inline-start: 0.875rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: #9aa8bc;
+  pointer-events: none;
+}
+
+.plannerSearchInput {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 3.125rem;
+  padding-inline: 2.625rem 0.875rem;
+  border: 1.5px solid rgb(15 23 40 / 10%);
+  border-radius: 0.75rem;
+  background: #fff;
+  font: inherit;
+  font-size: 1rem;
+}
+
+.plannerSearchInput:focus-visible {
+  border-color: rgb(91 79 214 / 45%);
+  outline: 2px solid rgb(91 79 214 / 22%);
+  outline-offset: 0;
+}
+
+.plannerSearchSpinner {
+  position: absolute;
+  inset-inline-end: 0.875rem;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgb(15 23 40 / 12%);
+  border-top-color: #6b7c93;
+  border-radius: 50%;
+  animation: placeSearchSpin 0.8s linear infinite;
+}
+
+.plannerSearch:has(.plannerResults) .plannerSearchInput {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.plannerResults {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1.5px solid rgb(15 23 40 / 10%);
+  border-top: none;
+  border-radius: 0 0 0.75rem 0.75rem;
+  background: #fff;
+  overflow: hidden;
+}
+
+.plannerResultRow {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  min-height: 3.25rem;
+  padding: 0.625rem 0.875rem;
+  border: 0;
+  border-bottom: 1px solid rgb(15 23 40 / 7%);
+  background: transparent;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.plannerResultRow:last-child {
+  border-bottom: none;
+}
+
+.plannerResultRow:hover,
+.plannerResultRow[data-active="true"] {
+  background: rgb(91 79 214 / 5%);
+}
+
+.plannerResultIcon {
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: #9aa8bc;
+}
+
+.plannerResultText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.plannerResultName {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1a2740;
+}
+
+.plannerResultAddress {
+  font-size: 0.75rem;
+  color: #6b7c93;
+}
+
+.plannerSelected {
+  width: 100%;
+  padding: 0.875rem;
+  border: 1.5px solid rgb(91 79 214 / 22%);
+  border-radius: 0.75rem;
+  background: rgb(91 79 214 / 6%);
+}
+
+.plannerSelectedRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  width: 100%;
+}
+
+.plannerSelectedCheck {
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: 0.125rem;
+  color: #5b4fd6;
+}
+
+.plannerSelectedText {
+  flex: 1;
+  min-width: 0;
+}
+
+.plannerSelectedHint {
+  margin: 0 0 0.125rem;
+  font-size: 0.6875rem;
+  color: #6b7c93;
+}
+
+.plannerSelectedName {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #1a2740;
+}
+
+.plannerSelectedAddress {
+  margin: 0.125rem 0 0;
+  font-size: 0.75rem;
+  color: #6b7c93;
+}
+
+.plannerChangeButton {
+  flex-shrink: 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: #5b4fd6;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }

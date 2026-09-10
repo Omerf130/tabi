@@ -206,6 +206,70 @@ export function IconTrain({ className }: IconProps) {
   );
 }
 
+export function IconBus({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <rect x="4.5" y="7" width="15" height="9.5" rx="2" />
+      <path d="M4.5 11.5h15" />
+      <path d="M7.5 7V5.5h9V7" />
+      <circle cx="8" cy="17" r="1" fill="currentColor" stroke="none" />
+      <circle cx="16" cy="17" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function IconCar({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M6 16.5h12" />
+      <path d="M7.5 16.5 8.5 11h7l1 5.5" />
+      <path d="M8.5 11 9.5 8h5l1 3" />
+      <circle cx="8.5" cy="16.5" r="1.25" />
+      <circle cx="15.5" cy="16.5" r="1.25" />
+    </svg>
+  );
+}
+
+export function IconTaxi({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M6 16.5h12" />
+      <path d="M7.5 16.5 8.5 11.5h7l1 5" />
+      <path d="M8.5 11.5 9.5 9h5l1 2.5" />
+      <rect x="10.5" y="7" width="3" height="2" rx="0.5" />
+      <circle cx="8.5" cy="16.5" r="1.25" />
+      <circle cx="15.5" cy="16.5" r="1.25" />
+    </svg>
+  );
+}
+
+export function IconFerry({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M5 16.5h14" />
+      <path d="M7 16.5V11l5-4 5 4v5.5" />
+      <path d="M9.5 12.5h5" />
+    </svg>
+  );
+}
+
+export function IconSearch({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <circle cx="11" cy="11" r="5.5" />
+      <path d="M16 16 20 20" />
+    </svg>
+  );
+}
+
+export function IconCheck({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M6.5 12.5 10 16 17.5 8.5" />
+    </svg>
+  );
+}
+
 export function IconTicket({ className }: IconProps) {
   return (
     <svg {...stroke} className={className}>

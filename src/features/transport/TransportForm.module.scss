@@ -41,6 +41,44 @@
   justify-content: flex-end;
 }
 
+.plannerLegLabel {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7c93;
+}
+
+.plannerDetails {
+  border: 1px solid rgb(15 23 40 / 8%);
+  border-radius: 0.875rem;
+  background: rgb(255 252 248 / 100%);
+  overflow: hidden;
+}
+
+.plannerDetailsSummary {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7c93;
+  cursor: pointer;
+  list-style: none;
+}
+
+.plannerDetailsSummary::-webkit-details-marker {
+  display: none;
+}
+
+.plannerDetailsBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  padding: 0 0.875rem 0.875rem;
+  border-top: 1px solid rgb(15 23 40 / 6%);
+}
+
 @media (max-width: 480px) {
   .splitRow {
     grid-template-columns: 1fr;

@@ -25,6 +25,8 @@ import {
 } from "@/features/trips/settings/section-variant";
 import type { CurrencyOption } from "@/features/currency/types";
 import { EntityCostFields } from "@/features/finance/EntityCostFields.client";
+import overlayStyles from "@/features/itinerary/AddItemFlow.module.scss";
+import { PlaceModeSegment } from "@/features/itinerary/PlaceModeSegment.client";
 import sectionStyles from "@/features/trips/settings/TripSettingsSections.module.scss";
 import styles from "./TripAccommodationSettings.module.scss";
 
@@ -219,6 +221,8 @@ export function TripAccommodationForm({
   onSuccess,
   financeBaseCurrency = "ILS",
   currencies = [],
+  plannerPresentation = false,
+  overlayNavigation = false,
 }: {
   tripId: string;
   accommodation?: AccommodationSettingsViewModel;
@@ -234,6 +238,8 @@ export function TripAccommodationForm({
   onSuccess?: () => void;
   financeBaseCurrency?: string;
   currencies?: readonly CurrencyOption[];
+  plannerPresentation?: boolean;
+  overlayNavigation?: boolean;
 }) {
   const router = useRouter();
   const [manualMode, setManualMode] = useState(isManualAccommodation(accommodation));
@@ -253,18 +259,53 @@ export function TripAccommodationForm({
   const canSubmitGoogle = manualMode || Boolean(googleSelection);
 
   return (
-    <form action={formAction} className={styles.editForm}>
+    <form
+      action={formAction}
+      className={plannerPresentation ? overlayStyles.plannerForm : styles.editForm}
+    >
       <input type="hidden" name="tripId" value={tripId} />
       {accommodation ? (
         <input type="hidden" name="accommodationId" value={accommodation.id} />
       ) : null}
 
-      {isGoogleMode ? (
+      {plannerPresentation ? (
+        <div className={overlayStyles.searchGroup}>
+          <PlaceModeSegment
+            mode={isGoogleMode ? "google" : "manual"}
+            googleLabel="חיפוש מלון"
+            manualLabel="הזנה ידנית"
+            onChange={(mode) => {
+              setManualMode(mode === "manual");
+              setGoogleSelection(null);
+            }}
+          />
+          {isGoogleMode ? (
+            <>
+              <p className={overlayStyles.searchGroupLabel}>איפה?</p>
+              <PlaceSearchField
+                key={`${idPrefix}-${accommodation?.id ?? "new"}-${accommodation?.googlePlaceId ?? "none"}`}
+                tripId={tripId}
+                inputId={`${idPrefix}-place-search`}
+                label="חיפוש מלון"
+                placeholder="חיפוש מלון..."
+                initialSelection={googleSelection}
+                onSelectionChange={setGoogleSelection}
+                presentation="planner"
+                hideLabel
+              />
+            </>
+          ) : null}
+        </div>
+      ) : null}
+
+      {!plannerPresentation && isGoogleMode ? (
         <>
           <PlaceSearchField
             key={`${idPrefix}-${accommodation?.id ?? "new"}-${accommodation?.googlePlaceId ?? "none"}`}
             tripId={tripId}
             inputId={`${idPrefix}-place-search`}
+            label="חיפוש מלון"
+            placeholder="חיפוש מלון..."
             initialSelection={googleSelection}
             onSelectionChange={setGoogleSelection}
           />
@@ -279,18 +320,22 @@ export function TripAccommodationForm({
             לא מצאת את המקום? הזנה ידנית
           </button>
         </>
-      ) : (
+      ) : null}
+
+      {!isGoogleMode ? (
         <>
           <ManualFields accommodation={accommodation} idPrefix={idPrefix} />
-          <button
-            type="button"
-            className={styles.manualToggle}
-            onClick={() => setManualMode(false)}
-          >
-            חזרה לחיפוש Google
-          </button>
+          {!plannerPresentation ? (
+            <button
+              type="button"
+              className={styles.manualToggle}
+              onClick={() => setManualMode(false)}
+            >
+              חזרה לחיפוש Google
+            </button>
+          ) : null}
         </>
-      )}
+      ) : null}
 
       <TripFields
         accommodation={accommodation}
@@ -305,6 +350,7 @@ export function TripAccommodationForm({
           baseCurrency={financeBaseCurrency}
           currencies={currencies}
           linkedCost={accommodation?.linkedCost}
+          showHelper={!plannerPresentation}
           idPrefix={`${idPrefix}-cost`}
         />
       ) : null}
@@ -316,20 +362,32 @@ export function TripAccommodationForm({
       ) : null}
       {state.success ? <p className={styles.success}>{state.success}</p> : null}
 
-      <div className={styles.rowActions}>
-        {canSubmitGoogle ? (
-          <AuthSubmitButton>{submitLabel}</AuthSubmitButton>
-        ) : (
-          <Button type="button" disabled>
-            {submitLabel}
-          </Button>
-        )}
-        {onCancel ? (
-          <Button type="button" variant="ghost" size="compact" onClick={onCancel}>
-            ביטול
-          </Button>
-        ) : null}
-      </div>
+      {plannerPresentation ? (
+        <div className={overlayStyles.plannerFooter}>
+          {canSubmitGoogle ? (
+            <AuthSubmitButton>{submitLabel}</AuthSubmitButton>
+          ) : (
+            <Button type="button" disabled>
+              {submitLabel}
+            </Button>
+          )}
+        </div>
+      ) : (
+        <div className={styles.rowActions}>
+          {canSubmitGoogle ? (
+            <AuthSubmitButton>{submitLabel}</AuthSubmitButton>
+          ) : (
+            <Button type="button" disabled>
+              {submitLabel}
+            </Button>
+          )}
+          {onCancel && !overlayNavigation ? (
+            <Button type="button" variant="ghost" size="compact" onClick={onCancel}>
+              ביטול
+            </Button>
+          ) : null}
+        </div>
+      )}
     </form>
   );
 }

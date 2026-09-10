@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { DayPageContent } from "@/features/itinerary/DayPageContent";
 import { getTripDayNumber } from "@/features/trips/trip-days";
 import { parseItineraryDateParam } from "@/features/itinerary/routes";
-import { TripHeader } from "@/features/app-shell/TripHeader";
 import { requireTripMember } from "@/features/trips/authorization";
 
 export async function generateMetadata({
@@ -37,16 +36,5 @@ export default async function ItineraryDayPage({
     notFound();
   }
 
-  const dayNumber = getTripDayNumber(trip.startDate, trip.endDate, resolvedDate)!;
-
-  return (
-    <>
-      <TripHeader
-        title={`יום ${dayNumber}`}
-        tripName={trip.name}
-        showTripSwitch
-      />
-      <DayPageContent trip={trip} date={resolvedDate} />
-    </>
-  );
+  return <DayPageContent trip={trip} date={resolvedDate} />;
 }

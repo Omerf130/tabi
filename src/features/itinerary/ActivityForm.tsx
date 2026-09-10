@@ -1,11 +1,7 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
-import { Field } from "@/components/ui/Field/Field";
-import { Input } from "@/components/ui/Input/Input";
-import { Select } from "@/components/ui/Select/Select";
-import { Textarea } from "@/components/ui/Textarea/Textarea";
 import { AuthSubmitButton } from "@/features/auth/AuthSubmitButton";
 import {
   ACTIVITY_TYPES,
@@ -20,11 +16,31 @@ import {
 import type { CurrencyOption } from "@/features/currency/types";
 import { EntityCostFields } from "@/features/finance/EntityCostFields.client";
 import type { EntityLinkedCostViewModel } from "@/features/finance/types";
-import { ActivityLocationSection } from "./ActivityLocationSection";
+import { ActivityAddOverlay } from "./ActivityAddOverlay.client";
+import { PlaceModeSegment } from "./PlaceModeSegment.client";
+import { ActivityDeleteControl } from "./ActivityDeleteControl.client";
+import {
+  ActivityLocationSection,
+  type ActivityPlaceMode,
+} from "./ActivityLocationSection";
+import { shouldExpandActivityDetails } from "./should-expand-activity-details";
 import type { ActivityFormValues } from "./types";
+import overlayStyles from "./AddItemFlow.module.scss";
 import styles from "./ActivityForm.module.scss";
 
 const initialState: ActivityActionState = {};
+
+function resolveInitialPlaceMode(
+  defaultValues: ActivityFormValues,
+  mode: "create" | "edit",
+): ActivityPlaceMode {
+  if (mode === "edit") {
+    return defaultValues.placeSource === "google" && defaultValues.googlePlaceId
+      ? "google"
+      : "manual";
+  }
+  return "google";
+}
 
 type ActivityFormProps = {
   tripId: string;
@@ -34,6 +50,7 @@ type ActivityFormProps = {
   activityId?: string;
   lockDate?: boolean;
   onCancel?: () => void;
+  overlayNavigation?: boolean;
   onSuccess?: (result: ActivityActionState) => void;
   onDirtyChange?: (dirty: boolean) => void;
   showCostFields?: boolean;
@@ -50,6 +67,7 @@ export function ActivityForm({
   activityId,
   lockDate = false,
   onCancel,
+  overlayNavigation = false,
   onSuccess,
   onDirtyChange,
   showCostFields = false,
@@ -59,6 +77,16 @@ export function ActivityForm({
 }: ActivityFormProps) {
   const action = mode === "create" ? createActivityAction : updateActivityAction;
   const [state, formAction] = useActionState(action, initialState);
+  const titleRef = useRef<HTMLInputElement>(null);
+  const [placeMode, setPlaceMode] = useState<ActivityPlaceMode>(() =>
+    resolveInitialPlaceMode(defaultValues, mode),
+  );
+  const [hasGooglePlace, setHasGooglePlace] = useState(
+    Boolean(defaultValues.googlePlaceId),
+  );
+  const detailsExpanded = shouldExpandActivityDetails(defaultValues, mode);
+  const showDetails =
+    mode === "edit" || placeMode === "manual" || hasGooglePlace;
 
   useEffect(() => {
     if (state.ok && onSuccess) {
@@ -66,8 +94,53 @@ export function ActivityForm({
     }
   }, [state, onSuccess]);
 
+  useEffect(() => {
+    if (!showDetails || mode !== "create") {
+      return;
+    }
+
+    titleRef.current?.focus({ preventScroll: true });
+  }, [mode, showDetails]);
+
   function handleChange() {
     onDirtyChange?.(true);
+  }
+
+  function handlePlaceModeChange(nextMode: ActivityPlaceMode) {
+    setPlaceMode(nextMode);
+    setHasGooglePlace(false);
+    handleChange();
+  }
+
+  function handleGoogleSelectionChange(input: {
+    hasSelection: boolean;
+    locationName?: string;
+  }) {
+    setHasGooglePlace(input.hasSelection);
+    if (
+      input.hasSelection &&
+      input.locationName &&
+      titleRef.current &&
+      !titleRef.current.value.trim()
+    ) {
+      titleRef.current.value = input.locationName;
+      handleChange();
+    }
+  }
+
+  if (overlayNavigation && mode === "create") {
+    return (
+      <ActivityAddOverlay
+        tripId={tripId}
+        defaultValues={defaultValues}
+        lockDate={lockDate}
+        onSuccess={onSuccess}
+        onDirtyChange={onDirtyChange}
+        showCostFields={showCostFields}
+        financeBaseCurrency={financeBaseCurrency}
+        currencies={currencies}
+      />
+    );
   }
 
   return (
@@ -85,128 +158,251 @@ export function ActivityForm({
         <input type="hidden" name="activityId" value={activityId} />
       ) : null}
 
-      {state.error ? (
-        <p className={styles.formError} role="alert">
-          {state.error}
-        </p>
-      ) : null}
+      <div
+        className={
+          overlayNavigation ? `${styles.formBody} ${styles.formBodyPlanner}` : styles.formBody
+        }
+      >
+        {state.error ? (
+          <p className={styles.formError} role="alert">
+            {state.error}
+          </p>
+        ) : null}
 
-      <Field label="כותרת" htmlFor="title" error={state.fieldErrors?.title}>
-        <Input
-          id="title"
-          name="title"
-          defaultValue={defaultValues.title}
-          required
-          maxLength={120}
-          aria-invalid={state.fieldErrors?.title ? true : undefined}
-        />
-      </Field>
+        {overlayNavigation ? (
+          <div className={overlayStyles.searchGroup}>
+            <PlaceModeSegment
+              mode={placeMode}
+              onChange={handlePlaceModeChange}
+              googleLabel="חיפוש מקום"
+              manualLabel="הזנה ידנית"
+            />
+            {placeMode === "google" ? (
+              <>
+                <p id="activity-place-label" className={overlayStyles.searchGroupLabel}>
+                  איפה?
+                </p>
+                <ActivityLocationSection
+                  tripId={tripId}
+                  defaultValues={defaultValues}
+                  placeMode="google"
+                  fieldErrors={state.fieldErrors}
+                  onDirtyChange={handleChange}
+                  onGoogleSelectionChange={handleGoogleSelectionChange}
+                  plannerPresentation
+                />
+              </>
+            ) : null}
+          </div>
+        ) : (
+          <>
+            <PlaceModeSegment
+              mode={placeMode}
+              onChange={handlePlaceModeChange}
+              googleLabel="חיפוש מקום"
+              manualLabel="הזנה ידנית"
+            />
+            {placeMode === "google" ? (
+              <section className={styles.section} aria-labelledby="activity-place-label">
+                {!showDetails ? (
+                  <h3 id="activity-place-label" className={styles.sectionLabel}>
+                    איפה?
+                  </h3>
+                ) : null}
+                <ActivityLocationSection
+                  tripId={tripId}
+                  defaultValues={defaultValues}
+                  placeMode="google"
+                  fieldErrors={state.fieldErrors}
+                  onDirtyChange={handleChange}
+                  onGoogleSelectionChange={handleGoogleSelectionChange}
+                />
+              </section>
+            ) : null}
+          </>
+        )}
 
-      <Field label="סוג" htmlFor="type" error={state.fieldErrors?.type}>
-        <Select
-          id="type"
-          name="type"
-          defaultValue={defaultValues.type}
-          required
-          aria-invalid={state.fieldErrors?.type ? true : undefined}
-        >
-          {ACTIVITY_TYPES.map((type) => (
-            <option key={type} value={type}>
-              {ACTIVITY_TYPE_LABELS[type as ActivityType]}
-            </option>
-          ))}
-        </Select>
-      </Field>
+        {showDetails ? (
+          <>
+            <div className={styles.primaryField}>
+              <label className={styles.primaryLabel} htmlFor="activity-title">
+                מה עושים?
+              </label>
+              <input
+                ref={titleRef}
+                id="activity-title"
+                className={styles.primaryInput}
+                name="title"
+                defaultValue={defaultValues.title}
+                placeholder="TeamLab Planets"
+                required
+                maxLength={120}
+                dir="auto"
+                aria-invalid={state.fieldErrors?.title ? true : undefined}
+              />
+              {state.fieldErrors?.title ? (
+                <p className={styles.formError} role="alert">
+                  {state.fieldErrors.title}
+                </p>
+              ) : null}
+            </div>
 
-      {!lockDate ? (
-        <Field label="יום" htmlFor="date" error={state.fieldErrors?.date}>
-          <Select
-            id="date-visible"
-            name="date"
-            defaultValue={defaultValues.date}
-            required
-            aria-invalid={state.fieldErrors?.date ? true : undefined}
-          >
-            {tripDates.map((date) => (
-              <option key={date} value={date}>
-                {date}
-              </option>
-            ))}
-          </Select>
-        </Field>
-      ) : null}
+            <section className={styles.section} aria-labelledby="activity-time-label">
+              <h3 id="activity-time-label" className={styles.sectionLabel}>
+                {overlayNavigation ? "שעה" : "באיזו שעה?"}
+              </h3>
+              <div className={styles.timeRow}>
+                <div className={styles.timeField}>
+                  <label className={styles.timeFieldLabel} htmlFor="startTime">
+                    התחלה
+                  </label>
+                  <input
+                    id="startTime"
+                    className={styles.timeInput}
+                    name="startTime"
+                    type="time"
+                    defaultValue={defaultValues.startTime}
+                    aria-invalid={state.fieldErrors?.startTime ? true : undefined}
+                  />
+                </div>
+                <div className={styles.timeField}>
+                  <label className={styles.timeFieldLabel} htmlFor="endTime">
+                    סיום
+                  </label>
+                  <input
+                    id="endTime"
+                    className={styles.timeInput}
+                    name="endTime"
+                    type="time"
+                    defaultValue={defaultValues.endTime}
+                    aria-invalid={state.fieldErrors?.endTime ? true : undefined}
+                  />
+                </div>
+              </div>
+            </section>
 
-      <div className={styles.timeRow}>
-        <Field
-          label="שעת התחלה"
-          htmlFor="startTime"
-          error={state.fieldErrors?.startTime}
-        >
-          <Input
-            id="startTime"
-            name="startTime"
-            type="time"
-            defaultValue={defaultValues.startTime}
-            aria-invalid={state.fieldErrors?.startTime ? true : undefined}
-          />
-        </Field>
-        <Field
-          label="שעת סיום"
-          htmlFor="endTime"
-          error={state.fieldErrors?.endTime}
-        >
-          <Input
-            id="endTime"
-            name="endTime"
-            type="time"
-            defaultValue={defaultValues.endTime}
-            aria-invalid={state.fieldErrors?.endTime ? true : undefined}
-          />
-        </Field>
-      </div>
+            {placeMode === "manual" ? (
+              <section className={styles.section} aria-labelledby="activity-place-label">
+                <h3 id="activity-place-label" className={styles.sectionLabel}>
+                  איפה?
+                </h3>
+                <ActivityLocationSection
+                  tripId={tripId}
+                  defaultValues={defaultValues}
+                  placeMode="manual"
+                  fieldErrors={state.fieldErrors}
+                  onDirtyChange={handleChange}
+                />
+              </section>
+            ) : null}
 
-      <div className={styles.locationBlock}>
-        <p className={styles.locationHeading}>מיקום</p>
-        <ActivityLocationSection
-          tripId={tripId}
-          defaultValues={defaultValues}
-          fieldErrors={state.fieldErrors}
-          onDirtyChange={handleChange}
-        />
-      </div>
+            {!lockDate ? (
+              <div className={styles.typeField}>
+                <label className={styles.fieldLabel} htmlFor="date">
+                  יום
+                </label>
+                <select
+                  id="date"
+                  className={styles.fieldSelect}
+                  name="date"
+                  defaultValue={defaultValues.date}
+                  required
+                  aria-invalid={state.fieldErrors?.date ? true : undefined}
+                >
+                  {tripDates.map((tripDate) => (
+                    <option key={tripDate} value={tripDate}>
+                      {tripDate}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ) : null}
 
-      <Field label="הערות" htmlFor="notes" error={state.fieldErrors?.notes}>
-        <Textarea
-          id="notes"
-          name="notes"
-          defaultValue={defaultValues.notes}
-          maxLength={2000}
-          rows={3}
-          dir="auto"
-          aria-invalid={state.fieldErrors?.notes ? true : undefined}
-        />
-      </Field>
+            <details className={styles.detailsSection} open={detailsExpanded}>
+              <summary className={styles.detailsSummary}>פרטים נוספים</summary>
+              <div className={styles.detailsBody}>
+                <div className={styles.typeField}>
+                  <label className={styles.fieldLabel} htmlFor="type">
+                    סוג פעילות
+                  </label>
+                  <select
+                    id="type"
+                    className={styles.fieldSelect}
+                    name="type"
+                    defaultValue={defaultValues.type}
+                    required
+                    aria-invalid={state.fieldErrors?.type ? true : undefined}
+                  >
+                    {ACTIVITY_TYPES.map((type) => (
+                      <option key={type} value={type}>
+                        {ACTIVITY_TYPE_LABELS[type as ActivityType]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-      {showCostFields && currencies.length > 0 ? (
-        <EntityCostFields
-          baseCurrency={financeBaseCurrency}
-          currencies={currencies}
-          linkedCost={linkedCost}
-          showCategory
-          idPrefix={`activity-${activityId ?? "create"}`}
-        />
-      ) : null}
+                <div className={styles.notesField}>
+                  <label className={styles.fieldLabel} htmlFor="notes">
+                    הערות
+                  </label>
+                  <textarea
+                    id="notes"
+                    className={styles.fieldTextarea}
+                    name="notes"
+                    defaultValue={defaultValues.notes}
+                    maxLength={2000}
+                    rows={3}
+                    dir="auto"
+                    aria-invalid={state.fieldErrors?.notes ? true : undefined}
+                  />
+                </div>
+              </div>
+            </details>
 
-      <div className={styles.actions}>
-        <AuthSubmitButton>
-          {mode === "create" ? "הוספת פעילות" : "שמירה"}
-        </AuthSubmitButton>
-        {onCancel ? (
-          <Button type="button" variant="ghost" size="compact" onClick={onCancel}>
-            ביטול
-          </Button>
+            {showCostFields && currencies.length > 0 ? (
+              <div className={styles.costSection}>
+                <EntityCostFields
+                  baseCurrency={financeBaseCurrency}
+                  currencies={currencies}
+                  linkedCost={linkedCost}
+                  showCategory
+                  showHelper={false}
+                  idPrefix={`activity-${activityId ?? "create"}`}
+                />
+              </div>
+            ) : null}
+          </>
         ) : null}
       </div>
+
+      {showDetails ? (
+        <div className={styles.formFooter}>
+          <div className={styles.footerActions}>
+            <AuthSubmitButton>
+              {mode === "create" ? "הוספת פעילות" : "שמירת שינויים"}
+            </AuthSubmitButton>
+            {onCancel && !overlayNavigation ? (
+              <Button
+                type="button"
+                variant="ghost"
+                size="compact"
+                className={styles.cancelButton}
+                onClick={onCancel}
+              >
+                ביטול
+              </Button>
+            ) : null}
+          </div>
+
+          {mode === "edit" && activityId ? (
+            <ActivityDeleteControl
+              tripId={tripId}
+              activityId={activityId}
+              onSuccess={onSuccess ? () => onSuccess({ ok: true }) : undefined}
+            />
+          ) : null}
+        </div>
+      ) : null}
     </form>
   );
 }

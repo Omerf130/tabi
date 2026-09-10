@@ -2,17 +2,13 @@
 
 import { useActionState, useCallback, useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  IconActivityAttraction,
-  IconActivityTransport,
-  IconCalendar,
-  IconDocuments,
-} from "@/components/ui/icons";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { Textarea } from "@/components/ui/Textarea/Textarea";
 import { AuthSubmitButton } from "@/features/auth/AuthSubmitButton";
+import { createAccommodationAction } from "@/features/accommodations/actions";
+import { TripAccommodationForm } from "@/features/accommodations/TripAccommodationSettings";
 import { TripDocumentForm } from "@/features/documents/TripDocumentSettings";
 import { createTravelDocumentAction } from "@/features/documents/actions";
 import { TransportForm } from "@/features/transport/TransportForm.client";
@@ -20,10 +16,6 @@ import {
   createEmptyTransportFormValues,
   toTransportFormValues,
 } from "@/features/transport/transport-form-defaults";
-import {
-  TRANSPORT_TYPES,
-  TRANSPORT_TYPE_LABELS,
-} from "@/features/transport/transport-types";
 import type { TransportRecord } from "@/features/transport/types";
 import {
   createTripReminderAction,
@@ -37,23 +29,25 @@ import { ACTIVITY_TYPES } from "./activity-types";
 import { ActivityForm } from "./ActivityForm";
 import { ActivityMovePanel } from "./ActivityMovePanel";
 import { confirmDayActionDiscard } from "./confirm-day-action-discard";
-import { DAY_ADD_MENU_OPTIONS, getDayActionSurfaceTitle } from "./day-action-menu";
+import { getDayActionSurfaceTitle } from "./day-action-menu";
+import {
+  canDayActionGoBack,
+  getDayActionBackTarget,
+  shouldShowDayContext,
+} from "./day-action-navigation";
+import { DayAddItemChooser } from "./DayAddItemChooser.client";
+import { formatActivityFormDayContext } from "./format-activity-form-day-context";
+import { TransportTypeChooser } from "./TransportTypeChooser.client";
 import type { DayActionState, DayAddMenuAction } from "./day-action-surface.types";
 import {
   emptyActivityFormValues,
   toActivityFormValues,
 } from "./to-activity-view-model";
 import type { ActivityViewModel } from "./types";
+import overlayStyles from "./AddItemFlow.module.scss";
 import styles from "./DayPage.module.scss";
 
 const reminderInitialState: TripReminderActionState = {};
-
-const MENU_ICONS = {
-  activity: IconActivityAttraction,
-  transport: IconActivityTransport,
-  document: IconDocuments,
-  reminder: IconCalendar,
-} as const;
 
 type DayActionSurfaceProps = {
   state: DayActionState;
@@ -76,13 +70,11 @@ type DayActionSurfaceProps = {
 function ReminderCreateForm({
   tripId,
   date,
-  onCancel,
   onSuccess,
   onDirtyChange,
 }: {
   tripId: string;
   date: string;
-  onCancel: () => void;
   onSuccess: () => void;
   onDirtyChange: (dirty: boolean) => void;
 }) {
@@ -100,7 +92,7 @@ function ReminderCreateForm({
   return (
     <form
       action={createAction}
-      className={reminderStyles.createForm}
+      className={overlayStyles.plannerForm}
       onChange={() => onDirtyChange(true)}
       onInput={() => onDirtyChange(true)}
     >
@@ -109,7 +101,7 @@ function ReminderCreateForm({
       <Field label="שעה" htmlFor="day-action-reminder-time">
         <Input id="day-action-reminder-time" name="time" type="time" required />
       </Field>
-      <Field label="תוכן התזכורת" htmlFor="day-action-reminder-text">
+      <Field label="מה חשוב לזכור?" htmlFor="day-action-reminder-text">
         <Textarea id="day-action-reminder-text" name="text" rows={3} required />
       </Field>
       {createState.error ? (
@@ -117,11 +109,8 @@ function ReminderCreateForm({
           {createState.error}
         </p>
       ) : null}
-      <div className={reminderStyles.rowActions}>
-        <AuthSubmitButton>הוספה</AuthSubmitButton>
-        <Button type="button" variant="ghost" size="compact" onClick={onCancel}>
-          ביטול
-        </Button>
+      <div className={overlayStyles.plannerFooter}>
+        <AuthSubmitButton>הוספת תזכורת</AuthSubmitButton>
       </div>
     </form>
   );
@@ -235,6 +224,12 @@ export function DayActionSurface({
 
   const isOpen = state.kind !== "closed";
   const isFormState = state.kind !== "closed" && state.kind !== "menu";
+  const showBack = canDayActionGoBack(state);
+  const dayContextLabel = shouldShowDayContext(state)
+    ? formatActivityFormDayContext(startDate, endDate, date)
+    : state.kind === "menu"
+      ? formatActivityFormDayContext(startDate, endDate, date)
+      : null;
 
   const requestClose = useCallback(() => {
     if (!confirmDayActionDiscard(dirty)) {
@@ -243,6 +238,17 @@ export function DayActionSurface({
     setDirty(false);
     onClose();
   }, [dirty, onClose]);
+
+  const requestBack = useCallback(() => {
+    if (!confirmDayActionDiscard(dirty)) {
+      return;
+    }
+    setDirty(false);
+    const target = getDayActionBackTarget(state);
+    if (target) {
+      onStateChange(target);
+    }
+  }, [dirty, onStateChange, state]);
 
   const handleMutationSuccess = useCallback(() => {
     setDirty(false);
@@ -285,6 +291,10 @@ export function DayActionSurface({
       onStateChange({ kind: "activity-create" });
       return;
     }
+    if (action === "accommodation") {
+      onStateChange({ kind: "accommodation-create" });
+      return;
+    }
     if (action === "document") {
       onStateChange({ kind: "document-create" });
       return;
@@ -292,7 +302,19 @@ export function DayActionSurface({
     onStateChange({ kind: "reminder-create" });
   }
 
-  function handleTransportTypeSelect(transportType: (typeof TRANSPORT_TYPES)[number]) {
+  function handleTransportTypeSelect(
+    transportType: Parameters<typeof createEmptyTransportFormValues>[0],
+  ) {
+    setDirty(false);
+    onStateChange({ kind: "transport-create", transportType });
+  }
+
+  function handleTransportTypeChange(
+    transportType: Parameters<typeof createEmptyTransportFormValues>[0],
+  ) {
+    if (state.kind !== "transport-create") {
+      return;
+    }
     setDirty(false);
     onStateChange({ kind: "transport-create", transportType });
   }
@@ -325,16 +347,37 @@ export function DayActionSurface({
       />
       <div
         ref={panelRef}
-        className={isFormState ? styles.sheetPanelForm : styles.sheetPanel}
+        className={
+          state.kind === "menu" || isFormState ? styles.sheetPanelForm : styles.sheetPanel
+        }
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1}
       >
         <div className={styles.sheetHeader}>
-          <h2 id={titleId} className={styles.sheetTitle}>
-            {title}
-          </h2>
+          {showBack ? (
+            <button
+              type="button"
+              className={styles.sheetBackButton}
+              aria-label="חזרה"
+              onClick={requestBack}
+            >
+              ←
+            </button>
+          ) : (
+            <span className={styles.sheetBackSpacer} aria-hidden />
+          )}
+
+          <div className={styles.sheetHeaderTitles}>
+            <h2 id={titleId} className={styles.sheetTitle}>
+              {title}
+            </h2>
+            {dayContextLabel ? (
+              <p className={styles.sheetSubtitle}>{dayContextLabel}</p>
+            ) : null}
+          </div>
+
           <button
             type="button"
             className={styles.sheetCloseButton}
@@ -347,23 +390,7 @@ export function DayActionSurface({
 
         <div className={styles.sheetBody}>
           {state.kind === "menu" ? (
-            <ul className={styles.sheetOptions}>
-              {DAY_ADD_MENU_OPTIONS.map((option) => {
-                const Icon = MENU_ICONS[option.id];
-                return (
-                  <li key={option.id}>
-                    <button
-                      type="button"
-                      className={styles.sheetOption}
-                      onClick={() => handleMenuSelect(option.id)}
-                    >
-                      <Icon className={styles.sheetOptionIcon} aria-hidden />
-                      <span>{option.label}</span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
+            <DayAddItemChooser onSelect={handleMenuSelect} />
           ) : null}
 
           {state.kind === "activity-create" ? (
@@ -373,11 +400,11 @@ export function DayActionSurface({
               tripDates={tripDates}
               mode="create"
               lockDate
+              overlayNavigation
               defaultValues={emptyActivityFormValues({
                 date,
                 type: ACTIVITY_TYPES[0],
               })}
-              onCancel={requestClose}
               onSuccess={handleMutationSuccess}
               onDirtyChange={setDirty}
               showCostFields={showCostFields}
@@ -418,19 +445,7 @@ export function DayActionSurface({
           ) : null}
 
           {state.kind === "transport-type" ? (
-            <ul className={styles.transportTypeList}>
-              {TRANSPORT_TYPES.map((type) => (
-                <li key={type}>
-                  <button
-                    type="button"
-                    className={styles.sheetOption}
-                    onClick={() => handleTransportTypeSelect(type)}
-                  >
-                    {TRANSPORT_TYPE_LABELS[type]}
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <TransportTypeChooser onSelect={handleTransportTypeSelect} />
           ) : null}
 
           {state.kind === "transport-create" ? (
@@ -439,12 +454,17 @@ export function DayActionSurface({
                 key={`transport-create-${state.transportType}-${date}`}
                 tripId={tripId}
                 mode="create"
+                overlayNavigation
+                plannerPresentation
+                transportType={state.transportType}
+                onTransportTypeChange={handleTransportTypeChange}
                 defaultValues={{
                   ...createEmptyTransportFormValues(state.transportType),
                   departureDate: date,
                 }}
-                onCancel={requestClose}
                 onSuccess={handleMutationSuccess}
+                financeBaseCurrency={financeBaseCurrency}
+                currencies={showCostFields ? currencies : []}
               />
             </div>
           ) : null}
@@ -459,19 +479,44 @@ export function DayActionSurface({
                 defaultValues={toTransportFormValues(transportRecord)}
                 onCancel={requestClose}
                 onSuccess={handleMutationSuccess}
+                financeBaseCurrency={financeBaseCurrency}
+                currencies={showCostFields ? currencies : []}
+                linkedCost={undefined}
+                plannerPresentation
               />
             </div>
           ) : null}
 
+          {state.kind === "accommodation-create" ? (
+            <TripAccommodationForm
+              tripId={tripId}
+              startDate={startDate}
+              endDate={endDate}
+              idPrefix="day-add-accommodation"
+              action={createAccommodationAction}
+              submitLabel="הוספת מקום לינה"
+              defaultCheckInDate={date}
+              overlayNavigation
+              plannerPresentation
+              onSuccess={handleMutationSuccess}
+              financeBaseCurrency={financeBaseCurrency}
+              currencies={showCostFields ? currencies : []}
+            />
+          ) : null}
+
           {state.kind === "document-create" ? (
-            <div onChange={() => setDirty(true)} onInput={() => setDirty(true)}>
+            <div
+              className={overlayStyles.plannerForm}
+              onChange={() => setDirty(true)}
+              onInput={() => setDirty(true)}
+            >
               <TripDocumentForm
                 tripId={tripId}
                 activityOptions={documentLinkOptions.activityOptions}
                 accommodationOptions={documentLinkOptions.accommodationOptions}
                 transportOptions={documentLinkOptions.transportOptions}
                 action={createTravelDocumentAction}
-                submitLabel="הוספה"
+                submitLabel="הוספת מסמך"
                 includeFile
                 initialLinkType={documentLinkOptions.initialLinkType}
                 initialActivityId={documentLinkOptions.initialActivityId}
@@ -487,7 +532,6 @@ export function DayActionSurface({
             <ReminderCreateForm
               tripId={tripId}
               date={date}
-              onCancel={requestClose}
               onSuccess={handleMutationSuccess}
               onDirtyChange={setDirty}
             />
