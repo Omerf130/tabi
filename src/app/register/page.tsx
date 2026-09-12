@@ -31,10 +31,17 @@ export default async function RegisterPage({
 
   return (
     <AuthPageShell
-      title="Create your account"
+      title="Save your journey"
+      subtitle="Create an account to plan, save and access your trips from anywhere."
       footer={
         <>
-          Already have an account? <Link href={loginHref}>Sign in</Link>
+          Already have an account? <Link href={loginHref}>Log in</Link>
+        </>
+      }
+      legal={
+        <>
+          By creating an account, you agree to our Terms of Service and Privacy
+          Policy.
         </>
       }
     >

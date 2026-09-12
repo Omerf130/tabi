@@ -1,13 +1,22 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import { Button } from "@/components/ui/Button/Button";
+import styles from "./AuthForm.module.scss";
 
 export function AuthSubmitButton({ children }: { children: string }) {
   const { pending } = useFormStatus();
+
   return (
-    <Button type="submit" loading={pending}>
-      {children}
-    </Button>
+    <button
+      type="submit"
+      className={styles.primaryButton}
+      disabled={pending}
+      aria-busy={pending || undefined}
+    >
+      <span>{children}</span>
+      <span className={styles.primaryArrow} aria-hidden>
+        →
+      </span>
+    </button>
   );
 }

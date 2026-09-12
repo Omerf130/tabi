@@ -1,9 +1,9 @@
 "use client";
 
-import { useActionState } from "react";
-import { Field } from "@/components/ui/Field/Field";
-import { Input } from "@/components/ui/Input/Input";
+import { useActionState, useState } from "react";
 import { registerAction, type AuthActionState } from "./actions";
+import { deriveRegistrationNameFromEmail } from "./derive-registration-name";
+import { AuthEmailField, AuthPasswordField } from "./AuthField";
 import { AuthSubmitButton } from "./AuthSubmitButton";
 import styles from "./AuthForm.module.scss";
 
@@ -15,60 +15,44 @@ type RegisterFormProps = {
 
 export function RegisterForm({ nextPath }: RegisterFormProps) {
   const [state, action] = useActionState(registerAction, initialState);
+  const [email, setEmail] = useState("");
 
   return (
     <form action={action} className={styles.form}>
       {nextPath ? <input type="hidden" name="next" value={nextPath} /> : null}
+      <input
+        type="hidden"
+        name="name"
+        value={deriveRegistrationNameFromEmail(email)}
+      />
       {state.error ? (
         <p className={styles.formError} role="alert">
           {state.error}
         </p>
       ) : null}
-      <div className={styles.authField}>
-        <Field label="Name" htmlFor="name" error={state.fieldErrors?.name}>
-          <Input
-            id="name"
-            name="name"
-            autoComplete="name"
-            required
-            minLength={2}
-            maxLength={80}
-            aria-invalid={state.fieldErrors?.name ? true : undefined}
-          />
-        </Field>
-      </div>
-      <div className={styles.authField}>
-        <Field label="Email" htmlFor="email" error={state.fieldErrors?.email}>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            aria-invalid={state.fieldErrors?.email ? true : undefined}
-          />
-        </Field>
-      </div>
-      <div className={styles.authField}>
-        <Field
-          label="Password"
-          htmlFor="password"
-          error={state.fieldErrors?.password}
-        >
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="new-password"
-            required
-            minLength={8}
-            maxLength={256}
-            aria-invalid={state.fieldErrors?.password ? true : undefined}
-          />
-        </Field>
-      </div>
+      <AuthEmailField
+        id="email"
+        name="email"
+        label="Email"
+        placeholder="Email Address"
+        autoComplete="email"
+        required
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        error={state.fieldErrors?.email}
+      />
+      <AuthPasswordField
+        id="password"
+        label="Password"
+        placeholder="Password"
+        autoComplete="new-password"
+        required
+        minLength={8}
+        maxLength={256}
+        error={state.fieldErrors?.password}
+      />
       <div className={styles.authSubmit}>
-        <AuthSubmitButton>Create account</AuthSubmitButton>
+        <AuthSubmitButton>Create Account</AuthSubmitButton>
       </div>
     </form>
   );

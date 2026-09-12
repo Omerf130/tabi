@@ -33,10 +33,11 @@ export default async function LoginPage({
   return (
     <AuthPageShell
       title="Welcome back"
+      subtitle="Log in to continue your journey"
       footer={
         <>
           Don&apos;t have an account?{" "}
-          <Link href={registerHref}>Create account</Link>
+          <Link href={registerHref}>Sign Up</Link>
         </>
       }
     >

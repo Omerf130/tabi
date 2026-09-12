@@ -1,53 +1,58 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { TabiBrandMark } from "@/features/welcome/TabiBrandMark";
+import { AUTH_BACKGROUND_SRC } from "./auth-visual";
 import styles from "./AuthPageShell.module.scss";
 
 type AuthPageShellProps = {
   title: string;
+  subtitle: string;
   children: ReactNode;
   footer?: ReactNode;
+  legal?: ReactNode;
 };
 
-export function AuthPageShell({ title, children, footer }: AuthPageShellProps) {
+export function AuthPageShell({
+  title,
+  subtitle,
+  children,
+  footer,
+  legal,
+}: AuthPageShellProps) {
   return (
     <div className={styles.screen} dir="ltr" lang="en">
-      <aside className={styles.visualPanel} aria-hidden="true">
-        <div className={styles.visualBackdrop}>
-          <div className={styles.visualBlur} />
-          <Image
-            src="/destination-visuals/homeApp.png"
-            alt=""
-            fill
-            priority
-            sizes="(min-width: 1024px) 50vw, 0px"
-            className={styles.visualImage}
-          />
-          <div className={styles.visualOverlay} />
-        </div>
-        <div className={styles.visualBrand}>
-          <TabiBrandMark className={styles.visualMark} />
-          <p className={styles.visualName}>Tabi</p>
-          <p className={styles.visualTagline}>
-            Your journey.
-            <br />
-            Perfectly planned.
-          </p>
-        </div>
-      </aside>
+      <div className={styles.backdrop} aria-hidden="true">
+        <Image
+          src={AUTH_BACKGROUND_SRC}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className={styles.backgroundImage}
+        />
+        <div className={styles.overlay} />
+      </div>
 
-      <main className={styles.formPanel}>
-        <div className={styles.formInner}>
-          <header className={styles.header}>
-            <TabiBrandMark className={styles.headerMark} />
-            <h1 className={styles.title}>{title}</h1>
+      <div className={styles.content}>
+        <div className={styles.mainColumn}>
+          <header className={styles.brandBlock}>
+            <TabiBrandMark className={styles.brandMark} />
+            <p className={styles.brandName}>Tabi</p>
           </header>
 
-          <div className={styles.content}>{children}</div>
+          <div className={styles.heroBlock}>
+            <h1 className={styles.title}>{title}</h1>
+            <p className={styles.subtitle}>{subtitle}</p>
+          </div>
+
+          <div className={styles.formStack}>{children}</div>
+
+          <div className={styles.scenerySpacer} aria-hidden="true" />
 
           {footer ? <footer className={styles.footer}>{footer}</footer> : null}
+          {legal ? <p className={styles.legal}>{legal}</p> : null}
         </div>
-      </main>
+      </div>
     </div>
   );
 }

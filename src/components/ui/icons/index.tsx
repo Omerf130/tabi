@@ -405,3 +405,41 @@ export function IconDictionary({ className }: IconProps) {
     </svg>
   );
 }
+
+export function IconMail({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <rect x="4.5" y="6.5" width="15" height="11" rx="1.75" />
+      <path d="m5 8 7 5 7-5" />
+    </svg>
+  );
+}
+
+export function IconLock({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <rect x="6.5" y="10.5" width="11" height="8.5" rx="1.75" />
+      <path d="M9 10.5V8.5a3 3 0 0 1 6 0v2" />
+    </svg>
+  );
+}
+
+export function IconEye({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M3.5 12s2.75-5 8.5-5 8.5 5 8.5 5-2.75 5-8.5 5-8.5-5-8.5-5Z" />
+      <circle cx="12" cy="12" r="2.25" />
+    </svg>
+  );
+}
+
+export function IconEyeOff({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M10.2 10.2a2.25 2.25 0 0 0 3.2 3.2" />
+      <path d="M7.1 7.1C5.4 8.3 4.1 10 3.5 12c0 0 2.75 5 8.5 5 1.4 0 2.65-.35 3.75-.95" />
+      <path d="M14.9 14.9C16.6 13.7 17.9 12 18.5 10c0 0-2.75-5-8.5-5-1.05 0-2.02.22-2.9.6" />
+      <path d="m5 5 14 14" />
+    </svg>
+  );
+}

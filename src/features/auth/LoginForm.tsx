@@ -1,9 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
-import { Field } from "@/components/ui/Field/Field";
-import { Input } from "@/components/ui/Input/Input";
 import { loginAction, type AuthActionState } from "./actions";
+import { AuthEmailField, AuthPasswordField } from "./AuthField";
 import { AuthSubmitButton } from "./AuthSubmitButton";
 import styles from "./AuthForm.module.scss";
 
@@ -30,38 +29,27 @@ export function LoginForm({ nextPath, googleError }: LoginFormProps) {
           {state.error}
         </p>
       ) : null}
-      <div className={styles.authField}>
-        <Field label="Email" htmlFor="email" error={state.fieldErrors?.email}>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            aria-invalid={state.fieldErrors?.email ? true : undefined}
-          />
-        </Field>
-      </div>
-      <div className={styles.authField}>
-        <Field
-          label="Password"
-          htmlFor="password"
-          error={state.fieldErrors?.password}
-        >
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            minLength={8}
-            maxLength={256}
-            aria-invalid={state.fieldErrors?.password ? true : undefined}
-          />
-        </Field>
-      </div>
+      <AuthEmailField
+        id="email"
+        name="email"
+        label="Email"
+        placeholder="Email Address"
+        autoComplete="email"
+        required
+        error={state.fieldErrors?.email}
+      />
+      <AuthPasswordField
+        id="password"
+        label="Password"
+        placeholder="Password"
+        autoComplete="current-password"
+        required
+        minLength={8}
+        maxLength={256}
+        error={state.fieldErrors?.password}
+      />
       <div className={styles.authSubmit}>
-        <AuthSubmitButton>Sign in</AuthSubmitButton>
+        <AuthSubmitButton>Log In</AuthSubmitButton>
       </div>
     </form>
   );

@@ -4,9 +4,9 @@
   justify-content: center;
   gap: 0.75rem;
   width: 100%;
-  min-height: 3rem;
+  min-height: 3.125rem;
   padding-inline: 1rem;
-  border: 1px solid rgb(15 23 40 / 12%);
+  border: 0;
   border-radius: 999px;
   background: #ffffff;
   color: #0f1728;
@@ -14,27 +14,15 @@
   font-weight: 600;
   line-height: 1.2;
   text-decoration: none;
-  transition:
-    background-color 160ms ease,
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    transform 160ms ease;
+  transition: background-color 160ms ease;
 }
 
 .button:hover {
-  background: rgb(15 23 40 / 3%);
-  border-color: rgb(15 23 40 / 18%);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgb(15 23 40 / 8%);
-}
-
-.button:active {
-  transform: translateY(0);
-  box-shadow: none;
+  background: rgb(255 255 255 / 94%);
 }
 
 .button:focus-visible {
-  outline: 2px solid #1a2740;
+  outline: 2px solid rgb(255 255 255 / 72%);
   outline-offset: 3px;
 }
 

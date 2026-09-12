@@ -1,75 +1,143 @@
 .screen {
-  --auth-text: #0f1728;
-  --auth-text-muted: #5c6678;
-  --auth-surface: #ffffff;
-  --auth-border: rgb(15 23 40 / 10%);
-  --auth-focus: #1a2740;
-  --auth-primary: #1a2740;
-  --auth-primary-hover: #243352;
-  --auth-danger: #b42318;
-  --auth-max-form: 22rem;
+  --auth-text: #ffffff;
+  --auth-text-muted: rgb(255 255 255 / 78%);
+  --auth-text-subtle: rgb(255 255 255 / 62%);
+  --auth-primary: #1a3f7a;
+  --auth-primary-hover: #214c92;
+  --auth-max-form: 26rem;
+  --auth-page-inline: clamp(1.5rem, 6vw, 1.75rem);
 
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  isolation: isolate;
   min-height: 100dvh;
-  background: var(--auth-surface);
   color: var(--auth-text);
+  background: #1a2740;
 }
 
-.visualPanel {
-  display: none;
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
 }
 
-.formPanel {
+.backgroundImage {
+  object-fit: cover;
+  object-position: center 42%;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgb(8 18 42 / 22%) 0%,
+      rgb(8 18 42 / 8%) 18%,
+      transparent 38%
+    ),
+    linear-gradient(
+      0deg,
+      rgb(8 12 24 / 18%) 0%,
+      transparent 28%
+    );
+}
+
+.content {
+  position: relative;
+  z-index: 1;
   display: flex;
-  flex: 1;
-  flex-direction: column;
   justify-content: center;
+  min-height: 100dvh;
   padding:
-    calc(env(safe-area-inset-top, 0px) + clamp(1.75rem, 6vh, 2.5rem))
-    clamp(1.25rem, 5vw, 2rem)
-    calc(env(safe-area-inset-bottom, 0px) + clamp(1.5rem, 5vh, 2rem));
+    calc(env(safe-area-inset-top, 0px) + clamp(1.75rem, 5vh, 2.75rem))
+    var(--auth-page-inline)
+    calc(env(safe-area-inset-bottom, 0px) + clamp(1rem, 3vh, 1.5rem));
 }
 
-.formInner {
+.mainColumn {
   display: flex;
   flex-direction: column;
-  gap: clamp(1.5rem, 4vh, 2rem);
   width: min(100%, var(--auth-max-form));
-  margin-inline: auto;
+  min-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
 }
 
-.header {
+.mainColumn::before {
+  content: "";
+  display: block;
+  flex: 1.1 1 auto;
+  min-height: clamp(2.5rem, 12vh, 5.5rem);
+  max-height: 20vh;
+}
+
+.brandBlock {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.625rem;
+  margin-block-end: clamp(1.25rem, 4vh, 1.75rem);
   text-align: center;
 }
 
-.headerMark {
-  width: 1.5rem;
+.brandMark {
+  width: 1.875rem;
   height: auto;
-  color: var(--auth-primary);
+  color: var(--auth-text);
+}
+
+.brandName {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: clamp(2.125rem, 8vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.heroBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-block-end: clamp(1.25rem, 4vh, 1.5rem);
+  text-align: center;
 }
 
 .title {
   margin: 0;
-  font-size: clamp(1.625rem, 5vw, 1.875rem);
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: clamp(1.75rem, 6.5vw, 2rem);
   font-weight: 600;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   line-height: 1.15;
 }
 
-.content {
+.subtitle {
+  margin: 0;
+  max-width: 22rem;
+  margin-inline: auto;
+  font-size: clamp(0.9375rem, 3.6vw, 1rem);
+  line-height: 1.45;
+  color: var(--auth-text-muted);
+}
+
+.formStack {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.875rem;
+}
+
+.scenerySpacer {
+  flex: 1 1 auto;
+  min-height: clamp(1.25rem, 5vh, 2.75rem);
+  max-height: 14vh;
 }
 
 .footer {
-  font-size: 0.9375rem;
-  line-height: 1.5;
+  flex-shrink: 0;
+  margin-block-start: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
   text-align: center;
   color: var(--auth-text-muted);
 }
@@ -77,128 +145,84 @@
 .footer a {
   color: var(--auth-text);
   font-weight: 600;
+  text-decoration: none;
+}
+
+.footer a:hover {
   text-decoration: underline;
-  text-underline-offset: 0.18em;
+  text-underline-offset: 0.16em;
 }
 
 .footer a:focus-visible {
-  outline: 2px solid var(--auth-focus);
+  outline: 2px solid rgb(255 255 255 / 72%);
   outline-offset: 3px;
   border-radius: 0.125rem;
 }
 
+.legal {
+  flex-shrink: 0;
+  margin: 0.75rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  text-align: center;
+  color: var(--auth-text-subtle);
+}
+
+@media (max-height: 700px) {
+  .mainColumn::before {
+    flex-grow: 0.75;
+    min-height: clamp(1.25rem, 6vh, 2.5rem);
+    max-height: 10vh;
+  }
+
+  .scenerySpacer {
+    min-height: clamp(0.75rem, 3vh, 1.5rem);
+    max-height: 8vh;
+  }
+}
+
 @media (min-width: 1024px) {
-  .screen {
-    flex-direction: row;
+  .content {
+    justify-content: flex-start;
+    padding-inline: clamp(3rem, 8vw, 6rem);
   }
 
-  .visualPanel {
-    position: relative;
-    display: flex;
-    flex: 1.05;
-    align-items: flex-end;
-    min-height: 100dvh;
-    overflow: hidden;
-    background: #1a2740;
+  .mainColumn::before {
+    display: none;
   }
 
-  .visualBackdrop {
-    position: absolute;
-    inset: 0;
+  .mainColumn {
+    width: min(100%, 24rem);
+    min-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    padding-block-start: clamp(2rem, 6vh, 3.5rem);
   }
 
-  .visualBlur {
-    position: absolute;
-    inset: -8%;
-    background-image: url("/destination-visuals/homeApp.png");
-    background-size: cover;
-    background-position: center 35%;
-    filter: blur(28px) saturate(1.05);
-    transform: scale(1.08);
-    opacity: 1;
-    pointer-events: none;
+  .scenerySpacer {
+    max-height: none;
   }
 
-  .visualImage {
-    object-fit: cover;
-    object-position: 48% 32%;
+  .backgroundImage {
+    object-position: center 40%;
   }
 
-  .visualOverlay {
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(
-        180deg,
-        rgb(8 18 38 / 28%) 0%,
-        rgb(8 18 38 / 8%) 24%,
-        transparent 42%
-      ),
-      linear-gradient(
-        0deg,
-        rgb(8 18 38 / 52%) 0%,
-        rgb(8 18 38 / 18%) 32%,
-        transparent 58%
-      );
+  .brandBlock,
+  .heroBlock {
+    align-items: flex-start;
+    text-align: start;
   }
 
-  .visualBrand {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.875rem;
-    padding:
-      calc(env(safe-area-inset-bottom, 0px) + clamp(2rem, 6vh, 3rem))
-      clamp(2rem, 6vw, 4rem);
-    color: #ffffff;
-  }
-
-  .visualMark {
-    width: 1.75rem;
-    height: auto;
-    color: #ffffff;
-    opacity: 0.96;
-  }
-
-  .visualName {
-    margin: 0;
-    font-size: clamp(2.25rem, 4vw, 3rem);
-    font-weight: 600;
-    letter-spacing: -0.04em;
-    line-height: 1;
-  }
-
-  .visualTagline {
-    margin: 0;
-    max-width: 16rem;
-    font-size: 1.0625rem;
-    line-height: 1.45;
-    color: rgb(255 255 255 / 82%);
-  }
-
-  .formPanel {
-    flex: 0.95;
-    justify-content: center;
-    padding-inline: clamp(2rem, 6vw, 5rem);
-  }
-
-  .formInner {
+  .subtitle {
     margin-inline: 0;
   }
 
-  .header {
-    align-items: flex-start;
+  .footer,
+  .legal {
     text-align: start;
   }
 }
 
 @media (min-width: 1440px) {
-  .visualImage {
-    object-position: 46% 36%;
-  }
-
-  .formPanel {
-    padding-inline: clamp(3rem, 8vw, 6rem);
+  .backgroundImage {
+    object-position: center 38%;
   }
 }
