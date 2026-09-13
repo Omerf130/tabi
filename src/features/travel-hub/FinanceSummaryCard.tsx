@@ -11,7 +11,9 @@ type FinanceSummaryCardProps = {
 
 export function FinanceSummaryCard({ finance }: FinanceSummaryCardProps) {
   const progressPercent =
-    finance.percentConsumed !== null ? Math.min(Math.max(finance.percentConsumed, 0), 100) : null;
+    finance.percentConsumed !== null
+      ? Math.min(Math.max(Math.round(finance.percentConsumed), 0), 100)
+      : null;
 
   return (
     <Link href={finance.href} className={styles.financeSummaryCard}>
@@ -19,7 +21,7 @@ export function FinanceSummaryCard({ finance }: FinanceSummaryCardProps) {
         <span className={styles.financePreviewIconWrap} aria-hidden>
           <IconCurrency className={styles.financePreviewIcon} />
         </span>
-        <h3 className={styles.financePreviewTitle}>{FINANCE_PAGE_TITLE}</h3>
+        <h2 className={styles.financePreviewTitle}>{FINANCE_PAGE_TITLE}</h2>
         <IconChevron className={styles.financeSummaryChevron} aria-hidden />
       </header>
 
@@ -30,15 +32,20 @@ export function FinanceSummaryCard({ finance }: FinanceSummaryCardProps) {
           <p className={styles.financeSummaryPrimary}>
             {formatCurrencyAmount(finance.totalExpenses, finance.baseCurrency)}
           </p>
-          <p className={styles.financeSummaryMeta}>{FINANCE_MESSAGES.totalExpenses}</p>
-          {finance.hasBudget && finance.remainingBudget !== null ? (
+          {finance.hasBudget && finance.budgetAmount !== null ? (
             <>
-              <p className={styles.financeSummarySecondary}>
-                {formatCurrencyAmount(finance.remainingBudget, finance.baseCurrency)}{" "}
-                {FINANCE_MESSAGES.remaining}
+              <p className={styles.financeSummaryMeta}>
+                מתוך {formatCurrencyAmount(finance.budgetAmount, finance.baseCurrency)} תקציב
               </p>
               {progressPercent !== null ? (
-                <div className={styles.financeSummaryTrack} aria-hidden>
+                <div
+                  className={styles.financeSummaryTrack}
+                  role="progressbar"
+                  aria-valuenow={progressPercent}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-label={`${FINANCE_PAGE_TITLE}: ${progressPercent}% נוצל`}
+                >
                   <span
                     className={styles.financeSummaryFill}
                     style={{ width: `${progressPercent}%` }}
@@ -46,7 +53,9 @@ export function FinanceSummaryCard({ finance }: FinanceSummaryCardProps) {
                 </div>
               ) : null}
             </>
-          ) : null}
+          ) : (
+            <p className={styles.financeSummaryMeta}>{FINANCE_MESSAGES.totalExpenses}</p>
+          )}
         </>
       )}
     </Link>

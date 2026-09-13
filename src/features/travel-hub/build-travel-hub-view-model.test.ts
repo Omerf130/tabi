@@ -39,7 +39,6 @@ function makeAccommodation(
     dateRangeLabel: "25 Oct – 28 Oct 2026",
     nightCount: 3,
     usesGoogleAttribution: false,
-    googleMapsUrl: "https://maps.google.com/example",
     ...overrides,
   };
 }
@@ -67,49 +66,36 @@ function makeList(
 }
 
 describe("buildTravelHubViewModel", () => {
-  it("builds working tool hrefs and disabled future tools", () => {
+  it("builds essentials hierarchy with canonical hrefs", () => {
     const model = buildTravelHubViewModel({
       trip,
       accommodations: [],
+      transports: [],
       lists: [],
-      todayJapan: "2026-10-01",
+      documentCount: 0,
+      currentTripDate: "2026-10-01",
       finance: emptyFinance,
     });
 
-    const accommodationsTool = model.tools.find((tool) => tool.id === "accommodations");
-    const listsTool = model.tools.find((tool) => tool.id === "lists");
-    const currencyTool = model.tools.find((tool) => tool.id === "currency");
-    const weatherTool = model.tools.find((tool) => tool.id === "weather");
-    const transportTool = model.tools.find((tool) => tool.id === "transport");
-    const languageTool = model.tools.find((tool) => tool.id === "language");
-    const emergencyTool = model.tools.find((tool) => tool.id === "emergency");
-
-    expect(model.hero.title).toBe("עוד");
-    expect(model.myTrip.href).toBe(`/app/trips/${tripId}`);
-    expect(accommodationsTool?.href).toBe(`/app/trips/${tripId}/accommodations`);
-    expect(listsTool?.href).toBe(`/app/trips/${tripId}/lists`);
-    expect(currencyTool?.href).toBe(`/app/trips/${tripId}/currency`);
-    expect(currencyTool?.status).toBe("active");
-    expect(weatherTool?.href).toBe(`/app/trips/${tripId}/weather`);
-    expect(weatherTool?.status).toBe("active");
-    expect(transportTool?.href).toBe(`/app/trips/${tripId}/transport`);
-    expect(transportTool?.status).toBe("active");
-    expect(languageTool?.href).toBe(`/app/trips/${tripId}/language`);
-    expect(languageTool?.status).toBe("active");
-    expect(languageTool?.label).toBe("שפה ותקשורת");
-    expect(emergencyTool?.href).toBe(`/app/trips/${tripId}/emergency`);
-    expect(emergencyTool?.status).toBe("active");
-    expect(emergencyTool?.label).toBe("חירום ועזרה");
-
-    const manageTool = model.tools.find((tool) => tool.id === "manage");
-
-    expect(model.tools).toHaveLength(8);
-    expect(manageTool?.href).toBe(`/app/trips/${tripId}/manage`);
-    expect(manageTool?.status).toBe("active");
-    expect(manageTool?.label).toBe("הגדרות וניהול");
+    expect(model.hero.title).toBe("כלי הטיול");
+    expect(model.accommodation.href).toBe(`/app/trips/${tripId}/accommodations`);
+    expect(model.transport.href).toBe(`/app/trips/${tripId}/transport`);
+    expect(model.finance.href).toBe(`/app/trips/${tripId}/finance`);
+    expect(model.materials.lists.href).toBe(`/app/trips/${tripId}/lists`);
+    expect(model.materials.documents.href).toBe(`/app/trips/${tripId}/documents`);
+    expect(model.management.href).toBe(`/app/trips/${tripId}/manage`);
+    expect(model.quickTools.map((tool) => tool.id)).toEqual([
+      "currency",
+      "weather",
+      "language",
+      "emergency",
+    ]);
+    expect(model.quickTools.find((tool) => tool.id === "currency")?.href).toBe(
+      `/app/trips/${tripId}/currency`,
+    );
   });
 
-  it("includes contextual accommodation and photo href when available", () => {
+  it("includes accommodation detail and optional photo", () => {
     const model = buildTravelHubViewModel({
       trip,
       accommodations: [
@@ -119,8 +105,10 @@ describe("buildTravelHubViewModel", () => {
           usesGoogleAttribution: true,
         }),
       ],
+      transports: [],
       lists: [],
-      todayJapan: "2026-10-01",
+      documentCount: 0,
+      currentTripDate: "2026-10-01",
       accommodationPhotoPresentation: {
         hasPhoto: true,
         photoHref: `/app/trips/${tripId}/accommodations/acc-google/photo`,
@@ -129,42 +117,26 @@ describe("buildTravelHubViewModel", () => {
       finance: emptyFinance,
     });
 
-    expect(model.contextualAccommodation?.title).toBe("הלינה הבאה שלך");
-    expect(model.contextualAccommodation?.placePhoto?.photoHref).toBe(
+    expect(model.accommodation.detailLine).toBe("הבא: Hotel Gracery Shinjuku");
+    expect(model.accommodation.thumbnail?.photoHref).toBe(
       `/app/trips/${tripId}/accommodations/acc-google/photo`,
     );
-    expect(model.contextualAccommodation?.showGoogleAttribution).toBe(true);
-    expect(model.contextualAccommodation?.listHref).toBe(
-      `/app/trips/${tripId}/accommodations`,
-    );
   });
 
-  it("omits attention list when all relevant lists are complete", () => {
+  it("uses real lists and documents metrics", () => {
     const model = buildTravelHubViewModel({
       trip,
       accommodations: [],
-      lists: [
-        makeList("before_trip", 6, 6),
-        makeList("pre_trip_shopping", 6, 6),
-        makeList("packing", 8, 8),
-      ],
-      todayJapan: "2026-10-01",
-      finance: emptyFinance,
-    });
-
-    expect(model.attentionList).toBeNull();
-  });
-
-  it("links attention list to list detail route", () => {
-    const model = buildTravelHubViewModel({
-      trip,
-      accommodations: [],
+      transports: [{ id: "t1" } as never, { id: "t2" } as never],
       lists: [makeList("packing", 8, 3)],
-      todayJapan: "2026-10-01",
+      documentCount: 5,
+      currentTripDate: "2026-10-01",
       finance: emptyFinance,
     });
 
-    expect(model.attentionList?.href).toBe(`/app/trips/${tripId}/lists/packing`);
+    expect(model.transport.countLabel).toBe("2 קטעי תחבורה");
+    expect(model.transport.detailLine).toBeNull();
+    expect(model.materials.lists.secondaryLine).toBe("3 מתוך 8 הושלמו");
+    expect(model.materials.documents.secondaryLine).toBe("5 מסמכים");
   });
 });
-

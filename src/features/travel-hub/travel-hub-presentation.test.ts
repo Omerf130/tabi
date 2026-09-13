@@ -1,24 +1,15 @@
-import { existsSync, readFileSync } from "node:fs";
-
+import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-
 import { fileURLToPath } from "node:url";
-
 import { describe, expect, it } from "vitest";
-
 import { buildAccommodationListHref } from "@/features/accommodations/constants";
-
 import { getActiveNavSection } from "@/features/app-shell/navigation";
-
 import { buildFinanceHref } from "@/features/finance/constants";
-
 import { buildTravelHubViewModel } from "./build-travel-hub-view-model";
-
-import { TRAVEL_TOOLS } from "./constants";
-
-
+import { TRAVEL_HUB_QUICK_TOOLS } from "./constants";
 
 const tripId = "507f1f77bcf86cd799439011";
+const featureRoot = dirname(fileURLToPath(import.meta.url));
 
 const emptyFinance = {
   href: buildFinanceHref(tripId),
@@ -31,49 +22,18 @@ const emptyFinance = {
   percentConsumed: null,
 };
 
-const featureRoot = dirname(fileURLToPath(import.meta.url));
-
-
-
 describe("travel hub presentation", () => {
-
-  it("keeps all 8 real travel tools in grid order", () => {
-
-    expect(TRAVEL_TOOLS.map((tool) => tool.id)).toEqual([
-
-      "accommodations",
-
-      "lists",
-
+  it("uses quick tools instead of a uniform nine-tile grid", () => {
+    expect(TRAVEL_HUB_QUICK_TOOLS.map((tool) => tool.id)).toEqual([
       "currency",
-
-      "transport",
-
       "weather",
-
       "language",
-
-      "manage",
-
       "emergency",
-
     ]);
-
-    expect(TRAVEL_TOOLS.every((tool) => tool.description.length > 0)).toBe(true);
-
+    expect(TRAVEL_HUB_QUICK_TOOLS.every((tool) => tool.description.length > 0)).toBe(
+      true,
+    );
   });
-
-
-
-  it("does not include a maps tool", () => {
-
-    expect(TRAVEL_TOOLS.some((tool) => tool.id.includes("map"))).toBe(false);
-
-    expect(TRAVEL_TOOLS.some((tool) => tool.label.includes("מפות"))).toBe(false);
-
-  });
-
-
 
   it("renders live finance summary card linked to Finance route", () => {
     const source = readFileSync(join(featureRoot, "FinanceSummaryCard.tsx"), "utf8");
@@ -83,17 +43,7 @@ describe("travel hub presentation", () => {
     expect(source).not.toContain("בקרוב");
   });
 
-  it("keeps finance out of the travel tools grid while the summary card remains", () => {
-    expect(TRAVEL_TOOLS.map((tool) => tool.id)).not.toContain("finance");
-    expect(
-      existsSync(join(process.cwd(), "src/app/app/trips/[tripId]/finance")),
-    ).toBe(true);
-  });
-
-
-
-  it("preserves existing tool hrefs", () => {
-
+  it("preserves canonical destination hrefs", () => {
     const model = buildTravelHubViewModel({
       trip: {
         id: tripId,
@@ -102,37 +52,54 @@ describe("travel hub presentation", () => {
         endDate: "2026-11-18",
       },
       accommodations: [],
+      transports: [],
       lists: [],
-      todayJapan: "2026-10-01",
+      documentCount: 0,
+      currentTripDate: "2026-10-01",
       finance: emptyFinance,
     });
 
-    const hrefById = Object.fromEntries(model.tools.map((tool) => [tool.id, tool.href]));
-
-
-
-    expect(hrefById.accommodations).toBe(`/app/trips/${tripId}/accommodations`);
-
-    expect(hrefById.lists).toBe(`/app/trips/${tripId}/lists`);
-
-    expect(hrefById.currency).toBe(`/app/trips/${tripId}/currency`);
-
-    expect(hrefById.transport).toBe(`/app/trips/${tripId}/transport`);
-
-    expect(hrefById.weather).toBe(`/app/trips/${tripId}/weather`);
-
-    expect(hrefById.language).toBe(`/app/trips/${tripId}/language`);
-
-    expect(hrefById.manage).toBe(`/app/trips/${tripId}/manage`);
-
-    expect(hrefById.emergency).toBe(`/app/trips/${tripId}/emergency`);
-
+    expect(model.accommodation.href).toBe(`/app/trips/${tripId}/accommodations`);
+    expect(model.materials.lists.href).toBe(`/app/trips/${tripId}/lists`);
+    expect(model.quickTools.find((tool) => tool.id === "currency")?.href).toBe(
+      `/app/trips/${tripId}/currency`,
+    );
+    expect(model.transport.href).toBe(`/app/trips/${tripId}/transport`);
+    expect(model.quickTools.some((tool) => tool.id === "currency")).toBe(true);
+    expect(model.quickTools.find((tool) => tool.id === "weather")?.href).toBe(
+      `/app/trips/${tripId}/weather`,
+    );
+    expect(model.quickTools.find((tool) => tool.id === "language")?.href).toBe(
+      `/app/trips/${tripId}/language`,
+    );
+    expect(model.management.href).toBe(`/app/trips/${tripId}/manage`);
+    expect(model.quickTools.find((tool) => tool.id === "emergency")?.href).toBe(
+      `/app/trips/${tripId}/emergency`,
+    );
   });
 
+  it("does not use selectNextUpcomingTransport in transport row builder", () => {
+    const source = readFileSync(
+      join(featureRoot, "build-travel-hub-transport-row.ts"),
+      "utf8",
+    );
 
+    expect(source).not.toContain("selectNextUpcomingTransport");
+    expect(source).not.toContain("getJapanWallClockTime");
+  });
 
-  it("preserves contextual accommodation behavior and list-all href", () => {
+  it("uses compact essentials layout in TravelHubContent", () => {
+    const source = readFileSync(join(featureRoot, "TravelHubContent.tsx"), "utf8");
 
+    expect(source).toContain("TravelHubPrimaryRow");
+    expect(source).toContain("materialsGrid");
+    expect(source).toContain("quickToolsGrid");
+    expect(source).toContain("managementRow");
+    expect(source).not.toContain("myTripCard");
+    expect(source).not.toContain("toolsGrid");
+  });
+
+  it("preserves accommodation list href and populated detail", () => {
     const model = buildTravelHubViewModel({
       trip: {
         id: tripId,
@@ -156,27 +123,18 @@ describe("travel hub presentation", () => {
           usesGoogleAttribution: false,
         },
       ],
+      transports: [],
       lists: [],
-      todayJapan: "2026-10-01",
+      documentCount: 0,
+      currentTripDate: "2026-10-01",
       finance: emptyFinance,
     });
 
-
-
-    expect(model.contextualAccommodation?.title).toBe("הלינה הבאה שלך");
-
-    expect(model.contextualAccommodation?.listHref).toBe(
-
-      buildAccommodationListHref(tripId),
-
-    );
-
+    expect(model.accommodation.detailLine).toBe("הבא: Hotel Gracery Shinjuku");
+    expect(model.accommodation.href).toBe(buildAccommodationListHref(tripId));
   });
 
-
-
-  it("uses real preparation progress data for attention list", () => {
-
+  it("uses real preparation progress data for lists tile", () => {
     const model = buildTravelHubViewModel({
       trip: {
         id: tripId,
@@ -185,6 +143,7 @@ describe("travel hub presentation", () => {
         endDate: "2026-11-18",
       },
       accommodations: [],
+      transports: [],
       lists: [
         {
           type: "packing",
@@ -195,52 +154,15 @@ describe("travel hub presentation", () => {
           progressLabel: "3 מתוך 8 הושלמו",
         },
       ],
-      todayJapan: "2026-10-01",
+      documentCount: 0,
+      currentTripDate: "2026-10-01",
       finance: emptyFinance,
     });
 
-
-
-    expect(model.attentionList?.list.progressLabel).toBe("3 מתוך 8 הושלמו");
-
-    expect(model.attentionList?.remainingCount).toBe(5);
-
+    expect(model.materials.lists.secondaryLine).toBe("3 מתוך 8 הושלמו");
   });
-
-
-
-  it("builds my trip card from canonical trip visual and real duration", () => {
-
-    const model = buildTravelHubViewModel({
-      trip: {
-        id: tripId,
-        name: "Japan 2026",
-        startDate: "2026-10-25",
-        endDate: "2026-11-18",
-        coverVisualKey: "japan-01",
-      },
-      accommodations: [],
-      lists: [],
-      todayJapan: "2026-12-01",
-      finance: emptyFinance,
-    });
-
-    expect(model.myTrip.href).toBe(`/app/trips/${tripId}`);
-    expect(model.myTrip.metaLabel).toBe("25 ימים • טיול הושלם");
-    expect(model.myTrip.statusLabel).toBe("טיול הושלם");
-
-    expect(model.hero.heroImageSrc).toBeTruthy();
-
-  });
-
-
 
   it("keeps more active in navigation", () => {
-
     expect(getActiveNavSection(`/app/trips/${tripId}/more`, tripId)).toBe("more");
-
   });
-
 });
-
-

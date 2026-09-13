@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { AppPage } from "@/features/app-shell/AppPage";
 import { listAccommodationsForTrip } from "@/features/accommodations/queries";
+import { listTravelDocumentsForTrip } from "@/features/documents/queries";
 import { listTripListsSummary } from "@/features/lists/queries";
+import { listTransportsForTrip } from "@/features/transport/queries";
 import { requireTripMember } from "@/features/trips/authorization";
 import { prepareTravelHubPage } from "@/features/travel-hub/prepare-travel-hub-page";
 import { TravelHubContent } from "@/features/travel-hub/TravelHubContent";
@@ -24,9 +26,11 @@ export default async function TripMorePage({
   const { tripId } = await params;
   const trip = await requireTripMember(tripId);
 
-  const [accommodations, lists] = await Promise.all([
+  const [accommodations, lists, transports, documents] = await Promise.all([
     listAccommodationsForTrip(trip.id),
     listTripListsSummary(trip.id),
+    listTransportsForTrip(trip.id),
+    listTravelDocumentsForTrip(trip.id),
   ]);
 
   const model = await prepareTravelHubPage({
@@ -39,7 +43,9 @@ export default async function TripMorePage({
       coverVisualKey: trip.coverVisualKey,
     },
     accommodations,
+    transports,
     lists,
+    documentCount: documents.length,
   });
 
   return (
@@ -48,4 +54,3 @@ export default async function TripMorePage({
     </AppPage>
   );
 }
-

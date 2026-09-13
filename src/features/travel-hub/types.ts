@@ -1,9 +1,6 @@
-import type { AccommodationViewModel } from "@/features/accommodations/types";
-import type { TravelHubFinanceSummary } from "@/features/finance/types";
 import type { PlacePhotoPresentation } from "@/features/place-images/types";
-import type { ContextualAccommodationVariant } from "./select-contextual-accommodation";
-import type { AttentionListResult } from "./select-attention-list";
-import type { TravelToolDefinition } from "./constants";
+import type { TravelHubFinanceSummary } from "@/features/finance/types";
+import type { TravelHubQuickToolId } from "./constants";
 
 export type TravelHubHeroViewModel = {
   heroImageSrc: string;
@@ -11,39 +8,47 @@ export type TravelHubHeroViewModel = {
   subtitle: string;
 };
 
-export type TravelHubMyTripCard = {
+export type TravelHubPrimaryToolRow = {
   href: string;
-  name: string;
-  dateRangeLabel: string;
-  metaLabel: string;
-  statusLabel: string;
-  heroImageSrc: string;
-};
-
-export type ContextualAccommodationCard = {
-  accommodation: AccommodationViewModel;
-  variant: ContextualAccommodationVariant;
   title: string;
-  detailHref: string;
-  listHref: string;
-  placePhoto?: PlacePhotoPresentation;
-  showGoogleAttribution: boolean;
+  countLabel: string | null;
+  detailLine: string | null;
+  emptyLine: string | null;
+  thumbnail?: PlacePhotoPresentation;
+  showGoogleAttribution?: boolean;
+  thumbnailAlt?: string;
 };
 
-export type AttentionListCard = AttentionListResult & {
+export type TravelHubMaterialsTile = {
   href: string;
+  title: string;
+  primaryLine: string;
+  secondaryLine: string | null;
 };
 
-export type TravelToolViewModel = TravelToolDefinition & {
-  href?: string;
+export type TravelHubQuickToolTile = {
+  id: TravelHubQuickToolId;
+  label: string;
+  description: string;
+  href: string;
+  colorClass: string;
+};
+
+export type TravelHubManagementEntry = {
+  href: string;
+  label: string;
 };
 
 export type TravelHubViewModel = {
   tripId: string;
   hero: TravelHubHeroViewModel;
-  myTrip: TravelHubMyTripCard;
-  contextualAccommodation: ContextualAccommodationCard | null;
-  attentionList: AttentionListCard | null;
+  accommodation: TravelHubPrimaryToolRow;
+  transport: TravelHubPrimaryToolRow;
   finance: TravelHubFinanceSummary;
-  tools: TravelToolViewModel[];
+  materials: {
+    lists: TravelHubMaterialsTile;
+    documents: TravelHubMaterialsTile;
+  };
+  quickTools: TravelHubQuickToolTile[];
+  management: TravelHubManagementEntry;
 };

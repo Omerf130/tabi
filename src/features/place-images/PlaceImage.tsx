@@ -18,6 +18,7 @@ type PlaceImageProps = {
   fallbackClassName?: string;
   attributionClassName?: string;
   alt?: string;
+  hideAttribution?: boolean;
 };
 
 export function PlaceImage({
@@ -31,6 +32,7 @@ export function PlaceImage({
   fallbackClassName,
   attributionClassName,
   alt = "",
+  hideAttribution = false,
 }: PlaceImageProps) {
   const [hasError, setHasError] = useState(false);
   const showPhoto = Boolean(photoHref) && !hasError;
@@ -62,12 +64,14 @@ export function PlaceImage({
           </div>
         )}
       </div>
-      <PlaceImageAttribution
-        authorAttributions={authorAttributions}
-        showPoweredByGoogle={showPoweredByGoogle}
-        presentation={presentation}
-        className={attributionClassName}
-      />
+      {hideAttribution ? null : (
+        <PlaceImageAttribution
+          authorAttributions={authorAttributions}
+          showPoweredByGoogle={showPoweredByGoogle}
+          presentation={presentation}
+          className={attributionClassName}
+        />
+      )}
     </div>
   );
 }

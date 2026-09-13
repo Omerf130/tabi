@@ -1,455 +1,181 @@
 import Link from "next/link";
-
 import {
-
   IconAccommodation,
-
   IconChevron,
-
   IconCurrency,
-
   IconDictionary,
-
+  IconDocuments,
   IconGear,
-
   IconGrid,
-
-  IconProgress,
-
   IconShield,
-
   IconTrain,
-
   IconWeather,
-
 } from "@/components/ui/icons";
-
-import { progressPercent } from "@/features/lists/ListProgressBar";
-
 import { AccommodationPhoto } from "./AccommodationPhoto";
-
 import { FinanceSummaryCard } from "./FinanceSummaryCard";
-
-import type { TravelHubViewModel, TravelToolViewModel } from "./types";
-
+import type {
+  TravelHubMaterialsTile,
+  TravelHubPrimaryToolRow,
+  TravelHubQuickToolTile,
+  TravelHubViewModel,
+} from "./types";
 import styles from "./TravelHub.module.scss";
 
-
-
 type TravelHubContentProps = {
-
   model: TravelHubViewModel;
-
 };
 
+function PrimaryToolIcon({ title }: { title: string }) {
+  if (title === "לינה") {
+    return <IconAccommodation className={styles.primaryRowIconSvg} aria-hidden />;
+  }
+  if (title === "תחבורה") {
+    return <IconTrain className={styles.primaryRowIconSvg} aria-hidden />;
+  }
+  return <IconGrid className={styles.primaryRowIconSvg} aria-hidden />;
+}
 
-
-function TravelToolIcon({ tool }: { tool: TravelToolViewModel }) {
-
+function QuickToolIcon({ tool }: { tool: TravelHubQuickToolTile }) {
   switch (tool.id) {
-
-    case "accommodations":
-
-      return <IconAccommodation className={styles.toolIconSvg} />;
-
-    case "lists":
-
-      return <IconGrid className={styles.toolIconSvg} />;
-
     case "currency":
-
-      return <IconCurrency className={styles.toolIconSvg} />;
-
-    case "transport":
-
-      return <IconTrain className={styles.toolIconSvg} />;
-
-    case "language":
-
-      return <IconDictionary className={styles.toolIconSvg} />;
-
+      return <IconCurrency className={styles.quickToolIconSvg} aria-hidden />;
     case "weather":
-
-      return <IconWeather className={styles.toolIconSvg} />;
-
+      return <IconWeather className={styles.quickToolIconSvg} aria-hidden />;
+    case "language":
+      return <IconDictionary className={styles.quickToolIconSvg} aria-hidden />;
     case "emergency":
-
-      return <IconShield className={styles.toolIconSvg} />;
-
-    case "manage":
-
-      return <IconGear className={styles.toolIconSvg} />;
-
+      return <IconShield className={styles.quickToolIconSvg} aria-hidden />;
     default:
-
-      return <IconGrid className={styles.toolIconSvg} />;
-
+      return <IconGrid className={styles.quickToolIconSvg} aria-hidden />;
   }
-
 }
 
+function MaterialsIcon({ title }: { title: string }) {
+  if (title === "מסמכים") {
+    return <IconDocuments className={styles.materialsIconSvg} aria-hidden />;
+  }
+  return <IconGrid className={styles.materialsIconSvg} aria-hidden />;
+}
 
-
-function SectionActionLink({ href, label }: { href: string; label: string }) {
+function TravelHubPrimaryRow({ row }: { row: TravelHubPrimaryToolRow }) {
+  const secondaryLine = row.emptyLine ?? row.detailLine;
 
   return (
+    <Link href={row.href} className={styles.primaryRow}>
+      {row.thumbnail ? (
+        <span className={styles.primaryRowThumb} aria-hidden>
+          <AccommodationPhoto
+            placePhoto={row.thumbnail}
+            showGoogleAttribution={row.showGoogleAttribution ?? false}
+            alt={row.thumbnailAlt ?? row.title}
+            hideAttribution
+          />
+        </span>
+      ) : (
+        <span className={styles.primaryRowIconWrap} aria-hidden>
+          <PrimaryToolIcon title={row.title} />
+        </span>
+      )}
 
-    <Link href={href} className={styles.sectionActionLink}>
+      <span className={styles.primaryRowCopy}>
+        <span className={styles.primaryRowTitle}>{row.title}</span>
+        {row.countLabel ? (
+          <span className={styles.primaryRowMeta}>{row.countLabel}</span>
+        ) : null}
+        {secondaryLine ? (
+          <span className={styles.primaryRowDetail} dir="auto">
+            {secondaryLine}
+          </span>
+        ) : null}
+      </span>
 
-      {label}
-
-      <IconChevron className={styles.sectionActionChevron} aria-hidden />
-
+      <IconChevron className={styles.primaryRowChevron} aria-hidden />
     </Link>
-
   );
-
 }
 
-
-
-function TravelToolCard({ tool }: { tool: TravelToolViewModel }) {
-
-  const iconContainerClass = [
-
-    styles.toolIconWrap,
-
-    styles[tool.colorClass as keyof typeof styles],
-
-  ]
-
-    .filter(Boolean)
-
-    .join(" ");
-
-
-
-  const content = (
-
-    <>
-
-      <span className={iconContainerClass} aria-hidden>
-
-        <TravelToolIcon tool={tool} />
-
+function TravelHubMaterialsTileLink({ tile }: { tile: TravelHubMaterialsTile }) {
+  return (
+    <Link href={tile.href} className={styles.materialsTile}>
+      <span className={styles.materialsIconWrap} aria-hidden>
+        <MaterialsIcon title={tile.title} />
       </span>
-
-      <span className={styles.toolCopy}>
-
-        <span className={styles.toolLabel}>{tool.label}</span>
-
-        <span className={styles.toolDescription}>{tool.description}</span>
-
+      <span className={styles.materialsCopy}>
+        <span className={styles.materialsTitle}>{tile.primaryLine}</span>
+        {tile.secondaryLine ? (
+          <span className={styles.materialsMeta}>{tile.secondaryLine}</span>
+        ) : null}
       </span>
-
-      <IconChevron className={styles.toolChevron} aria-hidden />
-
-    </>
-
+    </Link>
   );
+}
 
-
-
-  if (tool.status === "active" && tool.href) {
-
-    return (
-
-      <Link href={tool.href} className={styles.toolCard}>
-
-        {content}
-
-      </Link>
-
-    );
-
-  }
-
-
+function TravelHubQuickToolTileLink({ tool }: { tool: TravelHubQuickToolTile }) {
+  const colorClass = styles[tool.colorClass as keyof typeof styles];
 
   return (
-
-    <div className={[styles.toolCard, styles.toolCardDisabled].join(" ")} aria-disabled="true">
-
-      {content}
-
-    </div>
-
+    <Link href={tool.href} className={styles.quickToolTile}>
+      <span
+        className={[styles.quickToolIconWrap, colorClass].filter(Boolean).join(" ")}
+        aria-hidden
+      >
+        <QuickToolIcon tool={tool} />
+      </span>
+      <span className={styles.quickToolCopy}>
+        <span className={styles.quickToolLabel}>{tool.label}</span>
+        <span className={styles.quickToolDescription}>{tool.description}</span>
+      </span>
+    </Link>
   );
-
 }
-
-
 
 export function TravelHubContent({ model }: TravelHubContentProps) {
-
-  const { contextualAccommodation, attentionList } = model;
-
-
-
   return (
-
     <div className={styles.hub}>
-
-      <section className={styles.hero} aria-label="מרכז הטיול">
-
+      <section className={styles.hero} aria-label="כלי הטיול">
         <div className={styles.heroMedia} aria-hidden>
-
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-
           <img src={model.hero.heroImageSrc} alt="" className={styles.heroImage} />
-
           <div className={styles.heroScrim} />
-
         </div>
-
         <div className={styles.heroBody}>
-
           <h1 className={styles.heroTitle}>{model.hero.title}</h1>
-
           <p className={styles.heroSubtitle}>{model.hero.subtitle}</p>
-
         </div>
-
       </section>
 
-
-
-      <Link href={model.myTrip.href} className={styles.myTripCard}>
-
-        <span className={styles.myTripThumbWrap} aria-hidden>
-
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-
-          <img src={model.myTrip.heroImageSrc} alt="" className={styles.myTripThumb} />
-
-        </span>
-
-        <span className={styles.myTripCopy}>
-
-          <span className={styles.myTripEyebrow}>הטיול שלי</span>
-
-          <span className={styles.myTripName} dir="auto">
-
-            {model.myTrip.name}
-
-          </span>
-
-          <span className={styles.myTripDates}>{model.myTrip.dateRangeLabel}</span>
-
-          <span className={styles.myTripMeta}>
-
-            <span
-
-              className={styles.myTripStatusDot}
-
-              data-status={model.myTrip.statusLabel === "טיול הושלם" ? "completed" : "default"}
-
-              aria-hidden
-
-            />
-
-            {model.myTrip.metaLabel}
-
-          </span>
-
-        </span>
-
-        <IconChevron className={styles.myTripChevron} aria-hidden />
-
-      </Link>
-
-
-
       <div className={styles.hubBody}>
-
-        {contextualAccommodation ? (
-
-          <section
-
-            className={styles.section}
-
-            aria-labelledby="contextual-accommodation-title"
-
-          >
-
-            <div className={styles.sectionHeader}>
-
-              <div className={styles.sectionHeaderStart}>
-
-                <IconAccommodation className={styles.sectionIcon} aria-hidden />
-
-                <h2 id="contextual-accommodation-title" className={styles.sectionTitle}>
-
-                  {contextualAccommodation.title}
-
-                </h2>
-
-              </div>
-
-              <SectionActionLink
-
-                href={contextualAccommodation.listHref}
-
-                label="הצג הכול"
-
-              />
-
-            </div>
-
-
-
-            <div className={styles.accommodationCard}>
-
-              <div className={styles.accommodationThumb}>
-
-                <AccommodationPhoto
-
-                  placePhoto={contextualAccommodation.placePhoto}
-
-                  showGoogleAttribution={contextualAccommodation.showGoogleAttribution}
-
-                  alt={contextualAccommodation.accommodation.name}
-
-                />
-
-              </div>
-
-              <Link
-
-                href={contextualAccommodation.detailHref}
-
-                className={styles.accommodationMainLink}
-
-                aria-label={contextualAccommodation.accommodation.name}
-
-              >
-
-                <span className={styles.accommodationIdentity}>
-
-                  <span className={styles.accommodationName} dir="auto">
-
-                    {contextualAccommodation.accommodation.name}
-
-                  </span>
-
-                  <span className={styles.accommodationLocation} dir="auto">
-
-                    {contextualAccommodation.accommodation.city}
-
-                  </span>
-
-                </span>
-
-                <IconChevron className={styles.accommodationChevron} aria-hidden />
-
-              </Link>
-
-            </div>
-
+        <div className={styles.hubMain}>
+          <section className={styles.primarySection} aria-label="כלי טיול עיקריים">
+            <TravelHubPrimaryRow row={model.accommodation} />
+            <TravelHubPrimaryRow row={model.transport} />
           </section>
 
-        ) : null}
+          <FinanceSummaryCard finance={model.finance} />
 
-
-
-        {attentionList ? (
-
-          <section className={styles.section} aria-labelledby="attention-list-title">
-
-            <div className={styles.sectionHeader}>
-
-              <div className={styles.sectionHeaderStart}>
-
-                <IconProgress className={styles.sectionIcon} aria-hidden />
-
-                <h2 id="attention-list-title" className={styles.sectionTitle}>
-
-                  התקדמות הטיול
-
-                </h2>
-
-              </div>
-
-              <SectionActionLink href={attentionList.href} label="הצג פרטים" />
-
+          <section className={styles.materialsSection} aria-label="חומרים והכנה">
+            <div className={styles.materialsGrid}>
+              <TravelHubMaterialsTileLink tile={model.materials.lists} />
+              <TravelHubMaterialsTileLink tile={model.materials.documents} />
             </div>
-
-
-
-            <Link href={attentionList.href} className={styles.progressCardLink}>
-
-              <article className={styles.progressCard}>
-
-                <p className={styles.progressPrimary}>{attentionList.attentionMessage}</p>
-
-                <p className={styles.progressSecondary}>{attentionList.list.progressLabel}</p>
-
-                <div
-
-                  className={styles.progressTrack}
-
-                  role="progressbar"
-
-                  aria-valuenow={progressPercent(attentionList.list.progress)}
-
-                  aria-valuemin={0}
-
-                  aria-valuemax={100}
-
-                  aria-label={`${attentionList.list.title}: ${attentionList.list.progressLabel}`}
-
-                >
-
-                  <div
-
-                    className={styles.progressFill}
-
-                    style={{ width: `${progressPercent(attentionList.list.progress)}%` }}
-
-                  />
-
-                </div>
-
-              </article>
-
-            </Link>
-
           </section>
 
-        ) : null}
+          <Link href={model.management.href} className={styles.managementRow}>
+            <span className={styles.managementIconWrap} aria-hidden>
+              <IconGear className={styles.managementIconSvg} />
+            </span>
+            <span className={styles.managementLabel}>{model.management.label}</span>
+            <IconChevron className={styles.managementChevron} aria-hidden />
+          </Link>
+        </div>
 
-
-
-        <FinanceSummaryCard finance={model.finance} />
-
-
-
-        <section className={styles.section} aria-labelledby="travel-tools-title">
-
-          <h2 id="travel-tools-title" className={styles.toolsHeading}>
-
-            כלי הטיול
-
-          </h2>
-
-          <div className={styles.toolsGrid}>
-
-            {model.tools.map((tool) => (
-
-              <TravelToolCard key={tool.id} tool={tool} />
-
+        <section className={styles.quickToolsSection} aria-label="כלי עזר מהירים">
+          <div className={styles.quickToolsGrid}>
+            {model.quickTools.map((tool) => (
+              <TravelHubQuickToolTileLink key={tool.id} tool={tool} />
             ))}
-
           </div>
-
         </section>
-
       </div>
-
     </div>
-
   );
-
 }
-
-

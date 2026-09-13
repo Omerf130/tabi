@@ -84,6 +84,10 @@ export function getTravelDocumentFilePath(
   return `/app/trips/${tripId}/documents/${documentId}/file`;
 }
 
+export function buildTravelDocumentsHref(tripId: string): string {
+  return `/app/trips/${tripId}/documents`;
+}
+
 export function getTravelDocumentDetailPath(
   tripId: string,
   documentId: string,
