@@ -61,6 +61,12 @@ describe("buildHomePreparation", () => {
       percentage: 44,
       progressLabel: "8 מתוך 18 הושלמו",
     });
+    expect(result?.listTiles).toHaveLength(3);
+    expect(result?.listTiles.map((tile) => tile.type)).toEqual([
+      "packing",
+      "before_trip",
+      "pre_trip_shopping",
+    ]);
   });
 
   it("returns null when total is zero", () => {

@@ -7,7 +7,10 @@ import {
 import { listAccommodationsForTrip } from "@/features/accommodations/queries";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
 import { extractFocusedDayWeather } from "@/features/itinerary/focused-day-weather";
-import { listActivitiesForTripDay } from "@/features/itinerary/queries";
+import {
+  listActivitiesForTrip,
+  listActivitiesForTripDay,
+} from "@/features/itinerary/queries";
 import { resolveDayLocation } from "@/features/itinerary/resolve-day-location.server";
 import {
   listTripListItemsForTypes,
@@ -24,6 +27,7 @@ import type { TripWorkspace } from "@/features/trips/public-trip";
 import {
   listIncompleteRemindersForUserTrip,
   listIncompleteRemindersForUserTripDay,
+  listRemindersForUserTrip,
 } from "@/features/trips/reminders/queries";
 import { selectTodayHomeReminders } from "@/features/trips/reminders/select-today-home-reminders";
 import { selectUpcomingHomeReminders } from "@/features/trips/reminders/select-upcoming-home-reminders";
@@ -89,6 +93,7 @@ export async function prepareTripHomePage(
       lists,
       listItems,
       reminderRecords,
+      allReminders,
       accommodations,
     ] = await Promise.all([
       listActivitiesForTripDay(trip.id, trip.startDate),
@@ -101,6 +106,7 @@ export async function prepareTripHomePage(
       listTripListsSummary(trip.id),
       listTripListItemsForTypes(trip.id, PREPARATION_LIST_TYPES),
       listIncompleteRemindersForUserTrip(trip.id, userId),
+      listRemindersForUserTrip(trip.id, userId, todayJapan),
       listAccommodationsForTrip(trip.id),
     ]);
 
@@ -146,17 +152,27 @@ export async function prepareTripHomePage(
         reminderRecords,
         todayJapan,
       ),
+      allReminders,
       dayOnePhotoPresentation,
+      usePreviewCountdownReference:
+        "isPreview" in previewContext && previewContext.isPreview,
     });
   }
 
   if (phase === "completed") {
-    const financeRecap = await prepareAfterTripFinanceRecap(trip.id);
+    const [financeRecap, activities, accommodations] = await Promise.all([
+      prepareAfterTripFinanceRecap(trip.id),
+      listActivitiesForTrip(trip.id),
+      listAccommodationsForTrip(trip.id),
+    ]);
+
     return buildTripHomeViewModel({
       trip,
       todayJapan,
       nowJapanTime,
       financeRecap,
+      activityCount: activities.length,
+      accommodationCount: accommodations.length,
     });
   }
 
@@ -166,6 +182,7 @@ export async function prepareTripHomePage(
     dayActivities,
     dayTransports,
     todayReminderRecords,
+    allReminders,
     accommodations,
     transportRecords,
   ] = await Promise.all([
@@ -177,6 +194,7 @@ export async function prepareTripHomePage(
       trip.endDate,
     ),
     listIncompleteRemindersForUserTripDay(trip.id, userId, todayJapan),
+    listRemindersForUserTrip(trip.id, userId, todayJapan),
     listAccommodationsForTrip(trip.id),
     listTransportsForTrip(trip.id),
   ]);
@@ -267,5 +285,6 @@ export async function prepareTripHomePage(
     upNextPhotoPresentation,
     tonightPhotoPresentation,
     weather,
+    allReminders,
   });
 }

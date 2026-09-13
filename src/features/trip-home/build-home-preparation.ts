@@ -1,4 +1,9 @@
-import { buildListsLandingHref } from "@/features/lists/constants";
+import {
+  buildListDetailHref,
+  buildListsLandingHref,
+  getTripListSlugFromType,
+  TRIP_LIST_DEFINITIONS,
+} from "@/features/lists/constants";
 import type { TripListType } from "@/features/lists/constants";
 import type {
   TripListItemViewModel,
@@ -30,6 +35,14 @@ export type HomePreparationPreviewItem = {
   listType: TripListType;
 };
 
+export type HomePreparationListTile = {
+  type: TripListType;
+  title: string;
+  completedCount: number;
+  totalCount: number;
+  href: string;
+};
+
 export type HomePreparationViewModel = {
   totalCount: number;
   completedCount: number;
@@ -37,6 +50,7 @@ export type HomePreparationViewModel = {
   percentage: number | null;
   progressLabel: string;
   previewItems: HomePreparationPreviewItem[];
+  listTiles: HomePreparationListTile[];
   listsHref: string;
 };
 
@@ -94,6 +108,24 @@ export function buildHomePreparation(
 
   const remainingCount = totalCount - completedCount;
   const percentage = Math.round((completedCount / totalCount) * 100);
+  const listTiles: HomePreparationListTile[] = [];
+
+  for (const type of PREPARATION_LIST_TYPES) {
+    const progress = listByType.get(type)?.progress;
+    if (!progress || progress.totalCount === 0) {
+      continue;
+    }
+
+    const definition = TRIP_LIST_DEFINITIONS.find((entry) => entry.type === type);
+    listTiles.push({
+      type,
+      title: definition?.title ?? type,
+      completedCount: progress.completedCount,
+      totalCount: progress.totalCount,
+      href: buildListDetailHref(tripId, getTripListSlugFromType(type)),
+    });
+  }
+
   const previewItems = listItems
     .filter((item) => isPreparationListType(item.listType))
     .sort((left, right) => {
@@ -132,6 +164,7 @@ export function buildHomePreparation(
     percentage,
     progressLabel: `${completedCount} מתוך ${totalCount} הושלמו`,
     previewItems,
+    listTiles,
     listsHref: buildListsLandingHref(tripId),
   };
 }

@@ -56,10 +56,10 @@ describe("during trip home", () => {
   it("defines the main surface section order", () => {
     expect(DURING_SURFACE_SECTION_ORDER).toEqual([
       "importantToday",
-      "todaysPlan",
       "now",
       "upNext",
-      "tonight",
+      "todaySummary",
+      "todaysPlan",
     ]);
   });
 
@@ -199,6 +199,80 @@ describe("during trip home", () => {
 
     expect(model.tonight?.name).toBe("Hotel Gracery Shinjuku");
     expect(model.tonight?.city).toBe("Shinjuku City");
+  });
+
+  it("CASE A — empty active day keeps today's plan with CTA and no NOW/UP NEXT", () => {
+    const model = buildTripHomeViewModel({
+      trip,
+      todayJapan: "2026-11-01",
+      nowJapanTime: "13:00",
+      dayActivities: [],
+      dayTransports: [],
+    });
+
+    expect(model.phase).toBe("active");
+    if (model.phase !== "active") {
+      return;
+    }
+
+    expect(model.todaysPlan.isEmpty).toBe(true);
+    expect(model.todaysPlan.ctaHref).toBe(
+      "/app/trips/507f1f77bcf86cd799439011/itinerary/2026-11-01",
+    );
+    expect(model.todaysPlan.items).toHaveLength(0);
+    expect(model.now).toBeNull();
+    expect(model.upNext).toBeNull();
+    expect(model.todaySummary.todayItemCount).toBeUndefined();
+  });
+
+  it("CASE B — populated active day exposes timeline items and NOW/UP NEXT", () => {
+    const dayActivities = [
+      activity({
+        id: "now",
+        title: "TeamLab Planets",
+        order: 0,
+        startTime: "12:30",
+        endTime: "14:00",
+      }),
+      activity({
+        id: "next",
+        title: "Fushimi Inari",
+        order: 1,
+        startTime: "16:00",
+        endTime: "18:00",
+      }),
+      activity({
+        id: "later",
+        title: "Dinner in Gion",
+        order: 2,
+        startTime: "19:30",
+        endTime: "21:00",
+      }),
+    ];
+
+    const model = buildTripHomeViewModel({
+      trip,
+      todayJapan: "2026-11-01",
+      nowJapanTime: "13:00",
+      dayActivities,
+    });
+
+    expect(model.phase).toBe("active");
+    if (model.phase !== "active") {
+      return;
+    }
+
+    expect(model.todaysPlan.isEmpty).toBe(false);
+    expect(model.todaysPlan.items.length).toBeGreaterThan(0);
+    expect(model.todaysPlan.items.some((item) => item.title === "Dinner in Gion")).toBe(
+      true,
+    );
+    expect(model.todaysPlan.ctaHref).toBe(
+      "/app/trips/507f1f77bcf86cd799439011/itinerary/2026-11-01",
+    );
+    expect(model.now?.id).toBe("now");
+    expect(model.upNext?.id).toBe("next");
+    expect(model.todaySummary.todayItemCount).toBeGreaterThan(0);
   });
 
   it("limits during Google image slots to now, up next, and tonight", () => {

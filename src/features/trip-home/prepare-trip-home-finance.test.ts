@@ -22,6 +22,7 @@ vi.mock("@/features/accommodations/queries", () => ({
 
 vi.mock("@/features/itinerary/queries", () => ({
   listActivitiesForTripDay: vi.fn(async () => []),
+  listActivitiesForTrip: vi.fn(async () => []),
 }));
 
 vi.mock("@/features/transport/queries", () => ({
@@ -37,6 +38,7 @@ vi.mock("@/features/lists/queries", () => ({
 vi.mock("@/features/trips/reminders/queries", () => ({
   listIncompleteRemindersForUserTrip: vi.fn(async () => []),
   listIncompleteRemindersForUserTripDay: vi.fn(async () => []),
+  listRemindersForUserTrip: vi.fn(async () => []),
 }));
 
 vi.mock("@/features/weather/queries", () => ({

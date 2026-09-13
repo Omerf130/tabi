@@ -2,6 +2,7 @@ import Link from "next/link";
 import { IconChevron, IconItinerary, IconMemories } from "@/components/ui/icons";
 import type { AfterTripFinanceRecapViewModel } from "@/features/finance/types";
 import { AfterTripFinanceRecap } from "./AfterTripFinanceRecap";
+import type { AfterTripSummaryMetric } from "./build-after-trip-summary";
 import type {
   TripHomeItineraryRevisit,
   TripHomeMemoriesEntry,
@@ -9,18 +10,20 @@ import type {
 import styles from "./TripHomeContent.module.scss";
 
 export const AFTER_SURFACE_SECTION_ORDER = [
-  "memories",
+  "tripSummary",
   "financeRecap",
+  "memories",
   "itineraryRevisit",
 ] as const;
 
 type AfterTripJourneyProps = {
+  tripSummary: AfterTripSummaryMetric[];
   memories: TripHomeMemoriesEntry;
   financeRecap: AfterTripFinanceRecapViewModel;
   itineraryRevisit: TripHomeItineraryRevisit;
 };
 
-function AfterEntryCard({
+function AfterEntryRow({
   href,
   icon: Icon,
   title,
@@ -32,7 +35,7 @@ function AfterEntryCard({
   description: string;
 }) {
   return (
-    <Link href={href} className={styles.afterEntryCard}>
+    <Link href={href} className={styles.afterEntryRow}>
       <span className={styles.afterEntryIconWrap} aria-hidden>
         <Icon className={styles.afterEntryIcon} />
       </span>
@@ -46,27 +49,43 @@ function AfterEntryCard({
 }
 
 export function AfterTripJourney({
+  tripSummary,
   memories,
   financeRecap,
   itineraryRevisit,
 }: AfterTripJourneyProps) {
   return (
     <section className={styles.afterJourney} aria-label="אחרי הטיול">
-      <div className={styles.afterJourneyInner}>
-        <AfterEntryCard
+      <section className={styles.homeSection} aria-label="סיכום הטיול">
+        <div className={styles.homeSectionHeader}>
+          <h2 className={styles.homeSectionTitle}>סיכום הטיול</h2>
+        </div>
+        <ul className={styles.summaryMetricGrid}>
+          {tripSummary.map((metric) => (
+            <li key={metric.id} className={styles.summaryMetricTile}>
+              <span className={styles.summaryMetricValue}>{metric.value}</span>
+              <span className={styles.summaryMetricLabel}>{metric.label}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <AfterTripFinanceRecap recap={financeRecap} />
+
+      <section className={styles.homeSection} aria-label="זיכרונות ומסלול">
+        <AfterEntryRow
           href={memories.href}
           icon={IconMemories}
           title={memories.title}
           description={memories.description}
         />
-        <AfterTripFinanceRecap recap={financeRecap} />
-        <AfterEntryCard
+        <AfterEntryRow
           href={itineraryRevisit.href}
           icon={IconItinerary}
           title={itineraryRevisit.title}
           description={itineraryRevisit.description}
         />
-      </div>
+      </section>
     </section>
   );
 }

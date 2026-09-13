@@ -1,20 +1,16 @@
 "use client";
 
-import Link from "next/link";
 import {
-  useCallback,
   useEffect,
-  useId,
-  useRef,
   useState,
 } from "react";
 import { IconBell, IconChevron } from "@/components/ui/icons";
 import {
-  canOpenReminderPanel,
   getNextReminderIndex,
   REMINDER_ROTATION_MS,
   shouldAutoRotateReminders,
 } from "./home-reminder-rotation";
+import { useTripHomeReminders } from "./TripHomeRemindersContext.client";
 import type { TripHomeImportantToday } from "./types";
 import styles from "./TripHomeContent.module.scss";
 
@@ -34,93 +30,10 @@ function usePrefersReducedMotion(): boolean {
   return prefersReducedMotion;
 }
 
-type ReminderPanelProps = {
-  reminders: TripHomeImportantToday["reminders"];
-  settingsHref: string;
-  titleId: string;
-  onClose: () => void;
-};
-
-function ReminderPanel({
-  reminders,
-  settingsHref,
-  titleId,
-  onClose,
-}: ReminderPanelProps) {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) {
-      return;
-    }
-
-    if (!dialog.open) {
-      dialog.showModal();
-    }
-
-    return () => {
-      if (dialog.open) {
-        dialog.close();
-      }
-    };
-  }, []);
-
-  return (
-    <dialog
-      ref={dialogRef}
-      className={styles.reminderPanel}
-      aria-labelledby={titleId}
-      onCancel={(event) => {
-        event.preventDefault();
-        onClose();
-      }}
-      onClick={(event) => {
-        if (event.target === dialogRef.current) {
-          onClose();
-        }
-      }}
-    >
-      <div className={styles.reminderPanelInner}>
-        <div className={styles.reminderPanelHeader}>
-          <h3 id={titleId} className={styles.reminderPanelTitle}>
-            חשוב להיום
-          </h3>
-          <button
-            type="button"
-            className={styles.reminderPanelClose}
-            onClick={onClose}
-            aria-label="סגירה"
-          >
-            ×
-          </button>
-        </div>
-        <ul className={styles.reminderPanelList}>
-          {reminders.map((reminder) => (
-            <li key={reminder.id} className={styles.reminderPanelItem}>
-              <p className={styles.reminderMeta}>{reminder.time}</p>
-              <p className={styles.reminderText} dir="auto">
-                {reminder.text}
-              </p>
-            </li>
-          ))}
-        </ul>
-        <Link href={settingsHref} className={styles.sectionLink}>
-          לניהול התזכורות
-        </Link>
-      </div>
-    </dialog>
-  );
-}
-
-export function ImportantTodaySection({
-  reminders,
-  settingsHref,
-}: ImportantTodaySectionProps) {
-  const titleId = useId();
+export function ImportantTodaySection({ reminders }: ImportantTodaySectionProps) {
+  const { openManager } = useTripHomeReminders();
   const prefersReducedMotion = usePrefersReducedMotion();
   const [visibleIndex, setVisibleIndex] = useState(0);
-  const [panelOpen, setPanelOpen] = useState(false);
 
   useEffect(() => {
     if (!shouldAutoRotateReminders(reminders.length, prefersReducedMotion)) {
@@ -134,16 +47,6 @@ export function ImportantTodaySection({
     return () => window.clearInterval(timer);
   }, [prefersReducedMotion, reminders.length]);
 
-  const openPanel = useCallback(() => {
-    if (canOpenReminderPanel(reminders.length)) {
-      setPanelOpen(true);
-    }
-  }, [reminders.length]);
-
-  const closePanel = useCallback(() => {
-    setPanelOpen(false);
-  }, []);
-
   const currentReminder = reminders[visibleIndex] ?? reminders[0]!;
 
   return (
@@ -151,7 +54,7 @@ export function ImportantTodaySection({
       <button
         type="button"
         className={styles.duringImportantTodayTrigger}
-        onClick={openPanel}
+        onClick={() => openManager({ tab: "today" })}
         aria-label={`חשוב להיום: ${currentReminder.text}`}
       >
         <span className={styles.duringBlockHeader}>
@@ -188,14 +91,13 @@ export function ImportantTodaySection({
         </span>
       </button>
 
-      {panelOpen ? (
-        <ReminderPanel
-          reminders={reminders}
-          settingsHref={settingsHref}
-          titleId={titleId}
-          onClose={closePanel}
-        />
-      ) : null}
+      <button
+        type="button"
+        className={styles.duringImportantTodayManageLink}
+        onClick={() => openManager({ tab: "today" })}
+      >
+        לכל התזכורות
+      </button>
     </div>
   );
 }

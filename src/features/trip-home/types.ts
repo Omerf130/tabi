@@ -1,18 +1,23 @@
 import type { AfterTripFinanceRecapViewModel } from "@/features/finance/types";
 import type { PlacePhotoPresentation } from "@/features/place-images/types";
+import type { TripReminderViewModel } from "@/features/trips/reminders/types";
 import type { UpcomingHomeReminderItem } from "@/features/trips/reminders/select-upcoming-home-reminders";
 import type { TripPhase } from "@/features/trips/trip-phase";
 import type { HomeItineraryPreviewItem } from "./build-home-itinerary-preview";
 import type { DayOnePreviewItem } from "./build-day-one-home-preview";
+import type { AfterTripSummaryMetric } from "./build-after-trip-summary";
 import type { HomePreparationViewModel } from "./build-home-preparation";
+
+export type TripHomeCountdownViewModel = {
+  targetMs: number;
+  referenceMs?: number;
+};
 
 export type TripHomeHeroViewModel = {
   tripName: string;
   dateRangeLabel: string;
   heroImageSrc: string;
   hasPersistedCover: boolean;
-  countdownDays?: number;
-  countdownLabel?: string;
   tripIdentityLabel?: string;
   durationLabel?: string;
   currentDay?: {
@@ -53,10 +58,17 @@ export type TripHomeDayOnePreview = {
   dayHref: string;
 };
 
+export type TripHomeRemindersManagerData = {
+  tripId: string;
+  startDate: string;
+  endDate: string;
+  currentTripDate: string;
+  reminders: TripReminderViewModel[];
+};
+
 export type TripHomeBeforeJourneyViewModel = {
   preparation: HomePreparationViewModel | null;
   upcomingReminders: UpcomingHomeReminderItem[] | null;
-  remindersSettingsHref: string;
   dayOne: TripHomeDayOnePreview;
   itineraryCta: {
     label: string;
@@ -72,7 +84,6 @@ export type TripHomeReminderItem = {
 
 export type TripHomeImportantToday = {
   reminders: TripHomeReminderItem[];
-  settingsHref: string;
 };
 
 export type TripHomeActivityCard = {
@@ -105,10 +116,20 @@ export type TripHomeItineraryRevisit = {
   description: string;
 };
 
+export type TripHomeTodaySummary = {
+  tonightName?: string;
+  weatherLabel?: string;
+  weatherIconUrl?: string;
+  todayItemCount?: number;
+  todayPlanHref?: string;
+};
+
 export type TripHomeUpcomingViewModel = {
   phase: "upcoming";
   hero: TripHomeHeroViewModel;
+  countdown: TripHomeCountdownViewModel;
   beforeJourney: TripHomeBeforeJourneyViewModel;
+  remindersManager: TripHomeRemindersManagerData;
 };
 
 export type TripHomeActiveViewModel = {
@@ -119,11 +140,14 @@ export type TripHomeActiveViewModel = {
   now: TripHomeActivityCard | null;
   upNext: TripHomeActivityCard | null;
   tonight: TripHomeTonightCard | null;
+  todaySummary: TripHomeTodaySummary;
+  remindersManager: TripHomeRemindersManagerData;
 };
 
 export type TripHomeCompletedViewModel = {
   phase: "completed";
   hero: TripHomeHeroViewModel;
+  tripSummary: AfterTripSummaryMetric[];
   memories: TripHomeMemoriesEntry;
   financeRecap: AfterTripFinanceRecapViewModel;
   itineraryRevisit: TripHomeItineraryRevisit;

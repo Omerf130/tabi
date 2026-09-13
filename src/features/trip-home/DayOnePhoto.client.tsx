@@ -10,16 +10,19 @@ type DayOnePhotoProps = {
 };
 
 export function DayOnePhoto({ photoPresentation }: DayOnePhotoProps) {
+  if (!photoPresentation.hasPhoto) {
+    return null;
+  }
+
   return (
     <PlaceImage
       photoHref={photoPresentation.photoHref}
       authorAttributions={photoPresentation.authorAttributions}
-      showPoweredByGoogle={photoPresentation.hasPhoto}
+      showPoweredByGoogle
+      presentation="compact"
       fallbackIcon={IconActivityOther}
       frameClassName={styles.dayOnePhotoFrame}
       imageClassName={styles.dayOnePhoto}
-      fallbackClassName={styles.dayOnePhotoFallback}
-      attributionClassName={styles.dayOnePhotoAttribution}
       alt=""
     />
   );

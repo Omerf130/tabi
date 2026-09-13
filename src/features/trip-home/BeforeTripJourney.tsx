@@ -5,7 +5,6 @@ import {
   IconActivityOther,
   IconActivityTransport,
   IconChevron,
-  IconGrid,
 } from "@/components/ui/icons";
 import { DayOnePhoto } from "./DayOnePhoto.client";
 import type {
@@ -14,111 +13,50 @@ import type {
 } from "./types";
 import type { DayOnePreviewItem } from "./build-day-one-home-preview";
 import type { HomePreparationViewModel } from "./build-home-preparation";
-import type { UpcomingHomeReminderItem } from "@/features/trips/reminders/select-upcoming-home-reminders";
+import { BeforeTripRemindersSection } from "./BeforeTripRemindersSection.client";
 import styles from "./TripHomeContent.module.scss";
 
 type BeforeTripJourneyProps = {
   journey: TripHomeBeforeJourneyViewModel;
 };
 
-function PreparationProgressRing({
-  percentage,
-}: {
-  percentage: number | null;
-}) {
-  const progress = percentage ?? 0;
-
-  return (
-    <div
-      className={styles.preparationRing}
-      style={{ "--preparation-progress": `${progress}` } as CSSProperties}
-      aria-hidden
-    >
-      <div className={styles.preparationRingInner}>
-        <span className={styles.preparationRingValue}>
-          {percentage === null ? "—" : `${percentage}%`}
-        </span>
-      </div>
-    </div>
-  );
-}
-
-function PreparationBlock({
+function ListTilesSection({
   preparation,
 }: {
   preparation: HomePreparationViewModel;
 }) {
-  return (
-    <Link href={preparation.listsHref} className={styles.beforeInnerCard}>
-      <div className={styles.beforeInnerHeader}>
-        <span className={styles.beforeInnerIconWrap} aria-hidden>
-          <IconGrid className={styles.beforeInnerIcon} />
-        </span>
-        <span className={styles.beforeInnerTitle}>לקראת הטיול</span>
-        <IconChevron className={styles.beforeInnerChevron} aria-hidden />
-      </div>
+  if (preparation.listTiles.length === 0) {
+    return null;
+  }
 
-      <div className={styles.preparationBody}>
-        <PreparationProgressRing percentage={preparation.percentage} />
-        <div className={styles.preparationSummary}>
-          <p className={styles.preparationProgressLabel}>
-            {preparation.progressLabel}
-          </p>
-          {preparation.previewItems.length > 0 ? (
-            <ul className={styles.preparationChecklist}>
-              {preparation.previewItems.map((item) => (
-                <li
-                  key={item.id}
-                  className={styles.preparationChecklistItem}
-                  data-completed={item.isCompleted ? "true" : "false"}
-                >
-                  <span className={styles.preparationCheck} aria-hidden>
-                    {item.isCompleted ? "✓" : ""}
-                  </span>
-                  <span dir="auto">{item.text}</span>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-function RemindersBlock({
-  reminders,
-  settingsHref,
-}: {
-  reminders: readonly UpcomingHomeReminderItem[];
-  settingsHref: string;
-}) {
   return (
-    <div className={styles.beforeInnerSection}>
-      <div className={styles.beforeInnerHeaderStatic}>
-        <span className={styles.beforeInnerTitle}>תזכורות קרובות</span>
-        <Link href={settingsHref} className={styles.beforeInnerAction}>
-          ניהול
+    <section className={styles.homeSection} aria-label="רשימות והכנות">
+      <div className={styles.homeSectionHeader}>
+        <h2 className={styles.homeSectionTitle}>רשימות והכנות</h2>
+        <Link href={preparation.listsHref} className={styles.homeSectionAction}>
+          הכל
         </Link>
       </div>
-      <ul className={styles.beforeReminderList}>
-        {reminders.map((reminder) => (
-          <li key={reminder.id} className={styles.beforeReminderItem}>
-            <span className={styles.beforeReminderIndicator} aria-hidden />
-            <div className={styles.beforeReminderContent}>
-              <p className={styles.beforeReminderText} dir="auto">
-                {reminder.text}
-              </p>
-              <p className={styles.beforeReminderMeta}>
-                {reminder.dateLabel}
-                <span className={styles.heroDot}>·</span>
-                {reminder.time}
-              </p>
-            </div>
+      <ul className={styles.listTileGrid}>
+        {preparation.listTiles.map((tile) => (
+          <li key={tile.type}>
+            <Link href={tile.href} className={styles.listTile}>
+              <span className={styles.listTileTitle}>{tile.title}</span>
+              <span className={styles.listTileProgress}>
+                {tile.completedCount}/{tile.totalCount}
+              </span>
+              <span
+                className={styles.listTileBar}
+                style={{
+                  "--list-progress": `${Math.round((tile.completedCount / tile.totalCount) * 100)}%`,
+                } as CSSProperties}
+                aria-hidden
+              />
+            </Link>
           </li>
         ))}
       </ul>
-    </div>
+    </section>
   );
 }
 
@@ -132,16 +70,25 @@ function DayOnePreviewIcon({ item }: { item: DayOnePreviewItem }) {
   return <IconActivityOther className={styles.dayOneItemIcon} aria-hidden />;
 }
 
-function DayOneBlock({ dayOne }: { dayOne: TripHomeDayOnePreview }) {
-  return (
-    <div className={styles.beforeInnerCard}>
-      <Link href={dayOne.dayHref} className={styles.beforeInnerHeaderLink}>
-        <span className={styles.beforeInnerTitle}>מבט ליום הראשון</span>
-        <IconChevron className={styles.beforeInnerChevron} aria-hidden />
-      </Link>
+function DayOneSection({ dayOne }: { dayOne: TripHomeDayOnePreview }) {
+  const hasPhoto = dayOne.photoPresentation.hasPhoto;
+  const primaryItem = dayOne.items[0];
 
-      <div className={styles.dayOneBody}>
-        <div className={styles.dayOneCopy}>
+  return (
+    <section className={styles.homeSection} aria-label="מבט ליום הראשון">
+      <div className={styles.homeSectionHeader}>
+        <h2 className={styles.homeSectionTitle}>מבט ליום הראשון</h2>
+        <Link href={dayOne.dayHref} className={styles.homeSectionAction}>
+          פרטים
+        </Link>
+      </div>
+
+      <Link href={dayOne.dayHref} className={styles.dayOnePreviewRow}>
+        {hasPhoto ? (
+          <DayOnePhoto photoPresentation={dayOne.photoPresentation} />
+        ) : null}
+
+        <div className={styles.dayOnePreviewCopy}>
           <p className={styles.dayOneMeta}>{dayOne.dayMeta}</p>
           <p className={styles.dayOneDate}>
             {dayOne.weekdayLabel} · {dayOne.dateLabel}
@@ -149,60 +96,53 @@ function DayOneBlock({ dayOne }: { dayOne: TripHomeDayOnePreview }) {
 
           {dayOne.isEmpty ? (
             <p className={styles.dayOneEmpty}>{dayOne.emptyMessage}</p>
-          ) : (
-            <ul className={styles.dayOneItems}>
-              {dayOne.items.map((item) => (
-                <li key={item.id} className={styles.dayOneItem}>
-                  <DayOnePreviewIcon item={item} />
-                  <div className={styles.dayOneItemContent}>
-                    <p className={styles.dayOneItemTitle} dir="auto">
-                      {item.title}
-                    </p>
-                    {item.displayTime || item.subtitle ? (
-                      <p className={styles.dayOneItemMeta} dir="auto">
-                        {item.displayTime}
-                        {item.displayTime && item.subtitle ? (
-                          <span className={styles.heroDot}>·</span>
-                        ) : null}
-                        {item.subtitle}
-                      </p>
-                    ) : null}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {dayOne.overflowCount > 0 ? (
-            <p className={styles.dayOneOverflow}>ועוד {dayOne.overflowCount}</p>
+          ) : primaryItem ? (
+            <>
+              <p className={styles.dayOnePrimaryTitle} dir="auto">
+                {primaryItem.title}
+              </p>
+              {primaryItem.displayTime || primaryItem.subtitle ? (
+                <p className={styles.dayOnePrimaryMeta} dir="auto">
+                  {primaryItem.displayTime}
+                  {primaryItem.displayTime && primaryItem.subtitle ? (
+                    <span className={styles.heroDot}>·</span>
+                  ) : null}
+                  {primaryItem.subtitle}
+                </p>
+              ) : null}
+              {dayOne.items.length > 1 ? (
+                <ul className={styles.dayOneItemsCompact}>
+                  {dayOne.items.slice(1, 3).map((item) => (
+                    <li key={item.id} className={styles.dayOneItemCompact}>
+                      <DayOnePreviewIcon item={item} />
+                      <span dir="auto">{item.title}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+              {dayOne.overflowCount > 0 ? (
+                <p className={styles.dayOneOverflow}>ועוד {dayOne.overflowCount}</p>
+              ) : null}
+            </>
           ) : null}
         </div>
 
-        <DayOnePhoto photoPresentation={dayOne.photoPresentation} />
-      </div>
-    </div>
+        <IconChevron className={styles.dayOnePreviewChevron} aria-hidden />
+      </Link>
+    </section>
   );
 }
 
 export function BeforeTripJourney({ journey }: BeforeTripJourneyProps) {
   return (
     <section className={styles.beforeJourney} aria-label="הכנה לטיול">
-      <div className={styles.beforeJourneyPrimary}>
-        {journey.preparation ? (
-          <PreparationBlock preparation={journey.preparation} />
-        ) : null}
+      <BeforeTripRemindersSection reminders={journey.upcomingReminders ?? []} />
 
-        {journey.upcomingReminders ? (
-          <RemindersBlock
-            reminders={journey.upcomingReminders}
-            settingsHref={journey.remindersSettingsHref}
-          />
-        ) : null}
-      </div>
+      {journey.preparation ? (
+        <ListTilesSection preparation={journey.preparation} />
+      ) : null}
 
-      <div className={styles.beforeJourneySecondary}>
-        <DayOneBlock dayOne={journey.dayOne} />
-      </div>
+      <DayOneSection dayOne={journey.dayOne} />
 
       <Link href={journey.itineraryCta.href} className={styles.beforeJourneyCta}>
         {journey.itineraryCta.label}

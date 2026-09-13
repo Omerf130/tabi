@@ -6,9 +6,8 @@ import {
   formatCalendarDateRangeDisplay,
   getJapanCalendarDate,
 } from "@/features/trips/calendar-date";
-import { getCalendarDaysUntil } from "@/features/trips/calendar-day-diff";
 import { getJapanWallClockTime } from "@/features/trips/japan-wall-clock";
-import { getTripRemindersSettingsHref } from "@/features/trips/reminders/constants";
+import type { TripReminderViewModel } from "@/features/trips/reminders/types";
 import type { UpcomingHomeReminderItem } from "@/features/trips/reminders/select-upcoming-home-reminders";
 import type { TodayHomeReminderItem } from "@/features/trips/reminders/select-today-home-reminders";
 import { getTripPhase } from "@/features/trips/trip-phase";
@@ -27,7 +26,12 @@ import { buildDayOneHomePreview } from "./build-day-one-home-preview";
 import {
   buildActiveHomeItineraryPreview,
 } from "./build-home-itinerary-preview";
+import { buildAfterTripSummary } from "./build-after-trip-summary";
 import type { HomePreparationViewModel } from "./build-home-preparation";
+import {
+  resolveTripCountdownReferenceMs,
+  resolveTripCountdownTargetMs,
+} from "./resolve-trip-countdown";
 import { resolveNowAndNextUp } from "./resolve-now-and-next-up";
 import type { AfterTripFinanceRecapViewModel } from "@/features/finance/types";
 import type {
@@ -37,6 +41,7 @@ import type {
   TripHomeDayOnePreview,
   TripHomeHeroViewModel,
   TripHomeItinerarySection,
+  TripHomeRemindersManagerData,
   TripHomeUpcomingViewModel,
   TripHomeViewModel,
 } from "./types";
@@ -74,16 +79,23 @@ type BuildTripHomeViewModelInput = {
   todayJapan?: string;
   nowJapanTime?: string;
   financeRecap?: AfterTripFinanceRecapViewModel;
+  activityCount?: number;
+  accommodationCount?: number;
+  usePreviewCountdownReference?: boolean;
+  allReminders?: readonly TripReminderViewModel[];
 };
 
-function formatCountdownLabel(daysUntilStart: number): string {
-  if (daysUntilStart === 0) {
-    return "היום מתחילים";
-  }
-  if (daysUntilStart === 1) {
-    return "עוד יום אחד";
-  }
-  return `עוד ${daysUntilStart} ימים`;
+function buildRemindersManager(
+  input: BuildTripHomeViewModelInput,
+  currentTripDate: string,
+): TripHomeRemindersManagerData {
+  return {
+    tripId: input.trip.id,
+    startDate: input.trip.startDate,
+    endDate: input.trip.endDate,
+    currentTripDate,
+    reminders: [...(input.allReminders ?? [])],
+  };
 }
 
 function buildHeroBase(
@@ -153,7 +165,6 @@ function buildBeforeJourney(
     preparation,
     upcomingReminders:
       upcomingReminders.length > 0 ? [...upcomingReminders] : null,
-    remindersSettingsHref: getTripRemindersSettingsHref(trip.id),
     dayOne: buildDayOnePreviewSection(
       trip.id,
       trip.startDate,
@@ -229,18 +240,22 @@ export function buildTripHomeViewModel(
 
   const phase = getTripPhase(trip.startDate, trip.endDate, todayJapan);
   const totalDays = getTripDayCount(trip.startDate, trip.endDate);
-  const remindersSettingsHref = getTripRemindersSettingsHref(trip.id);
   const heroBase = buildHeroBase(input);
 
   if (phase === "upcoming") {
-    const countdownDays = getCalendarDaysUntil(todayJapan, trip.startDate);
+    const referenceMs = input.usePreviewCountdownReference
+      ? resolveTripCountdownReferenceMs({
+          previewCalendarDate: todayJapan,
+          previewWallClock: nowJapanTime,
+        })
+      : undefined;
 
     return {
       phase: "upcoming",
-      hero: {
-        ...heroBase,
-        countdownDays,
-        countdownLabel: formatCountdownLabel(countdownDays),
+      hero: heroBase,
+      countdown: {
+        targetMs: resolveTripCountdownTargetMs(trip.startDate),
+        referenceMs,
       },
       beforeJourney: buildBeforeJourney(
         {
@@ -250,6 +265,7 @@ export function buildTripHomeViewModel(
         },
         totalDays,
       ),
+      remindersManager: buildRemindersManager(input, todayJapan),
     } satisfies TripHomeUpcomingViewModel;
   }
 
@@ -265,7 +281,7 @@ export function buildTripHomeViewModel(
       hero: {
         ...heroBase,
         tripIdentityLabel: resolveAfterTripIdentityLabel(trip.name, destination),
-        completionMessage: "איזה טיול.",
+        completionMessage: "הטיול הסתיים",
         durationLabel: buildAfterTripDurationLabel(
           trip.startDate,
           trip.endDate,
@@ -273,6 +289,12 @@ export function buildTripHomeViewModel(
           trip.name,
         ),
       },
+      tripSummary: buildAfterTripSummary({
+        startDate: trip.startDate,
+        endDate: trip.endDate,
+        activityCount: input.activityCount ?? 0,
+        accommodationCount: input.accommodationCount ?? 0,
+      }),
       memories: {
         href: `/app/trips/${trip.id}/memories`,
         title: "זיכרונות",
@@ -315,7 +337,6 @@ export function buildTripHomeViewModel(
             time: reminder.time,
             text: reminder.text,
           })),
-          settingsHref: remindersSettingsHref,
         }
       : null;
 
@@ -341,6 +362,14 @@ export function buildTripHomeViewModel(
     };
   }
 
+  const todaysPlan = buildTodaysPlanSection(
+    trip.id,
+    todayJapan,
+    dayNumber,
+    totalDays,
+    preview,
+  );
+
   return {
     phase: "active",
     hero: {
@@ -354,15 +383,19 @@ export function buildTripHomeViewModel(
       weather,
     },
     importantToday,
-    todaysPlan: buildTodaysPlanSection(
-      trip.id,
-      todayJapan,
-      dayNumber,
-      totalDays,
-      preview,
-    ),
+    todaysPlan,
     now,
     upNext,
     tonight,
+    todaySummary: {
+      tonightName: tonight?.name,
+      weatherLabel: weather?.temperatureLabel,
+      weatherIconUrl: weather?.conditionIconUrl,
+      todayItemCount: todaysPlan.isEmpty
+        ? undefined
+        : todaysPlan.items.length + todaysPlan.overflowCount,
+      todayPlanHref: todaysPlan.ctaHref,
+    },
+    remindersManager: buildRemindersManager(input, todayJapan),
   } satisfies TripHomeActiveViewModel;
 }

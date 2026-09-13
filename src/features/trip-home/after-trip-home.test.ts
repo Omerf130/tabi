@@ -14,8 +14,9 @@ const trip = {
 describe("after trip home", () => {
   it("defines the after surface section order", () => {
     expect(AFTER_SURFACE_SECTION_ORDER).toEqual([
-      "memories",
+      "tripSummary",
       "financeRecap",
+      "memories",
       "itineraryRevisit",
     ]);
   });
