@@ -104,12 +104,6 @@ export type TripHomeTonightCard = {
   photoPresentation: PlacePhotoPresentation;
 };
 
-export type TripHomeMemoriesEntry = {
-  href: string;
-  title: string;
-  description: string;
-};
-
 export type TripHomeItineraryRevisit = {
   href: string;
   title: string;
@@ -148,7 +142,6 @@ export type TripHomeCompletedViewModel = {
   phase: "completed";
   hero: TripHomeHeroViewModel;
   tripSummary: AfterTripSummaryMetric[];
-  memories: TripHomeMemoriesEntry;
   financeRecap: AfterTripFinanceRecapViewModel;
   itineraryRevisit: TripHomeItineraryRevisit;
 };

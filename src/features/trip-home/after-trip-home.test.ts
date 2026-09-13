@@ -16,9 +16,9 @@ describe("after trip home", () => {
     expect(AFTER_SURFACE_SECTION_ORDER).toEqual([
       "tripSummary",
       "financeRecap",
-      "memories",
       "itineraryRevisit",
     ]);
+    expect(AFTER_SURFACE_SECTION_ORDER).not.toContain("memories");
   });
 
   it("uses canonical trip visual for completed hero", () => {
@@ -73,7 +73,7 @@ describe("after trip home", () => {
     expect(model.hero.durationLabel).not.toContain("יפן");
   });
 
-  it("links memories and itinerary revisit to real routes", () => {
+  it("links itinerary revisit to the real route", () => {
     const model = buildTripHomeViewModel({
       trip,
       todayJapan: "2026-12-01",
@@ -86,15 +86,13 @@ describe("after trip home", () => {
       return;
     }
 
-    expect(model.memories.href).toBe(
-      "/app/trips/507f1f77bcf86cd799439011/memories",
-    );
     expect(model.itineraryRevisit.href).toBe(
       "/app/trips/507f1f77bcf86cd799439011/itinerary",
     );
+    expect(model).not.toHaveProperty("memories");
   });
 
-  it("includes finance recap and avoids highlights or fake memories data", () => {
+  it("includes finance recap and avoids highlights", () => {
     const model = buildTripHomeViewModel({
       trip,
       todayJapan: "2026-12-01",
@@ -109,14 +107,7 @@ describe("after trip home", () => {
 
     expect(model.financeRecap.variant).toBe("noExpenses");
     expect(model).not.toHaveProperty("highlights");
-    expect(model.memories).toEqual({
-      href: "/app/trips/507f1f77bcf86cd799439011/memories",
-      title: "זיכרונות",
-      description: "הרגעים מהטיול יחכו לך כאן.",
-    });
-    expect(model.memories).not.toHaveProperty("photoCount");
-    expect(model.memories).not.toHaveProperty("gallery");
-    expect(model.memories).not.toHaveProperty("statistics");
+    expect(model).not.toHaveProperty("memories");
   });
 
   it("keeps before and during view models unchanged", () => {
@@ -144,4 +135,3 @@ describe("after trip home", () => {
     expect(during).not.toHaveProperty("memories");
   });
 });
-

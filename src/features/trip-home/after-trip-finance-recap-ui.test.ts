@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { buildFinanceHref } from "@/features/finance/constants";
 
 describe("after trip finance recap UI contracts", () => {
-  it("places finance recap after trip summary and before memories", () => {
+  it("places finance recap after trip summary and before itinerary revisit", () => {
     const source = readFileSync(
       join(process.cwd(), "src/features/trip-home/AfterTripJourney.tsx"),
       "utf8",
@@ -15,11 +15,9 @@ describe("after trip finance recap UI contracts", () => {
       source.indexOf("<AfterTripFinanceRecap"),
     );
     expect(source.indexOf("<AfterTripFinanceRecap")).toBeLessThan(
-      source.indexOf("memories.href"),
-    );
-    expect(source.indexOf("memories.href")).toBeLessThan(
       source.indexOf("itineraryRevisit.href"),
     );
+    expect(source).not.toContain("memories");
   });
 
   it("exposes read-only recap without mutation controls", () => {

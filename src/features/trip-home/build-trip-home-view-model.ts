@@ -295,11 +295,6 @@ export function buildTripHomeViewModel(
         activityCount: input.activityCount ?? 0,
         accommodationCount: input.accommodationCount ?? 0,
       }),
-      memories: {
-        href: `/app/trips/${trip.id}/memories`,
-        title: "זיכרונות",
-        description: "הרגעים מהטיול יחכו לך כאן.",
-      },
       financeRecap: input.financeRecap,
       itineraryRevisit: {
         href: `/app/trips/${trip.id}/itinerary`,

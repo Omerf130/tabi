@@ -42,16 +42,6 @@ export function IconDocuments({ className }: IconProps) {
   );
 }
 
-export function IconMemories({ className }: IconProps) {
-  return (
-    <svg {...stroke} className={className}>
-      <rect x="4" y="6" width="16" height="13" rx="2" />
-      <circle cx="9" cy="11" r="1.25" />
-      <path d="m8 16.5 3.2-3.2 2.3 2.3 2.2-2.8 4.3 3.7" />
-    </svg>
-  );
-}
-
 export function IconMore({ className }: IconProps) {
   return (
     <svg {...stroke} className={className}>

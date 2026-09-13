@@ -2,16 +2,24 @@ export type NavSection =
   | "home"
   | "itinerary"
   | "documents"
-  | "memories"
+  | "settings"
   | "more";
 
 export const NAV_LABELS: Record<NavSection, string> = {
   home: "בית",
   itinerary: "מסלול",
   documents: "מסמכים",
-  memories: "זיכרונות",
+  settings: "הגדרות",
   more: "עוד",
 };
+
+export const NAV_SECTIONS: NavSection[] = [
+  "home",
+  "itinerary",
+  "documents",
+  "settings",
+  "more",
+];
 
 export function buildTripNavHref(
   tripId: string,
@@ -20,6 +28,9 @@ export function buildTripNavHref(
   const base = `/app/trips/${tripId}`;
   if (section === "home") {
     return base;
+  }
+  if (section === "settings") {
+    return `${base}/manage`;
   }
   return `${base}/${section}`;
 }
@@ -47,14 +58,11 @@ export function getActiveNavSection(
   if (segment === "documents") {
     return "documents";
   }
-  if (segment === "memories") {
-    return "memories";
+  if (segment === "manage" || segment === "members" || segment === "settings") {
+    return "settings";
   }
   if (
     segment === "more" ||
-    segment === "manage" ||
-    segment === "members" ||
-    segment === "settings" ||
     segment === "accommodations" ||
     segment === "lists" ||
     segment === "currency" ||

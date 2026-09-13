@@ -3,16 +3,33 @@ import {
   buildTripNavHref,
   getActiveNavSection,
   isSecondaryTripRoute,
+  NAV_LABELS,
+  NAV_SECTIONS,
 } from "./navigation";
 
 const TRIP_A = "507f1f77bcf86cd799439011";
 const TRIP_B = "507f1f77bcf86cd799439012";
 
 describe("navigation", () => {
+  it("defines exactly five primary nav items in order", () => {
+    expect(NAV_SECTIONS).toEqual([
+      "home",
+      "itinerary",
+      "documents",
+      "settings",
+      "more",
+    ]);
+    expect(NAV_SECTIONS).not.toContain("memories");
+    expect(NAV_LABELS.settings).toBe("הגדרות");
+  });
+
   it("builds trip nav hrefs", () => {
     expect(buildTripNavHref(TRIP_A, "home")).toBe(`/app/trips/${TRIP_A}`);
     expect(buildTripNavHref(TRIP_A, "itinerary")).toBe(
       `/app/trips/${TRIP_A}/itinerary`,
+    );
+    expect(buildTripNavHref(TRIP_A, "settings")).toBe(
+      `/app/trips/${TRIP_A}/manage`,
     );
     expect(buildTripNavHref(TRIP_A, "more")).toBe(`/app/trips/${TRIP_A}/more`);
   });
@@ -25,27 +42,33 @@ describe("navigation", () => {
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/documents`, TRIP_A)).toBe(
       "documents",
     );
-    expect(getActiveNavSection(`/app/trips/${TRIP_A}/memories`, TRIP_A)).toBe(
-      "memories",
-    );
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/more`, TRIP_A)).toBe(
       "more",
     );
   });
 
-  it("maps travel hub secondary routes to more", () => {
+  it("maps management routes to settings", () => {
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/manage`, TRIP_A)).toBe(
-      "more",
+      "settings",
     );
     expect(
       getActiveNavSection(`/app/trips/${TRIP_A}/manage/details`, TRIP_A),
-    ).toBe("more");
+    ).toBe("settings");
+    expect(
+      getActiveNavSection(`/app/trips/${TRIP_A}/manage/members`, TRIP_A),
+    ).toBe("settings");
+    expect(
+      getActiveNavSection(`/app/trips/${TRIP_A}/manage/accommodations`, TRIP_A),
+    ).toBe("settings");
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/members`, TRIP_A)).toBe(
-      "more",
+      "settings",
     );
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/settings`, TRIP_A)).toBe(
-      "more",
+      "settings",
     );
+  });
+
+  it("maps travel hub secondary routes to more", () => {
     expect(
       getActiveNavSection(`/app/trips/${TRIP_A}/accommodations`, TRIP_A),
     ).toBe("more");
@@ -79,6 +102,18 @@ describe("navigation", () => {
         TRIP_A,
       ),
     ).toBe("more");
+  });
+
+  it("does not map traveler routes to settings", () => {
+    expect(
+      getActiveNavSection(`/app/trips/${TRIP_A}/accommodations`, TRIP_A),
+    ).not.toBe("settings");
+    expect(getActiveNavSection(`/app/trips/${TRIP_A}/transport`, TRIP_A)).not.toBe(
+      "settings",
+    );
+    expect(getActiveNavSection(`/app/trips/${TRIP_A}/finance`, TRIP_A)).not.toBe(
+      "settings",
+    );
   });
 
   it("returns null for non-matching trip paths", () => {

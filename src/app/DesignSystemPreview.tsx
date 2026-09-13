@@ -9,7 +9,7 @@ import {
   IconDocuments,
   IconHome,
   IconItinerary,
-  IconMemories,
+  IconGear,
   IconMore,
 } from "@/components/ui/icons";
 import styles from "./design-system/page.module.scss";
@@ -77,10 +77,10 @@ export function DesignSystemPreview({ children }: DesignSystemPreviewProps) {
               icon: <IconDocuments />,
             },
             {
-              id: "memories",
-              label: "זיכרונות",
-              href: "#memories",
-              icon: <IconMemories />,
+              id: "settings",
+              label: "הגדרות",
+              href: "#settings",
+              icon: <IconGear />,
             },
             {
               id: "more",

@@ -4,32 +4,24 @@ import { usePathname } from "next/navigation";
 import { BottomNav } from "@/components/ui/BottomNav/BottomNav";
 import {
   IconDocuments,
+  IconGear,
   IconHome,
   IconItinerary,
-  IconMemories,
   IconMore,
 } from "@/components/ui/icons";
 import {
   buildTripNavHref,
   getActiveNavSection,
   NAV_LABELS,
-  type NavSection,
+  NAV_SECTIONS,
 } from "./navigation";
 import styles from "./TripPrimaryNav.module.scss";
-
-const NAV_SECTIONS: NavSection[] = [
-  "home",
-  "itinerary",
-  "documents",
-  "memories",
-  "more",
-];
 
 const NAV_ICONS = {
   home: IconHome,
   itinerary: IconItinerary,
   documents: IconDocuments,
-  memories: IconMemories,
+  settings: IconGear,
   more: IconMore,
 } as const;
 

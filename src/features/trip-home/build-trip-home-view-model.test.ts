@@ -286,10 +286,7 @@ describe("buildTripHomeViewModel", () => {
     });
     expect(model.hero.durationLabel).toBe("25 ימים ביפן 2026");
     expect(model.hero.tripIdentityLabel).toBe("יפן 2026");
-    expect(model.memories.href).toBe(
-      "/app/trips/507f1f77bcf86cd799439011/memories",
-    );
-    expect(model.memories.description).toBe("הרגעים מהטיול יחכו לך כאן.");
+    expect(model).not.toHaveProperty("memories");
     expect(model.financeRecap.variant).toBe("noExpenses");
     expect(model.itineraryRevisit.href).toBe(
       "/app/trips/507f1f77bcf86cd799439011/itinerary",
