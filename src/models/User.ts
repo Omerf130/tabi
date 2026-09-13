@@ -20,6 +20,12 @@ const userSchema = new mongoose.Schema(
       default: "user",
       required: true,
     },
+    locale: {
+      type: String,
+      enum: ["he", "en"] as const,
+      default: "he",
+      required: true,
+    },
   },
   { timestamps: true },
 );

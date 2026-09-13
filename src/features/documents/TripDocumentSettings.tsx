@@ -1,17 +1,19 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import { useActionState, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { Textarea } from "@/components/ui/Textarea/Textarea";
 import { AuthSubmitButton } from "@/features/auth/AuthSubmitButton";
+import { TRAVEL_DOCUMENT_CATEGORIES } from "@/features/documents/constants";
+import { createTravelDocumentCategoryLabelResolver } from "@/features/documents/document-labels";
 import {
-  TRAVEL_DOCUMENT_CATEGORIES,
-  TRAVEL_DOCUMENT_CATEGORY_LABELS,
-  TRAVEL_DOCUMENT_MESSAGES,
-} from "@/features/documents/constants";
+  translateDocumentError,
+  translateDocumentSuccess,
+} from "@/features/documents/translate-document-error";
 import {
   createTravelDocumentAction,
   deleteTravelDocumentAction,
@@ -97,6 +99,7 @@ function ContextLinkFields({
   initialActivityId,
   initialAccommodationId,
   initialTransportId,
+  t,
 }: {
   document?: TravelDocumentSettingsViewModel;
   activityOptions: ActivityLinkOption[];
@@ -108,10 +111,11 @@ function ContextLinkFields({
   initialActivityId?: string;
   initialAccommodationId?: string;
   initialTransportId?: string;
+  t: ReturnType<typeof useTranslations<"Documents">>;
 }) {
   return (
     <div className={styles.linkFields}>
-      <Field label="קשור אל" htmlFor={`${idPrefix}-link-type`}>
+      <Field label={t("linkedTo")} htmlFor={`${idPrefix}-link-type`}>
         <select
           id={`${idPrefix}-link-type`}
           name="linkType"
@@ -120,15 +124,15 @@ function ContextLinkFields({
             onLinkTypeChange(event.target.value as DocumentLinkType)
           }
         >
-          <option value="none">ללא קישור</option>
-          <option value="activity">פעילות</option>
-          <option value="accommodation">לינה</option>
-          <option value="transport">תחבורה</option>
+          <option value="none">{t("linkNone")}</option>
+          <option value="activity">{t("linkActivity")}</option>
+          <option value="accommodation">{t("linkAccommodation")}</option>
+          <option value="transport">{t("linkTransport")}</option>
         </select>
       </Field>
 
       {linkType === "activity" ? (
-        <Field label="פעילות" htmlFor={`${idPrefix}-activity`}>
+        <Field label={t("linkActivity")} htmlFor={`${idPrefix}-activity`}>
           <select
             id={`${idPrefix}-activity`}
             name="activityId"
@@ -138,7 +142,7 @@ function ContextLinkFields({
                 : initialActivityId ?? ""
             }
           >
-            <option value="">בחרו פעילות</option>
+            <option value="">{t("selectActivity")}</option>
             {activityOptions.map((option) => (
               <option key={option.id} value={option.id}>
                 {option.label}
@@ -149,7 +153,7 @@ function ContextLinkFields({
       ) : null}
 
       {linkType === "accommodation" ? (
-        <Field label="לינה" htmlFor={`${idPrefix}-accommodation`}>
+        <Field label={t("linkAccommodation")} htmlFor={`${idPrefix}-accommodation`}>
           <select
             id={`${idPrefix}-accommodation`}
             name="accommodationId"
@@ -159,7 +163,7 @@ function ContextLinkFields({
                 : initialAccommodationId ?? ""
             }
           >
-            <option value="">בחרו מקום לינה</option>
+            <option value="">{t("selectAccommodation")}</option>
             {accommodationOptions.map((option) => (
               <option key={option.id} value={option.id}>
                 {option.label}
@@ -170,7 +174,7 @@ function ContextLinkFields({
       ) : null}
 
       {linkType === "transport" ? (
-        <Field label="תחבורה" htmlFor={`${idPrefix}-transport`}>
+        <Field label={t("linkTransport")} htmlFor={`${idPrefix}-transport`}>
           <select
             id={`${idPrefix}-transport`}
             name="transportId"
@@ -180,7 +184,7 @@ function ContextLinkFields({
                 : initialTransportId ?? ""
             }
           >
-            <option value="">בחרו קטע תחבורה</option>
+            <option value="">{t("selectTransport")}</option>
             {transportOptions.map((option) => (
               <option key={option.id} value={option.id}>
                 {option.label}
@@ -209,8 +213,16 @@ export function TripDocumentForm({
   onCancel,
   onSuccess,
 }: DocumentFormProps) {
+  const t = useTranslations("Documents");
+  const tCommon = useTranslations("Common");
+  const resolveCategoryLabel = useMemo(
+    () => createTravelDocumentCategoryLabelResolver(t),
+    [t],
+  );
   const router = useRouter();
   const [state, formAction] = useActionState(action, initialState);
+  const errorMessage = translateDocumentError(t, state.errorCode);
+  const successMessage = translateDocumentSuccess(t, state.successCode);
   const [linkType, setLinkType] = useState<DocumentLinkType>(
     document ? getInitialLinkType(document) : initialLinkType ?? "none",
   );
@@ -229,7 +241,7 @@ export function TripDocumentForm({
       {document ? <input type="hidden" name="documentId" value={document.id} /> : null}
 
       {includeFile ? (
-        <Field label="קובץ" htmlFor={`${idPrefix}-file`}>
+        <Field label={t("file")} htmlFor={`${idPrefix}-file`}>
           <input
             id={`${idPrefix}-file`}
             name="file"
@@ -241,17 +253,17 @@ export function TripDocumentForm({
         </Field>
       ) : null}
 
-      <Field label="כותרת" htmlFor={`${idPrefix}-title`}>
+      <Field label={t("title")} htmlFor={`${idPrefix}-title`}>
         <Input
           id={`${idPrefix}-title`}
           name="title"
           defaultValue={document?.title ?? ""}
-          placeholder={includeFile ? "אופציונלי — יילקח משם הקובץ" : undefined}
+          placeholder={includeFile ? t("titlePlaceholder") : undefined}
           required={!includeFile}
         />
       </Field>
 
-      <Field label="קטגוריה" htmlFor={`${idPrefix}-category`}>
+      <Field label={t("category")} htmlFor={`${idPrefix}-category`}>
         <select
           id={`${idPrefix}-category`}
           name="category"
@@ -260,13 +272,13 @@ export function TripDocumentForm({
         >
           {TRAVEL_DOCUMENT_CATEGORIES.map((category) => (
             <option key={category} value={category}>
-              {TRAVEL_DOCUMENT_CATEGORY_LABELS[category]}
+              {resolveCategoryLabel(category)}
             </option>
           ))}
         </select>
       </Field>
 
-      <Field label="תיאור (אופציונלי)" htmlFor={`${idPrefix}-description`}>
+      <Field label={t("descriptionOptional")} htmlFor={`${idPrefix}-description`}>
         <Textarea
           id={`${idPrefix}-description`}
           name="description"
@@ -286,9 +298,10 @@ export function TripDocumentForm({
         initialActivityId={initialActivityId}
         initialAccommodationId={initialAccommodationId}
         initialTransportId={initialTransportId}
+        t={t}
       />
 
-      <Field label="חירום" htmlFor={`${idPrefix}-show-in-emergency`}>
+      <Field label={t("emergency")} htmlFor={`${idPrefix}-show-in-emergency`}>
         <label className={styles.checkboxRow}>
           <input
             id={`${idPrefix}-show-in-emergency`}
@@ -297,22 +310,22 @@ export function TripDocumentForm({
             value="true"
             defaultChecked={document?.showInEmergency ?? false}
           />
-          <span>הצג במסך חירום</span>
+          <span>{t("showInEmergency")}</span>
         </label>
       </Field>
 
-      {state.error ? (
+      {errorMessage ? (
         <p className={styles.error} role="alert">
-          {state.error}
+          {errorMessage}
         </p>
       ) : null}
-      {state.success ? <p className={styles.success}>{state.success}</p> : null}
+      {successMessage ? <p className={styles.success}>{successMessage}</p> : null}
 
       <div className={styles.rowActions}>
         <AuthSubmitButton>{submitLabel}</AuthSubmitButton>
         {onCancel ? (
           <Button type="button" variant="ghost" size="compact" onClick={onCancel}>
-            ביטול
+            {tCommon("cancel")}
           </Button>
         ) : null}
       </div>
@@ -327,6 +340,8 @@ function DocumentRow({
   accommodationOptions,
   transportOptions,
 }: DocumentRowProps) {
+  const t = useTranslations("Documents");
+  const tCommon = useTranslations("Common");
   const [editing, setEditing] = useState(false);
   const [replacing, setReplacing] = useState(false);
   const [deleteState, deleteAction] = useActionState(
@@ -348,7 +363,7 @@ function DocumentRow({
           accommodationOptions={accommodationOptions}
           transportOptions={transportOptions}
           action={updateTravelDocumentAction}
-          submitLabel="שמירה"
+          submitLabel={t("saveSubmit")}
           onCancel={() => setEditing(false)}
         />
       </li>
@@ -356,7 +371,7 @@ function DocumentRow({
   }
 
   function handleDelete() {
-    if (!window.confirm(TRAVEL_DOCUMENT_MESSAGES.deleteConfirm)) {
+    if (!window.confirm(t("errors.deleteConfirm"))) {
       return;
     }
     const form = window.document.getElementById(
@@ -383,7 +398,7 @@ function DocumentRow({
           size="compact"
           onClick={() => setEditing(true)}
         >
-          עריכה
+          {t("edit")}
         </Button>
         <Button
           type="button"
@@ -391,7 +406,7 @@ function DocumentRow({
           size="compact"
           onClick={() => setReplacing((value) => !value)}
         >
-          החלפת קובץ
+          {t("replaceFile")}
         </Button>
         <Button
           type="button"
@@ -399,7 +414,7 @@ function DocumentRow({
           size="compact"
           onClick={handleDelete}
         >
-          מחיקה
+          {tCommon("delete")}
         </Button>
       </div>
 
@@ -407,7 +422,7 @@ function DocumentRow({
         <form action={replaceAction} className={styles.replaceForm}>
           <input type="hidden" name="tripId" value={tripId} />
           <input type="hidden" name="documentId" value={travelDocument.id} />
-          <Field label="קובץ חדש" htmlFor={`replace-${travelDocument.id}`}>
+          <Field label={t("newFile")} htmlFor={`replace-${travelDocument.id}`}>
             <input
               id={`replace-${travelDocument.id}`}
               name="file"
@@ -417,15 +432,17 @@ function DocumentRow({
               required
             />
           </Field>
-          {replaceState.error ? (
+          {replaceState.errorCode ? (
             <p className={styles.error} role="alert">
-              {replaceState.error}
+              {translateDocumentError(t, replaceState.errorCode)}
             </p>
           ) : null}
-          {replaceState.success ? (
-            <p className={styles.success}>{replaceState.success}</p>
+          {replaceState.successCode ? (
+            <p className={styles.success}>
+              {translateDocumentSuccess(t, replaceState.successCode)}
+            </p>
           ) : null}
-          <AuthSubmitButton>החלפה</AuthSubmitButton>
+          <AuthSubmitButton>{t("replaceSubmit")}</AuthSubmitButton>
         </form>
       ) : null}
 
@@ -433,9 +450,9 @@ function DocumentRow({
         <input type="hidden" name="tripId" value={tripId} />
         <input type="hidden" name="documentId" value={travelDocument.id} />
       </form>
-      {deleteState.error ? (
+      {deleteState.errorCode ? (
         <p className={styles.error} role="alert">
-          {deleteState.error}
+          {translateDocumentError(t, deleteState.errorCode)}
         </p>
       ) : null}
     </li>
@@ -450,6 +467,7 @@ export function TripDocumentSettings({
   transportOptions,
   variant = "stack",
 }: TripDocumentSettingsProps) {
+  const t = useTranslations("Documents");
   const [showCreate, setShowCreate] = useState(false);
 
   return (
@@ -460,27 +478,25 @@ export function TripDocumentSettings({
     >
       <div className={sectionStyles.header}>
         <h2 id="trip-documents-title" className={sectionStyles.title}>
-          מסמכים
+          {t("settingsTitle")}
         </h2>
-        <p className={sectionStyles.hint}>
-          כרטיסי טיסה, הזמנות, ביטוחים ומסמכים חשובים — זמינים לכל מי שבטיול.
-        </p>
+        <p className={sectionStyles.hint}>{t("settingsHint")}</p>
       </div>
 
       {!showCreate ? (
         <Button type="button" variant="ghost" onClick={() => setShowCreate(true)}>
-          + הוספת מסמך
+          {t("addDocument")}
         </Button>
       ) : (
         <div className={styles.createForm}>
-          <p className={styles.createLabel}>הוספת מסמך</p>
+          <p className={styles.createLabel}>{t("addDocumentLabel")}</p>
           <TripDocumentForm
             tripId={tripId}
             activityOptions={activityOptions}
             accommodationOptions={accommodationOptions}
             transportOptions={transportOptions}
             action={createTravelDocumentAction}
-            submitLabel="הוספה"
+            submitLabel={t("addSubmit")}
             includeFile
             onCancel={() => setShowCreate(false)}
           />
@@ -501,7 +517,7 @@ export function TripDocumentSettings({
           ))}
         </ul>
       ) : (
-        <p className={styles.empty}>אין מסמכים עדיין.</p>
+        <p className={styles.empty}>{t("emptySettings")}</p>
       )}
     </section>
   );

@@ -79,15 +79,38 @@ describe("toPublicUser", () => {
       name: "אלכס",
       email: "a@b.com",
       role: "user",
+      locale: "he",
     });
     expect(publicUser).not.toHaveProperty("passwordHash");
+  });
+
+  it("defaults legacy users without locale to Hebrew", () => {
+    const publicUser = toPublicUser({
+      _id: { toString: () => "abc" },
+      name: "Alex",
+      email: "a@b.com",
+      role: "user",
+    });
+    expect(publicUser.locale).toBe("he");
+  });
+
+  it("preserves explicit English locale", () => {
+    const publicUser = toPublicUser({
+      _id: { toString: () => "abc" },
+      name: "Alex",
+      email: "a@b.com",
+      role: "user",
+      locale: "en",
+    });
+    expect(publicUser.locale).toBe("en");
   });
 });
 
 describe("duplicate Mongo mapping", () => {
-  it("maps code 11000 to the friendly Hebrew message", () => {
+  it("maps code 11000 to the duplicate email error code", () => {
     expect(isDuplicateKeyError({ code: 11000 })).toBe(true);
     expect(duplicateEmailMessage()).toBe(AUTH_MESSAGES.duplicateEmail);
+    expect(AUTH_MESSAGES.duplicateEmail).toBe("duplicateEmail");
   });
 
   it("does not treat other errors as duplicates", () => {

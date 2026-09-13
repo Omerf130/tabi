@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useActionState, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { Card } from "@/components/ui/Card/Card";
@@ -11,12 +12,9 @@ import { deleteTransportAction, type TransportActionState } from "./actions";
 import {
   buildTransportEditHref,
   buildTransportHref,
-  TRANSPORT_MESSAGES,
 } from "./constants";
-import {
-  TRAIN_CATEGORY_LABELS,
-  type TrainCategory,
-} from "./transport-types";
+import { createTrainCategoryLabelResolver } from "./transport-labels";
+import type { TrainCategory } from "./transport-types";
 import type { TransportDetailViewModel } from "./types";
 import styles from "./TransportDetail.module.scss";
 
@@ -41,7 +39,13 @@ function DetailRow({ label, value }: { label: string; value?: string | null }) {
   );
 }
 
-function FlightDetails({ transport }: { transport: TransportDetailViewModel }) {
+function FlightDetails({
+  transport,
+  t,
+}: {
+  transport: TransportDetailViewModel;
+  t: ReturnType<typeof useTranslations<"Transport">>;
+}) {
   const details = transport.details;
   if (transport.type !== "flight") {
     return null;
@@ -49,38 +53,52 @@ function FlightDetails({ transport }: { transport: TransportDetailViewModel }) {
 
   return (
     <>
-      <DetailRow label="חברת תעופה" value={details.airline} />
-      <DetailRow label="מספר טיסה" value={details.flightNumber} />
-      <DetailRow label="טרמינל יציאה" value={details.departureTerminal} />
-      <DetailRow label="טרמינל הגעה" value={details.arrivalTerminal} />
-      <DetailRow label="שער" value={details.gate} />
-      <DetailRow label="מושב" value={details.seat} />
+      <DetailRow label={t("airline")} value={details.airline} />
+      <DetailRow label={t("flightNumber")} value={details.flightNumber} />
+      <DetailRow label={t("departureTerminal")} value={details.departureTerminal} />
+      <DetailRow label={t("arrivalTerminal")} value={details.arrivalTerminal} />
+      <DetailRow label={t("gate")} value={details.gate} />
+      <DetailRow label={t("seat")} value={details.seat} />
     </>
   );
 }
 
-function TrainDetails({ transport }: { transport: TransportDetailViewModel }) {
+function TrainDetails({
+  transport,
+  t,
+  trainCategoryLabel,
+}: {
+  transport: TransportDetailViewModel;
+  t: ReturnType<typeof useTranslations<"Transport">>;
+  trainCategoryLabel: ReturnType<typeof createTrainCategoryLabelResolver>;
+}) {
   const details = transport.details;
   if (transport.type !== "train") {
     return null;
   }
 
   const categoryLabel = details.trainCategory
-    ? TRAIN_CATEGORY_LABELS[details.trainCategory as TrainCategory]
+    ? trainCategoryLabel(details.trainCategory as TrainCategory)
     : undefined;
 
   return (
     <>
-      <DetailRow label="סוג רכבת" value={categoryLabel} />
-      <DetailRow label="שם שירות" value={details.serviceName} />
-      <DetailRow label="מספר רכבת" value={details.trainNumber} />
-      <DetailRow label="קרון" value={details.carNumber} />
-      <DetailRow label="מושבים" value={details.seats} />
+      <DetailRow label={t("trainType")} value={categoryLabel} />
+      <DetailRow label={t("serviceName")} value={details.serviceName} />
+      <DetailRow label={t("trainNumber")} value={details.trainNumber} />
+      <DetailRow label={t("carNumber")} value={details.carNumber} />
+      <DetailRow label={t("seats")} value={details.seats} />
     </>
   );
 }
 
-function OperatorDetails({ transport }: { transport: TransportDetailViewModel }) {
+function OperatorDetails({
+  transport,
+  t,
+}: {
+  transport: TransportDetailViewModel;
+  t: ReturnType<typeof useTranslations<"Transport">>;
+}) {
   const details = transport.details;
   if (transport.type === "flight" || transport.type === "train") {
     return null;
@@ -88,9 +106,9 @@ function OperatorDetails({ transport }: { transport: TransportDetailViewModel })
 
   return (
     <>
-      <DetailRow label="מפעיל / חברה" value={details.operator} />
-      <DetailRow label="מספר שירות / רכב" value={details.serviceNumber} />
-      <DetailRow label="פרטי רכב / שירות" value={details.vehicleOrServiceNotes} />
+      <DetailRow label={t("operator")} value={details.operator} />
+      <DetailRow label={t("serviceNumber")} value={details.serviceNumber} />
+      <DetailRow label={t("vehicleNotes")} value={details.vehicleOrServiceNotes} />
     </>
   );
 }
@@ -100,6 +118,10 @@ export function TransportDetailContent({
   transport,
   isOwner,
 }: TransportDetailContentProps) {
+  const t = useTranslations("Transport");
+  const tCommon = useTranslations("Common");
+  const tErrors = useTranslations("Transport.errors");
+  const trainCategoryLabel = createTrainCategoryLabelResolver(t);
   const router = useRouter();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [state, formAction] = useActionState(deleteTransportAction, initialState);
@@ -115,28 +137,28 @@ export function TransportDetailContent({
       <Card variant="standard">
         <dl className={styles.detailsList}>
           <div className={styles.detailItem}>
-            <dt>סוג</dt>
+            <dt>{t("type")}</dt>
             <dd>{transport.typeLabel}</dd>
           </div>
           <div className={styles.detailItem}>
-            <dt>מסלול</dt>
+            <dt>{t("route")}</dt>
             <dd dir="auto">{transport.routeLabel}</dd>
           </div>
           {transport.metaLabel ? (
             <div className={styles.detailItem}>
-              <dt>פרטים</dt>
+              <dt>{t("details")}</dt>
               <dd dir="auto">{transport.metaLabel}</dd>
             </div>
           ) : null}
           <div className={styles.detailItem}>
-            <dt>יציאה</dt>
+            <dt>{t("departure")}</dt>
             <dd>
               {formatCalendarDateDisplay(transport.departure.date)} ·{" "}
               {transport.departureTimeLabel} ({transport.departureTimezoneLabel})
             </dd>
           </div>
           <div className={styles.detailItem}>
-            <dt>הגעה</dt>
+            <dt>{t("arrival")}</dt>
             <dd>
               {formatCalendarDateDisplay(transport.arrival.date)} ·{" "}
               {transport.arrivalTimeLabel} ({transport.arrivalTimezoneLabel})
@@ -144,21 +166,25 @@ export function TransportDetailContent({
           </div>
           {transport.linkedCost ? (
             <div className={styles.detailItem}>
-              <dt>עלות</dt>
+              <dt>{t("cost")}</dt>
               <dd>{transport.linkedCost.label}</dd>
             </div>
           ) : null}
-          <DetailRow label="מספר הזמנה" value={transport.bookingReference} />
-          <DetailRow label="הערות" value={transport.notes} />
-          <FlightDetails transport={transport} />
-          <TrainDetails transport={transport} />
-          <OperatorDetails transport={transport} />
+          <DetailRow label={t("bookingReference")} value={transport.bookingReference} />
+          <DetailRow label={tCommon("notes")} value={transport.notes} />
+          <FlightDetails transport={transport} t={t} />
+          <TrainDetails
+            transport={transport}
+            t={t}
+            trainCategoryLabel={trainCategoryLabel}
+          />
+          <OperatorDetails transport={transport} t={t} />
         </dl>
       </Card>
 
       {transport.linkedDocuments.length > 0 ? (
         <section className={styles.documentsSection}>
-          <h2 className={styles.documentsTitle}>מסמכים מקושרים</h2>
+          <h2 className={styles.documentsTitle}>{t("linkedDocuments")}</h2>
           <ul className={styles.documentsList}>
             {transport.linkedDocuments.map((document) => (
               <li key={document.id}>
@@ -178,7 +204,7 @@ export function TransportDetailContent({
             href={buildTransportEditHref(tripId, transport.id)}
             className={styles.actionLinkPrimary}
           >
-            עריכה
+            {tCommon("edit")}
           </Link>
           {!confirmDelete ? (
             <Button
@@ -186,28 +212,28 @@ export function TransportDetailContent({
               variant="secondary"
               onClick={() => setConfirmDelete(true)}
             >
-              מחיקה
+              {tCommon("delete")}
             </Button>
           ) : (
             <form action={formAction} className={styles.deleteForm}>
               <input type="hidden" name="tripId" value={tripId} />
               <input type="hidden" name="transportId" value={transport.id} />
-              {state.error ? (
+              {state.errorCode ? (
                 <p className={styles.formError} role="alert">
-                  {state.error}
+                  {tErrors(state.errorCode)}
                 </p>
               ) : null}
-              <p className={styles.deleteConfirm}>{TRANSPORT_MESSAGES.deleteConfirm}</p>
+              <p className={styles.deleteConfirm}>{tErrors("deleteConfirm")}</p>
               <div className={styles.deleteActions}>
                 <Button
                   type="button"
                   variant="secondary"
                   onClick={() => setConfirmDelete(false)}
                 >
-                  ביטול
+                  {tCommon("cancel")}
                 </Button>
                 <Button type="submit" variant="danger">
-                  מחיקה
+                  {tCommon("delete")}
                 </Button>
               </div>
             </form>

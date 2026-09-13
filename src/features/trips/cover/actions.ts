@@ -8,13 +8,17 @@ import {
   removeTripCoverImage,
   replaceTripCoverImage,
 } from "./cover-domain";
-import { TRIP_COVER_MESSAGES } from "./constants";
+import {
+  TRIP_COVER_ERROR_CODES,
+  TRIP_COVER_SUCCESS_CODES,
+} from "./constants";
 import { validateTripCoverUpload } from "./validate-trip-cover";
+import type { TripCoverErrorCode, TripCoverSuccessCode } from "./constants";
 
 export type TripCoverActionState = {
   ok?: boolean;
-  error?: string;
-  success?: string;
+  errorCode?: TripCoverErrorCode;
+  successCode?: TripCoverSuccessCode;
 };
 
 export async function uploadTripCoverAction(
@@ -25,7 +29,7 @@ export async function uploadTripCoverAction(
   const file = formData.get("cover");
 
   if (!(file instanceof File)) {
-    return { error: TRIP_COVER_MESSAGES.missingFile };
+    return { errorCode: TRIP_COVER_ERROR_CODES.missingFile };
   }
 
   try {
@@ -39,12 +43,12 @@ export async function uploadTripCoverAction(
 
     if (!validation.ok) {
       if (validation.error === "tooLarge") {
-        return { error: TRIP_COVER_MESSAGES.tooLarge };
+        return { errorCode: TRIP_COVER_ERROR_CODES.tooLarge };
       }
       if (validation.error === "missing") {
-        return { error: TRIP_COVER_MESSAGES.missingFile };
+        return { errorCode: TRIP_COVER_ERROR_CODES.missingFile };
       }
-      return { error: TRIP_COVER_MESSAGES.invalidType };
+      return { errorCode: TRIP_COVER_ERROR_CODES.invalidType };
     }
 
     const { previousPathname } = await replaceTripCoverImage(
@@ -59,9 +63,9 @@ export async function uploadTripCoverAction(
 
     revalidatePath(`/app/trips/${tripId}`);
     revalidateTripManagement(tripId, "details");
-    return { ok: true, success: TRIP_COVER_MESSAGES.uploaded };
+    return { ok: true, successCode: TRIP_COVER_SUCCESS_CODES.uploaded };
   } catch {
-    return { error: TRIP_COVER_MESSAGES.generic };
+    return { errorCode: TRIP_COVER_ERROR_CODES.generic };
   }
 }
 
@@ -76,8 +80,8 @@ export async function removeTripCoverAction(
     await removeTripCoverImage(tripId);
     revalidatePath(`/app/trips/${tripId}`);
     revalidateTripManagement(tripId, "details");
-    return { ok: true, success: TRIP_COVER_MESSAGES.removed };
+    return { ok: true, successCode: TRIP_COVER_SUCCESS_CODES.removed };
   } catch {
-    return { error: TRIP_COVER_MESSAGES.generic };
+    return { errorCode: TRIP_COVER_ERROR_CODES.generic };
   }
 }

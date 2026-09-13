@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import {
   buildNearTermWeatherColumns,
   hasHourlyWeatherData,
   shouldShowNearTermStrip,
 } from "./get-near-term-hourly";
+
+const t = createAppTranslator("Weather", "he");
 import type { WeatherSnapshot } from "./types";
 
 function createSnapshot(hourly: WeatherSnapshot["hourly"]): WeatherSnapshot {
@@ -75,7 +78,7 @@ describe("get-near-term-hourly", () => {
       },
     ]);
 
-    const columns = buildNearTermWeatherColumns(snapshot);
+    const columns = buildNearTermWeatherColumns(snapshot, t);
 
     expect(columns[0]).toMatchObject({ label: "עכשיו", temperatureC: 27, isNow: true });
     expect(columns.length).toBeGreaterThanOrEqual(2);
@@ -87,7 +90,7 @@ describe("get-near-term-hourly", () => {
     const snapshot = createSnapshot([]);
 
     expect(shouldShowNearTermStrip(snapshot)).toBe(false);
-    expect(buildNearTermWeatherColumns(snapshot)).toEqual([
+    expect(buildNearTermWeatherColumns(snapshot, t)).toEqual([
       expect.objectContaining({ label: "עכשיו", temperatureC: 27 }),
     ]);
   });

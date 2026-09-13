@@ -56,6 +56,7 @@ export function DesignSystemPreview({ children }: DesignSystemPreviewProps) {
       <div className={styles.body}>{children}</div>
       <div className={styles.navDock}>
         <BottomNav
+          ariaLabel="ניווט ראשי"
           items={[
             {
               id: "home",

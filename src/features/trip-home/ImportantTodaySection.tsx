@@ -4,6 +4,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useTranslations } from "next-intl";
 import { IconBell, IconChevron } from "@/components/ui/icons";
 import {
   getNextReminderIndex,
@@ -31,6 +32,7 @@ function usePrefersReducedMotion(): boolean {
 }
 
 export function ImportantTodaySection({ reminders }: ImportantTodaySectionProps) {
+  const t = useTranslations("Home");
   const { openManager } = useTripHomeReminders();
   const prefersReducedMotion = usePrefersReducedMotion();
   const [visibleIndex, setVisibleIndex] = useState(0);
@@ -55,12 +57,12 @@ export function ImportantTodaySection({ reminders }: ImportantTodaySectionProps)
         type="button"
         className={styles.duringImportantTodayTrigger}
         onClick={() => openManager({ tab: "today" })}
-        aria-label={`חשוב להיום: ${currentReminder.text}`}
+        aria-label={t("importantTodayAria", { text: currentReminder.text })}
       >
         <span className={styles.duringBlockHeader}>
           <span className={styles.duringBlockHeaderStart}>
             <IconBell className={styles.duringBlockIcon} aria-hidden />
-            <span className={styles.duringBlockTitle}>חשוב להיום</span>
+            <span className={styles.duringBlockTitle}>{t("importantToday")}</span>
           </span>
           <IconChevron className={styles.duringBlockChevron} aria-hidden />
         </span>
@@ -96,7 +98,7 @@ export function ImportantTodaySection({ reminders }: ImportantTodaySectionProps)
         className={styles.duringImportantTodayManageLink}
         onClick={() => openManager({ tab: "today" })}
       >
-        לכל התזכורות
+        {t("remindersAll")}
       </button>
     </div>
   );

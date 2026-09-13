@@ -20,20 +20,21 @@ describe("my trips presentation contracts", () => {
     const screen = readSource("features/my-trips/MyTripsScreen.tsx");
     const hero = readSource("features/my-trips/MyTripsHero.tsx");
 
-    expect(hero).toContain("Your adventures, all in one place.");
+    expect(hero).toContain('getTranslations("MyTrips")');
     expect(screen).not.toContain("pageIntro");
     expect(screen).not.toContain("Your personal collection of journeys.");
+    expect(screen).not.toContain('dir="ltr"');
   });
 
   it("implements All, Upcoming, and Past filters without Saved", () => {
     const filterBar = readSource("features/my-trips/MyTripsFilterBar.tsx");
-    const constants = readSource("features/my-trips/constants.ts");
+    const messages = readFileSync(join(root, "../messages/en.json"), "utf8");
 
     expect(filterBar).toContain('aria-pressed={isSelected}');
-    expect(constants).toContain('"All"');
-    expect(constants).toContain('"Upcoming"');
-    expect(constants).toContain('"Past"');
-    expect(constants).not.toContain("Saved");
+    expect(filterBar).toContain('useTranslations("MyTrips.filters")');
+    expect(messages).toContain('"all": "All"');
+    expect(messages).toContain('"upcoming": "Upcoming"');
+    expect(messages).toContain('"past": "Past"');
     expect(filterBar).not.toContain("Saved");
   });
 
@@ -50,11 +51,12 @@ describe("my trips presentation contracts", () => {
   it("routes create actions through the existing create trip flow", () => {
     const filterBar = readSource("features/my-trips/MyTripsFilterBar.tsx");
     const emptyState = readSource("features/my-trips/MyTripsEmptyState.tsx");
+    const messages = readFileSync(join(root, "../messages/en.json"), "utf8");
 
     expect(CREATE_TRIP_PATH).toBe("/app/trips/new");
-    expect(filterBar).toContain('aria-label="Create new trip"');
+    expect(filterBar).toContain('useTranslations("MyTrips.createTrip")');
     expect(filterBar).toContain("CREATE_TRIP_PATH");
-    expect(readSource("features/my-trips/constants.ts")).toContain("Plan Your First Trip");
+    expect(messages).toContain("Plan Your First Trip");
     expect(emptyState).toContain("CREATE_TRIP_PATH");
   });
 
@@ -64,6 +66,7 @@ describe("my trips presentation contracts", () => {
 
     expect(card).toContain("/app/trips/${trip.id}");
     expect(card).toContain("unoptimized={trip.hasPersistedCover}");
+    expect(card).toContain("formatAppDate");
     expect(builder).toContain("resolveTripCardVisual");
     expect(builder).toContain("coverVisualKey");
   });
@@ -97,15 +100,15 @@ describe("my trips presentation contracts", () => {
 
   it("provides contextual empty states for each filter", () => {
     const emptyState = readSource("features/my-trips/MyTripsEmptyState.tsx");
-    const constants = readSource("features/my-trips/constants.ts");
+    const messages = readFileSync(join(root, "../messages/en.json"), "utf8");
 
     expect(emptyState).toContain("filter: MyTripsFilter");
     expect(readSource("features/my-trips/MyTripsContent.client.tsx")).toContain(
       "<MyTripsEmptyState filter={activeFilter}",
     );
-    expect(constants).toContain("No trips yet");
-    expect(constants).toContain("No upcoming trips");
-    expect(constants).toContain("No past trips yet");
+    expect(messages).toContain("No trips yet");
+    expect(messages).toContain("No upcoming trips");
+    expect(messages).toContain("No past trips yet");
   });
 
   it("keeps account affordance in the hero", () => {
@@ -114,6 +117,6 @@ describe("my trips presentation contracts", () => {
 
     expect(hero).toContain("MyTripsAccountAffordance");
     expect(account).toContain("logoutAction");
-    expect(account).toContain('aria-label="Account menu"');
+    expect(account).toContain('useTranslations("MyTrips.account")');
   });
 });

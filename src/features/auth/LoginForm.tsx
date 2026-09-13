@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { loginAction, type AuthActionState } from "./actions";
 import { AuthEmailField, AuthPasswordField } from "./AuthField";
 import { AuthSubmitButton } from "./AuthSubmitButton";
@@ -14,6 +15,9 @@ type LoginFormProps = {
 };
 
 export function LoginForm({ nextPath, googleError }: LoginFormProps) {
+  const tFields = useTranslations("Auth.fields");
+  const tActions = useTranslations("Auth.actions");
+  const tErrors = useTranslations("Auth.errors");
   const [state, action] = useActionState(loginAction, initialState);
 
   return (
@@ -21,35 +25,43 @@ export function LoginForm({ nextPath, googleError }: LoginFormProps) {
       {nextPath ? <input type="hidden" name="next" value={nextPath} /> : null}
       {googleError ? (
         <p className={styles.formError} role="alert">
-          We couldn&apos;t sign you in with Google. Please try again.
+          {tErrors("googleSignInFailed")}
         </p>
       ) : null}
-      {state.error ? (
+      {state.errorCode ? (
         <p className={styles.formError} role="alert">
-          {state.error}
+          {tErrors(state.errorCode)}
         </p>
       ) : null}
       <AuthEmailField
         id="email"
         name="email"
-        label="Email"
-        placeholder="Email Address"
+        label={tFields("email")}
+        placeholder={tFields("emailPlaceholder")}
         autoComplete="email"
         required
-        error={state.fieldErrors?.email}
+        error={
+          state.fieldErrorCodes?.email
+            ? tErrors(state.fieldErrorCodes.email)
+            : undefined
+        }
       />
       <AuthPasswordField
         id="password"
-        label="Password"
-        placeholder="Password"
+        label={tFields("password")}
+        placeholder={tFields("passwordPlaceholder")}
         autoComplete="current-password"
         required
         minLength={8}
         maxLength={256}
-        error={state.fieldErrors?.password}
+        error={
+          state.fieldErrorCodes?.password
+            ? tErrors(state.fieldErrorCodes.password)
+            : undefined
+        }
       />
       <div className={styles.authSubmit}>
-        <AuthSubmitButton>Log In</AuthSubmitButton>
+        <AuthSubmitButton>{tActions("logIn")}</AuthSubmitButton>
       </div>
     </form>
   );

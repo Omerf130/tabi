@@ -1,9 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import {
   buildLanguageCategoryHref,
   buildLanguageFavoritesHref,
   buildLanguageHref,
-  PHRASEBOOK_MESSAGES,
 } from "./constants";
 import { PHRASEBOOK_CATEGORIES, type PhrasebookCategory } from "./types";
 import styles from "./LanguagePage.module.scss";
@@ -21,8 +23,10 @@ export function CategoryGrid({
   activeCategory,
   showFavorites,
 }: CategoryGridProps) {
+  const t = useTranslations("Language");
+
   return (
-    <nav className={styles.categoryNav} aria-label="קטגוריות ביטויים">
+    <nav className={styles.categoryNav} aria-label={t("categoryNavAria")}>
       <Link
         href={buildLanguageFavoritesHref(tripId)}
         className={[
@@ -32,7 +36,7 @@ export function CategoryGrid({
           .filter(Boolean)
           .join(" ")}
       >
-        ⭐ {PHRASEBOOK_MESSAGES.favoritesSection}
+        ⭐ {t("errors.favoritesSection")}
       </Link>
       <Link
         href={buildLanguageHref(tripId)}
@@ -43,7 +47,7 @@ export function CategoryGrid({
           .filter(Boolean)
           .join(" ")}
       >
-        {PHRASEBOOK_MESSAGES.showAll}
+        {t("errors.showAll")}
       </Link>
       {PHRASEBOOK_CATEGORIES.map((category) => (
         <Link

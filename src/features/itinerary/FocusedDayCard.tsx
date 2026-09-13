@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui/Badge/Badge";
 import { IconChevron } from "@/components/ui/icons";
 import type { FocusedDayCardViewModel } from "./types";
@@ -8,7 +9,11 @@ type FocusedDayCardProps = {
   card: FocusedDayCardViewModel;
 };
 
-export function FocusedDayCard({ card }: FocusedDayCardProps) {
+export async function FocusedDayCard({ card }: FocusedDayCardProps) {
+  const [t, tCommon] = await Promise.all([
+    getTranslations("Itinerary"),
+    getTranslations("Common"),
+  ]);
   const showIndicators = card.transportCount > 0 || card.incompleteReminderCount > 0;
 
   return (
@@ -16,19 +21,32 @@ export function FocusedDayCard({ card }: FocusedDayCardProps) {
       href={card.href}
       className={styles.focusedDayCard}
       data-temporal={card.temporalState}
-      aria-label={`יום ${card.dayNumber}, ${card.weekdayLabel}, ${card.dateLabel}. פתיחת יום מלא`}
+      aria-label={t("focusedDayOpenAria", {
+        dayNumber: card.dayNumber,
+        weekdayLabel: card.weekdayLabel,
+        dateLabel: card.dateLabel,
+      })}
     >
       <span className={styles.focusedDayMain}>
         <span className={styles.focusedDayIdentity}>
-          {card.showTodayBadge ? <Badge tone="accent">היום</Badge> : null}
-          <span className={styles.focusedDayNumber}>יום {card.dayNumber}</span>
+          {card.showTodayBadge ? <Badge tone="accent">{tCommon("today")}</Badge> : null}
+          <span className={styles.focusedDayNumber}>
+            {tCommon("dayNumber", { dayNumber: card.dayNumber })}
+          </span>
           <span className={styles.focusedDayMeta}>
             {card.weekdayLabel}, {card.dateLabel}
           </span>
         </span>
 
         {card.weather ? (
-          <span className={styles.focusedWeather} aria-label={`מזג אוויר: ${card.weather.conditionLabel}, ${card.weather.temperatureLabel}, ${card.weather.locationLabel}`}>
+          <span
+            className={styles.focusedWeather}
+            aria-label={t("focusedWeatherAria", {
+              condition: card.weather.conditionLabel,
+              temperature: card.weather.temperatureLabel,
+              location: card.weather.locationLabel,
+            })}
+          >
             {card.weather.conditionIconUrl ? (
               // eslint-disable-next-line @next/next/no-img-element -- WeatherAPI CDN icon
               <img
@@ -56,7 +74,7 @@ export function FocusedDayCard({ card }: FocusedDayCardProps) {
 
         {card.nextItems.length > 0 ? (
           <span className={styles.focusedNextSection}>
-            <span className={styles.focusedNextHeading}>הבא בתכנון</span>
+            <span className={styles.focusedNextHeading}>{t("focusedNextHeading")}</span>
             <span className={styles.focusedNextList}>
               {card.nextItems.map((item, index) => (
                 <span
@@ -82,17 +100,13 @@ export function FocusedDayCard({ card }: FocusedDayCardProps) {
             {card.transportCount > 0 ? (
               <span className={styles.focusedIndicator}>
                 <span aria-hidden>🚆</span>{" "}
-                {card.transportCount === 1
-                  ? "נסיעה אחת"
-                  : `${card.transportCount} נסיעות`}
+                {tCommon("rideCount", { count: card.transportCount })}
               </span>
             ) : null}
             {card.incompleteReminderCount > 0 ? (
               <span className={styles.focusedIndicator}>
                 <span aria-hidden>🔔</span>{" "}
-                {card.incompleteReminderCount === 1
-                  ? "תזכורת אחת"
-                  : `${card.incompleteReminderCount} תזכורות`}
+                {tCommon("reminderCount", { count: card.incompleteReminderCount })}
               </span>
             ) : null}
           </span>

@@ -3,7 +3,10 @@ import {
   resolveLinkedExpenseTitle,
   type ExpenseSourceTitleLookup,
 } from "./resolve-expense-source-titles";
+import { createTestFinanceLabels } from "./finance-labels";
 import type { PublicTripExpense } from "./types";
+
+const labels = createTestFinanceLabels();
 
 const emptyLookup: ExpenseSourceTitleLookup = {
   activities: new Map(),
@@ -37,6 +40,7 @@ describe("resolve expense source titles", () => {
         createdAt: "2026-10-26T10:00:00.000Z",
       } satisfies PublicTripExpense,
       lookup,
+      labels,
     );
 
     expect(title).toBe("TeamLab Planets");
@@ -62,8 +66,9 @@ describe("resolve expense source titles", () => {
         createdAt: "2026-10-26T10:00:00.000Z",
       } satisfies PublicTripExpense,
       emptyLookup,
+      labels,
     );
 
-    expect(title).toBe("פריט שנמחק");
+    expect(title).toBe(labels.resolveUiText("deletedSourceFallback"));
   });
 });

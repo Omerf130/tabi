@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { buildGoogleAuthHref } from "./google/google-auth-href";
 import styles from "./GoogleSignInButton.module.scss";
 
@@ -7,10 +10,12 @@ type GoogleSignInButtonProps = {
 };
 
 export function GoogleSignInButton({ nextPath }: GoogleSignInButtonProps) {
+  const t = useTranslations("Auth.actions");
+
   return (
     <Link href={buildGoogleAuthHref(nextPath)} className={styles.button}>
       <GoogleGIcon />
-      <span>Continue with Google</span>
+      <span>{t("continueWithGoogle")}</span>
     </Link>
   );
 }

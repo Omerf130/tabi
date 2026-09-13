@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { buildCurrencyRateHref, CURRENCY_MESSAGES } from "./constants";
+import { useLocale, useTranslations } from "next-intl";
+import { buildCurrencyRateHref } from "./constants";
 import {
   convertAmount,
   formatCurrencyAmount,
@@ -20,6 +21,7 @@ import {
   resolveInitialCurrencyPair,
   writeCurrencyPairPreference,
 } from "./currency-preferences";
+import { localeToIntlLocale, resolveAppLocale } from "@/features/i18n/locale";
 import { CurrencyPicker } from "./CurrencyPicker.client";
 import type { CurrencyConverterInitialData, ExchangeRate } from "./types";
 import styles from "./CurrencyConverter.module.scss";
@@ -27,6 +29,13 @@ import styles from "./CurrencyConverter.module.scss";
 type CurrencyConverterProps = CurrencyConverterInitialData;
 
 type PickerTarget = "from" | "to" | null;
+
+function getCurrencyDisplayName(
+  option: { code: string; hebrewName: string; englishName: string },
+  locale: "he" | "en",
+): string {
+  return locale === "he" ? option.hebrewName : option.englishName;
+}
 
 function createInitialRateState(
   initialPair: { from: string; to: string },
@@ -58,6 +67,10 @@ export function CurrencyConverter({
   initialAmount,
   initialRate,
 }: CurrencyConverterProps) {
+  const t = useTranslations("Currency");
+  const locale = resolveAppLocale(useLocale());
+  const intlLocale = localeToIntlLocale(locale);
+
   const initialPair = useMemo(
     () => resolveInitialCurrencyPair(currencies, initialFrom, initialTo),
     [currencies, initialFrom, initialTo],
@@ -161,16 +174,13 @@ export function CurrencyConverter({
 
   const formattedResult =
     convertedAmount !== null
-      ? formatCurrencyAmount(convertedAmount, toCurrency)
+      ? formatCurrencyAmount(convertedAmount, toCurrency, intlLocale)
       : "—";
 
-  const unitRate = useMemo(() => {
-    if (!rate || parsedAmount === null || parsedAmount <= 0 || convertedAmount === null) {
-      return null;
-    }
-
-    return convertedAmount / parsedAmount;
-  }, [convertedAmount, parsedAmount, rate]);
+  const unitRate =
+    rate && parsedAmount !== null && parsedAmount > 0 && convertedAmount !== null
+      ? convertedAmount / parsedAmount
+      : null;
 
   function handleAmountChange(value: string) {
     setAmountInput(normalizeAmountInput(value));
@@ -249,15 +259,18 @@ export function CurrencyConverter({
   if (!fromOption || !toOption) {
     return (
       <div className={styles.errorBlock}>
-        <p className={styles.errorText}>{CURRENCY_MESSAGES.invalidCurrency}</p>
+        <p className={styles.errorText}>{t("invalidCurrency")}</p>
       </div>
     );
   }
 
+  const fromDisplayName = getCurrencyDisplayName(fromOption, locale);
+  const toDisplayName = getCurrencyDisplayName(toOption, locale);
+
   return (
     <div className={styles.converter}>
       <div className={styles.panels}>
-        <section className={styles.panel} aria-label="מטבע מקור">
+        <section className={styles.panel} aria-label={t("fromCurrencyPanelAriaLabel")}>
           <div className={styles.panelHeader}>
             <button
               type="button"
@@ -265,11 +278,14 @@ export function CurrencyConverter({
               onClick={() => setPickerTarget("from")}
               aria-haspopup="dialog"
               aria-expanded={pickerTarget === "from"}
-              aria-label={`בחירת מטבע מקור: ${fromOption.code} ${fromOption.hebrewName}`}
+              aria-label={t("selectSourceCurrencyAriaLabel", {
+                code: fromOption.code,
+                name: fromDisplayName,
+              })}
             >
               <span className={styles.currencyIdentity}>
                 <span className={styles.currencyCode}>{fromOption.code}</span>
-                <span className={styles.currencyName}>{fromOption.hebrewName}</span>
+                <span className={styles.currencyName}>{fromDisplayName}</span>
               </span>
               <IconChevron className={styles.currencyChevron} aria-hidden />
             </button>
@@ -281,7 +297,7 @@ export function CurrencyConverter({
                 className={styles.amountInput}
                 value={amountInput}
                 onChange={(event) => handleAmountChange(event.target.value)}
-                aria-label="סכום להמרה"
+                aria-label={t("amountToConvertAriaLabel")}
                 autoComplete="off"
               />
             </div>
@@ -294,13 +310,13 @@ export function CurrencyConverter({
             className={styles.swapButton}
             onClick={handleSwap}
             disabled={isFetchingRate}
-            aria-label="החלפת מטבעות"
+            aria-label={t("swapCurrenciesAriaLabel")}
           >
             ⇅
           </button>
         </div>
 
-        <section className={styles.panel} aria-label="מטבע יעד">
+        <section className={styles.panel} aria-label={t("toCurrencyPanelAriaLabel")}>
           <div className={styles.panelHeader}>
             <button
               type="button"
@@ -308,11 +324,14 @@ export function CurrencyConverter({
               onClick={() => setPickerTarget("to")}
               aria-haspopup="dialog"
               aria-expanded={pickerTarget === "to"}
-              aria-label={`בחירת מטבע יעד: ${toOption.code} ${toOption.hebrewName}`}
+              aria-label={t("selectTargetCurrencyAriaLabel", {
+                code: toOption.code,
+                name: toDisplayName,
+              })}
             >
               <span className={styles.currencyIdentity}>
                 <span className={styles.currencyCode}>{toOption.code}</span>
-                <span className={styles.currencyName}>{toOption.hebrewName}</span>
+                <span className={styles.currencyName}>{toDisplayName}</span>
               </span>
               <IconChevron className={styles.currencyChevron} aria-hidden />
             </button>
@@ -326,9 +345,9 @@ export function CurrencyConverter({
 
       {loadFailed ? (
         <div className={styles.errorBlock}>
-          <p className={styles.errorText}>{CURRENCY_MESSAGES.loadRateFailed}</p>
+          <p className={styles.errorText}>{t("loadRateFailed")}</p>
           <button type="button" className={styles.retryButton} onClick={handleRetry}>
-            {CURRENCY_MESSAGES.retry}
+            {t("retry")}
           </button>
         </div>
       ) : rate && unitRate !== null ? (
@@ -337,15 +356,15 @@ export function CurrencyConverter({
             1 {fromCurrency} = {formatRateValue(unitRate)} {toCurrency}
           </p>
           <p className={styles.rateDate}>
-            {CURRENCY_MESSAGES.estimatedRate} · {formatRateDate(rate.date)}
+            {t("estimatedRate")} · {formatRateDate(rate.date, intlLocale)}
           </p>
           {refreshFailed ? (
-            <p className={styles.refreshNotice}>{CURRENCY_MESSAGES.refreshFailed}</p>
+            <p className={styles.refreshNotice}>{t("refreshFailed")}</p>
           ) : null}
         </div>
       ) : null}
 
-      <p className={styles.disclaimer}>{CURRENCY_MESSAGES.disclaimer}</p>
+      <p className={styles.disclaimer}>{t("disclaimer")}</p>
 
       {pickerTarget !== null ? (
         <CurrencyPicker

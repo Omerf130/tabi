@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
@@ -25,7 +26,7 @@ import {
   type ManualExpenseActionState,
 } from "./actions";
 import { getExpenseCategoryPresentation } from "./category-presentation";
-import { EXPENSE_CATEGORIES, FINANCE_MESSAGES } from "./constants";
+import { EXPENSE_CATEGORIES } from "./constants";
 import type { ExpenseCategory, ExpenseRowViewModel } from "./types";
 import styles from "./FinancePage.module.scss";
 
@@ -46,6 +47,9 @@ export function FinanceExpenseSheet({
   expense,
   onClose,
 }: FinanceExpenseSheetProps) {
+  const t = useTranslations("Finance");
+  const tCategories = useTranslations("Finance.categories");
+  const tErrors = useTranslations("Finance.errors");
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -175,7 +179,7 @@ export function FinanceExpenseSheet({
   const amountCurrencyFields = (
     <>
       <div className={styles.amountRow}>
-        <Field label={FINANCE_MESSAGES.amountLabel} htmlFor="expense-amount">
+        <Field label={t("amountLabel")} htmlFor="expense-amount">
           <Input
             id="expense-amount"
             name="amount"
@@ -188,7 +192,7 @@ export function FinanceExpenseSheet({
           />
         </Field>
 
-        <Field label={FINANCE_MESSAGES.currencyLabel} htmlFor="expense-currency">
+        <Field label={t("currencyLabel")} htmlFor="expense-currency">
           <button
             id="expense-currency"
             type="button"
@@ -203,12 +207,12 @@ export function FinanceExpenseSheet({
 
       {previewLabel ? (
         <p className={styles.conversionPreview}>
-          ≈ {previewLabel} ({FINANCE_MESSAGES.conversionPreview})
+          ≈ {previewLabel} ({t("conversionPreview")})
         </p>
       ) : null}
       {previewError ? (
         <p className={styles.conversionPreviewError}>
-          {FINANCE_MESSAGES.conversionPreviewFailed}
+          {t("conversionPreviewFailed")}
         </p>
       ) : null}
     </>
@@ -217,11 +221,11 @@ export function FinanceExpenseSheet({
   const categoryPicker =
     isManual || expense?.categoryEditable ? (
       <div className={styles.categoryPickerSection}>
-        <span className={styles.fieldLabel}>{FINANCE_MESSAGES.categoryLabel}</span>
+        <span className={styles.fieldLabel}>{t("categoryLabel")}</span>
         <div
           className={styles.categoryGrid}
           role="radiogroup"
-          aria-label={FINANCE_MESSAGES.categoryLabel}
+          aria-label={t("categoryLabel")}
         >
           {categoryOptions.map((entry) => {
             const presentation = getExpenseCategoryPresentation(entry);
@@ -246,7 +250,7 @@ export function FinanceExpenseSheet({
                 aria-pressed={selected}
               >
                 <Icon className={styles.categoryChipIcon} aria-hidden />
-                <span>{presentation.label}</span>
+                <span>{tCategories(entry)}</span>
               </button>
             );
           })}
@@ -254,7 +258,7 @@ export function FinanceExpenseSheet({
       </div>
     ) : (
       <div className={styles.linkedCategoryReadonly}>
-        <span className={styles.fieldLabel}>{FINANCE_MESSAGES.categoryLabel}</span>
+        <span className={styles.fieldLabel}>{t("categoryLabel")}</span>
         <p className={styles.linkedCategoryValue}>{expense?.categoryLabel}</p>
       </div>
     );
@@ -288,25 +292,25 @@ export function FinanceExpenseSheet({
               type="button"
               className={styles.sheetClose}
               onClick={handleClose}
-              aria-label={FINANCE_MESSAGES.cancel}
+              aria-label={t("cancel")}
             >
               ×
             </button>
             <div className={styles.expenseFormHeading}>
               <h2 id={titleId} className={styles.expenseFormTitle}>
-                {isEdit ? FINANCE_MESSAGES.editExpense : FINANCE_MESSAGES.addExpense}
+                {isEdit ? t("editExpense") : t("addExpense")}
               </h2>
               <p className={styles.expenseFormSubtitle}>
                 {isLinked && expense?.linkedSourceLabel
                   ? expense.linkedSourceLabel
-                  : FINANCE_MESSAGES.addExpenseSubtitle}
+                  : t("addExpenseSubtitle")}
               </p>
             </div>
           </header>
 
           {isLinked && expense ? (
             <div className={styles.linkedSourceTitle}>
-              <span className={styles.fieldLabel}>פריט מקור</span>
+              <span className={styles.fieldLabel}>{t("linkedSourceTitleLabel")}</span>
               <p className={styles.linkedSourceTitleValue}>{expense.title}</p>
             </div>
           ) : null}
@@ -315,7 +319,7 @@ export function FinanceExpenseSheet({
 
           {isManual ? (
             <>
-              <Field label={FINANCE_MESSAGES.titleLabel} htmlFor="expense-title">
+              <Field label={t("titleLabel")} htmlFor="expense-title">
                 <Input
                   id="expense-title"
                   name="title"
@@ -327,7 +331,7 @@ export function FinanceExpenseSheet({
 
               {categoryPicker}
 
-              <Field label={FINANCE_MESSAGES.dateLabel} htmlFor="expense-date">
+              <Field label={t("dateLabel")} htmlFor="expense-date">
                 <Input
                   id="expense-date"
                   name="expenseDate"
@@ -337,7 +341,7 @@ export function FinanceExpenseSheet({
                 />
               </Field>
 
-              <Field label={FINANCE_MESSAGES.notesLabel} htmlFor="expense-notes">
+              <Field label={t("notesLabel")} htmlFor="expense-notes">
                 <Textarea
                   id="expense-notes"
                   name="notes"
@@ -350,7 +354,9 @@ export function FinanceExpenseSheet({
             categoryPicker
           )}
 
-          {state.error ? <p className={styles.formError}>{state.error}</p> : null}
+          {state.errorCode ? (
+            <p className={styles.formError}>{tErrors(state.errorCode)}</p>
+          ) : null}
 
           <div className={styles.expenseFormActions}>
             {isEdit ? (
@@ -367,9 +373,9 @@ export function FinanceExpenseSheet({
               />
             ) : null}
             <Button type="button" variant="secondary" onClick={handleClose}>
-              {FINANCE_MESSAGES.cancel}
+              {t("cancel")}
             </Button>
-            <Button type="submit">{FINANCE_MESSAGES.saveExpense}</Button>
+            <Button type="submit">{t("saveExpense")}</Button>
           </div>
         </form>
       </dialog>
@@ -401,6 +407,7 @@ function DeleteExpenseButton({
   onConfirm: () => void;
   onDeleted: () => void;
 }) {
+  const t = useTranslations("Finance");
   const deleteAction = isLinked ? removeLinkedExpenseCostAction : deleteManualExpenseAction;
   const [state, formAction] = useActionState(deleteAction, initialState);
 
@@ -410,10 +417,10 @@ function DeleteExpenseButton({
     }
   }, [state.ok, onDeleted]);
 
-  const label = isLinked ? FINANCE_MESSAGES.removeLinkedCost : FINANCE_MESSAGES.deleteExpense;
+  const label = isLinked ? t("removeLinkedCost") : t("deleteExpense");
   const confirmLabel = isLinked
-    ? FINANCE_MESSAGES.removeLinkedCostConfirm
-    : FINANCE_MESSAGES.deleteExpenseConfirm;
+    ? t("removeLinkedCostConfirm")
+    : t("deleteExpenseConfirm");
 
   if (!confirmDelete) {
     return (

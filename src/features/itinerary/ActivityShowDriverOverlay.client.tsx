@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { buildTaxiModeContent } from "@/features/accommodations/build-taxi-mode-content";
 import type { ActivityViewModel } from "./types";
 import styles from "@/features/accommodations/TaxiModeOverlay.module.scss";
@@ -13,10 +14,15 @@ export function ActivityShowDriverOverlay({
   activity,
   onClose,
 }: ActivityShowDriverOverlayProps) {
-  const content = buildTaxiModeContent({
-    name: activity.locationName ?? activity.title,
-    addressEnglish: activity.address,
-  });
+  const t = useTranslations("Accommodation");
+  const tCommon = useTranslations("Common");
+  const content = buildTaxiModeContent(
+    {
+      name: activity.locationName ?? activity.title,
+      addressEnglish: activity.address,
+    },
+    t("taxiMissingAddress"),
+  );
 
   return (
     <div className={styles.overlay} role="dialog" aria-modal="true">
@@ -47,7 +53,7 @@ export function ActivityShowDriverOverlay({
       </div>
 
       <button type="button" className={styles.closeButton} onClick={onClose}>
-        סגירה
+        {tCommon("close")}
       </button>
     </div>
   );

@@ -19,12 +19,14 @@ export type PublicInviteState =
       status: "invalid";
     };
 
+export type InviteStatus = "active" | "used" | "expired" | "revoked";
+
 export type InvitationListItem = {
   id: string;
   role: TripInvitationRole;
   createdAt: string;
   expiresAt: string;
-  status: "active" | "used" | "expired" | "revoked";
+  status: InviteStatus;
 };
 
 export function getInvitationStatus(

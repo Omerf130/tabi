@@ -5,12 +5,14 @@ import { Activity } from "@/models/Activity";
 import { Accommodation } from "@/models/Accommodation";
 import { TravelDocument } from "@/models/TravelDocument";
 import { resolveAccommodationIdentity } from "@/features/accommodations/resolve-accommodation-identity";
-import { ACTIVITY_TYPE_LABELS } from "@/features/itinerary/activity-types";
-import { TRANSPORT_TYPE_SINGULAR_LABELS } from "@/features/transport/transport-types";
+import { createActivityTypeLabelResolver } from "@/features/itinerary/activity-types";
+import { createTransportTypeSingularLabelResolver } from "@/features/transport/transport-types";
 import type { TransportLinkedDocumentViewModel } from "@/features/transport/types";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
+import { resolveRequestLocale } from "@/features/i18n/resolve-request-locale";
 import { formatCalendarDateDisplay } from "@/features/trips/calendar-date";
+import { createTravelDocumentCategoryLabelResolver } from "./document-labels";
 import {
-  TRAVEL_DOCUMENT_CATEGORY_LABELS,
   TRAVEL_DOCUMENT_CONTENT_TYPE_LABELS,
   getTravelDocumentDetailPath,
   getTravelDocumentFilePath,
@@ -27,6 +29,29 @@ import type {
   TravelDocumentViewModel,
 } from "./types";
 
+type DocumentLabelResolvers = {
+  getCategoryLabel: ReturnType<typeof createTravelDocumentCategoryLabelResolver>;
+  getActivityTypeLabel: ReturnType<typeof createActivityTypeLabelResolver>;
+  getTransportTypeLabel: ReturnType<typeof createTransportTypeSingularLabelResolver>;
+  fileFallbackLabel: string;
+  accommodationFallbackName: string;
+};
+
+async function resolveDocumentLabelResolvers(): Promise<DocumentLabelResolvers> {
+  const locale = await resolveRequestLocale();
+  const tDocs = createAppTranslator("Documents", locale);
+  const tActivity = createAppTranslator("Activity", locale);
+  const tTransport = createAppTranslator("Transport", locale);
+  const tAccommodation = createAppTranslator("Accommodation", locale);
+  return {
+    getCategoryLabel: createTravelDocumentCategoryLabelResolver(tDocs),
+    getActivityTypeLabel: createActivityTypeLabelResolver(tActivity),
+    getTransportTypeLabel: createTransportTypeSingularLabelResolver(tTransport),
+    fileFallbackLabel: tDocs("file"),
+    accommodationFallbackName: tAccommodation("fallbackName"),
+  };
+}
+
 function optionalString(value: string | null | undefined): string | undefined {
   return value?.trim() || undefined;
 }
@@ -39,18 +64,22 @@ function formatCreatedAtLabel(date: Date): string {
   }).format(date);
 }
 
-function getFileTypeLabel(contentType: string): string {
+function getFileTypeLabel(
+  contentType: string,
+  fileFallbackLabel: string,
+): string {
   if (contentType in TRAVEL_DOCUMENT_CONTENT_TYPE_LABELS) {
     return TRAVEL_DOCUMENT_CONTENT_TYPE_LABELS[
       contentType as TravelDocumentContentType
     ];
   }
-  return "קובץ";
+  return fileFallbackLabel;
 }
 
 async function resolveContextLink(
   tripId: string,
   document: TravelDocumentRecord,
+  labels: DocumentLabelResolvers,
 ): Promise<{ link?: TravelDocumentContextLink; sortDate?: string }> {
   if (document.activityId) {
     const activity = await Activity.findOne({
@@ -69,7 +98,7 @@ async function resolveContextLink(
         activityId: activity._id.toString(),
         title: activity.title,
         date: activity.date,
-        activityType: ACTIVITY_TYPE_LABELS[activity.type],
+        activityType: labels.getActivityTypeLabel(activity.type),
       },
     };
   }
@@ -84,7 +113,10 @@ async function resolveContextLink(
       return {};
     }
 
-    const identity = await resolveAccommodationIdentity(accommodation);
+    const identity = await resolveAccommodationIdentity(
+      accommodation,
+      labels.accommodationFallbackName,
+    );
 
     return {
       sortDate: accommodation.checkInDate,
@@ -114,7 +146,7 @@ async function resolveContextLink(
         type: "transport",
         transportId: transport._id.toString(),
         title: `${transport.departure.locationName} → ${transport.arrival.locationName}`,
-        subtitle: TRANSPORT_TYPE_SINGULAR_LABELS[transport.type],
+        subtitle: labels.getTransportTypeLabel(transport.type),
       },
     };
   }
@@ -124,6 +156,7 @@ async function resolveContextLink(
 
 async function toTravelDocumentViewModel(
   document: TravelDocumentRecord,
+  labels: DocumentLabelResolvers,
 ): Promise<TravelDocumentViewModel | null> {
   if (!document.file?.contentType) {
     return null;
@@ -134,6 +167,7 @@ async function toTravelDocumentViewModel(
   const { link: contextLink, sortDate: contextSortDate } = await resolveContextLink(
     tripId,
     document,
+    labels,
   );
   const contentType = document.file.contentType;
   const sortDate =
@@ -143,11 +177,11 @@ async function toTravelDocumentViewModel(
     id,
     tripId,
     category: document.category,
-    categoryLabel: TRAVEL_DOCUMENT_CATEGORY_LABELS[document.category],
+    categoryLabel: labels.getCategoryLabel(document.category),
     title: document.title,
     description: optionalString(document.description),
     fileContentType: contentType,
-    fileTypeLabel: getFileTypeLabel(contentType),
+    fileTypeLabel: getFileTypeLabel(contentType, labels.fileFallbackLabel),
     isPdf: isPdfContentType(contentType),
     isImage: isImageContentType(contentType),
     fileHref: getTravelDocumentFilePath(tripId, id),
@@ -162,13 +196,14 @@ async function toTravelDocumentViewModel(
 
 export async function listEmergencyDocumentsForTrip(tripId: string) {
   await connectDb();
+  const labels = await resolveDocumentLabelResolvers();
   const documents = await TravelDocument.find({ tripId, showInEmergency: true })
     .sort({ createdAt: -1, _id: -1 })
     .lean();
 
   const viewModels = (
     await Promise.all(
-      documents.map((document) => toTravelDocumentViewModel(document)),
+      documents.map((document) => toTravelDocumentViewModel(document, labels)),
     )
   ).filter((document): document is TravelDocumentViewModel => document !== null);
 
@@ -192,13 +227,14 @@ export async function listTravelDocumentsForTrip(
   tripId: string,
 ): Promise<TravelDocumentViewModel[]> {
   await connectDb();
+  const labels = await resolveDocumentLabelResolvers();
   const documents = await TravelDocument.find({ tripId })
     .sort({ createdAt: -1, _id: -1 })
     .lean();
 
   const viewModels = (
     await Promise.all(
-      documents.map((document) => toTravelDocumentViewModel(document)),
+      documents.map((document) => toTravelDocumentViewModel(document, labels)),
     )
   ).filter((document): document is TravelDocumentViewModel => document !== null);
 
@@ -225,7 +261,8 @@ export async function getTravelDocumentForTrip(
     return null;
   }
 
-  return toTravelDocumentViewModel(document);
+  const labels = await resolveDocumentLabelResolvers();
+  return toTravelDocumentViewModel(document, labels);
 }
 
 export async function listActivityLinkOptions(
@@ -247,13 +284,17 @@ export async function listAccommodationLinkOptions(
   tripId: string,
 ): Promise<AccommodationLinkOption[]> {
   await connectDb();
+  const labels = await resolveDocumentLabelResolvers();
   const accommodations = await Accommodation.find({ tripId })
     .sort({ checkInDate: 1, _id: 1 })
     .lean();
 
   const options = await Promise.all(
     accommodations.map(async (accommodation) => {
-      const identity = await resolveAccommodationIdentity(accommodation);
+      const identity = await resolveAccommodationIdentity(
+        accommodation,
+        labels.accommodationFallbackName,
+      );
       return {
         id: accommodation._id.toString(),
         label: `${identity.name} · ${formatCalendarDateDisplay(accommodation.checkInDate)}`,
@@ -284,8 +325,9 @@ export async function listTravelDocumentsLinkedToTransport(
 
   const linked: TransportLinkedDocumentViewModel[] = [];
 
+  const labels = await resolveDocumentLabelResolvers();
   for (const document of documents) {
-    const viewModel = await toTravelDocumentViewModel(document);
+    const viewModel = await toTravelDocumentViewModel(document, labels);
     if (!viewModel) {
       continue;
     }

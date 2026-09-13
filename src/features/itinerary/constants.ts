@@ -7,13 +7,30 @@ export const ACTIVITY_COUNTRY_MAX_LENGTH = 100;
 export const ACTIVITY_GOOGLE_MAPS_URL_MAX_LENGTH = 2000;
 export const ACTIVITY_NOTES_MAX_LENGTH = 2000;
 
+export const ACTIVITY_ERROR_CODES = {
+  generic: "generic",
+  created: "created",
+  updated: "updated",
+  deleted: "deleted",
+  dateOutOfRange: "dateOutOfRange",
+  notFound: "notFound",
+  deleteConfirm: "deleteConfirm",
+  discardConfirm: "discardConfirm",
+  invalidCostData: "invalidCostData",
+} as const;
+
+export type ActivityErrorCode =
+  (typeof ACTIVITY_ERROR_CODES)[keyof typeof ACTIVITY_ERROR_CODES];
+
+/** @deprecated Use ACTIVITY_ERROR_CODES and translate in the UI layer. */
 export const ACTIVITY_MESSAGES = {
-  generic: "משהו השתבש. נסו שוב.",
-  created: "הפעילות נוספה למסלול.",
-  updated: "הפעילות עודכנה.",
-  deleted: "הפעילות נמחקה.",
-  dateOutOfRange: "התאריך אינו בתוך טווח הטיול.",
-  notFound: "הפעילות לא נמצאה.",
-  deleteConfirm: "למחוק את הפעילות?",
-  discardConfirm: "לבטל שינויים?",
+  generic: "generic",
+  created: "created",
+  updated: "updated",
+  deleted: "deleted",
+  dateOutOfRange: "dateOutOfRange",
+  notFound: "notFound",
+  deleteConfirm: "deleteConfirm",
+  discardConfirm: "discardConfirm",
+  invalidCostData: "invalidCostData",
 } as const;

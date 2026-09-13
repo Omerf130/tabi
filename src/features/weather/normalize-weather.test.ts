@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { createHebrewWeatherTranslator } from "@/features/i18n/test-translators";
+import { createConditionLabelResolver } from "./condition-labels";
 import {
   buildLocationQuery,
   normalizeIconUrl,
@@ -6,6 +8,8 @@ import {
   normalizeWeatherSnapshot,
   type WeatherApiForecastResponse,
 } from "./normalize-weather";
+
+const resolveConditionLabel = createConditionLabelResolver(createHebrewWeatherTranslator());
 
 const samplePayload: WeatherApiForecastResponse = {
   current: {
@@ -76,7 +80,11 @@ const tokyoLocation = {
 
 describe("normalizeWeatherSnapshot", () => {
   it("normalizes a 3-day forecast without provider location IDs", () => {
-    const snapshot = normalizeWeatherSnapshot(samplePayload, tokyoLocation);
+    const snapshot = normalizeWeatherSnapshot(
+      samplePayload,
+      tokyoLocation,
+      resolveConditionLabel,
+    );
 
     expect(snapshot.location).toEqual(tokyoLocation);
     expect(snapshot.current.temperatureC).toBe(24);

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { createHebrewHomeTranslations } from "@/features/i18n/test-translators";
 import { buildTestNoExpensesRecap } from "@/features/finance/after-trip-finance-recap-fixture";
 import { NEUTRAL_FALLBACK_VISUAL_SRC } from "@/features/destination-visuals/registry";
 import type { ActivityViewModel } from "@/features/itinerary/types";
@@ -14,6 +15,8 @@ const trip = {
   startDate: "2026-10-25",
   endDate: "2026-11-18",
 };
+
+const translations = createHebrewHomeTranslations();
 
 function activity(
   overrides: Partial<ActivityViewModel> & Pick<ActivityViewModel, "id">,
@@ -33,6 +36,7 @@ describe("buildTripHomeViewModel", () => {
   it("builds before-trip Day 1 preview and itinerary CTA", () => {
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-10-01",
       nowJapanTime: "10:00",
       usePreviewCountdownReference: true,
@@ -71,6 +75,7 @@ describe("buildTripHomeViewModel", () => {
   it("builds before-trip empty Day 1 state", () => {
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-10-01",
       nowJapanTime: "10:00",
       dayActivities: [],
@@ -90,6 +95,7 @@ describe("buildTripHomeViewModel", () => {
   it("includes preparation and upcoming reminders when provided", () => {
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-10-01",
       nowJapanTime: "10:00",
       preparation: {
@@ -140,6 +146,7 @@ describe("buildTripHomeViewModel", () => {
   it("builds during-trip sections with now and up next cards", () => {
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-11-01",
       nowJapanTime: "13:00",
       dayActivities: [
@@ -178,6 +185,7 @@ describe("buildTripHomeViewModel", () => {
   it("omits important today when there are no reminders", () => {
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-11-01",
       nowJapanTime: "10:00",
     });
@@ -193,6 +201,7 @@ describe("buildTripHomeViewModel", () => {
   it("includes remindersManager bundle for upcoming and active phases", () => {
     const upcoming = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-10-01",
       nowJapanTime: "10:00",
       allReminders: [
@@ -231,6 +240,7 @@ describe("buildTripHomeViewModel", () => {
 
     const active = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-11-01",
       nowJapanTime: "10:00",
       allReminders: [],
@@ -246,6 +256,7 @@ describe("buildTripHomeViewModel", () => {
   it("includes today's reminders in important today", () => {
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-11-01",
       nowJapanTime: "13:00",
       todayReminders: [
@@ -268,6 +279,7 @@ describe("buildTripHomeViewModel", () => {
   it("builds after-trip state with finance recap and without highlights", () => {
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-12-01",
       nowJapanTime: "10:00",
       financeRecap: buildTestNoExpensesRecap(),
@@ -297,6 +309,7 @@ describe("buildTripHomeViewModel", () => {
 
   it("uses coverVisualKey when no uploaded cover exists", () => {
     const model = buildTripHomeViewModel({
+      translations,
       trip: {
         ...trip,
         coverVisualKey: "japan-01",
@@ -311,6 +324,7 @@ describe("buildTripHomeViewModel", () => {
 
   it("uses uploaded cover when present", () => {
     const model = buildTripHomeViewModel({
+      translations,
       trip: {
         ...trip,
         coverImage: { pathname: "x", contentType: "image/jpeg" },

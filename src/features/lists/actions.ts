@@ -3,7 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { requireUser } from "@/features/auth/session";
 import { requireTripMember } from "@/features/trips/authorization";
-import { TRIP_LIST_DEFINITIONS, TRIP_LIST_MESSAGES } from "./constants";
+import {
+  TRIP_LIST_DEFINITIONS,
+  TRIP_LIST_ERROR_CODES,
+  TRIP_LIST_SUCCESS_CODES,
+  type TripListErrorCode,
+  type TripListSuccessCode,
+} from "./constants";
 import {
   createTripListItem,
   deleteTripListItem,
@@ -21,8 +27,8 @@ import {
 
 export type TripListActionState = {
   ok?: boolean;
-  error?: string;
-  success?: string;
+  errorCode?: TripListErrorCode;
+  successCode?: TripListSuccessCode;
   fieldErrors?: Record<string, string>;
 };
 
@@ -45,7 +51,7 @@ export async function createTripListItemAction(
 
   if (!parsed.success) {
     return {
-      error: TRIP_LIST_MESSAGES.generic,
+      errorCode: TRIP_LIST_ERROR_CODES.generic,
       fieldErrors: Object.fromEntries(
         parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
       ),
@@ -62,12 +68,12 @@ export async function createTripListItemAction(
       userId: user.id,
     });
     revalidateTripListPaths(trip.id);
-    return { ok: true, success: TRIP_LIST_MESSAGES.created };
+    return { ok: true, successCode: TRIP_LIST_SUCCESS_CODES.created };
   } catch (error) {
     if (error instanceof TripListItemValidationError) {
-      return { error: error.message };
+      return { errorCode: TRIP_LIST_ERROR_CODES.generic };
     }
-    return { error: TRIP_LIST_MESSAGES.generic };
+    return { errorCode: TRIP_LIST_ERROR_CODES.generic };
   }
 }
 
@@ -83,7 +89,7 @@ export async function updateTripListItemAction(
 
   if (!parsed.success) {
     return {
-      error: TRIP_LIST_MESSAGES.generic,
+      errorCode: TRIP_LIST_ERROR_CODES.generic,
       fieldErrors: Object.fromEntries(
         parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
       ),
@@ -98,12 +104,12 @@ export async function updateTripListItemAction(
       text: parsed.data.text,
     });
     revalidateTripListPaths(parsed.data.tripId);
-    return { ok: true, success: TRIP_LIST_MESSAGES.updated };
+    return { ok: true, successCode: TRIP_LIST_SUCCESS_CODES.updated };
   } catch (error) {
     if (error instanceof TripListItemNotFoundError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
-    return { error: TRIP_LIST_MESSAGES.generic };
+    return { errorCode: TRIP_LIST_ERROR_CODES.generic };
   }
 }
 
@@ -118,7 +124,7 @@ export async function setTripListItemCompletedAction(
   });
 
   if (!parsed.success) {
-    return { error: TRIP_LIST_MESSAGES.generic };
+    return { errorCode: TRIP_LIST_ERROR_CODES.generic };
   }
 
   try {
@@ -133,15 +139,15 @@ export async function setTripListItemCompletedAction(
     revalidateTripListPaths(parsed.data.tripId);
     return {
       ok: true,
-      success: parsed.data.isCompleted
-        ? TRIP_LIST_MESSAGES.completed
-        : TRIP_LIST_MESSAGES.uncompleted,
+      successCode: parsed.data.isCompleted
+        ? TRIP_LIST_SUCCESS_CODES.completed
+        : TRIP_LIST_SUCCESS_CODES.uncompleted,
     };
   } catch (error) {
     if (error instanceof TripListItemNotFoundError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
-    return { error: TRIP_LIST_MESSAGES.generic };
+    return { errorCode: TRIP_LIST_ERROR_CODES.generic };
   }
 }
 
@@ -155,7 +161,7 @@ export async function deleteTripListItemAction(
   });
 
   if (!parsed.success) {
-    return { error: TRIP_LIST_MESSAGES.generic };
+    return { errorCode: TRIP_LIST_ERROR_CODES.generic };
   }
 
   try {
@@ -165,11 +171,11 @@ export async function deleteTripListItemAction(
       itemId: parsed.data.itemId,
     });
     revalidateTripListPaths(parsed.data.tripId);
-    return { ok: true, success: TRIP_LIST_MESSAGES.deleted };
+    return { ok: true, successCode: TRIP_LIST_SUCCESS_CODES.deleted };
   } catch (error) {
     if (error instanceof TripListItemNotFoundError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
-    return { error: TRIP_LIST_MESSAGES.generic };
+    return { errorCode: TRIP_LIST_ERROR_CODES.generic };
   }
 }

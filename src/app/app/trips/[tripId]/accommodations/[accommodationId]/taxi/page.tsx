@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { TaxiModeOverlay } from "@/features/accommodations/TaxiModeOverlay";
 import { getAccommodationForTrip } from "@/features/accommodations/queries";
@@ -10,10 +11,13 @@ export async function generateMetadata({
   params: Promise<{ tripId: string; accommodationId: string }>;
 }): Promise<Metadata> {
   const { tripId, accommodationId } = await params;
-  const trip = await requireTripMember(tripId);
+  const [trip, t] = await Promise.all([
+    requireTripMember(tripId),
+    getTranslations("Accommodation"),
+  ]);
   const accommodation = await getAccommodationForTrip(trip.id, accommodationId);
-  const title = accommodation?.name ?? "מצב מונית";
-  return { title: `מצב מונית · ${title}` };
+  const title = accommodation?.name ?? t("taxiModePageTitle");
+  return { title: `${t("taxiModePageTitle")} · ${title}` };
 }
 
 export default async function AccommodationTaxiPage({

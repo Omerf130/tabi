@@ -1,10 +1,8 @@
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import type { TripListType } from "@/features/lists/constants";
 import type { TripListSummaryViewModel } from "@/features/lists/types";
 import type { TripPhase } from "@/features/trips/trip-phase";
-import {
-  TRIP_ATTENTION_LIST_PRIORITIES,
-  TRIP_ATTENTION_SECTION_LABELS,
-} from "./constants";
+import { TRIP_ATTENTION_LIST_PRIORITIES } from "./constants";
 
 export type AttentionListResult = {
   list: TripListSummaryViewModel;
@@ -18,39 +16,41 @@ function isListEligible(list: TripListSummaryViewModel): boolean {
   return totalCount > 0 && completedCount < totalCount;
 }
 
-function formatAttentionMessage(list: TripListSummaryViewModel, remainingCount: number): string {
-  if (remainingCount === 1) {
-    switch (list.type) {
-      case "packing":
-        return "נשאר פריט אחד לארוז";
-      case "before_trip":
-        return "נשארה מטלה אחת לפני הטיסה";
-      case "during_trip":
-        return "נשארה מטלה אחת במהלך הטיול";
-      case "pre_trip_shopping":
-        return "נשאר פריט קנייה אחד";
-      default:
-        return "נשאר פריט אחד";
-    }
-  }
+function formatAttentionMessage(
+  list: TripListSummaryViewModel,
+  remainingCount: number,
+  t: AppTranslator<"TravelHub">,
+): string {
+  const isOne = remainingCount === 1;
 
   switch (list.type) {
     case "packing":
-      return `נשארו ${remainingCount} דברים לארוז`;
+      return isOne
+        ? t("attentionMessages.packingOne")
+        : t("attentionMessages.packingMany", { count: remainingCount });
     case "before_trip":
-      return `נשארו ${remainingCount} מטלות לפני הטיסה`;
+      return isOne
+        ? t("attentionMessages.beforeTripOne")
+        : t("attentionMessages.beforeTripMany", { count: remainingCount });
     case "during_trip":
-      return `נשארו ${remainingCount} מטלות במהלך הטיול`;
+      return isOne
+        ? t("attentionMessages.duringTripOne")
+        : t("attentionMessages.duringTripMany", { count: remainingCount });
     case "pre_trip_shopping":
-      return `נשארו ${remainingCount} פריטי קנייה`;
+      return isOne
+        ? t("attentionMessages.preTripShoppingOne")
+        : t("attentionMessages.preTripShoppingMany", { count: remainingCount });
     default:
-      return `נשארו ${remainingCount} פריטים`;
+      return isOne
+        ? t("attentionMessages.defaultOne")
+        : t("attentionMessages.defaultMany", { count: remainingCount });
   }
 }
 
 export function selectAttentionList(
   lists: readonly TripListSummaryViewModel[],
   tripPhase: TripPhase,
+  t: AppTranslator<"TravelHub">,
 ): AttentionListResult | null {
   if (tripPhase === "completed") {
     return null;
@@ -71,8 +71,8 @@ export function selectAttentionList(
 
     return {
       list,
-      sectionLabel: TRIP_ATTENTION_SECTION_LABELS[tripPhase],
-      attentionMessage: formatAttentionMessage(list, remainingCount),
+      sectionLabel: t(`attentionSections.${tripPhase}`),
+      attentionMessage: formatAttentionMessage(list, remainingCount, t),
       remainingCount,
     };
   }

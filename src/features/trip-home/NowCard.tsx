@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { IconActivityOther, IconNavigation } from "@/components/ui/icons";
 import { PlaceImage } from "@/features/place-images/PlaceImage";
 import type { TripHomeActivityCard } from "./types";
@@ -11,6 +12,7 @@ type NowCardProps = {
 };
 
 export function NowCard({ card }: NowCardProps) {
+  const tHome = useTranslations("Home");
   const navAction = card.googleMapsUrl ? (
     <Link
       href={card.googleMapsUrl}
@@ -18,7 +20,7 @@ export function NowCard({ card }: NowCardProps) {
       data-tone="now"
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={`ניווט ל${card.title}`}
+      aria-label={tHome("navigateTo", { name: card.title })}
     >
       <IconNavigation className={styles.duringSemanticIconGlyph} aria-hidden />
     </Link>
@@ -34,7 +36,7 @@ export function NowCard({ card }: NowCardProps) {
 
       <div className={styles.duringCompactMain}>
         <p className={styles.duringNowEyebrow} id="trip-home-now">
-          עכשיו
+          {tHome("nowEyebrow")}
         </p>
         <h3 className={styles.duringCompactTitle} dir="auto">
           {card.title}

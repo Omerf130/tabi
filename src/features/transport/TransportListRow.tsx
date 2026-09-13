@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { IconChevron } from "@/components/ui/icons";
-import { formatEntityLinkedCostDisplay } from "@/features/finance/entity-linked-cost-presentation";
+import { EntityLinkedCostDisplay } from "@/features/finance/EntityLinkedCostDisplay.client";
 import type { TransportCardViewModel } from "./types";
 import styles from "./TransportPage.module.scss";
 
@@ -8,20 +8,23 @@ type TransportListRowProps = {
   transport: TransportCardViewModel;
 };
 
-function buildTertiaryLine(transport: TransportCardViewModel): string | undefined {
-  const parts: string[] = [];
-  if (transport.metaLabel) {
-    parts.push(transport.metaLabel);
+function TertiaryLine({ transport }: { transport: TransportCardViewModel }) {
+  if (!transport.metaLabel && !transport.linkedCost) {
+    return null;
   }
-  if (transport.linkedCost) {
-    parts.push(formatEntityLinkedCostDisplay(transport.linkedCost));
-  }
-  return parts.length > 0 ? parts.join(" · ") : undefined;
+
+  return (
+    <span className={styles.rowMeta} dir="auto">
+      {transport.metaLabel}
+      {transport.metaLabel && transport.linkedCost ? " · " : null}
+      {transport.linkedCost ? (
+        <EntityLinkedCostDisplay linkedCost={transport.linkedCost} />
+      ) : null}
+    </span>
+  );
 }
 
 export function TransportListRow({ transport }: TransportListRowProps) {
-  const tertiaryLine = buildTertiaryLine(transport);
-
   return (
     <li>
       <Link href={transport.detailHref} className={styles.rowLink}>
@@ -35,11 +38,7 @@ export function TransportListRow({ transport }: TransportListRowProps) {
           <span className={styles.rowRoute} dir="ltr">
             {transport.routeLabel}
           </span>
-          {tertiaryLine ? (
-            <span className={styles.rowMeta} dir="auto">
-              {tertiaryLine}
-            </span>
-          ) : null}
+          <TertiaryLine transport={transport} />
         </span>
 
         <span className={styles.rowVisualWrap} aria-hidden>

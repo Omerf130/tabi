@@ -10,6 +10,7 @@ import {
   type SyntheticEvent,
 } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { IconBack, IconChevron } from "@/components/ui/icons";
 import {
   completeTripReminderAction,
@@ -24,6 +25,7 @@ import {
   type ReminderManagerTab,
 } from "@/features/trips/reminders/filter-trip-home-reminders";
 import type { TripReminderViewModel } from "@/features/trips/reminders/types";
+import { translateReminderError } from "@/features/trips/reminders/translate-reminder-error";
 import { TripHomeReminderFormFields } from "./TripHomeReminderForm.client";
 import type { TripHomeRemindersManagerData } from "./types";
 import styles from "./TripHomeRemindersManager.module.scss";
@@ -39,13 +41,6 @@ type TripHomeRemindersManagerProps = {
   initialTab: ReminderManagerTab;
 };
 
-const TABS: Array<{ id: ReminderManagerTab; label: string }> = [
-  { id: "today", label: "היום" },
-  { id: "upcoming", label: "בקרוב" },
-  { id: "all", label: "הכל" },
-  { id: "completed", label: "הושלמו" },
-];
-
 function ReminderCompleteButton({
   tripId,
   reminderId,
@@ -55,6 +50,7 @@ function ReminderCompleteButton({
   reminderId: string;
   onCompleted: () => void;
 }) {
+  const tCommon = useTranslations("Common");
   const [state, action] = useActionState(completeTripReminderAction, initialState);
 
   useEffect(() => {
@@ -70,7 +66,7 @@ function ReminderCompleteButton({
       <button
         type="submit"
         className={styles.completeButton}
-        aria-label="סימון כהושלם"
+        aria-label={tCommon("markComplete")}
       />
     </form>
   );
@@ -91,6 +87,13 @@ function ReminderListView({
   onEdit: (reminder: TripReminderViewModel) => void;
   onComplete: () => void;
 }) {
+  const t = useTranslations("Home");
+  const tabs: Array<{ id: ReminderManagerTab; label: string }> = [
+    { id: "today", label: t("remindersTabToday") },
+    { id: "upcoming", label: t("remindersTabUpcoming") },
+    { id: "all", label: t("remindersTabAll") },
+    { id: "completed", label: t("remindersTabCompleted") },
+  ];
   const groups = useMemo(
     () =>
       groupRemindersForTab(
@@ -101,12 +104,12 @@ function ReminderListView({
     [managerData.reminders, activeTab, managerData.currentTripDate],
   );
 
-  const emptyMessage = getReminderManagerEmptyMessage(activeTab);
+  const emptyMessage = getReminderManagerEmptyMessage(activeTab, t);
 
   return (
     <>
-      <div className={styles.tabBar} role="tablist" aria-label="סינון תזכורות">
-        {TABS.map((tab) => (
+      <div className={styles.tabBar} role="tablist" aria-label={t("remindersFilterAria")}>
+        {tabs.map((tab) => (
           <button
             key={tab.id}
             type="button"
@@ -127,7 +130,7 @@ function ReminderListView({
             <p className={styles.emptyTitle}>{emptyMessage}</p>
             {activeTab !== "completed" ? (
               <button type="button" className={styles.emptyAction} onClick={onCreate}>
-                + תזכורת חדשה
+                + {t("remindersNew")}
               </button>
             ) : null}
           </div>
@@ -190,6 +193,9 @@ function ReminderFormView({
   onBack: () => void;
   onSaved: () => void;
 }) {
+  const t = useTranslations("Home");
+  const tCommon = useTranslations("Common");
+  const tReminders = useTranslations("TripReminders");
   const formId = useId();
   const [createState, createFormAction] = useActionState(
     createTripReminderAction,
@@ -205,6 +211,8 @@ function ReminderFormView({
   );
 
   const state = mode === "create" ? createState : updateState;
+  const formError = translateReminderError(tReminders, state.errorCode);
+  const deleteError = translateReminderError(tReminders, deleteState.errorCode);
 
   useEffect(() => {
     if (createState.ok || updateState.ok || deleteState.ok) {
@@ -219,15 +227,15 @@ function ReminderFormView({
           type="button"
           className={styles.managerIconButton}
           onClick={onBack}
-          aria-label="חזרה לרשימה"
+          aria-label={tCommon("backToList")}
         >
           <IconBack aria-hidden />
         </button>
         <h2 id={titleId} className={styles.managerTitle}>
-          {mode === "create" ? "תזכורת חדשה" : "עריכת תזכורת"}
+          {mode === "create" ? t("remindersNew") : t("remindersEdit")}
         </h2>
         <button type="submit" form={formId} className={styles.managerSaveButton}>
-          שמור
+          {tCommon("save")}
         </button>
       </header>
 
@@ -251,9 +259,9 @@ function ReminderFormView({
             timeId={`${formId}-time`}
             textId={`${formId}-text`}
           />
-          {state.error ? (
+          {formError ? (
             <p className={styles.formError} role="alert">
-              {state.error}
+              {formError}
             </p>
           ) : null}
         </form>
@@ -263,11 +271,11 @@ function ReminderFormView({
             <input type="hidden" name="tripId" value={managerData.tripId} />
             <input type="hidden" name="reminderId" value={reminder.id} />
             <button type="submit" className={styles.deleteButton}>
-              מחיקת תזכורת
+              {t("remindersDelete")}
             </button>
-            {deleteState.error ? (
+            {deleteError ? (
               <p className={styles.formError} role="alert">
-                {deleteState.error}
+                {deleteError}
               </p>
             ) : null}
           </form>
@@ -283,6 +291,8 @@ export function TripHomeRemindersManager({
   managerData,
   initialTab,
 }: TripHomeRemindersManagerProps) {
+  const t = useTranslations("Home");
+  const tCommon = useTranslations("Common");
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
@@ -371,18 +381,18 @@ export function TripHomeRemindersManager({
                 type="button"
                 className={styles.managerIconButton}
                 onClick={handleClose}
-                aria-label="סגירה"
+                aria-label={tCommon("close")}
               >
                 ×
               </button>
               <h2 id={titleId} className={styles.managerTitle}>
-                תזכורות
+                {t("remindersTitle")}
               </h2>
               <button
                 type="button"
                 className={styles.managerIconButton}
                 onClick={() => setView("create")}
-                aria-label="תזכורת חדשה"
+                aria-label={t("remindersNew")}
               >
                 +
               </button>

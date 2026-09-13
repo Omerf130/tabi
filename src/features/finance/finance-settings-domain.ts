@@ -10,21 +10,27 @@ import { TripExpense } from "@/models/TripExpense";
 import { TripFinanceSettings } from "@/models/TripFinanceSettings";
 import {
   DEFAULT_BASE_CURRENCY,
-  FINANCE_MESSAGES,
+  FINANCE_ERROR_CODES,
+  type FinanceErrorCode,
 } from "./constants";
 import { toPublicTripFinanceSettings } from "./public-finance";
 import type { PublicTripFinanceSettings } from "./types";
 
 export class FinanceSettingsValidationError extends Error {
-  constructor(message: string) {
-    super(message);
+  readonly code: FinanceErrorCode;
+
+  constructor(code: FinanceErrorCode) {
+    super(code);
+    this.code = code;
     this.name = "FinanceSettingsValidationError";
   }
 }
 
 export class FinanceSettingsNotFoundError extends Error {
+  readonly code = FINANCE_ERROR_CODES.settingsNotFound;
+
   constructor() {
-    super(FINANCE_MESSAGES.settingsNotFound);
+    super(FINANCE_ERROR_CODES.settingsNotFound);
     this.name = "FinanceSettingsNotFoundError";
   }
 }
@@ -32,7 +38,7 @@ export class FinanceSettingsNotFoundError extends Error {
 async function assertSupportedBaseCurrency(baseCurrency: string): Promise<void> {
   const currencies = await getSupportedCurrencies();
   if (!isSupportedCurrencyCode(currencies, baseCurrency)) {
-    throw new FinanceSettingsValidationError(FINANCE_MESSAGES.baseCurrencyInvalid);
+    throw new FinanceSettingsValidationError(FINANCE_ERROR_CODES.baseCurrencyInvalid);
   }
 }
 
@@ -108,7 +114,7 @@ export async function updateTripFinanceSettings(input: {
     if (normalized !== settings.baseCurrency) {
       const hasExpenses = await tripHasExpenses(input.tripId);
       if (hasExpenses) {
-        throw new FinanceSettingsValidationError(FINANCE_MESSAGES.baseCurrencyLocked);
+        throw new FinanceSettingsValidationError(FINANCE_ERROR_CODES.baseCurrencyLocked);
       }
       update.baseCurrency = normalized;
     }

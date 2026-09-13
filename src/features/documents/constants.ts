@@ -17,30 +17,13 @@ export const TRAVEL_DOCUMENT_CATEGORIES = [
 
 export type TravelDocumentCategory = (typeof TRAVEL_DOCUMENT_CATEGORIES)[number];
 
-export const TRAVEL_DOCUMENT_CATEGORY_LABELS: Record<
-  TravelDocumentCategory,
-  string
-> = {
-  flight: "טיסות",
-  accommodation: "לינה",
-  train: "רכבות",
-  ticket: "כרטיסים",
-  insurance: "ביטוח",
-  reservation: "הזמנות",
-  transport: "תחבורה",
-  other: "אחר",
-};
-
-export const TRAVEL_DOCUMENT_FILTER_OPTIONS = [
-  { value: "all", label: "הכל" },
-  ...TRAVEL_DOCUMENT_CATEGORIES.map((category) => ({
-    value: category,
-    label: TRAVEL_DOCUMENT_CATEGORY_LABELS[category],
-  })),
+export const TRAVEL_DOCUMENT_FILTER_VALUES = [
+  "all",
+  ...TRAVEL_DOCUMENT_CATEGORIES,
 ] as const;
 
 export type TravelDocumentFilterValue =
-  (typeof TRAVEL_DOCUMENT_FILTER_OPTIONS)[number]["value"];
+  (typeof TRAVEL_DOCUMENT_FILTER_VALUES)[number];
 
 export const TRAVEL_DOCUMENT_ALLOWED_CONTENT_TYPES = [
   "application/pdf",
@@ -62,20 +45,28 @@ export const TRAVEL_DOCUMENT_CONTENT_TYPE_LABELS: Record<
   "image/webp": "WebP",
 };
 
-export const TRAVEL_DOCUMENT_MESSAGES = {
-  created: "המסמך נוסף",
-  updated: "המסמך עודכן",
-  replaced: "הקובץ הוחלף",
-  deleted: "המסמך נמחק",
-  generic: "לא ניתן לשמור את המסמך. נסו שוב.",
-  notFound: "המסמך לא נמצא",
-  missingFile: "יש לבחור קובץ",
-  tooLarge: "הקובץ גדול מדי (עד 15MB)",
-  invalidType: "סוג קובץ לא נתמך. PDF, JPEG, PNG או WebP בלבד",
-  invalidLink: "קישור לא תקין למסמך",
-  bothLinks: "ניתן לקשר מסמך לפריט אחד בלבד (פעילות, לינה או תחבורה)",
-  deleteConfirm: "למחוק את המסמך?",
+export const TRAVEL_DOCUMENT_ERROR_CODES = {
+  generic: "generic",
+  notFound: "notFound",
+  missingFile: "missingFile",
+  tooLarge: "tooLarge",
+  invalidType: "invalidType",
+  invalidLink: "invalidLink",
+  bothLinks: "bothLinks",
 } as const;
+
+export type TravelDocumentErrorCode =
+  (typeof TRAVEL_DOCUMENT_ERROR_CODES)[keyof typeof TRAVEL_DOCUMENT_ERROR_CODES];
+
+export const TRAVEL_DOCUMENT_SUCCESS_CODES = {
+  created: "created",
+  updated: "updated",
+  replaced: "replaced",
+  deleted: "deleted",
+} as const;
+
+export type TravelDocumentSuccessCode =
+  (typeof TRAVEL_DOCUMENT_SUCCESS_CODES)[keyof typeof TRAVEL_DOCUMENT_SUCCESS_CODES];
 
 export function getTravelDocumentFilePath(
   tripId: string,

@@ -1,10 +1,8 @@
 "use client";
 
-import {
-  TRANSPORT_TYPES,
-  TRANSPORT_TYPE_SINGULAR_LABELS,
-  type TransportType,
-} from "@/features/transport/transport-types";
+import { useTranslations } from "next-intl";
+import { createTransportTypeSingularLabelResolver } from "@/features/transport/transport-labels";
+import { TRANSPORT_TYPES, type TransportType } from "@/features/transport/transport-types";
 import { TRANSPORT_TYPE_ICONS } from "./transport-type-icons";
 import styles from "./AddItemFlow.module.scss";
 
@@ -19,17 +17,21 @@ export function TransportTypeChooser({
   selectedType,
   showLabel = true,
 }: TransportTypeChooserProps) {
+  const t = useTranslations("Activity");
+  const tTransport = useTranslations("Transport");
+  const typeSingularLabel = createTransportTypeSingularLabelResolver(tTransport);
+
   return (
     <section className={styles.transportChooser} aria-labelledby="transport-type-heading">
       {showLabel ? (
         <h3 id="transport-type-heading" className={styles.blockLabel}>
-          סוג תחבורה
+          {t("transportType")}
         </h3>
       ) : null}
       <div
         className={styles.transportTileGrid}
         role="radiogroup"
-        aria-label="סוג תחבורה"
+        aria-label={t("transportTypeAria")}
       >
         {TRANSPORT_TYPES.map((type) => {
           const Icon = TRANSPORT_TYPE_ICONS[type];
@@ -47,7 +49,7 @@ export function TransportTypeChooser({
                 <Icon />
               </span>
               <span className={styles.transportTileLabel}>
-                {TRANSPORT_TYPE_SINGULAR_LABELS[type]}
+                {typeSingularLabel(type)}
               </span>
             </button>
           );

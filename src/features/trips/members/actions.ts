@@ -5,14 +5,15 @@ import { revalidateTripManagement } from "@/features/trip-management/revalidatio
 import { requireUser } from "@/features/auth/session";
 import { requireTripOwner } from "@/features/trips/authorization";
 import { changeTripMemberRole } from "./change-role";
-import { MEMBER_MESSAGES } from "./constants";
+import { MEMBER_ERROR_CODES, MEMBER_SUCCESS_CODES } from "./constants";
 import { LastOwnerError, MemberNotFoundError } from "./errors";
 import { removeTripMember } from "./remove-member";
 import { changeMemberRoleSchema, removeMemberSchema } from "./schemas";
+import type { MemberErrorCode, MemberSuccessCode } from "./constants";
 
 export type MemberActionState = {
-  error?: string;
-  success?: string;
+  errorCode?: MemberErrorCode;
+  successCode?: MemberSuccessCode;
 };
 
 export async function changeTripMemberRoleAction(
@@ -28,7 +29,7 @@ export async function changeTripMemberRoleAction(
   });
 
   if (!parsed.success) {
-    return { error: MEMBER_MESSAGES.generic };
+    return { errorCode: MEMBER_ERROR_CODES.generic };
   }
 
   try {
@@ -40,15 +41,15 @@ export async function changeTripMemberRoleAction(
     );
     revalidatePath(`/app/trips/${parsed.data.tripId}/members`);
     revalidateTripManagement(parsed.data.tripId, "members");
-    return { success: MEMBER_MESSAGES.roleChanged };
+    return { successCode: MEMBER_SUCCESS_CODES.roleChanged };
   } catch (error) {
     if (error instanceof LastOwnerError) {
-      return { error: MEMBER_MESSAGES.lastOwner };
+      return { errorCode: MEMBER_ERROR_CODES.lastOwner };
     }
     if (error instanceof MemberNotFoundError) {
-      return { error: MEMBER_MESSAGES.generic };
+      return { errorCode: MEMBER_ERROR_CODES.generic };
     }
-    return { error: MEMBER_MESSAGES.generic };
+    return { errorCode: MEMBER_ERROR_CODES.generic };
   }
 }
 
@@ -64,7 +65,7 @@ export async function removeTripMemberAction(
   });
 
   if (!parsed.success) {
-    return { error: MEMBER_MESSAGES.generic };
+    return { errorCode: MEMBER_ERROR_CODES.generic };
   }
 
   try {
@@ -72,14 +73,14 @@ export async function removeTripMemberAction(
     await removeTripMember(parsed.data.tripId, parsed.data.membershipId);
     revalidatePath(`/app/trips/${parsed.data.tripId}/members`);
     revalidateTripManagement(parsed.data.tripId, "members");
-    return { success: MEMBER_MESSAGES.removed };
+    return { successCode: MEMBER_SUCCESS_CODES.removed };
   } catch (error) {
     if (error instanceof LastOwnerError) {
-      return { error: MEMBER_MESSAGES.lastOwner };
+      return { errorCode: MEMBER_ERROR_CODES.lastOwner };
     }
     if (error instanceof MemberNotFoundError) {
-      return { error: MEMBER_MESSAGES.generic };
+      return { errorCode: MEMBER_ERROR_CODES.generic };
     }
-    return { error: MEMBER_MESSAGES.generic };
+    return { errorCode: MEMBER_ERROR_CODES.generic };
   }
 }

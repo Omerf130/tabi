@@ -1,7 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { IconChevron, IconCurrency } from "@/components/ui/icons";
 import { formatCurrencyAmount } from "@/features/currency/convert";
-import { FINANCE_MESSAGES } from "@/features/finance/constants";
 import type { AfterTripFinanceRecapViewModel } from "@/features/finance/types";
 import styles from "./TripHomeContent.module.scss";
 
@@ -10,6 +12,8 @@ type AfterTripFinanceRecapProps = {
 };
 
 export function AfterTripFinanceRecap({ recap }: AfterTripFinanceRecapProps) {
+  const t = useTranslations("Finance");
+
   if (recap.variant === "noExpenses") {
     return (
       <Link href={recap.href} className={styles.afterFinanceCompact}>
@@ -39,14 +43,14 @@ export function AfterTripFinanceRecap({ recap }: AfterTripFinanceRecapProps) {
         <div className={styles.afterFinanceRecapStat}>
           <span className={styles.afterFinanceRecapStatValue}>{recap.totalExpensesLabel}</span>
           <span className={styles.afterFinanceRecapStatLabel}>
-            {FINANCE_MESSAGES.totalExpenses}
+            {t("totalExpenses")}
           </span>
         </div>
         {recap.hasBudget && recap.budgetLabel ? (
           <div className={styles.afterFinanceRecapStat}>
             <span className={styles.afterFinanceRecapStatValue}>{recap.budgetLabel}</span>
             <span className={styles.afterFinanceRecapStatLabel}>
-              {FINANCE_MESSAGES.totalBudget}
+              {t("totalBudget")}
             </span>
           </div>
         ) : null}
@@ -58,7 +62,9 @@ export function AfterTripFinanceRecap({ recap }: AfterTripFinanceRecapProps) {
             >
               {recap.remainingLabel}
             </span>
-            <span className={styles.afterFinanceRecapStatLabel}>{recap.remainingHeading}</span>
+            <span className={styles.afterFinanceRecapStatLabel}>
+              {t(recap.remainingHeading)}
+            </span>
           </div>
         ) : null}
       </div>

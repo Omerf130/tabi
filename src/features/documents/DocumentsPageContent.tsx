@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import {
   IconAccommodation,
@@ -24,10 +25,12 @@ import japanWalletHero from "@/assets/pics/ChatGPT Image Sep 8, 2026, 08_41_47 P
 import walletBottomArtwork from "@/assets/pics/ChatGPT Image Sep 8, 2026, 08_59_02 PM.png";
 import { getTravelDocumentsSettingsHref } from "@/features/documents/constants";
 import {
-  TRAVEL_WALLET_VISUAL_FILTERS,
+  createTravelWalletVisualFilterOptions,
+  formatDocumentLinkedCount,
+  formatDocumentWalletCount,
+} from "@/features/documents/document-labels";
+import {
   filterDocumentsByVisualFilter,
-  formatDocumentCountHebrew,
-  formatLinkedCountHebrew,
   type TravelWalletVisualFilter,
 } from "@/features/documents/document-filter-ui";
 import type { TravelDocumentViewModel } from "@/features/documents/types";
@@ -40,11 +43,20 @@ type DocumentsPageContentProps = {
   isOwner: boolean;
 };
 
+type VisualFilterIcon =
+  | "grid"
+  | "plane"
+  | "bed"
+  | "train"
+  | "ticket"
+  | "shield"
+  | "more";
+
 function FilterIcon({
   icon,
   className,
 }: {
-  icon: (typeof TRAVEL_WALLET_VISUAL_FILTERS)[number]["icon"];
+  icon: VisualFilterIcon;
   className?: string;
 }) {
   switch (icon) {
@@ -142,7 +154,9 @@ export function DocumentsPageContent({
   documents,
   isOwner,
 }: DocumentsPageContentProps) {
+  const t = useTranslations("Documents");
   const [activeFilter, setActiveFilter] = useState<TravelWalletVisualFilter>("all");
+  const visualFilters = useMemo(() => createTravelWalletVisualFilterOptions(t), [t]);
 
   const filteredDocuments = useMemo(
     () => filterDocumentsByVisualFilter(documents, activeFilter),
@@ -180,12 +194,12 @@ export function DocumentsPageContent({
           <div className={styles.heroReadabilityOverlay} aria-hidden />
           <div className={styles.heroContent}>
             <h1 id="wallet-hero-title" className={styles.heroTitle}>
-              ארנק הנסיעה
+              {t("pageTitle")}
             </h1>
             <p className={styles.heroSubtitle}>
-              כל הכרטיסים, ההזמנות והמסמכים החשובים
+              {t("pageSubtitleLine1")}
               <br />
-              במקום אחד — לטיול רגוע יותר.
+              {t("pageSubtitleLine2")}
             </p>
           </div>
         </section>
@@ -194,9 +208,9 @@ export function DocumentsPageContent({
           <div
             className={styles.filters}
             role="tablist"
-            aria-label="סינון לפי קטגוריה"
+            aria-label={t("filterAria")}
           >
-            {TRAVEL_WALLET_VISUAL_FILTERS.map((option) => {
+            {visualFilters.map((option) => {
               const isActive = activeFilter === option.value;
               return (
                 <button
@@ -216,17 +230,17 @@ export function DocumentsPageContent({
         </div>
 
         {documents.length > 0 ? (
-          <div className={styles.summaryStrip} aria-label="סיכום ארנק">
+          <div className={styles.summaryStrip} aria-label={t("summaryAria")}>
             <span className={styles.summaryItem}>
               <IconDocuments className={styles.summaryIcon} aria-hidden />
-              {formatDocumentCountHebrew(documents.length)}
+              {formatDocumentWalletCount(documents.length, t)}
             </span>
             {linkedCount > 0 ? (
               <>
                 <span className={styles.summaryDivider} aria-hidden />
                 <span className={styles.summaryItem}>
                   <IconLink className={styles.summaryIcon} aria-hidden />
-                  {formatLinkedCountHebrew(linkedCount)}
+                  {formatDocumentLinkedCount(linkedCount, t)}
                 </span>
               </>
             ) : null}
@@ -236,18 +250,18 @@ export function DocumentsPageContent({
         {filteredDocuments.length === 0 ? (
           <div className={styles.emptyState}>
             <p className={styles.emptyTitle}>
-              {documents.length === 0 ? "אין מסמכים עדיין" : "אין מסמכים בקטגוריה זו"}
+              {documents.length === 0 ? t("emptyAll") : t("emptyFilter")}
             </p>
             <p className={styles.emptyHint}>
               {documents.length === 0
                 ? isOwner
-                  ? "הוסיפו כרטיסי טיסה, הזמנות וביטוחים כדי שיהיו זמינים לכל מי שבטיול."
-                  : "בעל הטיול עדיין לא הוסיף מסמכים."
-                : "נסו לבחור קטגוריה אחרת."}
+                  ? t("emptyAllHintOwner")
+                  : t("emptyAllHintGuest")
+                : t("emptyFilterHint")}
             </p>
             {documents.length === 0 && isOwner ? (
               <Link href={getTravelDocumentsSettingsHref(tripId)} className={styles.emptyLink}>
-                להוספת מסמך בהגדרות
+                {t("addInSettings")}
               </Link>
             ) : null}
           </div>
@@ -278,7 +292,7 @@ export function DocumentsPageContent({
                         <IconChevron className={styles.cardChevron} aria-hidden />
                         <span className={styles.cardDate}>
                           <IconCalendar className={styles.cardDateIcon} aria-hidden />
-                          <span>נוסף ב{document.createdAtLabel}</span>
+                          <span>{t("addedOn", { date: document.createdAtLabel })}</span>
                         </span>
                       </div>
                     </article>

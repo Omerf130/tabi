@@ -1,11 +1,11 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
-import {
-  formatCalendarDateDisplay,
-  formatCalendarDateRangeWithWeekdayDisplay,
-} from "@/features/trips/calendar-date";
+import { useLocale, useTranslations } from "next-intl";
+import { formatAppDate, formatAppNumber } from "@/features/i18n/formatting";
+import { resolveAppLocale } from "@/features/i18n/locale";
 import { TRIP_DESCRIPTION_MAX_LENGTH } from "@/features/trips/constants";
+import { parseCalendarDateParts } from "@/features/trips/calendar-date";
 import { getTripDayCount } from "@/features/trips/trip-days";
 import { createTripWizardAction, type TripActionState } from "@/features/trips/actions";
 import { DestinationSearchField } from "./DestinationSearchField";
@@ -24,7 +24,42 @@ import {
 } from "./wizard-state";
 import styles from "./CreateTripWizard.module.scss";
 
+function calendarDateToUtcDate(value: string): Date {
+  const parts = parseCalendarDateParts(value);
+  if (!parts) {
+    return new Date(value);
+  }
+  return new Date(Date.UTC(parts.year, parts.month - 1, parts.day));
+}
+
+function formatCalendarDate(value: string, locale: ReturnType<typeof resolveAppLocale>): string {
+  return formatAppDate(calendarDateToUtcDate(value), locale, {
+    timeZone: "UTC",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function formatCalendarDateWithWeekday(
+  value: string,
+  locale: ReturnType<typeof resolveAppLocale>,
+): string {
+  return formatAppDate(calendarDateToUtcDate(value), locale, {
+    timeZone: "UTC",
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
 export function CreateTripWizard() {
+  const locale = resolveAppLocale(useLocale());
+  const tDestination = useTranslations("CreateTrip.destination");
+  const tDates = useTranslations("CreateTrip.dates");
+  const tDetails = useTranslations("CreateTrip.details");
+  const tErrors = useTranslations("CreateTrip.errors");
   const [state, setState] = useState(createInitialWizardState);
   const [actionState, setActionState] = useState<TripActionState>({});
   const [isPending, startTransition] = useTransition();
@@ -85,9 +120,9 @@ export function CreateTripWizard() {
         setActionState({});
         return;
       }
-      setPopularError(error ?? "Could not load this destination");
+      setPopularError(error ?? tErrors("destinationLoadFailed"));
     } catch {
-      setPopularError("Could not load this destination");
+      setPopularError(tErrors("destinationLoadFailed"));
     } finally {
       setPopularLoadingId(null);
     }
@@ -118,17 +153,25 @@ export function CreateTripWizard() {
     canContinueDates && state.startDate && state.endDate
       ? (() => {
           const dayCount = getTripDayCount(state.startDate, state.endDate);
-          return dayCount === 1 ? "1 day" : `${dayCount} days`;
+          return dayCount === 1
+            ? tDates("durationOneDay")
+            : tDates("durationManyDays", {
+                count: formatAppNumber(dayCount, locale),
+              });
         })()
       : "";
 
   const weekdayRangeLabel =
     canContinueDates && state.startDate && state.endDate
-      ? formatCalendarDateRangeWithWeekdayDisplay(state.startDate, state.endDate, "en-US")
+      ? (() => {
+          const start = formatCalendarDateWithWeekday(state.startDate, locale);
+          const end = formatCalendarDateWithWeekday(state.endDate, locale);
+          return state.startDate === state.endDate ? start : `${start} – ${end}`;
+        })()
       : "";
 
   return (
-    <div className={styles.wizard} dir="ltr" lang="en">
+    <div className={styles.wizard}>
       <WizardHero
         step={state.step}
         canGoBack={stepIndex > 0}
@@ -141,11 +184,9 @@ export function CreateTripWizard() {
             <>
               <div className={styles.stepIntro}>
                 <h1 ref={stepHeadingRef} className={styles.stepTitle} tabIndex={-1}>
-                  Where are you going?
+                  {tDestination("title")}
                 </h1>
-                <p className={styles.stepSubtitle}>
-                  Choose your destination for this trip.
-                </p>
+                <p className={styles.stepSubtitle}>{tDestination("subtitle")}</p>
               </div>
 
               <DestinationSearchField
@@ -174,7 +215,7 @@ export function CreateTripWizard() {
                 disabled={!canContinueDestination}
                 onClick={goNext}
               >
-                Continue →
+                {tDestination("continue")}
               </button>
             </>
           ) : null}
@@ -183,26 +224,26 @@ export function CreateTripWizard() {
             <>
               <div className={styles.stepIntro}>
                 <h1 ref={stepHeadingRef} className={styles.stepTitle} tabIndex={-1}>
-                  When are you traveling?
+                  {tDates("title")}
                 </h1>
-                <p className={styles.stepSubtitle}>Select your travel dates.</p>
+                <p className={styles.stepSubtitle}>{tDates("subtitle")}</p>
               </div>
 
               <div className={styles.dateSummaryGrid}>
                 <div className={styles.dateSummaryCard}>
-                  <span className={styles.dateSummaryLabel}>Start Date</span>
+                  <span className={styles.dateSummaryLabel}>{tDates("startDate")}</span>
                   <span className={styles.dateSummaryValue}>
                     {state.startDate
-                      ? formatCalendarDateDisplay(state.startDate, "en-US")
-                      : "Select date"}
+                      ? formatCalendarDate(state.startDate, locale)
+                      : tDates("selectDate")}
                   </span>
                 </div>
                 <div className={styles.dateSummaryCard}>
-                  <span className={styles.dateSummaryLabel}>End Date</span>
+                  <span className={styles.dateSummaryLabel}>{tDates("endDate")}</span>
                   <span className={styles.dateSummaryValue}>
                     {state.endDate
-                      ? formatCalendarDateDisplay(state.endDate, "en-US")
-                      : "Select date"}
+                      ? formatCalendarDate(state.endDate, locale)
+                      : tDates("selectDate")}
                   </span>
                 </div>
               </div>
@@ -233,10 +274,10 @@ export function CreateTripWizard() {
                 disabled={!canContinueDates}
                 onClick={goNext}
               >
-                Continue →
+                {tDates("continue")}
               </button>
               <button type="button" className={styles.secondaryButton} onClick={goBack}>
-                Back
+                {tDates("back")}
               </button>
             </>
           ) : null}
@@ -245,15 +286,13 @@ export function CreateTripWizard() {
             <>
               <div className={styles.stepIntro}>
                 <h1 ref={stepHeadingRef} className={styles.stepTitle} tabIndex={-1}>
-                  Name your trip
+                  {tDetails("title")}
                 </h1>
-                <p className={styles.stepSubtitle}>
-                  Give this journey a name you&apos;ll recognize later.
-                </p>
+                <p className={styles.stepSubtitle}>{tDetails("subtitle")}</p>
               </div>
 
               <label className={styles.fieldLabel} htmlFor="tripName">
-                Trip Name
+                {tDetails("tripName")}
               </label>
               <input
                 id="tripName"
@@ -273,7 +312,8 @@ export function CreateTripWizard() {
               />
 
               <label className={styles.fieldLabel} htmlFor="tripDescription">
-                Trip Description <span className={styles.optionalLabel}>(optional)</span>
+                {tDetails("tripDescription")}{" "}
+                <span className={styles.optionalLabel}>{tDetails("optional")}</span>
               </label>
               <textarea
                 id="tripDescription"
@@ -281,7 +321,7 @@ export function CreateTripWizard() {
                 value={state.description}
                 maxLength={TRIP_DESCRIPTION_MAX_LENGTH}
                 rows={4}
-                placeholder="Our honeymoon in Japan"
+                placeholder={tDetails("descriptionPlaceholder")}
                 onChange={(event) =>
                   setState((current) => ({
                     ...current,
@@ -292,15 +332,15 @@ export function CreateTripWizard() {
 
               {state.destination ? (
                 <div className={styles.tripSummary}>
-                  <p className={styles.tripSummaryTitle}>Trip summary</p>
+                  <p className={styles.tripSummaryTitle}>{tDetails("summaryTitle")}</p>
                   <dl className={styles.tripSummaryList}>
                     <div>
-                      <dt>Destination</dt>
+                      <dt>{tDetails("summaryDestination")}</dt>
                       <dd>{state.destination.displayName}</dd>
                     </div>
                     {canContinueDates ? (
                       <div>
-                        <dt>Dates</dt>
+                        <dt>{tDetails("summaryDates")}</dt>
                         <dd>
                           {weekdayRangeLabel}
                           {durationLabel ? ` · ${durationLabel}` : ""}
@@ -328,10 +368,10 @@ export function CreateTripWizard() {
                 disabled={!canCreateTrip || isPending}
                 onClick={handleCreateTrip}
               >
-                {isPending ? "Creating trip..." : "Create Trip →"}
+                {isPending ? tDetails("creating") : tDetails("create")}
               </button>
               <button type="button" className={styles.secondaryButton} onClick={goBack}>
-                Back
+                {tDetails("back")}
               </button>
             </>
           ) : null}

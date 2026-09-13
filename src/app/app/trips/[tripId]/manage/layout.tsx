@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { TripHeader } from "@/features/app-shell/TripHeader";
 import { requireTripMember } from "@/features/trips/authorization";
 import { TripManagementShell } from "@/features/trip-management/TripManagementShell";
@@ -11,11 +12,12 @@ export default async function TripManageLayout({
 }) {
   const { tripId } = await params;
   const trip = await requireTripMember(tripId);
+  const t = await getTranslations("TripManagement");
 
   return (
     <>
       <TripHeader
-        title="ניהול הטיול"
+        title={t("title")}
         tripName={trip.name}
         showTripSwitch
         backHref={`/app/trips/${tripId}/more`}

@@ -1,26 +1,26 @@
 import type { ItineraryDayItem } from "@/features/transport/merge-itinerary-day-items";
 import { countItineraryDayItems } from "@/features/transport/merge-itinerary-day-items";
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 
-export function formatDayItineraryCount(items: readonly ItineraryDayItem[]): string {
-  const { activityCount, transportCount, totalCount } = countItineraryDayItems(items);
+export function formatDayItineraryCount(
+  items: readonly ItineraryDayItem[],
+  t: AppTranslator<"Itinerary">,
+  tCommon: AppTranslator<"Common">,
+): string {
+  const { activityCount, transportCount, totalCount } =
+    countItineraryDayItems(items);
 
   if (totalCount === 0) {
-    return "אין פריטים";
+    return t("itineraryCount", { count: 0 });
   }
 
   if (transportCount === 0) {
-    if (activityCount === 1) {
-      return "פעילות אחת";
-    }
-    return `${activityCount} פעילויות`;
+    return tCommon("activityCount", { count: activityCount });
   }
 
   if (activityCount === 0) {
-    if (transportCount === 1) {
-      return "תחבורה אחת";
-    }
-    return `${transportCount} תחבורה`;
+    return tCommon("transportCount", { count: transportCount });
   }
 
-  return `${totalCount} פריטים`;
+  return t("itineraryCountMixed", { count: totalCount });
 }

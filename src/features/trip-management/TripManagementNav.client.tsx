@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   buildTripManagementHref,
-  getVisibleManagementSections,
   parseTripManagementSection,
   type TripManagementSection,
 } from "./constants";
+import { getVisibleManagementSections } from "./trip-management-labels";
 import styles from "./TripManagementShell.module.scss";
 
 type TripManagementNavClientProps = {
@@ -28,13 +29,14 @@ export function TripManagementNavClient({
   tripId,
   isOwner,
 }: TripManagementNavClientProps) {
+  const t = useTranslations("TripManagement");
   const pathname = usePathname();
   const activeSection = getActiveSection(pathname, tripId);
-  const sections = getVisibleManagementSections(isOwner);
+  const sections = getVisibleManagementSections(isOwner, t);
 
   return (
     <>
-      <nav className={styles.mobileNav} aria-label="ניהול הטיול">
+      <nav className={styles.mobileNav} aria-label={t("navAria")}>
         <div className={styles.mobileGrid}>
           {sections.map((section) => {
             const isActive = section.id === activeSection;
@@ -53,7 +55,7 @@ export function TripManagementNavClient({
         </div>
       </nav>
 
-      <nav className={styles.desktopNav} aria-label="ניהול הטיול">
+      <nav className={styles.desktopNav} aria-label={t("navAria")}>
         <ul className={styles.sidebarList}>
           {sections.map((section) => {
             const isActive = section.id === activeSection;

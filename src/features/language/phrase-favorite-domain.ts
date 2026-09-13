@@ -2,26 +2,29 @@ import "server-only";
 
 import { connectDb } from "@/lib/db/connect";
 import { PhraseFavorite } from "@/models/PhraseFavorite";
-import { DEFAULT_PHRASEBOOK_PACK_ID, PHRASEBOOK_MESSAGES } from "./constants";
+import { DEFAULT_PHRASEBOOK_PACK_ID, PHRASEBOOK_ERROR_CODES } from "./constants";
 import { getDefaultPhrasebookPack, getPhraseFromDefaultPack } from "./builtin/registry";
 
 export class PhraseFavoriteValidationError extends Error {
-  constructor(message: string) {
-    super(message);
+  readonly code: (typeof PHRASEBOOK_ERROR_CODES)[keyof typeof PHRASEBOOK_ERROR_CODES];
+
+  constructor(code: (typeof PHRASEBOOK_ERROR_CODES)[keyof typeof PHRASEBOOK_ERROR_CODES]) {
+    super(code);
+    this.code = code;
     this.name = "PhraseFavoriteValidationError";
   }
 }
 
 function resolveTargetLanguageFromPack(packId: string): string {
   if (packId !== DEFAULT_PHRASEBOOK_PACK_ID) {
-    throw new PhraseFavoriteValidationError(PHRASEBOOK_MESSAGES.favoriteFailed);
+    throw new PhraseFavoriteValidationError(PHRASEBOOK_ERROR_CODES.favoriteFailed);
   }
   return getDefaultPhrasebookPack().targetLanguage;
 }
 
 function assertPhraseInDefaultPack(phraseId: string): void {
   if (!getPhraseFromDefaultPack(phraseId)) {
-    throw new PhraseFavoriteValidationError(PHRASEBOOK_MESSAGES.favoriteFailed);
+    throw new PhraseFavoriteValidationError(PHRASEBOOK_ERROR_CODES.favoriteFailed);
   }
 }
 

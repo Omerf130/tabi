@@ -1,9 +1,12 @@
-import { FINANCE_MESSAGES } from "./constants";
+import { FINANCE_ERROR_CODES, type FinanceErrorCode } from "./constants";
 import type { ExpenseCategory, ExpenseSourceType } from "./types";
 
 export class TripExpenseValidationError extends Error {
-  constructor(message: string) {
-    super(message);
+  readonly code: FinanceErrorCode;
+
+  constructor(code: FinanceErrorCode) {
+    super(code);
+    this.code = code;
     this.name = "TripExpenseValidationError";
   }
 }
@@ -20,24 +23,24 @@ export function validateTripExpenseInvariants(
   input: TripExpenseInvariantInput,
 ): void {
   if (!Number.isFinite(input.originalAmount) || input.originalAmount <= 0) {
-    throw new TripExpenseValidationError(FINANCE_MESSAGES.expenseAmountInvalid);
+    throw new TripExpenseValidationError(FINANCE_ERROR_CODES.expenseAmountInvalid);
   }
 
   if (input.sourceType === "manual") {
     if (input.sourceId) {
-      throw new TripExpenseValidationError(FINANCE_MESSAGES.manualSourceIdForbidden);
+      throw new TripExpenseValidationError(FINANCE_ERROR_CODES.manualSourceIdForbidden);
     }
     if (!input.title?.trim()) {
-      throw new TripExpenseValidationError(FINANCE_MESSAGES.manualTitleRequired);
+      throw new TripExpenseValidationError(FINANCE_ERROR_CODES.manualTitleRequired);
     }
     return;
   }
 
   if (!input.sourceId?.trim()) {
-    throw new TripExpenseValidationError(FINANCE_MESSAGES.linkedSourceRequired);
+    throw new TripExpenseValidationError(FINANCE_ERROR_CODES.linkedSourceRequired);
   }
 
   if (input.title?.trim()) {
-    throw new TripExpenseValidationError(FINANCE_MESSAGES.linkedTitleForbidden);
+    throw new TripExpenseValidationError(FINANCE_ERROR_CODES.linkedTitleForbidden);
   }
 }

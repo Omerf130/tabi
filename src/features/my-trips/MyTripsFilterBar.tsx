@@ -1,10 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import {
-  CREATE_TRIP_PATH,
-  MY_TRIPS_FILTER_LABELS,
-} from "./constants";
+import { useTranslations } from "next-intl";
+import { CREATE_TRIP_PATH } from "./constants";
 import type { MyTripsFilter } from "./filter-my-trips";
 import { MY_TRIPS_FILTERS } from "./filter-my-trips";
 import styles from "./MyTripsScreen.module.scss";
@@ -18,12 +16,15 @@ export function MyTripsFilterBar({
   activeFilter,
   onFilterChange,
 }: MyTripsFilterBarProps) {
+  const t = useTranslations("MyTrips.filters");
+  const tCreate = useTranslations("MyTrips.createTrip");
+
   return (
     <div className={styles.filterBar}>
       <div
         className={styles.filterGroup}
         role="group"
-        aria-label="Trip filters"
+        aria-label={t("ariaLabel")}
       >
         {MY_TRIPS_FILTERS.map((filter) => {
           const isSelected = activeFilter === filter;
@@ -35,7 +36,7 @@ export function MyTripsFilterBar({
               aria-pressed={isSelected}
               onClick={() => onFilterChange(filter)}
             >
-              {MY_TRIPS_FILTER_LABELS[filter]}
+              {t(filter)}
             </button>
           );
         })}
@@ -44,7 +45,7 @@ export function MyTripsFilterBar({
       <Link
         href={CREATE_TRIP_PATH}
         className={styles.createTripButton}
-        aria-label="Create new trip"
+        aria-label={tCreate("ariaLabel")}
       >
         <span className={styles.createTripIcon} aria-hidden="true">
           +

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { Card } from "@/components/ui/Card/Card";
 import { AppPage } from "@/features/app-shell/AppPage";
 import { GooglePlacesAttribution } from "@/features/places/GooglePlacesAttribution";
@@ -11,47 +12,49 @@ type AccommodationDetailContentProps = {
   accommodation: AccommodationViewModel;
 };
 
-export function AccommodationDetailContent({
+export async function AccommodationDetailContent({
   tripId,
   accommodation,
 }: AccommodationDetailContentProps) {
+  const t = await getTranslations("Accommodation");
+
   return (
     <AppPage width="content">
       <Card variant="standard">
         <dl className={styles.detailsList}>
           <div className={styles.detailItem}>
-            <dt>שם</dt>
+            <dt>{t("name")}</dt>
             <dd dir="auto">{accommodation.name}</dd>
           </div>
           {accommodation.nameJapanese ? (
             <div className={styles.detailItem}>
-              <dt>שם ביפנית</dt>
+              <dt>{t("nameJapanese")}</dt>
               <dd dir="auto" lang="ja">
                 {accommodation.nameJapanese}
               </dd>
             </div>
           ) : null}
           <div className={styles.detailItem}>
-            <dt>עיר</dt>
+            <dt>{t("city")}</dt>
             <dd>{accommodation.city}</dd>
           </div>
           <div className={styles.detailItem}>
-            <dt>Check-in</dt>
+            <dt>{t("checkIn")}</dt>
             <dd>{accommodation.checkInLabel}</dd>
           </div>
           <div className={styles.detailItem}>
-            <dt>Check-out</dt>
+            <dt>{t("checkOut")}</dt>
             <dd>{accommodation.checkOutLabel}</dd>
           </div>
           {accommodation.addressEnglish ? (
             <div className={styles.detailItem}>
-              <dt>כתובת באנגלית</dt>
+              <dt>{t("addressEnglish")}</dt>
               <dd dir="auto">{accommodation.addressEnglish}</dd>
             </div>
           ) : null}
           {accommodation.addressJapanese ? (
             <div className={styles.detailItem}>
-              <dt>כתובת ביפנית</dt>
+              <dt>{t("addressJapanese")}</dt>
               <dd dir="auto" lang="ja">
                 {accommodation.addressJapanese}
               </dd>
@@ -59,19 +62,19 @@ export function AccommodationDetailContent({
           ) : null}
           {accommodation.linkedCost ? (
             <div className={styles.detailItem}>
-              <dt>עלות</dt>
+              <dt>{t("cost")}</dt>
               <dd>{accommodation.linkedCost.label}</dd>
             </div>
           ) : null}
           {accommodation.bookingReference ? (
             <div className={styles.detailItem}>
-              <dt>מספר הזמנה</dt>
+              <dt>{t("bookingReference")}</dt>
               <dd>{accommodation.bookingReference}</dd>
             </div>
           ) : null}
           {accommodation.notes ? (
             <div className={styles.detailItem}>
-              <dt>הערות</dt>
+              <dt>{t("notes")}</dt>
               <dd dir="auto">{accommodation.notes}</dd>
             </div>
           ) : null}
@@ -86,14 +89,14 @@ export function AccommodationDetailContent({
             rel="noopener noreferrer"
             className={styles.actionLinkSecondary}
           >
-            פתח ב-Google Maps
+            {t("openInGoogleMaps")}
           </a>
         ) : null}
         <Link
           href={buildAccommodationTaxiHref(tripId, accommodation.id)}
           className={styles.actionLinkPrimary}
         >
-          הצג לנהג
+          {t("showDriver")}
         </Link>
       </div>
       {accommodation.usesGoogleAttribution ? (

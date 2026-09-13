@@ -3,6 +3,7 @@ import { buildCurrencyHref } from "@/features/currency/constants";
 import { buildEmergencyHref } from "@/features/emergency/constants";
 import { buildLanguageHref } from "@/features/language/constants";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import type { PlacePhotoPresentation } from "@/features/place-images/types";
 import type { TripListSummaryViewModel } from "@/features/lists/types";
 import type { TravelHubFinanceSummary } from "@/features/finance/types";
@@ -15,9 +16,7 @@ import { buildTravelHubDocumentsTile } from "./build-travel-hub-documents-tile";
 import { buildTravelHubListsTile } from "./build-travel-hub-lists-tile";
 import { buildTravelHubTransportRow } from "./build-travel-hub-transport-row";
 import {
-  TRAVEL_HUB_HERO,
   TRAVEL_HUB_MANAGE_HREF,
-  TRAVEL_HUB_MANAGEMENT_LABEL,
   TRAVEL_HUB_QUICK_TOOLS,
 } from "./constants";
 import type { TravelHubViewModel } from "./types";
@@ -38,6 +37,8 @@ type BuildTravelHubViewModelInput = {
   currentTripDate?: string;
   accommodationPhotoPresentation?: PlacePhotoPresentation | null;
   finance: TravelHubFinanceSummary;
+  t: AppTranslator<"TravelHub">;
+  tLists: AppTranslator<"Lists">;
 };
 
 function buildQuickToolHref(
@@ -65,6 +66,8 @@ export function buildTravelHubViewModel({
   currentTripDate = getJapanCalendarDate(),
   accommodationPhotoPresentation = null,
   finance,
+  t,
+  tLists,
 }: BuildTravelHubViewModelInput): TravelHubViewModel {
   const tripId = trip.id;
   const tripPhase = getTripPhase(trip.startDate, trip.endDate, currentTripDate);
@@ -78,8 +81,8 @@ export function buildTravelHubViewModel({
     tripId,
     hero: {
       heroImageSrc: visual.imageSrc,
-      title: TRAVEL_HUB_HERO.title,
-      subtitle: TRAVEL_HUB_HERO.subtitle,
+      title: t("heroTitle"),
+      subtitle: t("heroSubtitle"),
     },
     accommodation: buildTravelHubAccommodationRow({
       tripId,
@@ -87,23 +90,24 @@ export function buildTravelHubViewModel({
       tripPhase,
       currentTripDate,
       accommodationPhotoPresentation,
+      t,
     }),
-    transport: buildTravelHubTransportRow({ tripId, transports }),
+    transport: buildTravelHubTransportRow({ tripId, transports, t }),
     finance,
     materials: {
-      lists: buildTravelHubListsTile(tripId, lists),
-      documents: buildTravelHubDocumentsTile(tripId, documentCount),
+      lists: buildTravelHubListsTile(tripId, lists, t, tLists),
+      documents: buildTravelHubDocumentsTile(tripId, documentCount, t),
     },
     quickTools: TRAVEL_HUB_QUICK_TOOLS.map((tool) => ({
       id: tool.id,
-      label: tool.label,
-      description: tool.description,
+      label: t(`quickTools.${tool.id}.label`),
+      description: t(`quickTools.${tool.id}.description`),
       href: buildQuickToolHref(tripId, tool.id),
       colorClass: tool.colorClass,
     })),
     management: {
       href: TRAVEL_HUB_MANAGE_HREF(tripId),
-      label: TRAVEL_HUB_MANAGEMENT_LABEL,
+      label: t("managementLabel"),
     },
   };
 }

@@ -1,0 +1,1370 @@
+{
+
+  "Navigation": {
+
+    "home": "בית",
+
+    "itinerary": "מסלול",
+
+    "documents": "מסמכים",
+
+    "settings": "הגדרות",
+
+    "more": "עוד",
+
+    "ariaLabel": "ניווט ראשי"
+
+  },
+
+  "TripHeader": {
+
+    "back": "חזרה",
+
+    "myTrips": "הטיולים שלי"
+
+  },
+
+  "AccountMenu": {
+
+    "footerAriaLabel": "חשבון וניווט",
+
+    "myTrips": "הטיולים שלי",
+
+    "logout": "יציאה",
+
+    "interfaceLanguage": "שפת ממשק",
+
+    "languageHebrew": "עברית",
+
+    "languageEnglish": "English"
+
+  },
+
+  "TripManagement": {
+
+    "title": "ניהול הטיול",
+
+    "introTitle": "ניהול הטיול",
+
+    "introLead": "כל מה שצריך כדי לעדכן ולנהל את הטיול שלכם במקום אחד.",
+
+    "navAria": "ניהול הטיול",
+
+    "sections": {
+
+      "details": { "label": "פרטי הטיול", "shortLabel": "פרטי הטיול" },
+
+      "accommodations": { "label": "מקומות לינה", "shortLabel": "לינה" },
+
+      "transport": { "label": "תחבורה", "shortLabel": "תחבורה" },
+
+      "documents": { "label": "מסמכים", "shortLabel": "מסמכים" },
+
+      "reminders": { "label": "תזכורות", "shortLabel": "תזכורות" },
+
+      "members": { "label": "חברי הטיול", "shortLabel": "חברים" }
+
+    },
+
+    "membersTitle": "חברי הטיול",
+
+    "newInvite": "+ הזמנה חדשה",
+
+    "invitationsSection": "הזמנות פעילות ואחרונות"
+
+  },
+
+  "Errors": {
+
+    "invalidLocale": "שפת הממשק שנבחרה אינה נתמכת."
+
+  },
+
+  "Common": {
+    "today": "היום",
+    "all": "הכל",
+    "details": "פרטים",
+    "cancel": "ביטול",
+    "save": "שמירה",
+    "delete": "מחיקה",
+    "edit": "עריכה",
+    "close": "סגירה",
+    "back": "חזרה",
+    "backToList": "חזרה לרשימה",
+    "navigate": "ניווט",
+    "changePlace": "שינוי מקום",
+    "date": "תאריך",
+    "time": "שעה",
+    "start": "התחלה",
+    "end": "סיום",
+    "day": "יום",
+    "dayNumber": "יום {dayNumber}",
+    "dayMeta": "יום {dayNumber} מתוך {totalDays}",
+    "dayContext": "יום {dayNumber} · {dateLabel}",
+    "andMore": "ועוד {count}",
+    "noTime": "ללא שעה",
+    "notes": "הערות",
+    "markComplete": "סימון כהושלם",
+    "placeName": "שם המקום",
+    "address": "כתובת",
+    "targetDay": "יום יעד",
+    "move": "העברה",
+    "showDriver": "הצג לנהג",
+    "tripDays": "{count, plural, one {יום} other {# ימים}}",
+    "items": "{count, plural, one {פריט} other {# פריטים}}",
+    "activityCount": "{count, plural, =0 {אין פעילויות} one {פעילות אחת} other {# פעילויות}}",
+    "transportCount": "{count, plural, one {תחבורה אחת} other {# תחבורה}}",
+    "documentCount": "{count, plural, one {מסמך אחד} other {# מסמכים}}",
+    "tripCount": "{count, plural, one {נסיעה אחת} other {# נסיעות}}",
+    "reminderCount": "{count, plural, one {תזכורת אחת} other {# תזכורות}}",
+    "rideCount": "{count, plural, one {נסיעה אחת} other {# נסיעות}}",
+    "noItems": "אין פריטים",
+    "openReminderAria": "יש תזכורת פתוחה"
+  },
+
+  "Home": {
+    "heroIdentityAria": "זהות הטיול",
+    "beforeJourneyAria": "הכנה לטיול",
+    "duringJourneyAria": "היום בטיול",
+    "afterJourneyAria": "אחרי הטיול",
+    "listsSectionAria": "רשימות והכנות",
+    "listsSectionTitle": "רשימות והכנות",
+    "dayOneSectionAria": "מבט ליום הראשון",
+    "dayOneSectionTitle": "מבט ליום הראשון",
+    "dayOneEmpty": "היום הראשון עדיין מחכה לתכנון",
+    "itineraryCta": "למסלול המלא",
+    "upcomingRemindersTitle": "תזכורות קרובות",
+    "upcomingRemindersAll": "לכל התזכורות",
+    "upcomingRemindersEmpty": "אין תזכורות קרובות",
+    "remindersTitle": "תזכורות",
+    "remindersAll": "לכל התזכורות",
+    "remindersNew": "תזכורת חדשה",
+    "remindersEdit": "עריכת תזכורת",
+    "remindersDelete": "מחיקת תזכורת",
+    "remindersFilterAria": "סינון תזכורות",
+    "remindersTabToday": "היום",
+    "remindersTabUpcoming": "בקרוב",
+    "remindersTabAll": "הכל",
+    "remindersTabCompleted": "הושלמו",
+    "remindersEmptyToday": "אין תזכורות להיום",
+    "remindersEmptyUpcoming": "אין תזכורות קרובות",
+    "remindersEmptyAll": "אין תזכורות פתוחות",
+    "remindersEmptyCompleted": "עדיין אין תזכורות שהושלמו",
+    "reminderContent": "תוכן התזכורת",
+    "importantToday": "חשוב להיום",
+    "importantTodayAria": "חשוב להיום: {text}",
+    "nowSectionAria": "עכשיו",
+    "nowEyebrow": "עכשיו",
+    "upNextSectionAria": "הבא בתור",
+    "upNextEyebrow": "הבא בתור",
+    "todaySummaryAria": "סיכום היום",
+    "todaySummaryTitle": "סיכום היום",
+    "tonightLabel": "הלילה",
+    "weatherLabel": "מזג אוויר",
+    "todayItineraryLabel": "היום במסלול",
+    "todaysPlanTitle": "המסלול של היום",
+    "todaysPlanEmptyDay": "היום עדיין פנוי",
+    "todaysPlanEmptyTitle": "אין תוכניות להיום עדיין",
+    "todaysPlanEmptyHint": "היום שלך עדיין פתוח. אפשר להוסיף פעילות למסלול.",
+    "todaysPlanEmptyCta": "למסלול של היום",
+    "todaysPlanFullCta": "למסלול המלא של היום",
+    "tripSummaryAria": "סיכום הטיול",
+    "tripSummaryTitle": "סיכום הטיול",
+    "itineraryRevisitAria": "מסלול",
+    "itineraryRevisitTitle": "המסלול של הטיול",
+    "itineraryRevisitDescription": "עברו שוב על הימים והרגעים",
+    "tripCompleted": "הטיול הסתיים",
+    "durationOneDay": "יום אחד",
+    "durationOneDayInPlace": "יום ב{place}",
+    "durationDaysInPlace": "{count} ימים ב{place}",
+    "durationDays": "{count} ימים",
+    "summaryDays": "ימים",
+    "summaryActivities": "פעילויות",
+    "summaryStays": "לינות",
+    "preparationProgress": "{completed} מתוך {total} הושלמו",
+    "countdownDays": "ימים",
+    "countdownHours": "שעות",
+    "countdownMinutes": "דקות",
+    "countdownSeconds": "שניות",
+    "countdownAria": "{days} ימים, {hours} שעות, {minutes} דקות ו-{seconds} שניות עד תחילת הטיול",
+    "navigateTo": "ניווט ל{name}"
+  },
+
+  "Itinerary": {
+    "heroTitle": "מסלול הטיול",
+    "dayStripAria": "ימי הטיול",
+    "dayStripScrollPrev": "גלילה לימים קודמים",
+    "dayStripScrollNext": "גלילה לימים הבאים",
+    "dayHeaderToday": " · היום",
+    "dayTimelineTitle": "לוח היום",
+    "dayTimelineEmptyTitle": "אין עדיין תוכניות ליום הזה",
+    "dayTimelineEmptyHint": "הוסיפו פעילויות, תחבורה או תזכורות כדי לבנות את היום.",
+    "addItemToDay": "+ הוספת פריט ליום זה",
+    "addActivity": "+ הוספת פעילות",
+    "sideColumnAria": "מידע משלים ליום",
+    "accommodationSection": "לינה",
+    "accommodationManageOne": "ניהול מקום הלינה",
+    "accommodationManageMany": "ניהול מקומות לינה",
+    "documentsSection": "מסמכים",
+    "emptyDay": "אין פריטים ביום זה",
+    "focusedDayOpenAria": "יום {dayNumber}, {weekdayLabel}, {dateLabel}. פתיחת יום מלא",
+    "focusedNextHeading": "הבא בתכנון",
+    "focusedWeatherAria": "מזג אוויר: {condition}, {temperature}, {location}",
+    "focusedOpenDay": "פתיחת יום מלא",
+    "hasOpenReminderAria": "יש תזכורת פתוחה",
+    "dayActionMenu": "הוספה ליום",
+    "dayActionActivityCreate": "הוספת פעילות",
+    "dayActionActivityEdit": "עריכת פעילות",
+    "dayActionActivityMove": "העברה ליום אחר",
+    "dayActionTransportCreate": "הוספת תחבורה",
+    "dayActionTransportEdit": "עריכת תחבורה",
+    "dayActionAccommodationCreate": "הוספת מקום לינה",
+    "dayActionDocumentCreate": "הוספת מסמך",
+    "dayActionReminderCreate": "הוספת תזכורת",
+    "dayActionReminderEdit": "עריכת תזכורת",
+    "dayActionAddMenuActivity": "פעילות",
+    "dayActionAddMenuActivityDesc": "אטרקציה, מסעדה, מוזיאון ועוד",
+    "dayActionAddMenuTransport": "תחבורה",
+    "dayActionAddMenuTransportDesc": "רכבת, טיסה, אוטובוס, רכב או מונית",
+    "dayActionAddMenuAccommodation": "מקום לינה",
+    "dayActionAddMenuAccommodationDesc": "מלון או מקום לינה בטיול",
+    "dayActionAddMenuReminder": "תזכורת",
+    "dayActionAddMenuReminderDesc": "משהו אישי שחשוב לזכור",
+    "dayActionAddMenuDocument": "מסמך",
+    "dayActionAddMenuDocumentDesc": "קובץ שרלוונטי ליום הזה",
+    "dayActionReminderTime": "שעה",
+    "dayActionReminderPrompt": "מה חשוב לזכור?",
+    "dayActionReminderAdd": "הוספת תזכורת",
+    "dayActionReminderContent": "תוכן התזכורת",
+    "dayActionAddAccommodation": "הוספת מקום לינה",
+    "dayActionAddDocument": "הוספת מסמך",
+    "dayActionCloseAria": "סגירה",
+    "dayActionBackAria": "חזרה",
+    "dayRemindersTitle": "תזכורות אישיות",
+    "dayRemindersHint": "פרטיות — רק אתם רואים אותן.",
+    "dayRemindersAdd": "+ תזכורת",
+    "dayRemindersEmpty": "אין תזכורות פתוחות ליום זה.",
+    "dayRemindersCompleted": "הושלמו ({count})",
+    "activityActions": "פעולות",
+    "moveUp": "הזזה למעלה",
+    "moveDown": "הזזה למטה",
+    "moveToDay": "העברה ליום אחר",
+    "checkIn": "צ'ק-אין: {name}",
+    "checkOut": "צ'ק-אאוט: {name}",
+    "stayingTonight": "הלילה ישנים ב־{name}",
+    "itineraryCount": "{count, plural, =0 {אין פריטים} one {פריט אחד} other {# פריטים}}",
+    "itineraryCountActivitiesOnly": "{count, plural, one {פעילות אחת} other {# פעילויות}}",
+    "itineraryCountTransportOnly": "{count, plural, one {תחבורה אחת} other {# תחבורה}}",
+    "itineraryCountMixed": "{count, plural, one {פריט אחד} other {# פריטים}}"
+  },
+
+  "Activity": {
+    "whereQuestion": "איפה?",
+    "whatQuestion": "מה עושים?",
+    "whenQuestion": "באיזו שעה?",
+    "dayField": "יום",
+    "activityType": "סוג פעילות",
+    "moreDetails": "פרטים נוספים",
+    "createSubmit": "הוספת פעילות",
+    "updateSubmit": "שמירת שינויים",
+    "deleteActivity": "מחיקת פעילות",
+    "placeSearchGoogle": "חיפוש מקום",
+    "placeSearchManual": "הזנה ידנית",
+    "placeSearchModeAria": "אופן הזנת מקום",
+    "placeSearchPlaceholder": "חיפוש מקום...",
+    "placeSearchAccommodationLabel": "חפשו את מקום הלינה",
+    "placeSearchLoading": "טוען פרטי מקום...",
+    "placeSearchError": "לא ניתן לטעון פרטי המקום",
+    "transportType": "סוג תחבורה",
+    "transportTypeAria": "סוג תחבורה",
+    "types": {
+      "attraction": "אטרקציה",
+      "transport": "תחבורה",
+      "restaurant": "מסעדה",
+      "hotel": "לינה",
+      "freeTime": "זמן חופשי",
+      "shopping": "קניות",
+      "other": "אחר"
+    },
+    "errors": {
+      "generic": "משהו השתבש. נסו שוב.",
+      "created": "הפעילות נוספה למסלול.",
+      "updated": "הפעילות עודכנה.",
+      "deleted": "הפעילות נמחקה.",
+      "dateOutOfRange": "התאריך אינו בתוך טווח הטיול.",
+      "notFound": "הפעילות לא נמצאה.",
+      "deleteConfirm": "למחוק את הפעילות?",
+      "discardConfirm": "לבטל שינויים?",
+      "invalidCostData": "נתוני עלות לא תקינים"
+    }
+  },
+
+  "Finance": {
+
+    "pageTitle": "הכסף בטיול",
+
+    "heroSubtitle": "מעקב הוצאות ותקציב במקום אחד",
+
+    "tripBudgetTitle": "תקציב הטיול",
+
+    "budgetSummaryAriaLabel": "סיכום תקציב",
+
+    "backToMore": "חזרה לעוד",
+
+    "spent": "הוצאות",
+
+    "remaining": "נותר",
+
+    "overBudgetShort": "חריגה",
+
+    "percentConsumed": "נוצל",
+
+    "overBudget": "חריגה מהתקציב",
+
+    "totalExpenses": "סה״כ הוצאות",
+
+    "totalBudget": "תקציב",
+
+    "totalExpensesCenter": "סה״כ הוצאות",
+
+    "noExpensesYet": "עדיין אין הוצאות",
+
+    "noCategoriesYet": "עדיין אין הוצאות לפי קטגוריות",
+
+    "memberNoBudget": "לא הוגדר תקציב לטיול",
+
+    "setBudgetCta": "הגדרת תקציב לטיול",
+
+    "editBudgetCta": "עריכת תקציב",
+
+    "categoriesSectionTitle": "הוצאות לפי קטגוריות",
+
+    "recentSectionTitle": "הוצאות אחרונות",
+
+    "allSectionTitle": "כל ההוצאות",
+
+    "showAll": "הצג הכל",
+
+    "showRecent": "חזרה לסיכום",
+
+    "addExpense": "הוספת הוצאה",
+
+    "editExpense": "עריכת הוצאה",
+
+    "addExpenseSubtitle": "הוסיפו הוצאה לטיול",
+
+    "saveExpense": "שמירה",
+
+    "deleteExpense": "מחיקת הוצאה",
+
+    "deleteExpenseConfirm": "למחוק את ההוצאה?",
+
+    "removeLinkedCost": "הסרת העלות",
+
+    "removeLinkedCostConfirm": "להסיר את העלות? הפריט המקור יישאר ללא שינוי.",
+
+    "cancel": "ביטול",
+
+    "close": "סגירה",
+
+    "titleLabel": "תיאור / שם",
+
+    "categoryLabel": "קטגוריה",
+
+    "dateLabel": "תאריך",
+
+    "amountLabel": "סכום",
+
+    "currencyLabel": "מטבע",
+
+    "notesLabel": "הערות (אופציונלי)",
+
+    "conversionPreview": "לפי שער המרה עדכני",
+
+    "conversionPreviewFailed": "לא ניתן לטעון שער המרה כרגע",
+
+    "settingsTitle": "הגדרות כספים",
+
+    "baseCurrencyLabel": "מטבע בסיס",
+
+    "budgetAmountLabel": "תקציב כולל",
+
+    "budgetAmountPlaceholder": "לדוגמה: 30000",
+
+    "saveSettings": "שמירה",
+
+    "clearBudget": "ניקוי תקציב",
+
+    "entityCostSectionTitle": "עלות",
+
+    "entityCostHelper": "אפשר להשאיר ריק ולהוסיף מאוחר יותר",
+
+    "entityCostDisplayPrefix": "עלות",
+
+    "activityCostCategoryLabel": "קטגוריית הוצאה",
+
+    "linkedSourceTitleLabel": "פריט מקור",
+
+    "afterRecapTitle": "סיכום ההוצאות",
+
+    "afterNoExpenses": "לא נרשמו הוצאות לטיול הזה",
+
+    "afterFullFinanceCta": "לסיכום הכספי המלא",
+
+    "afterOpenFinanceCta": "לפתיחת הכספים",
+
+    "hubNoExpenses": "עדיין לא נוספו הוצאות",
+
+    "hubBudgetMeta": "מתוך {budget} תקציב",
+
+    "hubProgressAriaLabel": "{title}: {percent}% נוצל",
+
+    "linkedToActivity": "מחובר לפעילות",
+
+    "linkedToAccommodation": "מחובר למקום לינה",
+
+    "linkedToTransport": "מחובר לתחבורה",
+
+    "deletedSourceFallback": "פריט שנמחק",
+
+    "accommodationFallbackName": "מקום לינה",
+
+    "categories": {
+
+      "accommodation": "לינה",
+
+      "food": "אוכל",
+
+      "transport": "תחבורה",
+
+      "activities": "אטרקציות",
+
+      "shopping": "קניות",
+
+      "flights": "טיסות",
+
+      "other": "אחר"
+
+    },
+
+    "errors": {
+
+      "generic": "משהו השתבש. נסו שוב.",
+
+      "validationFailed": "נתונים לא תקינים",
+
+      "settingsNotFound": "הגדרות כספים לא נמצאו",
+
+      "budgetRequired": "יש להזין סכום תקציב חיובי",
+
+      "budgetInvalid": "סכום תקציב לא תקין",
+
+      "baseCurrencyInvalid": "מטבע בסיס לא נתמך",
+
+      "baseCurrencyLocked": "לא ניתן לשנות מטבע בסיס לאחר שנוספו הוצאות לטיול",
+
+      "expenseAmountInvalid": "סכום הוצאה חייב להיות גדול מאפס",
+
+      "manualTitleRequired": "יש להזין שם להוצאה",
+
+      "linkedSourceRequired": "חסר מזהה מקור להוצאה מקושרת",
+
+      "manualSourceIdForbidden": "הוצאה ידנית לא יכולה להיות מקושרת לישות",
+
+      "linkedTitleForbidden": "הוצאה מקושרת לא שומרת כותרת",
+
+      "categoryInvalid": "קטגוריה לא תקינה",
+
+      "sourceTypeInvalid": "סוג מקור לא תקין",
+
+      "conversionPreviewFailed": "לא ניתן לטעון שער המרה כרגע",
+
+      "invalidCostData": "נתוני עלות לא תקינים"
+
+    }
+
+  },
+
+  "Currency": {
+
+    "pageTitle": "מטבע",
+
+    "loadRateFailed": "לא ניתן לטעון את שער ההמרה כרגע.",
+
+    "retry": "נסה שוב",
+
+    "refreshFailed": "לא הצלחנו לרענן את השער. מוצג השער האחרון שנטען.",
+
+    "estimatedRate": "שער משוער",
+
+    "disclaimer": "שער משוער. השער בפועל עשוי להשתנות בהתאם לחברת האשראי, לבנק או לספק ההמרה.",
+
+    "invalidCurrency": "מטבע לא נתמך",
+
+    "sameCurrency": "יש לבחור שני מטבעות שונים",
+
+    "popularSection": "נפוצים",
+
+    "allSection": "כל המטבעות",
+
+    "searchPlaceholder": "חיפוש מטבע...",
+
+    "noResults": "לא נמצאו מטבעות",
+
+    "pickerTitle": "בחירת מטבע",
+
+    "close": "סגירה",
+
+    "fromCurrencyPanelAriaLabel": "מטבע מקור",
+
+    "toCurrencyPanelAriaLabel": "מטבע יעד",
+
+    "amountToConvertAriaLabel": "סכום להמרה",
+
+    "swapCurrenciesAriaLabel": "החלפת מטבעות",
+
+    "selectSourceCurrencyAriaLabel": "בחירת מטבע מקור: {code} {name}",
+
+    "selectTargetCurrencyAriaLabel": "בחירת מטבע יעד: {code} {name}"
+
+  },
+
+  "Lists": {
+
+    "pageTitle": "רשימות",
+
+    "progressLabel": "{completed} מתוך {total} הושלמו",
+
+    "deleteConfirm": "למחוק את הפריט?",
+
+    "addItemPlaceholder": "הוספת פריט",
+
+    "addItemButton": "הוספה",
+
+    "editButton": "עריכה",
+
+    "deleteButton": "מחיקה",
+
+    "saveButton": "שמירה",
+
+    "cancelButton": "ביטול",
+
+    "markCompletedAriaLabel": "סמן כהושלם",
+
+    "markIncompleteAriaLabel": "סמן כלא הושלם",
+
+    "definitions": {
+
+      "packing": "ציוד לארוז",
+
+      "before_trip": "מטלות לפני הטיסה",
+
+      "during_trip": "מטלות במהלך הטיול",
+
+      "pre_trip_shopping": "קניות לקראת הטיול"
+
+    },
+
+    "errors": {
+
+      "generic": "לא ניתן לעדכן את הרשימה. נסו שוב.",
+
+      "notFound": "הפריט לא נמצא",
+
+      "textRequired": "יש להזין טקסט לפריט",
+
+      "textTooLong": "הטקסט ארוך מדי"
+
+    },
+
+    "success": {
+
+      "created": "הפריט נוסף",
+
+      "updated": "הפריט עודכן",
+
+      "deleted": "הפריט נמחק",
+
+      "completed": "הפריט סומן כהושלם",
+
+      "uncompleted": "הפריט סומן כלא הושלם"
+
+    }
+
+  },
+
+  "Documents": {
+    "pageTitle": "ארנק הנסיעה",
+    "listPageTitle": "מסמכים",
+    "pageSubtitleLine1": "כל הכרטיסים, ההזמנות והמסמכים החשובים",
+    "pageSubtitleLine2": "במקום אחד — לטיול רגוע יותר.",
+    "filterAria": "סינון לפי קטגוריה",
+    "summaryAria": "סיכום ארנק",
+    "walletCount": "{count, plural, one {1 מסמך בארנק} other {# מסמכים בארנק}}",
+    "linkedCount": "{count, plural, one {1 מסמך מקושר} other {# מסמכים מקושרים}}",
+    "emptyAll": "אין מסמכים עדיין",
+    "emptyFilter": "אין מסמכים בקטגוריה זו",
+    "emptyAllHintOwner": "הוסיפו כרטיסי טיסה, הזמנות וביטוחים כדי שיהיו זמינים לכל מי שבטיול.",
+    "emptyAllHintGuest": "בעל הטיול עדיין לא הוסיף מסמכים.",
+    "emptyFilterHint": "נסו לבחור קטגוריה אחרת.",
+    "addInSettings": "להוספת מסמך בהגדרות",
+    "addedOn": "נוסף ב{date}",
+    "detailBreadcrumbWallet": "ארנק הנסיעה",
+    "detailBreadcrumbDocument": "מסמך",
+    "description": "תיאור",
+    "pdfHint": "לצפייה ב-PDF השתמשו בכפתור \"פתיחה\" — הדפדפן יציג את המסמך בצורה מאובטחת.",
+    "open": "פתיחה",
+    "defaultTitle": "מסמך",
+    "view": "צפייה",
+    "download": "הורדה",
+    "contextActivityAria": "קשר לפעילות",
+    "contextAccommodationAria": "קשר ללינה",
+    "settingsTitle": "מסמכים",
+    "settingsHint": "כרטיסי טיסה, הזמנות, ביטוחים ומסמכים חשובים — זמינים לכל מי שבטיול.",
+    "addDocument": "+ הוספת מסמך",
+    "addDocumentLabel": "הוספת מסמך",
+    "addSubmit": "הוספה",
+    "saveSubmit": "שמירה",
+    "replaceFile": "החלפת קובץ",
+    "replaceSubmit": "החלפה",
+    "newFile": "קובץ חדש",
+    "edit": "עריכה",
+    "delete": "מחיקה",
+    "emptySettings": "אין מסמכים עדיין.",
+    "file": "קובץ",
+    "title": "כותרת",
+    "titlePlaceholder": "אופציונלי — יילקח משם הקובץ",
+    "category": "קטגוריה",
+    "descriptionOptional": "תיאור (אופציונלי)",
+    "linkedTo": "קשור אל",
+    "linkNone": "ללא קישור",
+    "linkActivity": "פעילות",
+    "linkAccommodation": "לינה",
+    "linkTransport": "תחבורה",
+    "selectActivity": "בחרו פעילות",
+    "selectAccommodation": "בחרו מקום לינה",
+    "selectTransport": "בחרו קטע תחבורה",
+    "emergency": "חירום",
+    "showInEmergency": "הצג במסך חירום",
+    "filters": {
+      "all": "הכל",
+      "flight": "טיסות",
+      "accommodation": "לינה",
+      "train": "רכבות",
+      "ticket": "כרטיסים",
+      "insurance": "ביטוח",
+      "more": "עוד"
+    },
+    "categories": {
+      "flight": "טיסות",
+      "accommodation": "לינה",
+      "train": "רכבות",
+      "ticket": "כרטיסים",
+      "insurance": "ביטוח",
+      "reservation": "הזמנות",
+      "transport": "תחבורה",
+      "other": "אחר"
+    },
+    "errors": {
+      "created": "המסמך נוסף",
+      "updated": "המסמך עודכן",
+      "replaced": "הקובץ הוחלף",
+      "deleted": "המסמך נמחק",
+      "generic": "לא ניתן לשמור את המסמך. נסו שוב.",
+      "notFound": "המסמך לא נמצא",
+      "missingFile": "יש לבחור קובץ",
+      "tooLarge": "הקובץ גדול מדי (עד 15MB)",
+      "invalidType": "סוג קובץ לא נתמך. PDF, JPEG, PNG או WebP בלבד",
+      "invalidLink": "קישור לא תקין למסמך",
+      "bothLinks": "ניתן לקשר מסמך לפריט אחד בלבד (פעילות, לינה או תחבורה)",
+      "deleteConfirm": "למחוק את המסמך?"
+    }
+  },
+
+  "TravelHub": {
+    "heroTitle": "כלי הטיול",
+    "heroSubtitle": "מה שצריך לטיול החלק",
+    "heroAria": "כלי הטיול",
+    "primarySectionAria": "כלי טיול עיקריים",
+    "materialsSectionAria": "חומרים והכנה",
+    "quickToolsSectionAria": "כלי עזר מהירים",
+    "managementLabel": "ניהול הטיול",
+    "accommodationTitle": "לינה",
+    "accommodationEmpty": "עדיין לא נוספו מקומות לינה",
+    "accommodationCountOne": "מקום לינה אחד",
+    "accommodationCountMany": "{count} מקומות לינה",
+    "accommodationDetailCurrent": "עכשיו: {name}",
+    "accommodationDetailUpcoming": "הבא: {name}",
+    "transportTitle": "תחבורה",
+    "transportEmpty": "עדיין לא נוספו נסיעות",
+    "transportCountOne": "קטע תחבורה אחד",
+    "transportCountMany": "{count} קטעי תחבורה",
+    "listsTitle": "רשימות",
+    "listsEmptyPrimary": "רשימות לטיול",
+    "documentsTitle": "מסמכים",
+    "documentsEmptyPrimary": "המסמכים החשובים לטיול",
+    "documentsCountOne": "מסמך אחד",
+    "documentsCountMany": "{count} מסמכים",
+    "quickTools": {
+      "currency": { "label": "מטבע", "description": "המרת מטבע" },
+      "weather": { "label": "מזג אוויר", "description": "תחזית לטיול" },
+      "language": { "label": "שפה ותקשורת", "description": "שפה ותקשורת" },
+      "emergency": { "label": "חירום ועזרה", "description": "מידע חשוב" }
+    },
+    "attentionSections": { "upcoming": "לקראת הטיול", "active": "במהלך הטיול" },
+    "contextualAccommodation": { "current": "המקום שלך עכשיו", "upcoming": "הלינה הבאה שלך" },
+    "attentionMessages": {
+      "packingOne": "נשאר פריט אחד לארוז",
+      "packingMany": "נשארו {count} דברים לארוז",
+      "beforeTripOne": "נשארה מטלה אחת לפני הטיסה",
+      "beforeTripMany": "נשארו {count} מטלות לפני הטיסה",
+      "duringTripOne": "נשארה מטלה אחת במהלך הטיול",
+      "duringTripMany": "נשארו {count} מטלות במהלך הטיול",
+      "preTripShoppingOne": "נשאר פריט קנייה אחד",
+      "preTripShoppingMany": "נשארו {count} פריטי קנייה",
+      "defaultOne": "נשאר פריט אחד",
+      "defaultMany": "נשארו {count} פריטים"
+    },
+    "managementHubTitle": "הגדרות וניהול",
+    "tripSettings": "הגדרות הטיול",
+    "tripMembers": "חברי הטיול",
+    "myTrips": "הטיולים שלי"
+  },
+
+  "Accommodation": {
+    "pageTitle": "מקומות לינה",
+    "addButtonAria": "הוספת מקום לינה",
+    "settingsTitle": "מקומות לינה",
+    "settingsHint": "חפשו מקום לינה אמיתי ב-Google. Tabi שומרת את זהות המקום; אתם מוסיפים רק תאריכים, הזמנה והערות.",
+    "addStay": "+ הוספת מקום לינה",
+    "addStayLabel": "הוספת מקום לינה",
+    "addSubmit": "הוספה",
+    "deleteStay": "מחיקת מקום לינה",
+    "emptySettings": "אין מקומות לינה עדיין.",
+    "googleSource": "מקור: Google Places",
+    "hotelSearch": "חיפוש מלון",
+    "hotelSearchPlaceholder": "חיפוש מלון...",
+    "manualEntryPrompt": "לא מצאת את המקום? הזנה ידנית",
+    "backToGoogleSearch": "חזרה לחיפוש Google",
+    "manualName": "שם מקום הלינה",
+    "manualNameJapanese": "שם מקום הלינה ביפנית",
+    "manualNameJapaneseHint": "אופציונלי — לשימוש במצב מונית",
+    "googleMapsLink": "קישור Google Maps",
+    "fallbackName": "מקום לינה",
+    "nightCountOne": "לילה אחד",
+    "nightCountMany": "{count} לילות",
+    "taxiModePageTitle": "מצב מונית",
+    "taxiMissingAddress": "לא הוזנה כתובת. הוסיפו כתובת בהגדרות הטיול.",
+    "filterAria": "סינון מקומות לינה",
+    "filters": { "all": "הכל", "upcoming": "בקרוב", "past": "עבר" },
+    "filterTab": "{label} ({count})",
+    "emptyAll": "אין מקומות לינה",
+    "emptyUpcoming": "אין מקומות לינה קרובים",
+    "emptyPast": "אין מקומות לינה קודמים",
+    "emptyAllHintOwner": "הוסיפו מקומות לינה כדי שיופיעו כאן ובמסלול.",
+    "emptyAllHintGuest": "בעל הטיול עדיין לא הוסיף מקומות לינה.",
+    "name": "שם",
+    "nameJapanese": "שם ביפנית",
+    "city": "עיר",
+    "checkIn": "Check-in",
+    "checkOut": "Check-out",
+    "addressEnglish": "כתובת באנגלית",
+    "addressJapanese": "כתובת ביפנית",
+    "cost": "עלות",
+    "bookingReference": "מספר הזמנה",
+    "notes": "הערות",
+    "openInGoogleMaps": "פתח ב-Google Maps",
+    "showDriver": "הצג לנהג",
+    "errors": {
+      "created": "מקום הלינה נוסף",
+      "updated": "מקום הלינה עודכן",
+      "deleted": "מקום הלינה נמחק",
+      "generic": "לא ניתן לשמור את מקום הלינה. נסו שוב.",
+      "notFound": "מקום הלינה לא נמצא",
+      "dateOutOfRange": "תאריכי Check-in ו-Check-out חייבים להיות בתוך טווח הטיול",
+      "invalidDateRange": "תאריך Check-out חייב להיות אחרי תאריך Check-in (לפחות לילה אחד)",
+      "invalidCostData": "נתוני עלות לא תקינים",
+      "deleteConfirm": "למחוק את מקום הלינה הזה מהטיול?",
+      "deleteConfirmDetail": "פעולה זו מסירה את מקום הלינה מ-Tabi בלבד — היא לא מבטלת את ההזמנה בבית המלון."
+    }
+  },
+
+  "Transport": {
+    "pageTitle": "תחבורה",
+    "filterAria": "סינון תחבורה",
+    "addMenuAria": "הוספת תחבורה",
+    "addMenuTypeAria": "סוג תחבורה",
+    "filters": { "all": "הכל", "flight": "טיסות", "train": "רכבות", "other": "אחר" },
+    "filterTab": "{label} ({count})",
+    "emptyAll": "אין תחבורה",
+    "emptyAllHintOwner": "הוסיפו טיסות, רכבות ונסיעות כדי שיופיעו כאן ובמסלול.",
+    "emptyAllHintGuest": "בעל הטיול עדיין לא הוסיף תחבורה.",
+    "emptyFlight": "אין עדיין טיסות בטיול הזה",
+    "emptyTrain": "אין עדיין רכבות בטיול הזה",
+    "emptyOther": "אין עדיין נסיעות אחרות בטיול הזה",
+    "listTitles": {
+      "flight": "טיסה ל{destination}",
+      "flightNoDestination": "טיסה",
+      "train": "רכבת ל{destination}",
+      "trainNoDestination": "רכבת",
+      "bus": "אוטובוס ל{destination}",
+      "busNoDestination": "אוטובוס",
+      "ferry": "מעבורת ל{destination}",
+      "ferryNoDestination": "מעבורת",
+      "taxi": "מונית ל{destination}",
+      "taxiNoDestination": "מונית",
+      "carWithDestination": "רכב שכור · {destination}",
+      "car": "רכב שכור"
+    },
+    "addType": "הוספת {type}",
+    "types": {
+      "flight": "טיסות",
+      "train": "רכבות",
+      "bus": "אוטובוסים",
+      "ferry": "מעבורות",
+      "car": "רכב / הסעה",
+      "taxi": "מוניות"
+    },
+    "typesSingular": {
+      "flight": "טיסה",
+      "train": "רכבת",
+      "bus": "אוטובוס",
+      "ferry": "מעבורת",
+      "car": "רכב / הסעה",
+      "taxi": "מונית"
+    },
+    "trainCategories": {
+      "shinkansen": "Shinkansen",
+      "limited_express": "Limited Express",
+      "reserved": "רכבת שמורה",
+      "local": "רכבת מקומית",
+      "other": "רכבת"
+    },
+    "timezone": "אזור זמן",
+    "timezones": {
+      "japan": "יפן",
+      "israel": "ישראל",
+      "london": "בריטניה (לונדון)",
+      "paris": "צרפת (פריז)",
+      "newYork": "ארה\"ב (ניו יורק)",
+      "losAngeles": "ארה\"ב (לוס אנג'לס)",
+      "seoul": "דרום קוריאה (סיאול)",
+      "hongKong": "הונג קונג",
+      "singapore": "סינגפור",
+      "sydney": "אוסטרליה (סידני)",
+      "auckland": "ניו זילנד (אוקלנד)",
+      "utc": "UTC"
+    },
+    "airline": "חברת תעופה",
+    "flightNumber": "מספר טיסה",
+    "departureTerminal": "טרמינל יציאה",
+    "arrivalTerminal": "טרמינל הגעה",
+    "gate": "שער",
+    "seat": "מושב",
+    "trainType": "סוג רכבת",
+    "serviceName": "שם שירות",
+    "trainNumber": "מספר רכבת",
+    "carNumber": "קרון",
+    "seats": "מושבים",
+    "operator": "מפעיל / חברה",
+    "serviceNumber": "מספר שירות / רכב",
+    "vehicleNotes": "פרטי רכב / שירות",
+    "type": "סוג",
+    "route": "מסלול",
+    "times": "זמנים",
+    "moreDetails": "פרטים נוספים",
+    "departureLocationCode": "קוד יציאה (שדה / תחנה)",
+    "arrivalLocationCode": "קוד הגעה (שדה / תחנה)",
+    "from": "מאיפה",
+    "to": "לאן",
+    "details": "פרטים",
+    "departure": "יציאה",
+    "arrival": "הגעה",
+    "cost": "עלות",
+    "bookingReference": "מספר הזמנה",
+    "notes": "הערות",
+    "linkedDocuments": "מסמכים מקושרים",
+    "fromSection": "מאיפה",
+    "toSection": "לאן",
+    "location": "מיקום",
+    "locationCode": "קוד (שדה / תחנה)",
+    "date": "תאריך",
+    "time": "שעה",
+    "start": "התחלה",
+    "end": "סיום",
+    "detailsSection": "פרטים",
+    "createSubmit": "שמירה",
+    "createPlannerSubmit": "הוספת תחבורה",
+    "updateSubmit": "שמירת שינויים",
+    "edit": "עריכה",
+    "delete": "מחיקה",
+    "addTitle": "הוספת {type}",
+    "editTitle": "עריכת {type}",
+    "genericType": "תחבורה",
+    "noneOption": "ללא",
+    "saved": "נשמר",
+    "updated": "עודכן",
+    "deleted": "נמחק",
+    "errors": {
+      "notFound": "קטע התחבורה לא נמצא",
+      "invalidEndpoint": "פרטי מיקום או שעה לא תקינים",
+      "invalidChronology": "שעת ההגעה חייבת להיות אחרי שעת היציאה",
+      "invalidTimezone": "אזור זמן לא נתמך",
+      "invalidType": "סוג תחבורה לא תקין",
+      "saveFailed": "לא ניתן לשמור את התחבורה",
+      "invalidCostData": "נתוני עלות לא תקינים",
+      "deleteFailed": "לא ניתן למחוק את התחבורה",
+      "deleteConfirm": "למחוק את קטע התחבורה?"
+    }
+  },
+
+  "Weather": {
+    "pageTitle": "מזג אוויר",
+    "backAria": "חזרה",
+    "loadingAria": "טוען מזג אוויר",
+    "currentSectionAria": "מזג אוויר נוכחי",
+    "nearTermSectionAria": "תחזית לטווח קצר",
+    "loadFailed": "לא הצלחנו לטעון את מזג האוויר כרגע",
+    "retry": "נסו שוב",
+    "refreshFailed": "לא הצלחנו לרענן את מזג האוויר. מוצג המידע האחרון שנטען.",
+    "updated": "עודכן",
+    "feelsLike": "מרגיש כמו",
+    "today": "היום",
+    "forecast": "תחזית לימים הקרובים",
+    "rainChance": "סיכוי לגשם",
+    "searchPlaceholder": "חיפוש עיר או יעד...",
+    "changeLocation": "חיפוש מיקום",
+    "noResults": "לא נמצאו מיקומים",
+    "invalidLocation": "מיקום לא תקין",
+    "searchLocation": "חיפוש מיקום",
+    "searching": "מחפש...",
+    "closeAria": "סגירה",
+    "now": "עכשיו",
+    "highLowRange": "מקס׳ {max} · מינ׳ {min}",
+    "adviceTitle": "מה כדאי לקחת היום",
+    "adviceUmbrella": "יש סיכוי לגשם — כדאי לקחת מטרייה",
+    "adviceWater": "יום חם — כדאי להצטייד במים",
+    "adviceJacket": "קריר היום — מומלץ מעיל",
+    "adviceLayer": "מומלץ לקחת שכבה קלה",
+    "adviceComfort": "מזג אוויר נוח לטיול",
+    "conditions": {
+      "1000": "בהיר", "1003": "מעונן חלקית", "1006": "מעונן", "1009": "מעונן לגמרי", "1030": "ערפל",
+      "1063": "גשם פזור", "1066": "שלג פזור", "1069": "גשם ושלג מעורב", "1072": "טפטוף קפוא", "1087": "סופות רעמים",
+      "1114": "שלג ורוח", "1117": "סופת שלג", "1135": "ערפל", "1147": "ערפל קפוא", "1150": "טפטוף קל",
+      "1153": "טפטוף", "1168": "טפטוף קפוא", "1171": "טפטוף קפוא חזק", "1180": "גשם קל", "1183": "גשם קל לפרקים",
+      "1186": "גשם בינוני", "1189": "גשם כבד", "1192": "גשם כבד מאוד", "1195": "גשם קיצוני", "1198": "גשם קפוא קל",
+      "1201": "גשם קפוא", "1204": "גשם קפוא כבד", "1207": "גשם קפוא חזק", "1210": "שלג קל", "1213": "שלג",
+      "1216": "שלג כבד", "1219": "שלג חזק", "1222": "שלג קיצוני", "1225": "סופת שלג", "1237": "ברד",
+      "1240": "גשם וברד", "1243": "גשם וברד כבד", "1246": "ברד קיצוני", "1249": "גשם קפוא וברד", "1252": "גשם קפוא וברד כבד",
+      "1255": "ברד קפוא קיצוני", "1258": "גשם קפוא, ברד ושלג", "1261": "גשם קפוא, ברד ושלג כבד", "1264": "סופת ברד",
+      "1273": "ממטרים קלים", "1276": "ממטרים בינוניים", "1279": "ממטרים כבדים", "1282": "ממטרים קיצוניים"
+    }
+  },
+
+  "Emergency": {
+    "pageTitle": "חירום ועזרה",
+    "urgentSection": "חירום מיידי",
+    "assistanceSection": "סיוע לתיירים וקונסולרי",
+    "myLocation": "המיקום שלי",
+    "currentAccommodation": "מקום הלינה הנוכחי",
+    "accommodationDetails": "פרטי לינה",
+    "taxiMode": "Taxi Mode",
+    "openInMap": "פתיחה במפה",
+    "openWebsite": "פתיחת אתר",
+    "copyReference": "העתקת מספר/אסמכתא",
+    "emergencyDocuments": "מסמכים חשובים",
+    "myTripResources": "משאבי הטיול שלי",
+    "emergencyPhrases": "משפטים שימושיים בחירום",
+    "allEmergencyPhrases": "כל ביטויי החירום",
+    "sourceNote": "מידע רשמי שנבדק ידנית מול המקורות המצוינים.",
+    "categories": {
+      "insurance": "ביטוח",
+      "medical": "רפואה",
+      "personal_contact": "איש קשר",
+      "financial": "כספים",
+      "transport": "תחבורה",
+      "local_contact": "איש קשר מקומי",
+      "other": "אחר"
+    },
+    "edit": "עריכה",
+    "delete": "מחיקה",
+    "cancel": "ביטול",
+    "locating": "מאתר מיקום…",
+    "copyCoordinates": "העתקת קואורדינטות",
+    "refresh": "רענון",
+    "addResource": "הוספה",
+    "saveResource": "שמירה",
+    "form": {
+      "title": "כותרת",
+      "category": "קטגוריה",
+      "phoneOptional": "טלפון (אופציונלי)",
+      "secondaryPhoneOptional": "טלפון נוסף (אופציונלי)",
+      "emailOptional": "אימייל (אופציונלי)",
+      "addressOptional": "כתובת (אופציונלי)",
+      "urlOptional": "קישור (אופציונלי)",
+      "websiteOptional": "אתר (אופציונלי)",
+      "referenceOptional": "מספר/הפניה (אופציונלי)",
+      "notesOptional": "הערות (אופציונלי)"
+    },
+    "errors": {
+      "notFound": "המשאב לא נמצא",
+      "validationFailed": "לא ניתן לשמור את המשאב",
+      "deleteConfirm": "למחוק את המשאב?",
+      "noCustomResources": "אין משאבי חירום מותאמים עדיין",
+      "noDocuments": "אין מסמכים מסומנים לחירום",
+      "locationPrompt": "הצג את המיקום שלי",
+      "locationDenied": "הגישה למיקום נדחתה. אפשר לאשר בהגדרות הדפדפן.",
+      "locationUnavailable": "לא ניתן לקבל מיקום כרגע.",
+      "locationTimeout": "בקשת המיקום ארכה יותר מדי.",
+      "locationUnsupported": "הדפדפן לא תומך במיקום.",
+      "locationCopySuccess": "הקואורדינטות הועתקו",
+      "locationCopyFailed": "לא ניתן להעתיק",
+      "copySuccess": "הועתק",
+      "copyFailed": "לא ניתן להעתיק",
+      "addResource": "הוספה",
+      "saveResource": "שמירה"
+    }
+  },
+
+  "Language": {
+    "pageTitle": "שפה ותקשורת",
+    "categoryNavAria": "קטגוריות ביטויים",
+    "categories": {
+      "basics": "בסיסי",
+      "restaurants": "מסעדות",
+      "transport": "תחבורה",
+      "hotel": "מלון",
+      "shopping": "קניות",
+      "directions": "התמצאות",
+      "emergency": "חירום ובריאות",
+      "numbers_time": "מספרים וזמן"
+    },
+    "errors": {
+      "notFound": "הביטוי לא נמצא",
+      "favoriteFailed": "לא ניתן לעדכן מועדפים",
+      "noResults": "לא נמצאו ביטויים",
+      "noFavorites": "אין מועדפים עדיין",
+      "favoritesSection": "מועדפים",
+      "searchPlaceholder": "חיפוש ביטוי…",
+      "showAll": "כל הביטויים",
+      "favoriteAdd": "הוספה למועדפים",
+      "favoriteRemove": "הסרה מהמועדפים"
+    }
+  },
+
+  "Welcome": {
+    "brandName": "Tabi",
+    "taglineLine1": "המסע שלך.",
+    "taglineLine2": "מתוכנן בצורה מושלמת.",
+    "getStarted": "התחילו עכשיו",
+    "signInPrompt": "כבר יש לכם חשבון?",
+    "signInLink": "התחברות",
+    "metadataTitle": "Tabi — המסע שלך. מתוכנן בצורה מושלמת.",
+    "metadataDescription": "תכנון ונסיעה עם הכול במקום אחד — מסלול, לינה, תחבורה ומסמכים."
+  },
+
+  "Auth": {
+    "brandName": "Tabi",
+    "login": {
+      "metadataTitle": "התחברות · Tabi",
+      "title": "ברוכים השבים",
+      "subtitle": "התחברו כדי להמשיך במסע",
+      "footerPrompt": "אין לכם חשבון?",
+      "footerLink": "הרשמה"
+    },
+    "register": {
+      "metadataTitle": "יצירת חשבון · Tabi",
+      "title": "שמרו את המסע שלכם",
+      "subtitle": "צרו חשבון כדי לתכנן, לשמור ולגשת לטיולים שלכם מכל מקום.",
+      "footerPrompt": "כבר יש לכם חשבון?",
+      "footerLink": "התחברות",
+      "legal": "ביצירת חשבון, אתם מסכימים לתנאי השירות ולמדיניות הפרטיות שלנו."
+    },
+    "fields": {
+      "email": "אימייל",
+      "emailPlaceholder": "כתובת אימייל",
+      "password": "סיסמה",
+      "passwordPlaceholder": "סיסמה",
+      "showPassword": "הצג סיסמה",
+      "hidePassword": "הסתר סיסמה"
+    },
+    "actions": {
+      "logIn": "התחברות",
+      "createAccount": "יצירת חשבון",
+      "continueWithGoogle": "המשיכו עם Google",
+      "or": "או"
+    },
+    "errors": {
+      "generic": "משהו השתבש. נסו שוב.",
+      "invalidCredentials": "האימייל או הסיסמה שגויים",
+      "duplicateEmail": "כתובת האימייל הזו כבר רשומה",
+      "name": "נא להזין שם תקין",
+      "email": "נא להזין כתובת אימייל תקינה",
+      "password": "הסיסמה חייבת להיות באורך של 8–256 תווים",
+      "googleSignInFailed": "לא הצלחנו להתחבר עם Google. נסו שוב."
+    }
+  },
+
+  "MyTrips": {
+    "metadataTitle": "הטיולים שלי · Tabi",
+    "brandName": "Tabi",
+    "title": "הטיולים שלי",
+    "subtitle": "ההרפתקאות שלכם, במקום אחד.",
+    "filters": {
+      "ariaLabel": "סינון טיולים",
+      "all": "הכול",
+      "upcoming": "קרובים",
+      "past": "עבר"
+    },
+    "phases": {
+      "active": "פעיל"
+    },
+    "createTrip": {
+      "ariaLabel": "יצירת טיול חדש"
+    },
+    "account": {
+      "menuAriaLabel": "תפריט חשבון",
+      "signOut": "יציאה"
+    },
+    "duration": {
+      "oneDay": "יום אחד",
+      "manyDays": "{count} ימים"
+    },
+    "empty": {
+      "all": {
+        "title": "עדיין אין טיולים",
+        "body": "התחילו לתכנן את ההרפתקה הבאה שלכם ושמרו את כל הטיולים במקום אחד.",
+        "cta": "תכננו את הטיול הראשון ←"
+      },
+      "upcoming": {
+        "title": "אין טיולים קרובים",
+        "body": "כשתתכננו את המסע הבא, הוא יופיע כאן.",
+        "cta": "תכננו טיול ←"
+      },
+      "past": {
+        "title": "עדיין אין טיולים שעברו",
+        "body": "הרפתקאות שהסתיימו ייאספו כאן כדי שתוכלו לחזור אליהן."
+      }
+    }
+  },
+
+  "Places": {
+    "loadingSuggestions": "טוען הצעות...",
+    "noResults": "לא נמצאו תוצאות. נסו חיפוש אחר או הזנה ידנית.",
+    "manualEntryPrompt": "לא מצאת את המקום? הזנה ידנית",
+    "errors": {
+      "autocompleteFailed": "לא ניתן לטעון הצעות. נסו שוב.",
+      "resolveFailed": "לא ניתן לטעון פרטי המקום. נסו שוב."
+    }
+  },
+
+  "Trips": {
+    "errors": {
+      "generic": "משהו השתבש. נסו שוב.",
+      "name": "נא להזין שם טיול תקין",
+      "startDate": "נא לבחור תאריך התחלה תקין",
+      "endDate": "נא לבחור תאריך סיום תקין",
+      "dateOrder": "תאריך הסיום חייב להיות אחרי תאריך ההתחלה או בו",
+      "maxDuration": "משך הטיול לא יכול לעלות על 180 ימים"
+    },
+    "phases": {
+      "upcoming": "בקרוב",
+      "active": "פעיל",
+      "completed": "הסתיים"
+    },
+    "roles": {
+      "owner": "בעלים",
+      "member": "חבר בטיול"
+    }
+  },
+
+  "TripMembers": {
+    "createInviteTitle": "יצירת קישור הזמנה",
+    "permission": "הרשאה",
+    "createInviteSubmit": "יצירת קישור הזמנה",
+    "copyLinkHint": "העתיקו את הקישור עכשיו. לא ניתן לשחזר אותו לאחר רענון העמוד.",
+    "inviteUrlAria": "קישור הזמנה",
+    "copyLink": "העתקת קישור",
+    "linkCopied": "קישור הועתק",
+    "invitationsSection": "הזמנות פעילות ואחרונות",
+    "pageTitle": "חברי הטיול",
+    "leaveTripConfirm": "לעזוב את הטיול?",
+    "removeMemberConfirm": "להסיר את {name} מהטיול?",
+    "removeOwnerConfirm": "להסיר הרשאות ניהול? בעלים לא יוכל לנהל חברים והזמנות.",
+    "roleAria": "תפקיד של {name}",
+    "leaveTrip": "עזיבת הטיול",
+    "removeMember": "הסרה",
+    "revokeInvite": "ביטול הזמנה",
+    "expiresOn": "פג",
+    "errors": {
+      "generic": "משהו השתבש. נסו שוב.",
+      "lastOwner": "לא ניתן להסיר את הבעלים האחרון של הטיול.",
+      "removed": "החבר הוסר מהטיול.",
+      "roleChanged": "התפקיד עודכן."
+    }
+  },
+
+  "TripInvitations": {
+    "landingTitle": "הזמנה לטיול",
+    "enterTrip": "כניסה לטיול",
+    "invitedEyebrow": "הוזמנת להצטרף לטיול",
+    "roleLabel": "הרשאה: {role}",
+    "joinTrip": "הצטרפות לטיול",
+    "signIn": "התחברות",
+    "createAccountAndJoin": "יצירת חשבון והצטרפות",
+    "statuses": {
+      "active": "פעיל",
+      "used": "שומש",
+      "expired": "פג תוקף",
+      "revoked": "בוטל"
+    },
+    "errors": {
+      "generic": "משהו השתבש. נסו שוב.",
+      "invalid": "הקישור אינו תקף או שפג תוקפו.",
+      "alreadyMember": "אתה כבר חבר בטיול הזה.",
+      "accepted": "הצטרפת לטיול בהצלחה.",
+      "revoked": "ההזמנה בוטלה.",
+      "ownerHint": "בעלים יכולים לנהל את חברי הטיול וליצור הזמנות נוספות."
+    }
+  },
+
+  "TripReminders": {
+    "pageTitle": "תזכורות",
+    "settingsTitle": "תזכורות אישיות",
+    "settingsHint": "תזכורות פרטיות שלכם בלבד. חברי הטיול לא רואים אותן.",
+    "addReminder": "+ תזכורת חדשה",
+    "newReminderLabel": "תזכורת חדשה",
+    "addSubmit": "הוספה",
+    "content": "תוכן התזכורת",
+    "emptyUpcoming": "אין תזכורות קרובות.",
+    "completedSection": "הושלמו",
+    "markComplete": "הושלם",
+    "todayLabel": "היום",
+    "homeEmptyNew": "אין תזכורות חדשות",
+    "errors": {
+      "created": "התזכורת נוספה",
+      "updated": "התזכורת עודכנה",
+      "completed": "התזכורת סומנה כהושלמה",
+      "deleted": "התזכורת נמחקה",
+      "generic": "לא ניתן לשמור את התזכורת. נסו שוב.",
+      "notFound": "התזכורת לא נמצאה",
+      "dateOutOfRange": "התאריך חייב להיות בתוך טווח הטיול"
+    }
+  },
+
+  "TripCover": {
+    "title": "תמונת הטיול",
+    "hint": "תמונה אישית שתופיע בראש מסך הבית. JPEG, PNG או WebP עד 5MB.",
+    "empty": "עדיין לא נבחרה תמונת טיול.",
+    "replacePhoto": "+ החלפת תמונה",
+    "uploadPhoto": "+ העלאת תמונה",
+    "uploadField": "העלאת תמונה",
+    "replaceSubmit": "החלפה",
+    "uploadSubmit": "העלאה",
+    "remove": "הסרה",
+    "errors": {
+      "generic": "לא הצלחנו לעדכן את תמונת הטיול. נסו שוב.",
+      "invalidType": "יש להעלות קובץ JPEG, PNG או WebP בלבד.",
+      "tooLarge": "גודל הקובץ חורג מהמגבלה (5MB).",
+      "missingFile": "לא נבחר קובץ.",
+      "removed": "תמונת הטיול הוסרה.",
+      "uploaded": "תמונת הטיול עודכנה."
+    }
+  },
+
+  "TripSettings": {
+    "pageTitle": "הגדרות",
+    "detailsTitle": "פרטי הטיול",
+    "detailsHint": "מידע בסיסי על הטיול. ניהול מלא יתווסף בהמשך.",
+    "tripName": "שם הטיול",
+    "dates": "תאריכים"
+  },
+
+  "More": {
+    "pageTitle": "עוד"
+  },
+
+  "ItineraryPage": {
+    "pageTitle": "מסלול",
+    "dayPageTitle": "יום {dayNumber}"
+  },
+
+  "FinancePreview": {
+    "title": "הכסף בטיול",
+    "badge": "בקרוב",
+    "headline": "ניהול תקציב והוצאות במקום אחד",
+    "footer": "מעקב תקציב • הוצאות • חלוקה לקטגוריות"
+  },
+
+  "CreateTrip": {
+    "metadataTitle": "יצירת טיול · Tabi",
+    "brandName": "Tabi",
+    "hero": {
+      "goBack": "חזרה",
+      "backToMyTrips": "חזרה לטיולים שלי"
+    },
+    "steps": {
+      "ariaLabel": "שלבי יצירת טיול",
+      "destination": "יעד",
+      "dates": "תאריכים",
+      "details": "פרטי הטיול"
+    },
+    "destination": {
+      "title": "לאן אתם נוסעים?",
+      "subtitle": "בחרו את היעד לטיול הזה.",
+      "searchLabel": "חיפוש יעד",
+      "searchPlaceholder": "חפשו מדינה, עיר או מקום...",
+      "suggestionsAriaLabel": "הצעות יעד",
+      "change": "שינוי",
+      "searching": "מחפש יעדים...",
+      "loading": "טוען יעד...",
+      "noResults": "לא נמצאו יעדים. נסו חיפוש אחר.",
+      "continue": "המשך ←"
+    },
+    "dates": {
+      "title": "מתי אתם נוסעים?",
+      "subtitle": "בחרו את תאריכי הנסיעה.",
+      "startDate": "תאריך התחלה",
+      "endDate": "תאריך סיום",
+      "selectDate": "בחרו תאריך",
+      "durationOneDay": "יום אחד",
+      "durationManyDays": "{count} ימים",
+      "previousMonth": "חודש קודם",
+      "nextMonth": "חודש הבא",
+      "selectDay": "בחרו {day}",
+      "startDateSelected": "{day}, תאריך התחלה",
+      "endDateSelected": "{day}, תאריך סיום",
+      "continue": "המשך ←",
+      "back": "חזרה"
+    },
+    "details": {
+      "title": "תנו שם לטיול",
+      "subtitle": "בחרו שם שתזכרו אחר כך.",
+      "tripName": "שם הטיול",
+      "tripDescription": "תיאור הטיול",
+      "optional": "(אופציונלי)",
+      "descriptionPlaceholder": "ירח דבש ביפן",
+      "summaryTitle": "סיכום הטיול",
+      "summaryDestination": "יעד",
+      "summaryDates": "תאריכים",
+      "creating": "יוצר טיול...",
+      "create": "יצירת טיול ←",
+      "back": "חזרה"
+    },
+    "popularDestinations": {
+      "categoryCountry": "מדינה",
+      "japan": "יפן",
+      "thailand": "תאילנד",
+      "italy": "איטליה",
+      "france": "צרפת",
+      "usa": "ארה\"ב"
+    },
+    "errors": {
+      "destinationLoadFailed": "לא ניתן לטעון את היעד הזה",
+      "suggestionsLoadFailed": "לא ניתן לטעון הצעות"
+    }
+  }
+
+}
+
+

@@ -1,19 +1,23 @@
 import { describe, expect, it } from "vitest";
+import { createHebrewItineraryTranslator } from "@/features/i18n/test-translators";
 import { getAccommodationsSettingsHref } from "@/features/accommodations/constants";
 import { buildTransportNewHref } from "@/features/transport/constants";
-import { DAY_ADD_MENU_OPTIONS, getDayActionSurfaceTitle } from "./day-action-menu";
+import { getDayAddMenuOptions, getDayActionSurfaceTitle } from "./day-action-menu";
 import { isDayActionOpen } from "./day-action-surface.types";
 
 describe("day add menu", () => {
   it("offers activity, transport, accommodation, document, and reminder", () => {
-    expect(DAY_ADD_MENU_OPTIONS.map((option) => option.id)).toEqual([
+    const t = createHebrewItineraryTranslator();
+    const options = getDayAddMenuOptions(t);
+
+    expect(options.map((option) => option.id)).toEqual([
       "activity",
       "transport",
       "accommodation",
       "reminder",
       "document",
     ]);
-    expect(DAY_ADD_MENU_OPTIONS.map((option) => option.label)).toEqual([
+    expect(options.map((option) => option.label)).toEqual([
       "פעילות",
       "תחבורה",
       "מקום לינה",
@@ -23,7 +27,8 @@ describe("day add menu", () => {
   });
 
   it("uses the planner chooser title", () => {
-    expect(getDayActionSurfaceTitle({ kind: "menu" })).toBe("הוספה ליום");
+    const t = createHebrewItineraryTranslator();
+    expect(getDayActionSurfaceTitle({ kind: "menu" }, t)).toBe("הוספה ליום");
   });
 
   it("tracks open action surface states", () => {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/Input/Input";
 import { Button } from "@/components/ui/Button/Button";
 import styles from "./MembersPage.module.scss";
@@ -10,6 +11,7 @@ type CopyInviteUrlProps = {
 };
 
 export function CopyInviteUrl({ inviteUrl }: CopyInviteUrlProps) {
+  const t = useTranslations("TripMembers");
   const [copied, setCopied] = useState(false);
 
   async function handleCopy() {
@@ -23,9 +25,9 @@ export function CopyInviteUrl({ inviteUrl }: CopyInviteUrlProps) {
 
   return (
     <div className={styles.copyBlock}>
-      <Input readOnly value={inviteUrl} aria-label="קישור הזמנה" />
+      <Input readOnly value={inviteUrl} aria-label={t("inviteUrlAria")} />
       <Button type="button" variant="secondary" onClick={handleCopy}>
-        {copied ? "קישור הועתק" : "העתקת קישור"}
+        {copied ? t("linkCopied") : t("copyLink")}
       </Button>
     </div>
   );

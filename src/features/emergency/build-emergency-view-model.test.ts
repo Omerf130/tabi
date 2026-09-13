@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import { CURATED_EMERGENCY_PHRASE_IDS } from "./constants";
 import { getPhraseFromDefaultPack } from "@/features/language/builtin/registry";
 import { buildEmergencyViewModel } from "./build-emergency-view-model";
 
 const tripId = "507f1f77bcf86cd799439011";
+const t = createAppTranslator("Emergency", "he");
 
 function makeAccommodation(
   overrides: Partial<AccommodationViewModel> = {},
@@ -37,6 +39,7 @@ describe("buildEmergencyViewModel", () => {
       accommodations: [],
       customResources: [],
       emergencyDocuments: [],
+      t,
     });
 
     expect(model.urgentResources.map((resource) => resource.phone)).toEqual(["110", "119"]);
@@ -52,6 +55,7 @@ describe("buildEmergencyViewModel", () => {
       customResources: [],
       emergencyDocuments: [],
       todayJapan: "2026-10-26",
+      t,
     });
 
     expect(current.currentAccommodation?.name).toBe("Hotel Example");
@@ -64,6 +68,7 @@ describe("buildEmergencyViewModel", () => {
       customResources: [],
       emergencyDocuments: [],
       todayJapan: "2026-10-26",
+      t,
     });
 
     expect(upcoming.currentAccommodation).toBeNull();
@@ -77,6 +82,7 @@ describe("buildEmergencyViewModel", () => {
       accommodations: [],
       customResources: [],
       emergencyDocuments: [],
+      t,
     });
 
     for (const phraseId of CURATED_EMERGENCY_PHRASE_IDS) {

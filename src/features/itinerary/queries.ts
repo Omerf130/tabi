@@ -1,10 +1,19 @@
 import "server-only";
 
 import { attachLinkedCostsToIds } from "@/features/finance/linked-expense-queries";
+import { createActivityTypeLabelResolver } from "@/features/itinerary/activity-types";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
+import { resolveRequestLocale } from "@/features/i18n/resolve-request-locale";
 import { connectDb } from "@/lib/db/connect";
 import { Activity } from "@/models/Activity";
 import { toActivityViewModel } from "./to-activity-view-model";
 import type { ActivityViewModel } from "./types";
+
+async function resolveActivityTypeLabel() {
+  const locale = await resolveRequestLocale();
+  const t = createAppTranslator("Activity", locale);
+  return createActivityTypeLabelResolver(t);
+}
 
 export async function listActivitiesForTrip(
   tripId: string,
@@ -14,7 +23,10 @@ export async function listActivitiesForTrip(
     .sort({ date: 1, order: 1, createdAt: 1, _id: 1 })
     .lean();
 
-  const viewModels = activities.map((activity) => toActivityViewModel(activity));
+  const getTypeLabel = await resolveActivityTypeLabel();
+  const viewModels = activities.map((activity) =>
+    toActivityViewModel(activity, getTypeLabel),
+  );
   return attachLinkedCostsToIds(tripId, "activity", viewModels);
 }
 
@@ -28,7 +40,8 @@ export async function getActivityForTrip(
     return null;
   }
 
-  const viewModel = toActivityViewModel(activity);
+  const getTypeLabel = await resolveActivityTypeLabel();
+  const viewModel = toActivityViewModel(activity, getTypeLabel);
   const [withCost] = await attachLinkedCostsToIds(tripId, "activity", [viewModel]);
   return withCost;
 }
@@ -42,6 +55,9 @@ export async function listActivitiesForTripDay(
     .sort({ order: 1, createdAt: 1, _id: 1 })
     .lean();
 
-  const viewModels = activities.map((activity) => toActivityViewModel(activity));
+  const getTypeLabel = await resolveActivityTypeLabel();
+  const viewModels = activities.map((activity) =>
+    toActivityViewModel(activity, getTypeLabel),
+  );
   return attachLinkedCostsToIds(tripId, "activity", viewModels);
 }

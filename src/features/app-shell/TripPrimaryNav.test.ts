@@ -12,6 +12,7 @@ describe("TripPrimaryNav", () => {
 
     expect(source).toContain('variant: "bottom" | "rail"');
     expect(source).toContain("NAV_SECTIONS");
+    expect(source).toContain('useTranslations("Navigation")');
     expect(source).toContain("IconGear");
     expect(source).not.toContain("IconMemories");
     expect(NAV_SECTIONS).toEqual([

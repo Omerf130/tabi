@@ -7,6 +7,10 @@ import {
 
 const fetchMock = vi.fn();
 
+vi.mock("@/features/i18n/resolve-request-locale", () => ({
+  resolveRequestLocale: vi.fn(async () => "he"),
+}));
+
 describe("weatherapi.server", () => {
   beforeEach(() => {
     vi.clearAllMocks();

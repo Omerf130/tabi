@@ -1,9 +1,9 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useId, useRef, useState, useTransition } from "react";
 import { IconSearch } from "@/components/ui/icons";
 import {
-  WEATHER_MESSAGES,
   WEATHER_SEARCH_DEBOUNCE_MS,
   WEATHER_SEARCH_MIN_INPUT_LENGTH,
   buildWeatherSearchHref,
@@ -23,6 +23,7 @@ export function WeatherLocationSearch({
   onSelect,
   onClose,
 }: WeatherLocationSearchProps) {
+  const t = useTranslations("Weather");
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const [query, setQuery] = useState("");
@@ -71,7 +72,7 @@ export function WeatherLocationSearch({
       abortRef.current = controller;
 
       startTransition(async () => {
-        setStatus("מחפש...");
+        setStatus(t("searching"));
         setError(null);
 
         try {
@@ -93,7 +94,7 @@ export function WeatherLocationSearch({
 
           setResults([]);
           setStatus(null);
-          setError(WEATHER_MESSAGES.loadFailed);
+          setError(t("loadFailed"));
         }
       });
     }, WEATHER_SEARCH_DEBOUNCE_MS);
@@ -139,13 +140,13 @@ export function WeatherLocationSearch({
       <div className={styles.searchPanelInner}>
         <div className={styles.searchHeader}>
           <h2 id={titleId} className={styles.searchTitle}>
-            {WEATHER_MESSAGES.changeLocation}
+            {t("changeLocation")}
           </h2>
           <button
             type="button"
             className={styles.searchClose}
             onClick={handleClose}
-            aria-label="סגירה"
+            aria-label={t("closeAria")}
           >
             ×
           </button>
@@ -158,7 +159,7 @@ export function WeatherLocationSearch({
             className={styles.searchInput}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder={WEATHER_MESSAGES.searchPlaceholder}
+            placeholder={t("searchPlaceholder")}
             autoComplete="off"
             enterKeyHint="search"
           />
@@ -167,7 +168,7 @@ export function WeatherLocationSearch({
         {error ? <p className={styles.emptyResults}>{error}</p> : null}
         {status ? <p className={styles.searchStatus}>{status}</p> : null}
         {!error && !status && visibleResults.length === 0 && canSearch ? (
-          <p className={styles.emptyResults}>{WEATHER_MESSAGES.noResults}</p>
+          <p className={styles.emptyResults}>{t("noResults")}</p>
         ) : null}
 
         <ul className={styles.searchResults}>

@@ -1,9 +1,8 @@
-export function formatDayActivityCount(count: number): string {
-  if (count === 0) {
-    return "אין פעילויות";
-  }
-  if (count === 1) {
-    return "פעילות אחת";
-  }
-  return `${count} פעילויות`;
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
+
+export function formatDayActivityCount(
+  count: number,
+  t: AppTranslator<"Common">,
+): string {
+  return t("activityCount", { count });
 }

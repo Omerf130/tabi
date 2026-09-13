@@ -2,7 +2,7 @@ import "server-only";
 
 import mongoose from "mongoose";
 import type { TripListType } from "./constants";
-import { TRIP_LIST_MESSAGES } from "./constants";
+import { TRIP_LIST_ERROR_CODES } from "./constants";
 import { DEFAULT_TRIP_LIST_ITEMS } from "./default-items";
 import { getNextTripListItemOrder } from "./list-item-order";
 import { connectDb } from "@/lib/db/connect";
@@ -18,8 +18,10 @@ export class TripListItemValidationError extends Error {
 }
 
 export class TripListItemNotFoundError extends Error {
+  readonly code = TRIP_LIST_ERROR_CODES.notFound;
+
   constructor() {
-    super(TRIP_LIST_MESSAGES.notFound);
+    super(TRIP_LIST_ERROR_CODES.notFound);
     this.name = "TripListItemNotFoundError";
   }
 }

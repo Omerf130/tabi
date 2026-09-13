@@ -30,7 +30,7 @@ describe("create trip wizard presentation contracts", () => {
     const wizard = readSource("features/create-trip/CreateTripWizard.tsx");
 
     expect(search).toContain("/app/api/places/destination/resolve");
-    expect(search).toContain("Search country, city, or place...");
+    expect(search).toContain('useTranslations("CreateTrip.destination")');
     expect(wizard).toContain("resolveDestinationFromQuery");
     expect(wizard).toContain("PopularDestinationRows");
   });
@@ -38,7 +38,7 @@ describe("create trip wizard presentation contracts", () => {
   it("uses an inline calendar and compact trip summary on step 3", () => {
     const wizard = readSource("features/create-trip/CreateTripWizard.tsx");
     expect(wizard).toContain("TripDateRangeCalendar");
-    expect(wizard).toContain("Create Trip →");
+    expect(wizard).toContain('tDetails("create")');
     expect(wizard).toContain("tripSummary");
     expect(wizard).not.toContain('type="date"');
   });
@@ -63,7 +63,7 @@ describe("create trip wizard presentation contracts", () => {
   it("exposes stepper accessibility semantics", () => {
     const stepper = readSource("features/create-trip/WizardStepper.tsx");
     expect(stepper).toContain('aria-current={isCurrent ? "step" : undefined}');
-    expect(stepper).toContain('aria-label="Create trip steps"');
+    expect(stepper).toContain('useTranslations("CreateTrip.steps")');
   });
 
   it("does not add unknown-date support", () => {

@@ -19,6 +19,7 @@ export function toEntityLinkedCostViewModel(
 
 export function formatEntityLinkedCostDisplay(
   linkedCost: EntityLinkedCostViewModel,
+  costLabel: string,
 ): string {
-  return `עלות: ${linkedCost.label}`;
+  return `${costLabel}: ${linkedCost.label}`;
 }

@@ -9,6 +9,7 @@ import {
 import { AppPage } from "@/features/app-shell/AppPage";
 import type { TravelDocumentViewModel } from "@/features/documents/types";
 import { formatCalendarDateDisplay } from "@/features/trips/calendar-date";
+import { getTranslations } from "next-intl/server";
 import styles from "./DocumentDetail.module.scss";
 
 type DocumentDetailContentProps = {
@@ -46,14 +47,22 @@ function FileIdentity({ document }: { document: TravelDocumentViewModel }) {
   );
 }
 
-function ContextSection({ document }: { document: TravelDocumentViewModel }) {
+function ContextSection({
+  document,
+  activityAria,
+  accommodationAria,
+}: {
+  document: TravelDocumentViewModel;
+  activityAria: string;
+  accommodationAria: string;
+}) {
   if (!document.contextLink) {
     return null;
   }
 
   if (document.contextLink.type === "activity") {
     return (
-      <section className={styles.contextCard} aria-label="קשר לפעילות">
+      <section className={styles.contextCard} aria-label={activityAria}>
         <IconActivityAttraction className={styles.contextIcon} aria-hidden />
         <div>
           <p className={styles.contextPrimary} dir="auto">
@@ -69,7 +78,7 @@ function ContextSection({ document }: { document: TravelDocumentViewModel }) {
   }
 
   return (
-    <section className={styles.contextCard} aria-label="קשר ללינה">
+    <section className={styles.contextCard} aria-label={accommodationAria}>
       <IconAccommodation className={styles.contextIcon} aria-hidden />
       <div>
         <p className={styles.contextPrimary} dir="auto">
@@ -85,7 +94,8 @@ function ContextSection({ document }: { document: TravelDocumentViewModel }) {
   );
 }
 
-export function DocumentDetailContent({ document }: DocumentDetailContentProps) {
+export async function DocumentDetailContent({ document }: DocumentDetailContentProps) {
+  const t = await getTranslations("Documents");
   const titleClass = isMostlyLatin(document.title)
     ? `${styles.documentTitle} ${styles.titleLtr}`
     : styles.documentTitle;
@@ -94,9 +104,9 @@ export function DocumentDetailContent({ document }: DocumentDetailContentProps) 
     <AppPage width="wide">
       <div className={styles.walletDetail}>
         <div className={styles.identityStrip}>
-          <span>ארנק הנסיעה</span>
+          <span>{t("detailBreadcrumbWallet")}</span>
           <span className={styles.identityDot} aria-hidden />
-          <span>מסמך</span>
+          <span>{t("detailBreadcrumbDocument")}</span>
         </div>
 
         <header className={styles.heroCard}>
@@ -110,13 +120,17 @@ export function DocumentDetailContent({ document }: DocumentDetailContentProps) 
         {document.description ? (
           <dl className={styles.detailsList}>
             <div className={styles.detailItem}>
-              <dt>תיאור</dt>
+              <dt>{t("description")}</dt>
               <dd dir="auto">{document.description}</dd>
             </div>
           </dl>
         ) : null}
 
-        <ContextSection document={document} />
+        <ContextSection
+          document={document}
+          activityAria={t("contextActivityAria")}
+          accommodationAria={t("contextAccommodationAria")}
+        />
 
         {document.isImage ? (
           <div className={styles.previewWrap}>
@@ -129,9 +143,7 @@ export function DocumentDetailContent({ document }: DocumentDetailContentProps) 
           </div>
         ) : document.isPdf ? (
           <div className={styles.previewWrap}>
-            <p className={styles.pdfHint}>
-              לצפייה ב-PDF השתמשו בכפתור &quot;פתיחה&quot; — הדפדפן יציג את המסמך בצורה מאובטחת.
-            </p>
+            <p className={styles.pdfHint}>{t("pdfHint")}</p>
           </div>
         ) : null}
 
@@ -142,13 +154,13 @@ export function DocumentDetailContent({ document }: DocumentDetailContentProps) 
             target="_blank"
             rel="noopener noreferrer"
           >
-            {document.isPdf ? "פתיחה" : "צפייה"}
+            {document.isPdf ? t("open") : t("view")}
           </Link>
           <Link
             href={document.downloadHref}
             className={`${styles.actionLink} ${styles.actionLinkSecondary}`}
           >
-            הורדה
+            {t("download")}
           </Link>
         </div>
       </div>

@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import { buildTravelWeatherAdvice } from "./build-travel-weather-advice";
+
+const t = createAppTranslator("Weather", "he");
 import type { WeatherSnapshot } from "./types";
 
 function createSnapshot(
@@ -37,6 +40,7 @@ describe("buildTravelWeatherAdvice", () => {
           chanceOfRainPercent: 60,
         },
       }),
+      t,
     );
 
     expect(advice.message).toContain("מטרייה");
@@ -59,6 +63,7 @@ describe("buildTravelWeatherAdvice", () => {
           chanceOfRainPercent: 0,
         },
       }),
+      t,
     );
 
     expect(advice.message).toContain("מים");
@@ -81,6 +86,7 @@ describe("buildTravelWeatherAdvice", () => {
           chanceOfRainPercent: 10,
         },
       }),
+      t,
     );
 
     expect(advice.message).toContain("מעיל");
@@ -103,6 +109,7 @@ describe("buildTravelWeatherAdvice", () => {
           chanceOfRainPercent: 10,
         },
       }),
+      t,
     );
 
     expect(advice.message).toContain("שכבה קלה");

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { TripHeader } from "@/features/app-shell/TripHeader";
 import {
@@ -16,8 +17,9 @@ export async function generateMetadata({
   params: Promise<{ tripId: string; listSlug: string }>;
 }): Promise<Metadata> {
   const { tripId, listSlug } = await params;
+  const t = await getTranslations("Lists");
   if (!isTripListSlug(listSlug)) {
-    return { title: "רשימות" };
+    return { title: t("pageTitle") };
   }
   const trip = await requireTripMember(tripId);
   const list = await getTripListDetail(trip.id, getTripListTypeFromSlug(listSlug));

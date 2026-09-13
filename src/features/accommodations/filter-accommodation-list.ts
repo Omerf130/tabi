@@ -62,34 +62,3 @@ export function countAccommodationsByFilter(
     ).length,
   };
 }
-
-export function getAccommodationFilterEmptyMessage(
-  filter: AccommodationListFilter,
-): string {
-  switch (filter) {
-    case "all":
-      return "אין מקומות לינה";
-    case "upcoming":
-      return "אין מקומות לינה קרובים";
-    case "past":
-      return "אין מקומות לינה קודמים";
-  }
-}
-
-export const ACCOMMODATION_FILTER_TABS: Array<{
-  id: AccommodationListFilter;
-  label: string;
-}> = [
-  { id: "all", label: "הכל" },
-  { id: "upcoming", label: "בקרוב" },
-  { id: "past", label: "עבר" },
-];
-
-export function formatAccommodationFilterTabLabel(
-  filter: AccommodationListFilter,
-  count: number,
-): string {
-  const base =
-    ACCOMMODATION_FILTER_TABS.find((tab) => tab.id === filter)?.label ?? filter;
-  return `${base} (${count})`;
-}

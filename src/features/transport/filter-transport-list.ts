@@ -44,34 +44,3 @@ export function countTransportsByFilter(
     other: transports.filter((transport) => OTHER_TRANSPORT_TYPES.has(transport.type)).length,
   };
 }
-
-export function getTransportFilterEmptyMessage(filter: TransportListFilter): string {
-  switch (filter) {
-    case "all":
-      return "אין תחבורה";
-    case "flight":
-      return "אין עדיין טיסות בטיול הזה";
-    case "train":
-      return "אין עדיין רכבות בטיול הזה";
-    case "other":
-      return "אין עדיין נסיעות אחרות בטיול הזה";
-  }
-}
-
-export const TRANSPORT_FILTER_TABS: Array<{
-  id: TransportListFilter;
-  label: string;
-}> = [
-  { id: "all", label: "הכל" },
-  { id: "flight", label: "טיסות" },
-  { id: "train", label: "רכבות" },
-  { id: "other", label: "אחר" },
-];
-
-export function formatTransportFilterTabLabel(
-  filter: TransportListFilter,
-  count: number,
-): string {
-  const base = TRANSPORT_FILTER_TABS.find((tab) => tab.id === filter)?.label ?? filter;
-  return `${base} (${count})`;
-}

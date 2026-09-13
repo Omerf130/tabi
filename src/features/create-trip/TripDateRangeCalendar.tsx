@@ -1,6 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { formatAppDate } from "@/features/i18n/formatting";
+import { localeToIntlLocale, resolveAppLocale } from "@/features/i18n/locale";
 import { getJapanCalendarDate } from "@/features/trips/calendar-date";
 import {
   buildCalendarMonthGrid,
@@ -13,8 +16,6 @@ import {
 } from "./trip-date-range-selection";
 import styles from "./CreateTripWizard.module.scss";
 
-const WEEKDAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
 type TripDateRangeCalendarProps = {
   startDate: string;
   endDate: string;
@@ -26,6 +27,9 @@ export function TripDateRangeCalendar({
   endDate,
   onRangeChange,
 }: TripDateRangeCalendarProps) {
+  const locale = resolveAppLocale(useLocale());
+  const intlLocale = localeToIntlLocale(locale);
+  const t = useTranslations("CreateTrip.dates");
   const todayJapan = getJapanCalendarDate();
   const initialMonth = getInitialVisibleMonth(startDate, endDate);
   const [visibleYear, setVisibleYear] = useState(initialMonth.year);
@@ -38,12 +42,23 @@ export function TripDateRangeCalendar({
 
   const monthTitle = useMemo(() => {
     const anchor = new Date(Date.UTC(visibleYear, visibleMonth - 1, 1));
-    return new Intl.DateTimeFormat("en-US", {
+    return formatAppDate(anchor, locale, {
       timeZone: "UTC",
       month: "long",
       year: "numeric",
-    }).format(anchor);
-  }, [visibleYear, visibleMonth]);
+    });
+  }, [visibleYear, visibleMonth, locale]);
+
+  const weekdayLabels = useMemo(() => {
+    const formatter = new Intl.DateTimeFormat(intlLocale, {
+      weekday: "short",
+      timeZone: "UTC",
+    });
+    return Array.from({ length: 7 }, (_, index) => {
+      const date = new Date(Date.UTC(2024, 0, 7 + index));
+      return formatter.format(date);
+    });
+  }, [intlLocale]);
 
   function shiftMonth(delta: -1 | 1) {
     const next = shiftCalendarMonth(visibleYear, visibleMonth, delta);
@@ -58,7 +73,7 @@ export function TripDateRangeCalendar({
           type="button"
           className={styles.calendarNavButton}
           onClick={() => shiftMonth(-1)}
-          aria-label="Previous month"
+          aria-label={t("previousMonth")}
         >
           ‹
         </button>
@@ -67,14 +82,14 @@ export function TripDateRangeCalendar({
           type="button"
           className={styles.calendarNavButton}
           onClick={() => shiftMonth(1)}
-          aria-label="Next month"
+          aria-label={t("nextMonth")}
         >
           ›
         </button>
       </div>
 
       <div className={styles.calendarWeekdays} aria-hidden="true">
-        {WEEKDAY_LABELS.map((label) => (
+        {weekdayLabels.map((label) => (
           <span key={label} className={styles.calendarWeekday}>
             {label}
           </span>
@@ -102,10 +117,10 @@ export function TripDateRangeCalendar({
             );
             const selectedLabel =
               cell.date === startDate
-                ? "start date"
+                ? t("startDateSelected", { day: cell.day })
                 : cell.date === endDate
-                  ? "end date"
-                  : undefined;
+                  ? t("endDateSelected", { day: cell.day })
+                  : t("selectDay", { day: cell.day });
 
             return (
               <button
@@ -113,11 +128,7 @@ export function TripDateRangeCalendar({
                 type="button"
                 className={styles.calendarDayButton}
                 data-state={visualState}
-                aria-label={
-                  selectedLabel
-                    ? `${cell.day}, ${selectedLabel}`
-                    : `Select ${cell.day}`
-                }
+                aria-label={selectedLabel}
                 aria-pressed={visualState.startsWith("range")}
                 onClick={() =>
                   onRangeChange(

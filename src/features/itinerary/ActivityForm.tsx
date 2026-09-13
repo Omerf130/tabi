@@ -1,13 +1,11 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button/Button";
 import { AuthSubmitButton } from "@/features/auth/AuthSubmitButton";
-import {
-  ACTIVITY_TYPES,
-  ACTIVITY_TYPE_LABELS,
-  type ActivityType,
-} from "./activity-types";
+import { ACTIVITY_TYPES, type ActivityType } from "./activity-types";
+import { translateActivityError } from "./translate-activity-error";
 import {
   createActivityAction,
   updateActivityAction,
@@ -75,6 +73,8 @@ export function ActivityForm({
   currencies = [],
   linkedCost,
 }: ActivityFormProps) {
+  const t = useTranslations("Activity");
+  const tCommon = useTranslations("Common");
   const action = mode === "create" ? createActivityAction : updateActivityAction;
   const [state, formAction] = useActionState(action, initialState);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -165,7 +165,7 @@ export function ActivityForm({
       >
         {state.error ? (
           <p className={styles.formError} role="alert">
-            {state.error}
+            {translateActivityError(t, state.error)}
           </p>
         ) : null}
 
@@ -174,13 +174,13 @@ export function ActivityForm({
             <PlaceModeSegment
               mode={placeMode}
               onChange={handlePlaceModeChange}
-              googleLabel="חיפוש מקום"
-              manualLabel="הזנה ידנית"
+              googleLabel={t("placeSearchGoogle")}
+              manualLabel={t("placeSearchManual")}
             />
             {placeMode === "google" ? (
               <>
                 <p id="activity-place-label" className={overlayStyles.searchGroupLabel}>
-                  איפה?
+                  {t("whereQuestion")}
                 </p>
                 <ActivityLocationSection
                   tripId={tripId}
@@ -199,14 +199,14 @@ export function ActivityForm({
             <PlaceModeSegment
               mode={placeMode}
               onChange={handlePlaceModeChange}
-              googleLabel="חיפוש מקום"
-              manualLabel="הזנה ידנית"
+              googleLabel={t("placeSearchGoogle")}
+              manualLabel={t("placeSearchManual")}
             />
             {placeMode === "google" ? (
               <section className={styles.section} aria-labelledby="activity-place-label">
                 {!showDetails ? (
                   <h3 id="activity-place-label" className={styles.sectionLabel}>
-                    איפה?
+                    {t("whereQuestion")}
                   </h3>
                 ) : null}
                 <ActivityLocationSection
@@ -226,7 +226,7 @@ export function ActivityForm({
           <>
             <div className={styles.primaryField}>
               <label className={styles.primaryLabel} htmlFor="activity-title">
-                מה עושים?
+                {t("whatQuestion")}
               </label>
               <input
                 ref={titleRef}
@@ -242,19 +242,19 @@ export function ActivityForm({
               />
               {state.fieldErrors?.title ? (
                 <p className={styles.formError} role="alert">
-                  {state.fieldErrors.title}
+                  {translateActivityError(t, state.fieldErrors.title)}
                 </p>
               ) : null}
             </div>
 
             <section className={styles.section} aria-labelledby="activity-time-label">
               <h3 id="activity-time-label" className={styles.sectionLabel}>
-                {overlayNavigation ? "שעה" : "באיזו שעה?"}
+                {overlayNavigation ? tCommon("time") : t("whenQuestion")}
               </h3>
               <div className={styles.timeRow}>
                 <div className={styles.timeField}>
                   <label className={styles.timeFieldLabel} htmlFor="startTime">
-                    התחלה
+                    {tCommon("start")}
                   </label>
                   <input
                     id="startTime"
@@ -267,7 +267,7 @@ export function ActivityForm({
                 </div>
                 <div className={styles.timeField}>
                   <label className={styles.timeFieldLabel} htmlFor="endTime">
-                    סיום
+                    {tCommon("end")}
                   </label>
                   <input
                     id="endTime"
@@ -284,7 +284,7 @@ export function ActivityForm({
             {placeMode === "manual" ? (
               <section className={styles.section} aria-labelledby="activity-place-label">
                 <h3 id="activity-place-label" className={styles.sectionLabel}>
-                  איפה?
+                  {t("whereQuestion")}
                 </h3>
                 <ActivityLocationSection
                   tripId={tripId}
@@ -299,7 +299,7 @@ export function ActivityForm({
             {!lockDate ? (
               <div className={styles.typeField}>
                 <label className={styles.fieldLabel} htmlFor="date">
-                  יום
+                  {t("dayField")}
                 </label>
                 <select
                   id="date"
@@ -319,11 +319,11 @@ export function ActivityForm({
             ) : null}
 
             <details className={styles.detailsSection} open={detailsExpanded}>
-              <summary className={styles.detailsSummary}>פרטים נוספים</summary>
+              <summary className={styles.detailsSummary}>{t("moreDetails")}</summary>
               <div className={styles.detailsBody}>
                 <div className={styles.typeField}>
                   <label className={styles.fieldLabel} htmlFor="type">
-                    סוג פעילות
+                    {t("activityType")}
                   </label>
                   <select
                     id="type"
@@ -335,7 +335,7 @@ export function ActivityForm({
                   >
                     {ACTIVITY_TYPES.map((type) => (
                       <option key={type} value={type}>
-                        {ACTIVITY_TYPE_LABELS[type as ActivityType]}
+                        {t(`types.${type as ActivityType}`)}
                       </option>
                     ))}
                   </select>
@@ -343,7 +343,7 @@ export function ActivityForm({
 
                 <div className={styles.notesField}>
                   <label className={styles.fieldLabel} htmlFor="notes">
-                    הערות
+                    {tCommon("notes")}
                   </label>
                   <textarea
                     id="notes"
@@ -379,7 +379,7 @@ export function ActivityForm({
         <div className={styles.formFooter}>
           <div className={styles.footerActions}>
             <AuthSubmitButton>
-              {mode === "create" ? "הוספת פעילות" : "שמירת שינויים"}
+              {mode === "create" ? t("createSubmit") : t("updateSubmit")}
             </AuthSubmitButton>
             {onCancel && !overlayNavigation ? (
               <Button
@@ -389,7 +389,7 @@ export function ActivityForm({
                 className={styles.cancelButton}
                 onClick={onCancel}
               >
-                ביטול
+                {tCommon("cancel")}
               </Button>
             ) : null}
           </div>

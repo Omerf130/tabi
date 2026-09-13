@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { TripHeader } from "@/features/app-shell/TripHeader";
 import { ListsLandingContent } from "@/features/lists/ListsLandingContent";
 import { listTripListsSummary } from "@/features/lists/queries";
@@ -10,8 +11,11 @@ export async function generateMetadata({
   params: Promise<{ tripId: string }>;
 }): Promise<Metadata> {
   const { tripId } = await params;
-  const trip = await requireTripMember(tripId);
-  return { title: `רשימות · ${trip.name}` };
+  const [trip, t] = await Promise.all([
+    requireTripMember(tripId),
+    getTranslations("Lists"),
+  ]);
+  return { title: `${t("pageTitle")} · ${trip.name}` };
 }
 
 export default async function TripListsPage({
@@ -20,13 +24,16 @@ export default async function TripListsPage({
   params: Promise<{ tripId: string }>;
 }) {
   const { tripId } = await params;
-  const trip = await requireTripMember(tripId);
+  const [trip, t] = await Promise.all([
+    requireTripMember(tripId),
+    getTranslations("Lists"),
+  ]);
   const lists = await listTripListsSummary(trip.id);
 
   return (
     <>
       <TripHeader
-        title="רשימות"
+        title={t("pageTitle")}
         tripName={trip.name}
         showTripSwitch
         backHref={`/app/trips/${tripId}/more`}

@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { BottomNav } from "@/components/ui/BottomNav/BottomNav";
 import {
   IconDocuments,
@@ -12,8 +13,8 @@ import {
 import {
   buildTripNavHref,
   getActiveNavSection,
-  NAV_LABELS,
   NAV_SECTIONS,
+  type NavSection,
 } from "./navigation";
 import styles from "./TripPrimaryNav.module.scss";
 
@@ -33,12 +34,13 @@ type TripPrimaryNavProps = {
 export function TripPrimaryNav({ tripId, variant }: TripPrimaryNavProps) {
   const pathname = usePathname();
   const activeSection = getActiveNavSection(pathname, tripId);
+  const t = useTranslations("Navigation");
 
   const items = NAV_SECTIONS.map((section) => {
     const Icon = NAV_ICONS[section];
     return {
       id: section,
-      label: NAV_LABELS[section],
+      label: t(section satisfies NavSection),
       href: buildTripNavHref(tripId, section),
       icon: <Icon />,
       active: activeSection === section,
@@ -52,11 +54,17 @@ export function TripPrimaryNav({ tripId, variant }: TripPrimaryNavProps) {
           Tabi
         </div>
         <div className={styles.navWrap}>
-          <BottomNav items={items} variant="rail" />
+          <BottomNav
+            items={items}
+            variant="rail"
+            ariaLabel={t("ariaLabel")}
+          />
         </div>
       </div>
     );
   }
 
-  return <BottomNav items={items} variant={variant} />;
+  return (
+    <BottomNav items={items} variant={variant} ariaLabel={t("ariaLabel")} />
+  );
 }

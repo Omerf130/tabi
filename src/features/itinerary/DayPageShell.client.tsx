@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
 import { getAccommodationsSettingsHref } from "@/features/accommodations/constants";
 import type { DayDocumentLinkOptions } from "./build-day-document-link-options";
@@ -32,6 +33,7 @@ export function DayPageShell({
   transportRecords,
   activityPhotos,
 }: DayPageShellProps) {
+  const t = useTranslations("Itinerary");
   const [actionState, setActionState] = useState<DayActionState>({ kind: "closed" });
 
   const closeAction = useCallback(() => {
@@ -76,17 +78,17 @@ export function DayPageShell({
                 className={styles.addToDayButton}
                 onClick={openMenu}
               >
-                + הוספת פריט ליום זה
+                {t("addItemToDay")}
               </button>
             </div>
           ) : null}
         </div>
 
-        <aside className={styles.sideColumn} aria-label="מידע משלים ליום">
+        <aside className={styles.sideColumn} aria-label={t("sideColumnAria")}>
             {hasSideAccommodations ? (
               <section className={styles.sideSection} aria-labelledby="day-accommodation-title">
                 <h2 id="day-accommodation-title" className={styles.sideSectionTitle}>
-                  לינה
+                  {t("accommodationSection")}
                 </h2>
                 <ul className={styles.sideList}>
                   {day.accommodations.map((accommodation) => (
@@ -111,8 +113,8 @@ export function DayPageShell({
                     className={styles.timelineLocationAction}
                   >
                     {day.accommodations.length === 1
-                      ? "ניהול מקום הלינה"
-                      : "ניהול מקומות לינה"}
+                      ? t("accommodationManageOne")
+                      : t("accommodationManageMany")}
                   </Link>
                 ) : null}
               </section>
@@ -121,7 +123,7 @@ export function DayPageShell({
             {hasSideDocuments ? (
               <section className={styles.sideSection} aria-labelledby="day-documents-title">
                 <h2 id="day-documents-title" className={styles.sideSectionTitle}>
-                  מסמכים
+                  {t("documentsSection")}
                 </h2>
                 <ul className={styles.sideList}>
                   {day.documents.map((document) => (

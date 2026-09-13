@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import { selectUpcomingHomeReminders } from "./select-upcoming-home-reminders";
+
+const t = createAppTranslator("TripReminders", "he");
 
 describe("selectUpcomingHomeReminders", () => {
   it("returns incomplete reminders on or after today chronologically", () => {
@@ -35,6 +38,7 @@ describe("selectUpcomingHomeReminders", () => {
         },
       ],
       "2026-10-10",
+      t,
     );
 
     expect(selected.map((item) => item.id)).toEqual(["today", "future"]);
@@ -50,6 +54,7 @@ describe("selectUpcomingHomeReminders", () => {
         isCompleted: false,
       })),
       "2026-10-10",
+      t,
     );
 
     expect(selected).toHaveLength(3);

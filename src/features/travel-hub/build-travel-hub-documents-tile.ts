@@ -1,25 +1,24 @@
 import { buildTravelDocumentsHref } from "@/features/documents/constants";
-import { TRAVEL_HUB_DOCUMENTS } from "./constants";
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import type { TravelHubMaterialsTile } from "./types";
 
 export function buildTravelHubDocumentsTile(
   tripId: string,
   documentCount: number,
+  t: AppTranslator<"TravelHub">,
 ): TravelHubMaterialsTile {
   const secondaryLine =
     documentCount === 0
       ? null
       : documentCount === 1
-        ? TRAVEL_HUB_DOCUMENTS.countOne
-        : TRAVEL_HUB_DOCUMENTS.countMany(documentCount);
+        ? t("documentsCountOne")
+        : t("documentsCountMany", { count: documentCount });
 
   return {
     href: buildTravelDocumentsHref(tripId),
-    title: TRAVEL_HUB_DOCUMENTS.title,
+    title: t("documentsTitle"),
     primaryLine:
-      documentCount === 0
-        ? TRAVEL_HUB_DOCUMENTS.emptyPrimary
-        : TRAVEL_HUB_DOCUMENTS.title,
+      documentCount === 0 ? t("documentsEmptyPrimary") : t("documentsTitle"),
     secondaryLine,
   };
 }

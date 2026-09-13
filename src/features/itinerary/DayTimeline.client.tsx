@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { ActivityRow } from "./ActivityRow";
 import { ActivityRowActions } from "./ActivityRowActions";
@@ -26,12 +27,13 @@ export function DayTimeline({
   onMoveActivity,
   onEditTransport,
 }: DayTimelineProps) {
+  const t = useTranslations("Itinerary");
   const [actionsOpenId, setActionsOpenId] = useState<string | null>(null);
 
   return (
     <section className={styles.timelineSection} aria-labelledby="day-timeline-title">
       <h2 id="day-timeline-title" className={styles.srOnly}>
-        לוח היום
+        {t("dayTimelineTitle")}
       </h2>
 
       {day.items.length > 0 ? (
@@ -77,11 +79,9 @@ export function DayTimeline({
         </ul>
       ) : (
         <div className={styles.emptyDay}>
-          <p className={styles.emptyDayTitle}>אין עדיין תוכניות ליום הזה</p>
+          <p className={styles.emptyDayTitle}>{t("dayTimelineEmptyTitle")}</p>
           {day.isOwner ? (
-            <p className={styles.emptyDayHint}>
-              הוסיפו פעילויות, תחבורה או תזכורות כדי לבנות את היום.
-            </p>
+            <p className={styles.emptyDayHint}>{t("dayTimelineEmptyHint")}</p>
           ) : null}
         </div>
       )}

@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { createHebrewItineraryTranslator } from "@/features/i18n/test-translators";
 import { parseActivityEntityCostFromFormData } from "@/features/finance/entity-cost-schema";
 import { getDayActionSurfaceTitle } from "./day-action-menu";
 import { emptyActivityFormValues, toActivityFormValues } from "./to-activity-view-model";
@@ -13,11 +14,12 @@ const validTripId = "507f1f77bcf86cd799439011";
 
 describe("activity form flow", () => {
   it("uses create and edit overlay titles with day context helper", () => {
-    expect(getDayActionSurfaceTitle({ kind: "menu" })).toBe("הוספה ליום");
-    expect(getDayActionSurfaceTitle({ kind: "activity-create" })).toBe(
+    const t = createHebrewItineraryTranslator();
+    expect(getDayActionSurfaceTitle({ kind: "menu" }, t)).toBe("הוספה ליום");
+    expect(getDayActionSurfaceTitle({ kind: "activity-create" }, t)).toBe(
       "הוספת פעילות",
     );
-    expect(getDayActionSurfaceTitle({ kind: "activity-edit" })).toBe("עריכת פעילות");
+    expect(getDayActionSurfaceTitle({ kind: "activity-edit" }, t)).toBe("עריכת פעילות");
   });
 
   it("inherits canonical day via hidden date on locked create forms", () => {

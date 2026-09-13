@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { CurrencyPicker } from "@/features/currency/CurrencyPicker.client";
 import type { CurrencyOption } from "@/features/currency/types";
 import { ACTIVITY_COST_CATEGORIES } from "./entity-cost-schema";
 import { getExpenseCategoryPresentation } from "./category-presentation";
-import { FINANCE_MESSAGES } from "./constants";
 import type { EntityLinkedCostViewModel, ExpenseCategory } from "./types";
 import styles from "./EntityCostFields.module.scss";
 
@@ -28,6 +28,8 @@ export function EntityCostFields({
   showHelper = true,
   idPrefix = "entity-cost",
 }: EntityCostFieldsProps) {
+  const t = useTranslations("Finance");
+  const tCategories = useTranslations("Finance.categories");
   const [currency, setCurrency] = useState(linkedCost?.currency ?? baseCurrency);
   const [category, setCategory] = useState<ExpenseCategory>(
     linkedCost?.category ?? "activities",
@@ -40,17 +42,17 @@ export function EntityCostFields({
     <section className={styles.section} aria-labelledby={`${idPrefix}-title`}>
       <div className={styles.divider} aria-hidden />
       <h3 id={`${idPrefix}-title`} className={styles.title}>
-        {FINANCE_MESSAGES.entityCostSectionTitle}
+        {t("entityCostSectionTitle")}
       </h3>
       {showHelper ? (
-        <p className={styles.helper}>{FINANCE_MESSAGES.entityCostHelper}</p>
+        <p className={styles.helper}>{t("entityCostHelper")}</p>
       ) : null}
 
       <input type="hidden" name="costCurrency" value={currency} />
       {showCategory ? <input type="hidden" name="costCategory" value={category} /> : null}
 
       <div className={styles.amountRow}>
-        <Field label={FINANCE_MESSAGES.amountLabel} htmlFor={`${idPrefix}-amount`}>
+        <Field label={t("amountLabel")} htmlFor={`${idPrefix}-amount`}>
           <Input
             id={`${idPrefix}-amount`}
             name="costAmount"
@@ -61,7 +63,7 @@ export function EntityCostFields({
           />
         </Field>
 
-        <Field label={FINANCE_MESSAGES.currencyLabel} htmlFor={`${idPrefix}-currency`}>
+        <Field label={t("currencyLabel")} htmlFor={`${idPrefix}-currency`}>
           <button
             id={`${idPrefix}-currency`}
             type="button"
@@ -77,12 +79,12 @@ export function EntityCostFields({
       {showCategory ? (
         <div className={styles.categorySection}>
           <span className={styles.categoryLabel}>
-            {FINANCE_MESSAGES.activityCostCategoryLabel}
+            {t("activityCostCategoryLabel")}
           </span>
           <div
             className={styles.categoryGrid}
             role="radiogroup"
-            aria-label={FINANCE_MESSAGES.activityCostCategoryLabel}
+            aria-label={t("activityCostCategoryLabel")}
           >
             {ACTIVITY_COST_CATEGORIES.map((entry) => {
               const presentation = getExpenseCategoryPresentation(entry);
@@ -107,7 +109,7 @@ export function EntityCostFields({
                   aria-pressed={selected}
                 >
                   <Icon className={styles.categoryIcon} aria-hidden />
-                  <span>{presentation.label}</span>
+                  <span>{tCategories(entry)}</span>
                 </button>
               );
             })}

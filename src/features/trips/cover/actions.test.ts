@@ -63,7 +63,7 @@ describe("uploadTripCoverAction", () => {
     const result = await uploadTripCoverAction({}, formData);
 
     expect(result.ok).toBeUndefined();
-    expect(result.error).toBeDefined();
+    expect(result.errorCode).toBeDefined();
     expect(replaceTripCoverImageMock).not.toHaveBeenCalled();
   });
 
@@ -76,7 +76,7 @@ describe("uploadTripCoverAction", () => {
 
     const result = await uploadTripCoverAction({}, formData);
 
-    expect(result.error).toBeDefined();
+    expect(result.errorCode).toBeDefined();
     expect(replaceTripCoverImageMock).not.toHaveBeenCalled();
   });
 
@@ -87,7 +87,7 @@ describe("uploadTripCoverAction", () => {
 
     const result = await uploadTripCoverAction({}, formData);
 
-    expect(result.error).toBeDefined();
+    expect(result.errorCode).toBeDefined();
     expect(replaceTripCoverImageMock).not.toHaveBeenCalled();
   });
 
@@ -133,7 +133,7 @@ describe("removeTripCoverAction", () => {
     const result = await removeTripCoverAction({}, formData);
 
     expect(result.ok).toBeUndefined();
-    expect(result.error).toBeDefined();
+    expect(result.errorCode).toBeDefined();
     expect(removeTripCoverImageMock).not.toHaveBeenCalled();
   });
 });

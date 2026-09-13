@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useActionState, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
@@ -13,8 +14,12 @@ import {
   updateAccommodationAction,
   type AccommodationActionState,
 } from "@/features/accommodations/actions";
-import { formatAccommodationDeleteConfirm } from "@/features/accommodations/constants";
+import { formatAccommodationDeleteConfirm } from "@/features/accommodations/accommodation-labels";
 import type { AccommodationSettingsViewModel } from "@/features/accommodations/types";
+import {
+  translateAccommodationError,
+  translateAccommodationSuccess,
+} from "@/features/accommodations/translate-accommodation-error";
 import {
   PlaceSearchField,
   type PlaceSearchSelection,
@@ -92,10 +97,13 @@ function TripFields({
   idPrefix: string;
   defaultCheckInDate?: string;
 }) {
+  const t = useTranslations("Accommodation");
+  const tCommon = useTranslations("Common");
+
   return (
     <>
       <div className={styles.formRow}>
-        <Field label="תאריך Check-in" htmlFor={`${idPrefix}-checkIn`}>
+        <Field label={t("checkIn")} htmlFor={`${idPrefix}-checkIn`}>
           <Input
             id={`${idPrefix}-checkIn`}
             name="checkInDate"
@@ -106,7 +114,7 @@ function TripFields({
             required
           />
         </Field>
-        <Field label="תאריך Check-out" htmlFor={`${idPrefix}-checkOut`}>
+        <Field label={t("checkOut")} htmlFor={`${idPrefix}-checkOut`}>
           <Input
             id={`${idPrefix}-checkOut`}
             name="checkOutDate"
@@ -118,14 +126,14 @@ function TripFields({
           />
         </Field>
       </div>
-      <Field label="מספר הזמנה" htmlFor={`${idPrefix}-booking`}>
+      <Field label={t("bookingReference")} htmlFor={`${idPrefix}-booking`}>
         <Input
           id={`${idPrefix}-booking`}
           name="bookingReference"
           defaultValue={accommodation?.bookingReference}
         />
       </Field>
-      <Field label="הערות" htmlFor={`${idPrefix}-notes`}>
+      <Field label={tCommon("notes")} htmlFor={`${idPrefix}-notes`}>
         <Textarea
           id={`${idPrefix}-notes`}
           name="notes"
@@ -144,10 +152,13 @@ function ManualFields({
   accommodation?: AccommodationSettingsViewModel;
   idPrefix: string;
 }) {
+  const t = useTranslations("Accommodation");
+  const tCommon = useTranslations("Common");
+
   return (
     <>
       <input type="hidden" name="placeSource" value="manual" />
-      <Field label="שם מקום הלינה" htmlFor={`${idPrefix}-manualName`}>
+      <Field label={t("manualName")} htmlFor={`${idPrefix}-manualName`}>
         <Input
           id={`${idPrefix}-manualName`}
           name="manualName"
@@ -156,9 +167,9 @@ function ManualFields({
         />
       </Field>
       <Field
-        label="שם מקום הלינה ביפנית"
+        label={t("manualNameJapanese")}
         htmlFor={`${idPrefix}-manualNameJapanese`}
-        hint="אופציונלי — לשימוש במצב מונית"
+        hint={t("manualNameJapaneseHint")}
       >
         <Input
           id={`${idPrefix}-manualNameJapanese`}
@@ -168,7 +179,7 @@ function ManualFields({
           lang="ja"
         />
       </Field>
-      <Field label="עיר" htmlFor={`${idPrefix}-manualCity`}>
+      <Field label={t("city")} htmlFor={`${idPrefix}-manualCity`}>
         <Input
           id={`${idPrefix}-manualCity`}
           name="manualCity"
@@ -176,7 +187,7 @@ function ManualFields({
           required
         />
       </Field>
-      <Field label="כתובת באנגלית" htmlFor={`${idPrefix}-manualAddressEnglish`}>
+      <Field label={t("addressEnglish")} htmlFor={`${idPrefix}-manualAddressEnglish`}>
         <Textarea
           id={`${idPrefix}-manualAddressEnglish`}
           name="manualAddressEnglish"
@@ -185,7 +196,7 @@ function ManualFields({
           dir="auto"
         />
       </Field>
-      <Field label="כתובת ביפנית" htmlFor={`${idPrefix}-manualAddressJapanese`}>
+      <Field label={t("addressJapanese")} htmlFor={`${idPrefix}-manualAddressJapanese`}>
         <Textarea
           id={`${idPrefix}-manualAddressJapanese`}
           name="manualAddressJapanese"
@@ -195,7 +206,7 @@ function ManualFields({
           lang="ja"
         />
       </Field>
-      <Field label="קישור Google Maps" htmlFor={`${idPrefix}-manualMaps`}>
+      <Field label={t("googleMapsLink")} htmlFor={`${idPrefix}-manualMaps`}>
         <Input
           id={`${idPrefix}-manualMaps`}
           name="manualGoogleMapsUrl"
@@ -241,6 +252,9 @@ export function TripAccommodationForm({
   plannerPresentation?: boolean;
   overlayNavigation?: boolean;
 }) {
+  const t = useTranslations("Accommodation");
+  const tActivity = useTranslations("Activity");
+  const tCommon = useTranslations("Common");
   const router = useRouter();
   const [manualMode, setManualMode] = useState(isManualAccommodation(accommodation));
   const [googleSelection, setGoogleSelection] = useState<PlaceSearchSelection | null>(
@@ -257,6 +271,8 @@ export function TripAccommodationForm({
 
   const isGoogleMode = !manualMode;
   const canSubmitGoogle = manualMode || Boolean(googleSelection);
+  const errorMessage = translateAccommodationError(t, state.errorCode);
+  const successMessage = translateAccommodationSuccess(t, state.successCode);
 
   return (
     <form
@@ -272,8 +288,8 @@ export function TripAccommodationForm({
         <div className={overlayStyles.searchGroup}>
           <PlaceModeSegment
             mode={isGoogleMode ? "google" : "manual"}
-            googleLabel="חיפוש מלון"
-            manualLabel="הזנה ידנית"
+            googleLabel={t("hotelSearch")}
+            manualLabel={tActivity("placeSearchManual")}
             onChange={(mode) => {
               setManualMode(mode === "manual");
               setGoogleSelection(null);
@@ -281,13 +297,13 @@ export function TripAccommodationForm({
           />
           {isGoogleMode ? (
             <>
-              <p className={overlayStyles.searchGroupLabel}>איפה?</p>
+              <p className={overlayStyles.searchGroupLabel}>{tActivity("whereQuestion")}</p>
               <PlaceSearchField
                 key={`${idPrefix}-${accommodation?.id ?? "new"}-${accommodation?.googlePlaceId ?? "none"}`}
                 tripId={tripId}
                 inputId={`${idPrefix}-place-search`}
-                label="חיפוש מלון"
-                placeholder="חיפוש מלון..."
+                label={t("hotelSearch")}
+                placeholder={t("hotelSearchPlaceholder")}
                 initialSelection={googleSelection}
                 onSelectionChange={setGoogleSelection}
                 presentation="planner"
@@ -304,8 +320,8 @@ export function TripAccommodationForm({
             key={`${idPrefix}-${accommodation?.id ?? "new"}-${accommodation?.googlePlaceId ?? "none"}`}
             tripId={tripId}
             inputId={`${idPrefix}-place-search`}
-            label="חיפוש מלון"
-            placeholder="חיפוש מלון..."
+            label={t("hotelSearch")}
+            placeholder={t("hotelSearchPlaceholder")}
             initialSelection={googleSelection}
             onSelectionChange={setGoogleSelection}
           />
@@ -317,7 +333,7 @@ export function TripAccommodationForm({
               setGoogleSelection(null);
             }}
           >
-            לא מצאת את המקום? הזנה ידנית
+            {t("manualEntryPrompt")}
           </button>
         </>
       ) : null}
@@ -331,7 +347,7 @@ export function TripAccommodationForm({
               className={styles.manualToggle}
               onClick={() => setManualMode(false)}
             >
-              חזרה לחיפוש Google
+              {t("backToGoogleSearch")}
             </button>
           ) : null}
         </>
@@ -355,12 +371,12 @@ export function TripAccommodationForm({
         />
       ) : null}
 
-      {state.error ? (
+      {errorMessage ? (
         <p className={styles.error} role="alert">
-          {state.error}
+          {errorMessage}
         </p>
       ) : null}
-      {state.success ? <p className={styles.success}>{state.success}</p> : null}
+      {successMessage ? <p className={styles.success}>{successMessage}</p> : null}
 
       {plannerPresentation ? (
         <div className={overlayStyles.plannerFooter}>
@@ -383,7 +399,7 @@ export function TripAccommodationForm({
           )}
           {onCancel && !overlayNavigation ? (
             <Button type="button" variant="ghost" size="compact" onClick={onCancel}>
-              ביטול
+              {tCommon("cancel")}
             </Button>
           ) : null}
         </div>
@@ -400,6 +416,8 @@ function AccommodationRow({
   financeBaseCurrency,
   currencies,
 }: AccommodationRowProps) {
+  const t = useTranslations("Accommodation");
+  const tCommon = useTranslations("Common");
   const router = useRouter();
   const [editing, setEditing] = useState(false);
   const [deleteState, deleteAction] = useActionState(
@@ -423,7 +441,7 @@ function AccommodationRow({
           endDate={endDate}
           idPrefix={`edit-${accommodation.id}`}
           action={updateAccommodationAction}
-          submitLabel="שמירה"
+          submitLabel={tCommon("save")}
           onCancel={() => setEditing(false)}
           financeBaseCurrency={financeBaseCurrency}
           currencies={currencies}
@@ -433,7 +451,7 @@ function AccommodationRow({
   }
 
   function handleDelete() {
-    if (!window.confirm(formatAccommodationDeleteConfirm())) {
+    if (!window.confirm(formatAccommodationDeleteConfirm(t))) {
       return;
     }
     const form = document.getElementById(
@@ -441,6 +459,9 @@ function AccommodationRow({
     ) as HTMLFormElement | null;
     form?.requestSubmit();
   }
+
+  const deleteError = translateAccommodationError(t, deleteState.errorCode);
+  const deleteSuccess = translateAccommodationSuccess(t, deleteState.successCode);
 
   return (
     <li className={styles.item}>
@@ -457,7 +478,7 @@ function AccommodationRow({
           {accommodation.city} · {accommodation.dateRangeLabel}
         </p>
         {accommodation.placeSource === "google" ? (
-          <p className={styles.itemSource}>מקור: Google Places</p>
+          <p className={styles.itemSource}>{t("googleSource")}</p>
         ) : null}
       </div>
       <div className={styles.rowActions}>
@@ -467,7 +488,7 @@ function AccommodationRow({
           size="compact"
           onClick={() => setEditing(true)}
         >
-          עריכה
+          {tCommon("edit")}
         </Button>
         <Button
           type="button"
@@ -475,7 +496,7 @@ function AccommodationRow({
           size="compact"
           onClick={handleDelete}
         >
-          מחיקת מקום לינה
+          {t("deleteStay")}
         </Button>
       </div>
       <form
@@ -490,14 +511,14 @@ function AccommodationRow({
           value={accommodation.id}
         />
       </form>
-      {deleteState.error ? (
+      {deleteError ? (
         <p className={styles.error} role="alert">
-          {deleteState.error}
+          {deleteError}
         </p>
       ) : null}
-      {deleteState.ok && deleteState.success ? (
+      {deleteState.ok && deleteSuccess ? (
         <p className={styles.success} role="status">
-          {deleteState.success}
+          {deleteSuccess}
         </p>
       ) : null}
     </li>
@@ -513,6 +534,7 @@ export function TripAccommodationSettings({
   financeBaseCurrency = "ILS",
   currencies = [],
 }: TripAccommodationSettingsProps) {
+  const t = useTranslations("Accommodation");
   const [showCreate, setShowCreate] = useState(false);
 
   return (
@@ -523,28 +545,25 @@ export function TripAccommodationSettings({
     >
       <div className={sectionStyles.header}>
         <h2 id="trip-accommodations-title" className={sectionStyles.title}>
-          מקומות לינה
+          {t("settingsTitle")}
         </h2>
-        <p className={sectionStyles.hint}>
-          חפשו מקום לינה אמיתי ב-Google. Tabi שומרת את זהות המקום; אתם מוסיפים
-          רק תאריכים, הזמנה והערות.
-        </p>
+        <p className={sectionStyles.hint}>{t("settingsHint")}</p>
       </div>
 
       {!showCreate ? (
         <Button type="button" variant="ghost" onClick={() => setShowCreate(true)}>
-          + הוספת מקום לינה
+          {t("addStay")}
         </Button>
       ) : (
         <div className={styles.createForm}>
-          <p className={styles.createLabel}>הוספת מקום לינה</p>
+          <p className={styles.createLabel}>{t("addStayLabel")}</p>
           <TripAccommodationForm
             tripId={tripId}
             startDate={startDate}
             endDate={endDate}
             idPrefix="create"
             action={createAccommodationAction}
-            submitLabel="הוספה"
+            submitLabel={t("addSubmit")}
             onCancel={() => setShowCreate(false)}
             financeBaseCurrency={financeBaseCurrency}
             currencies={currencies}
@@ -567,7 +586,7 @@ export function TripAccommodationSettings({
           ))}
         </ul>
       ) : (
-        <p className={styles.empty}>אין מקומות לינה עדיין.</p>
+        <p className={styles.empty}>{t("emptySettings")}</p>
       )}
     </section>
   );

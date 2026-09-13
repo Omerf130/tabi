@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 import { IconChevron } from "@/components/ui/icons";
 import type { ItineraryDayStripItem } from "./types";
@@ -11,6 +12,8 @@ type ItineraryDayStripProps = {
 };
 
 export function ItineraryDayStrip({ days }: ItineraryDayStripProps) {
+  const t = useTranslations("Itinerary");
+  const tCommon = useTranslations("Common");
   const scrollerRef = useRef<HTMLDivElement>(null);
   const selectedRef = useRef<HTMLAnchorElement>(null);
 
@@ -30,12 +33,12 @@ export function ItineraryDayStrip({ days }: ItineraryDayStripProps) {
   };
 
   return (
-    <nav className={styles.dayStripNav} aria-label="ימי הטיול">
+    <nav className={styles.dayStripNav} aria-label={t("dayStripAria")}>
       <button
         type="button"
         className={styles.dayStripScrollButton}
         onClick={() => scrollBy(-1)}
-        aria-label="גלילה לימים קודמים"
+        aria-label={t("dayStripScrollPrev")}
       >
         <IconChevron className={styles.dayStripScrollPrev} aria-hidden />
       </button>
@@ -51,10 +54,12 @@ export function ItineraryDayStrip({ days }: ItineraryDayStripProps) {
                 data-selected={day.isSelected ? "true" : "false"}
                 aria-current={day.isSelected ? "date" : undefined}
               >
-                <span className={styles.dayStripNumber}>יום {day.dayNumber}</span>
+                <span className={styles.dayStripNumber}>
+                  {tCommon("dayNumber", { dayNumber: day.dayNumber })}
+                </span>
                 <span className={styles.dayStripDate}>{day.shortDateLabel}</span>
                 {day.isToday ? (
-                  <span className={styles.dayStripToday}>היום</span>
+                  <span className={styles.dayStripToday}>{tCommon("today")}</span>
                 ) : null}
               </Link>
             </li>
@@ -66,7 +71,7 @@ export function ItineraryDayStrip({ days }: ItineraryDayStripProps) {
         type="button"
         className={styles.dayStripScrollButton}
         onClick={() => scrollBy(1)}
-        aria-label="גלילה לימים הבאים"
+        aria-label={t("dayStripScrollNext")}
       >
         <IconChevron className={styles.dayStripScrollNext} aria-hidden />
       </button>

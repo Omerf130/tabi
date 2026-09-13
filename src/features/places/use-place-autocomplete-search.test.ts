@@ -181,7 +181,7 @@ describe("TripAccommodationSettings manual fallback", () => {
       "utf8",
     );
 
-    expect(source).toContain("לא מצאת את המקום? הזנה ידנית");
+    expect(source).toContain('t("manualEntryPrompt")');
     expect(source).toContain("ManualFields");
     expect(source).toContain("setManualMode(true)");
   });

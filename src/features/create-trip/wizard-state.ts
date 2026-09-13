@@ -11,12 +11,6 @@ export const CREATE_TRIP_WIZARD_STEPS: CreateTripWizardStep[] = [
   "details",
 ];
 
-export const WIZARD_STEP_LABELS: Record<CreateTripWizardStep, string> = {
-  destination: "Destination",
-  dates: "Dates",
-  details: "Trip Details",
-};
-
 export type CreateTripWizardState = {
   step: CreateTripWizardStep;
   destination: TripDestinationSnapshot | null;

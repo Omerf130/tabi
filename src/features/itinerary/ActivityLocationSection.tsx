@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
 import { Input } from "@/components/ui/Input/Input";
 import { PLACES_ACTIVITY_PRIMARY_TYPES } from "@/features/places/constants";
@@ -41,6 +42,8 @@ export function ActivityLocationSection({
   onGoogleSelectionChange,
   plannerPresentation = false,
 }: ActivityLocationSectionProps) {
+  const t = useTranslations("Activity");
+  const tCommon = useTranslations("Common");
   const initialGoogleSelection =
     toActivityPlaceSearchSelectionFromFormValues(defaultValues);
 
@@ -87,8 +90,8 @@ export function ActivityLocationSection({
         <PlaceSearchField
           tripId={tripId}
           inputId="activity-place-search"
-          label="חיפוש מקום"
-          placeholder="חיפוש מקום..."
+          label={t("placeSearchGoogle")}
+          placeholder={t("placeSearchPlaceholder")}
           includedPrimaryTypes={PLACES_ACTIVITY_PRIMARY_TYPES}
           resolvePurpose="activity"
           includeHiddenFields={false}
@@ -139,7 +142,7 @@ export function ActivityLocationSection({
       <div className={addItemStyles.blockField}>
         <input type="hidden" name="placeSource" value="manual" />
         <label className={addItemStyles.pairLabel} htmlFor="locationName">
-          שם המקום
+          {tCommon("placeName")}
         </label>
         <input
           id="locationName"
@@ -151,7 +154,7 @@ export function ActivityLocationSection({
           aria-invalid={fieldErrors?.locationName ? true : undefined}
         />
         <label className={addItemStyles.pairLabel} htmlFor="address">
-          כתובת
+          {tCommon("address")}
         </label>
         <input
           id="address"
@@ -176,7 +179,7 @@ export function ActivityLocationSection({
       <input type="hidden" name="placeSource" value="manual" />
       <div className={styles.typeField}>
         <label className={styles.fieldLabel} htmlFor="locationName">
-          שם המקום
+          {tCommon("placeName")}
         </label>
         <Input
           id="locationName"
@@ -189,7 +192,7 @@ export function ActivityLocationSection({
       </div>
       <div className={styles.typeField}>
         <label className={styles.fieldLabel} htmlFor="address">
-          כתובת
+          {tCommon("address")}
         </label>
         <Input
           id="address"

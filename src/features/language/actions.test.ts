@@ -65,7 +65,7 @@ describe("togglePhraseFavoriteAction", () => {
 
     const result = await togglePhraseFavoriteAction({}, formData);
 
-    expect(result.error).toBeDefined();
+    expect(result.errorCode).toBeDefined();
     expect(togglePhraseFavoriteMock).not.toHaveBeenCalled();
   });
 });

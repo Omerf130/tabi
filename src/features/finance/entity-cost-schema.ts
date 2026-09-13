@@ -53,7 +53,7 @@ function readCostCategory(formData: FormData): string {
 
 export function parseActivityEntityCostFromFormData(
   formData: FormData,
-): { ok: true; value: ParsedEntityCost } | { ok: false; error: string } {
+): { ok: true; value: ParsedEntityCost } | { ok: false; errorCode: "invalidCostData" } {
   const amountRaw = readCostAmount(formData);
   if (!amountRaw) {
     return { ok: true, value: { hasCost: false } };
@@ -72,7 +72,7 @@ export function parseActivityEntityCostFromFormData(
     });
 
   if (!parsed.success) {
-    return { ok: false, error: "נתוני עלות לא תקינים" };
+    return { ok: false, errorCode: "invalidCostData" };
   }
 
   return {
@@ -88,7 +88,7 @@ export function parseActivityEntityCostFromFormData(
 
 export function parseSimpleEntityCostFromFormData(
   formData: FormData,
-): { ok: true; value: ParsedEntityCost } | { ok: false; error: string } {
+): { ok: true; value: ParsedEntityCost } | { ok: false; errorCode: "invalidCostData" } {
   const amountRaw = readCostAmount(formData);
   if (!amountRaw) {
     return { ok: true, value: { hasCost: false } };
@@ -105,7 +105,7 @@ export function parseSimpleEntityCostFromFormData(
     });
 
   if (!parsed.success) {
-    return { ok: false, error: "נתוני עלות לא תקינים" };
+    return { ok: false, errorCode: "invalidCostData" };
   }
 
   return {

@@ -1,3 +1,4 @@
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import type { DayAddMenuAction } from "./day-action-surface.types";
 
 export type DayAddMenuOption = {
@@ -6,60 +7,66 @@ export type DayAddMenuOption = {
   description: string;
 };
 
-export const DAY_ADD_MENU_OPTIONS: readonly DayAddMenuOption[] = [
-  {
-    id: "activity",
-    label: "פעילות",
-    description: "אטרקציה, מסעדה, מוזיאון ועוד",
-  },
-  {
-    id: "transport",
-    label: "תחבורה",
-    description: "רכבת, טיסה, אוטובוס, רכב או מונית",
-  },
-  {
-    id: "accommodation",
-    label: "מקום לינה",
-    description: "מלון או מקום לינה בטיול",
-  },
-  {
-    id: "reminder",
-    label: "תזכורת",
-    description: "משהו אישי שחשוב לזכור",
-  },
-  {
-    id: "document",
-    label: "מסמך",
-    description: "קובץ שרלוונטי ליום הזה",
-  },
-] as const;
+const DAY_ADD_MENU_OPTION_KEYS: Record<
+  DayAddMenuAction,
+  readonly [labelKey: keyof MessagesItinerary, descKey: keyof MessagesItinerary]
+> = {
+  activity: ["dayActionAddMenuActivity", "dayActionAddMenuActivityDesc"],
+  transport: ["dayActionAddMenuTransport", "dayActionAddMenuTransportDesc"],
+  accommodation: [
+    "dayActionAddMenuAccommodation",
+    "dayActionAddMenuAccommodationDesc",
+  ],
+  reminder: ["dayActionAddMenuReminder", "dayActionAddMenuReminderDesc"],
+  document: ["dayActionAddMenuDocument", "dayActionAddMenuDocumentDesc"],
+};
 
-export function getDayActionSurfaceTitle(state: {
-  kind: string;
-  transportType?: string;
-}): string {
+type MessagesItinerary = typeof import("../../../messages/he.json")["Itinerary"];
+
+export function getDayAddMenuOptions(
+  t: AppTranslator<"Itinerary">,
+): readonly DayAddMenuOption[] {
+  return (Object.keys(DAY_ADD_MENU_OPTION_KEYS) as DayAddMenuAction[]).map(
+    (id) => {
+      const [labelKey, descKey] = DAY_ADD_MENU_OPTION_KEYS[id];
+      return {
+        id,
+        label: t(labelKey),
+        description: t(descKey),
+      };
+    },
+  );
+}
+
+export function getDayActionSurfaceTitle(
+  state: {
+    kind: string;
+    transportType?: string;
+  },
+  t: AppTranslator<"Itinerary">,
+): string {
   switch (state.kind) {
     case "menu":
-      return "הוספה ליום";
+      return t("dayActionMenu");
     case "activity-create":
-      return "הוספת פעילות";
+      return t("dayActionActivityCreate");
     case "activity-edit":
-      return "עריכת פעילות";
+      return t("dayActionActivityEdit");
     case "activity-move":
-      return "העברה ליום אחר";
+      return t("dayActionActivityMove");
     case "transport-type":
     case "transport-create":
-      return "הוספת תחבורה";
+      return t("dayActionTransportCreate");
     case "transport-edit":
-      return "עריכת תחבורה";
+      return t("dayActionTransportEdit");
     case "accommodation-create":
-      return "הוספת מקום לינה";
+      return t("dayActionAccommodationCreate");
     case "document-create":
-      return "הוספת מסמך";
+      return t("dayActionDocumentCreate");
     case "reminder-create":
-      return "הוספת תזכורת";
+      return t("dayActionReminderCreate");
     case "reminder-edit":
-      return "עריכת תזכורת";
+      return t("dayActionReminderEdit");
     default:
       return "";
   }

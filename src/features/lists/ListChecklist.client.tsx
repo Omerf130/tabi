@@ -2,13 +2,14 @@
 
 import { useOptimistic, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   createTripListItemAction,
   deleteTripListItemAction,
   setTripListItemCompletedAction,
   updateTripListItemAction,
 } from "./actions";
-import { TRIP_LIST_MESSAGES, type TripListType } from "./constants";
+import { TRIP_LIST_ERROR_CODES, type TripListType } from "./constants";
 import type { TripListItemViewModel } from "./types";
 import styles from "./ListDetail.module.scss";
 
@@ -53,6 +54,8 @@ export function ListChecklist({
   listType,
   initialItems,
 }: ListChecklistProps) {
+  const t = useTranslations("Lists");
+  const tErrors = useTranslations("Lists.errors");
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
@@ -64,6 +67,13 @@ export function ListChecklist({
     initialItems,
     applyOptimisticAction,
   );
+
+  function resolveError(errorCode?: string) {
+    if (!errorCode) {
+      return tErrors(TRIP_LIST_ERROR_CODES.generic);
+    }
+    return tErrors(errorCode as "generic" | "notFound");
+  }
 
   function handleSetCompleted(itemId: string, isCompleted: boolean) {
     startTransition(async () => {
@@ -78,7 +88,7 @@ export function ListChecklist({
         router.refresh();
         return;
       }
-      setError(result.error ?? TRIP_LIST_MESSAGES.generic);
+      setError(resolveError(result.errorCode));
       router.refresh();
     });
   }
@@ -114,13 +124,13 @@ export function ListChecklist({
         router.refresh();
         return;
       }
-      setError(result.error ?? TRIP_LIST_MESSAGES.generic);
+      setError(resolveError(result.errorCode));
       router.refresh();
     });
   }
 
   function handleDelete(itemId: string) {
-    if (!window.confirm(TRIP_LIST_MESSAGES.deleteConfirm)) {
+    if (!window.confirm(t("deleteConfirm"))) {
       return;
     }
 
@@ -135,7 +145,7 @@ export function ListChecklist({
         router.refresh();
         return;
       }
-      setError(result.error ?? TRIP_LIST_MESSAGES.generic);
+      setError(resolveError(result.errorCode));
       router.refresh();
     });
   }
@@ -169,7 +179,7 @@ export function ListChecklist({
         router.refresh();
         return;
       }
-      setError(result.error ?? TRIP_LIST_MESSAGES.generic);
+      setError(resolveError(result.errorCode));
       router.refresh();
     });
   }
@@ -193,7 +203,11 @@ export function ListChecklist({
                   onChange={(event) =>
                     handleSetCompleted(item.id, event.target.checked)
                   }
-                  aria-label={item.isCompleted ? "סמן כלא הושלם" : "סמן כהושלם"}
+                  aria-label={
+                    item.isCompleted
+                      ? t("markIncompleteAriaLabel")
+                      : t("markCompletedAriaLabel")
+                  }
                 />
                 {isEditing ? (
                   <input
@@ -220,7 +234,7 @@ export function ListChecklist({
                       onClick={() => handleSaveEdit(item.id)}
                       disabled={isPending}
                     >
-                      שמירה
+                      {t("saveButton")}
                     </button>
                     <button
                       type="button"
@@ -228,7 +242,7 @@ export function ListChecklist({
                       onClick={handleCancelEdit}
                       disabled={isPending}
                     >
-                      ביטול
+                      {t("cancelButton")}
                     </button>
                   </>
                 ) : (
@@ -239,7 +253,7 @@ export function ListChecklist({
                       onClick={() => handleStartEdit(item)}
                       disabled={isPending}
                     >
-                      עריכה
+                      {t("editButton")}
                     </button>
                     <button
                       type="button"
@@ -247,7 +261,7 @@ export function ListChecklist({
                       onClick={() => handleDelete(item.id)}
                       disabled={isPending}
                     >
-                      מחיקה
+                      {t("deleteButton")}
                     </button>
                   </>
                 )}
@@ -263,12 +277,12 @@ export function ListChecklist({
           className={styles.addInput}
           value={newItemText}
           onChange={(event) => setNewItemText(event.target.value)}
-          placeholder="הוספת פריט"
+          placeholder={t("addItemPlaceholder")}
           dir="auto"
           disabled={isPending}
         />
         <button type="submit" className={styles.addButton} disabled={isPending}>
-          הוספה
+          {t("addItemButton")}
         </button>
       </form>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useActionState, useEffect, useState } from "react";
 import { buildTransportJourneyPreview } from "@/features/itinerary/build-transport-journey-preview";
 import overlayStyles from "@/features/itinerary/AddItemFlow.module.scss";
@@ -20,14 +21,13 @@ import {
   type TransportActionState,
 } from "./actions";
 import { buildTransportDetailHref } from "./constants";
-import { TRANSPORT_TIMEZONE_OPTIONS } from "./timezone-options";
+import { createTransportTimezoneOptions } from "./timezone-options";
 import {
-  TRAIN_CATEGORIES,
-  TRAIN_CATEGORY_LABELS,
-  TRANSPORT_TYPE_LABELS,
-  TRANSPORT_TYPE_SINGULAR_LABELS,
-  type TransportType,
-} from "./transport-types";
+  createTrainCategoryLabelResolver,
+  createTransportTypeLabelResolver,
+  createTransportTypeSingularLabelResolver,
+} from "./transport-labels";
+import { TRAIN_CATEGORIES, type TransportType } from "./transport-types";
 import type { TransportFormValues } from "./types";
 import styles from "./TransportForm.module.scss";
 
@@ -55,14 +55,18 @@ function TimezoneSelect({
   name,
   defaultValue,
   error,
+  label,
+  options,
 }: {
   id: string;
   name: string;
   defaultValue: string;
   error?: string;
+  label: string;
+  options: ReturnType<typeof createTransportTimezoneOptions>;
 }) {
   return (
-    <Field label="אזור זמן" htmlFor={id} error={error}>
+    <Field label={label} htmlFor={id} error={error}>
       <Select
         id={id}
         name={name}
@@ -70,7 +74,7 @@ function TimezoneSelect({
         required
         aria-invalid={error ? true : undefined}
       >
-        {TRANSPORT_TIMEZONE_OPTIONS.map((option) => (
+        {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
@@ -83,14 +87,18 @@ function TimezoneSelect({
 function TypeSpecificFields({
   type,
   defaultValues,
+  t,
+  trainCategoryLabel,
 }: {
   type: TransportType;
   defaultValues: TransportFormValues;
+  t: ReturnType<typeof useTranslations<"Transport">>;
+  trainCategoryLabel: ReturnType<typeof createTrainCategoryLabelResolver>;
 }) {
   if (type === "flight") {
     return (
       <>
-        <Field label="חברת תעופה" htmlFor="airline">
+        <Field label={t("airline")} htmlFor="airline">
           <Input
             id="airline"
             name="airline"
@@ -98,7 +106,7 @@ function TypeSpecificFields({
             maxLength={80}
           />
         </Field>
-        <Field label="מספר טיסה" htmlFor="flightNumber">
+        <Field label={t("flightNumber")} htmlFor="flightNumber">
           <Input
             id="flightNumber"
             name="flightNumber"
@@ -107,7 +115,7 @@ function TypeSpecificFields({
           />
         </Field>
         <div className={styles.splitRow}>
-          <Field label="טרמינל יציאה" htmlFor="departureTerminal">
+          <Field label={t("departureTerminal")} htmlFor="departureTerminal">
             <Input
               id="departureTerminal"
               name="departureTerminal"
@@ -115,7 +123,7 @@ function TypeSpecificFields({
               maxLength={40}
             />
           </Field>
-          <Field label="טרמינל הגעה" htmlFor="arrivalTerminal">
+          <Field label={t("arrivalTerminal")} htmlFor="arrivalTerminal">
             <Input
               id="arrivalTerminal"
               name="arrivalTerminal"
@@ -125,10 +133,10 @@ function TypeSpecificFields({
           </Field>
         </div>
         <div className={styles.splitRow}>
-          <Field label="שער" htmlFor="gate">
+          <Field label={t("gate")} htmlFor="gate">
             <Input id="gate" name="gate" defaultValue={defaultValues.gate} maxLength={20} />
           </Field>
-          <Field label="מושב" htmlFor="seat">
+          <Field label={t("seat")} htmlFor="seat">
             <Input id="seat" name="seat" defaultValue={defaultValues.seat} maxLength={80} />
           </Field>
         </div>
@@ -139,21 +147,21 @@ function TypeSpecificFields({
   if (type === "train") {
     return (
       <>
-        <Field label="סוג רכבת" htmlFor="trainCategory">
+        <Field label={t("trainType")} htmlFor="trainCategory">
           <Select
             id="trainCategory"
             name="trainCategory"
             defaultValue={defaultValues.trainCategory}
           >
-            <option value="">ללא</option>
+            <option value="">{t("noneOption")}</option>
             {TRAIN_CATEGORIES.map((category) => (
               <option key={category} value={category}>
-                {TRAIN_CATEGORY_LABELS[category]}
+                {trainCategoryLabel(category)}
               </option>
             ))}
           </Select>
         </Field>
-        <Field label="שם שירות" htmlFor="serviceName">
+        <Field label={t("serviceName")} htmlFor="serviceName">
           <Input
             id="serviceName"
             name="serviceName"
@@ -162,7 +170,7 @@ function TypeSpecificFields({
           />
         </Field>
         <div className={styles.splitRow}>
-          <Field label="מספר רכבת" htmlFor="trainNumber">
+          <Field label={t("trainNumber")} htmlFor="trainNumber">
             <Input
               id="trainNumber"
               name="trainNumber"
@@ -170,7 +178,7 @@ function TypeSpecificFields({
               maxLength={40}
             />
           </Field>
-          <Field label="קרון" htmlFor="carNumber">
+          <Field label={t("carNumber")} htmlFor="carNumber">
             <Input
               id="carNumber"
               name="carNumber"
@@ -179,7 +187,7 @@ function TypeSpecificFields({
             />
           </Field>
         </div>
-        <Field label="מושבים" htmlFor="seats">
+        <Field label={t("seats")} htmlFor="seats">
           <Input id="seats" name="seats" defaultValue={defaultValues.seats} maxLength={80} />
         </Field>
       </>
@@ -188,7 +196,7 @@ function TypeSpecificFields({
 
   return (
     <>
-      <Field label="מפעיל / חברה" htmlFor="operator">
+      <Field label={t("operator")} htmlFor="operator">
         <Input
           id="operator"
           name="operator"
@@ -196,7 +204,7 @@ function TypeSpecificFields({
           maxLength={120}
         />
       </Field>
-      <Field label="מספר שירות / רכב" htmlFor="serviceNumber">
+      <Field label={t("serviceNumber")} htmlFor="serviceNumber">
         <Input
           id="serviceNumber"
           name="serviceNumber"
@@ -204,7 +212,7 @@ function TypeSpecificFields({
           maxLength={40}
         />
       </Field>
-      <Field label="פרטי רכב / שירות" htmlFor="vehicleOrServiceNotes">
+      <Field label={t("vehicleNotes")} htmlFor="vehicleOrServiceNotes">
         <Input
           id="vehicleOrServiceNotes"
           name="vehicleOrServiceNotes"
@@ -232,6 +240,13 @@ export function TransportForm({
   transportType,
   onTransportTypeChange,
 }: TransportFormProps) {
+  const t = useTranslations("Transport");
+  const tCommon = useTranslations("Common");
+  const tErrors = useTranslations("Transport.errors");
+  const typeLabel = createTransportTypeLabelResolver(t);
+  const typeSingularLabel = createTransportTypeSingularLabelResolver(t);
+  const trainCategoryLabel = createTrainCategoryLabelResolver(t);
+  const timezoneOptions = createTransportTimezoneOptions(t);
   const router = useRouter();
   const action = mode === "create" ? createTransportAction : updateTransportAction;
   const [state, formAction] = useActionState(action, initialState);
@@ -295,9 +310,9 @@ export function TransportForm({
           <input type="hidden" name="transportId" value={transportId} />
         ) : null}
 
-        {state.error ? (
+        {state.errorCode ? (
           <p className={overlayStyles.overlayError} role="alert">
-            {state.error}
+            {tErrors(state.errorCode)}
           </p>
         ) : null}
 
@@ -307,19 +322,19 @@ export function TransportForm({
             onSelect={onTransportTypeChange}
           />
         ) : (
-          <p className={styles.typeBadge}>{TRANSPORT_TYPE_SINGULAR_LABELS[type]}</p>
+          <p className={styles.typeBadge}>{typeSingularLabel(type)}</p>
         )}
 
         <section aria-labelledby="transport-route-label">
           <h2 id="transport-route-label" className={overlayStyles.blockLabel}>
-            מסלול
+            {t("route")}
           </h2>
           <div className={overlayStyles.routePath}>
             <div className={overlayStyles.routeStop}>
               <span className={overlayStyles.routeDot} aria-hidden />
               <div className={overlayStyles.routeStopFields}>
                 <label className={overlayStyles.pairLabel} htmlFor="departureLocationName">
-                  מאיפה
+                  {t("from")}
                 </label>
                 <input
                   id="departureLocationName"
@@ -344,7 +359,7 @@ export function TransportForm({
               <span className={overlayStyles.routeDot} data-kind="destination" aria-hidden />
               <div className={overlayStyles.routeStopFields}>
                 <label className={overlayStyles.pairLabel} htmlFor="arrivalLocationName">
-                  לאן
+                  {t("to")}
                 </label>
                 <input
                   id="arrivalLocationName"
@@ -378,13 +393,13 @@ export function TransportForm({
 
         <section className={overlayStyles.timeSection} aria-labelledby="transport-times-label">
           <h2 id="transport-times-label" className={overlayStyles.blockLabel}>
-            זמנים
+            {t("times")}
           </h2>
-          <p className={overlayStyles.timeLegLabel}>יציאה</p>
+          <p className={overlayStyles.timeLegLabel}>{t("departure")}</p>
           <div className={overlayStyles.pairRow}>
             <div className={overlayStyles.pairCell}>
               <label className={overlayStyles.pairLabel} htmlFor="departureDate">
-                תאריך
+                {tCommon("date")}
               </label>
               <input
                 id="departureDate"
@@ -398,7 +413,7 @@ export function TransportForm({
             </div>
             <div className={overlayStyles.pairCell}>
               <label className={overlayStyles.pairLabel} htmlFor="departureTime">
-                שעה
+                {tCommon("time")}
               </label>
               <input
                 id="departureTime"
@@ -416,12 +431,14 @@ export function TransportForm({
             name="departureTimezone"
             defaultValue={defaultValues.departureTimezone}
             error={state.fieldErrors?.["departure.timezone"]}
+            label={t("timezone")}
+            options={timezoneOptions}
           />
-          <p className={overlayStyles.timeLegLabel}>הגעה</p>
+          <p className={overlayStyles.timeLegLabel}>{t("arrival")}</p>
           <div className={overlayStyles.pairRow}>
             <div className={overlayStyles.pairCell}>
               <label className={overlayStyles.pairLabel} htmlFor="arrivalDate">
-                תאריך
+                {tCommon("date")}
               </label>
               <input
                 id="arrivalDate"
@@ -435,7 +452,7 @@ export function TransportForm({
             </div>
             <div className={overlayStyles.pairCell}>
               <label className={overlayStyles.pairLabel} htmlFor="arrivalTime">
-                שעה
+                {tCommon("time")}
               </label>
               <input
                 id="arrivalTime"
@@ -453,13 +470,15 @@ export function TransportForm({
             name="arrivalTimezone"
             defaultValue={defaultValues.arrivalTimezone}
             error={state.fieldErrors?.["arrival.timezone"]}
+            label={t("timezone")}
+            options={timezoneOptions}
           />
         </section>
 
         <details className={overlayStyles.compactDetails}>
-          <summary className={overlayStyles.compactDetailsSummary}>פרטים נוספים</summary>
+          <summary className={overlayStyles.compactDetailsSummary}>{t("moreDetails")}</summary>
           <div className={overlayStyles.compactDetailsBody}>
-            <Field label="קוד יציאה (שדה / תחנה)" htmlFor="departureLocationCode">
+            <Field label={t("departureLocationCode")} htmlFor="departureLocationCode">
               <Input
                 id="departureLocationCode"
                 name="departureLocationCode"
@@ -468,7 +487,7 @@ export function TransportForm({
                 dir="auto"
               />
             </Field>
-            <Field label="קוד הגעה (שדה / תחנה)" htmlFor="arrivalLocationCode">
+            <Field label={t("arrivalLocationCode")} htmlFor="arrivalLocationCode">
               <Input
                 id="arrivalLocationCode"
                 name="arrivalLocationCode"
@@ -477,8 +496,13 @@ export function TransportForm({
                 dir="auto"
               />
             </Field>
-            <TypeSpecificFields type={type} defaultValues={defaultValues} />
-            <Field label="מספר הזמנה" htmlFor="bookingReference">
+            <TypeSpecificFields
+              type={type}
+              defaultValues={defaultValues}
+              t={t}
+              trainCategoryLabel={trainCategoryLabel}
+            />
+            <Field label={t("bookingReference")} htmlFor="bookingReference">
               <Input
                 id="bookingReference"
                 name="bookingReference"
@@ -486,7 +510,7 @@ export function TransportForm({
                 maxLength={80}
               />
             </Field>
-            <Field label="הערות" htmlFor="notes">
+            <Field label={tCommon("notes")} htmlFor="notes">
               <Textarea
                 id="notes"
                 name="notes"
@@ -511,7 +535,7 @@ export function TransportForm({
 
         <div className={overlayStyles.overlayFooter}>
           <AuthSubmitButton>
-            {mode === "create" ? "הוספת תחבורה" : "שמירת שינויים"}
+            {mode === "create" ? t("createPlannerSubmit") : t("updateSubmit")}
           </AuthSubmitButton>
         </div>
       </form>
@@ -531,13 +555,13 @@ export function TransportForm({
         <input type="hidden" name="transportId" value={transportId} />
       ) : null}
 
-      {state.error ? (
+      {state.errorCode ? (
         <p className={styles.formError} role="alert">
-          {state.error}
+          {tErrors(state.errorCode)}
         </p>
       ) : null}
 
-      <p className={styles.typeBadge}>{TRANSPORT_TYPE_LABELS[type]}</p>
+      <p className={styles.typeBadge}>{typeLabel(type)}</p>
 
       {journeyPreview ? (
         <div className={overlayStyles.journeyPreview} aria-live="polite">
@@ -549,9 +573,9 @@ export function TransportForm({
       ) : null}
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>מאיפה</h2>
+        <h2 className={styles.sectionTitle}>{t("fromSection")}</h2>
         <Field
-          label="מיקום"
+          label={t("location")}
           htmlFor="departureLocationName"
           error={state.fieldErrors?.["departure.locationName"]}
         >
@@ -564,7 +588,7 @@ export function TransportForm({
             dir="auto"
           />
         </Field>
-        <Field label="קוד (שדה / תחנה)" htmlFor="departureLocationCode">
+        <Field label={t("locationCode")} htmlFor="departureLocationCode">
           <Input
             id="departureLocationCode"
             name="departureLocationCode"
@@ -575,7 +599,7 @@ export function TransportForm({
         </Field>
         <div className={styles.splitRow}>
           <Field
-            label="תאריך"
+            label={tCommon("date")}
             htmlFor="departureDate"
             error={state.fieldErrors?.["departure.date"]}
           >
@@ -588,7 +612,7 @@ export function TransportForm({
             />
           </Field>
           <Field
-            label="שעה"
+            label={tCommon("time")}
             htmlFor="departureTime"
             error={state.fieldErrors?.["departure.time"]}
           >
@@ -606,13 +630,15 @@ export function TransportForm({
           name="departureTimezone"
           defaultValue={defaultValues.departureTimezone}
           error={state.fieldErrors?.["departure.timezone"]}
+          label={t("timezone")}
+          options={timezoneOptions}
         />
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>לאן</h2>
+        <h2 className={styles.sectionTitle}>{t("toSection")}</h2>
         <Field
-          label="מיקום"
+          label={t("location")}
           htmlFor="arrivalLocationName"
           error={state.fieldErrors?.["arrival.locationName"]}
         >
@@ -625,7 +651,7 @@ export function TransportForm({
             dir="auto"
           />
         </Field>
-        <Field label="קוד (שדה / תחנה)" htmlFor="arrivalLocationCode">
+        <Field label={t("locationCode")} htmlFor="arrivalLocationCode">
           <Input
             id="arrivalLocationCode"
             name="arrivalLocationCode"
@@ -636,7 +662,7 @@ export function TransportForm({
         </Field>
         <div className={styles.splitRow}>
           <Field
-            label="תאריך"
+            label={tCommon("date")}
             htmlFor="arrivalDate"
             error={state.fieldErrors?.["arrival.date"]}
           >
@@ -649,7 +675,7 @@ export function TransportForm({
             />
           </Field>
           <Field
-            label="שעה"
+            label={tCommon("time")}
             htmlFor="arrivalTime"
             error={state.fieldErrors?.["arrival.time"]}
           >
@@ -667,13 +693,20 @@ export function TransportForm({
           name="arrivalTimezone"
           defaultValue={defaultValues.arrivalTimezone}
           error={state.fieldErrors?.["arrival.timezone"]}
+          label={t("timezone")}
+          options={timezoneOptions}
         />
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>פרטים</h2>
-        <TypeSpecificFields type={type} defaultValues={defaultValues} />
-        <Field label="מספר הזמנה" htmlFor="bookingReference">
+        <h2 className={styles.sectionTitle}>{t("detailsSection")}</h2>
+        <TypeSpecificFields
+          type={type}
+          defaultValues={defaultValues}
+          t={t}
+          trainCategoryLabel={trainCategoryLabel}
+        />
+        <Field label={t("bookingReference")} htmlFor="bookingReference">
           <Input
             id="bookingReference"
             name="bookingReference"
@@ -681,7 +714,7 @@ export function TransportForm({
             maxLength={80}
           />
         </Field>
-        <Field label="הערות" htmlFor="notes">
+        <Field label={tCommon("notes")} htmlFor="notes">
           <Textarea
             id="notes"
             name="notes"
@@ -705,15 +738,15 @@ export function TransportForm({
       <div className={styles.actions}>
         {onCancel && !overlayNavigation ? (
           <Button type="button" variant="secondary" onClick={onCancel}>
-            ביטול
+            {tCommon("cancel")}
           </Button>
         ) : null}
         <AuthSubmitButton>
           {mode === "create"
             ? plannerPresentation
-              ? "הוספת תחבורה"
-              : "שמירה"
-            : "שמירת שינויים"}
+              ? t("createPlannerSubmit")
+              : t("createSubmit")
+            : t("updateSubmit")}
         </AuthSubmitButton>
       </div>
     </form>

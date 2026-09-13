@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button/Button";
@@ -18,6 +19,7 @@ type ReminderRowProps = {
 };
 
 function ReminderRow({ tripId, reminder, onEdit }: ReminderRowProps) {
+  const tCommon = useTranslations("Common");
   const router = useRouter();
   const [, startTransition] = useTransition();
 
@@ -55,7 +57,7 @@ function ReminderRow({ tripId, reminder, onEdit }: ReminderRowProps) {
             size="compact"
             onClick={() => runMutation(completeTripReminderAction)}
           >
-            סימון כהושלם
+            {tCommon("markComplete")}
           </Button>
         ) : null}
         <Button
@@ -64,7 +66,7 @@ function ReminderRow({ tripId, reminder, onEdit }: ReminderRowProps) {
           size="compact"
           onClick={() => onEdit(reminder.id)}
         >
-          עריכה
+          {tCommon("edit")}
         </Button>
         <Button
           type="button"
@@ -72,7 +74,7 @@ function ReminderRow({ tripId, reminder, onEdit }: ReminderRowProps) {
           size="compact"
           onClick={() => runMutation(deleteTripReminderAction)}
         >
-          מחיקה
+          {tCommon("delete")}
         </Button>
       </div>
     </li>
@@ -97,18 +99,20 @@ export function DayRemindersSection({
   onEditReminder,
   tripId,
 }: DayRemindersSectionProps) {
+  const t = useTranslations("Itinerary");
+
   return (
     <section className={styles.section} aria-labelledby="day-reminders-title">
       <div className={styles.sectionHeader}>
         <h2 id="day-reminders-title" className={styles.sectionTitle}>
-          תזכורות אישיות
+          {t("dayRemindersTitle")}
         </h2>
-        <p className={styles.sectionHint}>פרטיות — רק אתם רואים אותן.</p>
+        <p className={styles.sectionHint}>{t("dayRemindersHint")}</p>
       </div>
 
       {showCreateAction ? (
         <Button type="button" variant="ghost" onClick={onCreateRequest}>
-          + תזכורת
+          {t("dayRemindersAdd")}
         </Button>
       ) : null}
 
@@ -124,12 +128,12 @@ export function DayRemindersSection({
           ))}
         </ul>
       ) : (
-        <p className={styles.emptyState}>אין תזכורות פתוחות ליום זה.</p>
+        <p className={styles.emptyState}>{t("dayRemindersEmpty")}</p>
       )}
 
       {completedReminders.length > 0 ? (
         <details className={styles.completedDetails}>
-          <summary>הושלמו ({completedReminders.length})</summary>
+          <summary>{t("dayRemindersCompleted", { count: completedReminders.length })}</summary>
           <ul className={reminderStyles.list}>
             {completedReminders.map((reminder) => (
               <ReminderRow

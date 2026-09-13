@@ -4,7 +4,8 @@ import { connectDb } from "@/lib/db/connect";
 import { Activity } from "@/models/Activity";
 import { Accommodation } from "@/models/Accommodation";
 import { Transport } from "@/models/Transport";
-import { FINANCE_MESSAGES } from "./constants";
+import { FINANCE_UI_KEYS } from "./constants";
+import type { FinanceLabels } from "./finance-labels";
 import type { PublicTripExpense } from "./types";
 
 export type ExpenseSourceTitleLookup = {
@@ -13,11 +14,18 @@ export type ExpenseSourceTitleLookup = {
   transports: Map<string, string>;
 };
 
-function resolveStoredAccommodationTitle(accommodation: {
-  manualName?: string | null;
-  name?: string | null;
-}): string {
-  return accommodation.manualName?.trim() || accommodation.name?.trim() || "מקום לינה";
+function resolveStoredAccommodationTitle(
+  accommodation: {
+    manualName?: string | null;
+    name?: string | null;
+  },
+  accommodationFallbackName: string,
+): string {
+  return (
+    accommodation.manualName?.trim() ||
+    accommodation.name?.trim() ||
+    accommodationFallbackName
+  );
 }
 
 function resolveTransportTitle(transport: {
@@ -30,6 +38,7 @@ function resolveTransportTitle(transport: {
 export async function resolveExpenseSourceTitles(
   tripId: string,
   expenses: readonly PublicTripExpense[],
+  labels: Pick<FinanceLabels, "resolveUiText">,
 ): Promise<ExpenseSourceTitleLookup> {
   const activityIds = new Set<string>();
   const accommodationIds = new Set<string>();
@@ -56,6 +65,10 @@ export async function resolveExpenseSourceTitles(
 
   await connectDb();
 
+  const accommodationFallbackName = labels.resolveUiText(
+    FINANCE_UI_KEYS.accommodationFallbackName,
+  );
+
   const [activities, accommodations, transports] = await Promise.all([
     activityIds.size
       ? Activity.find({ tripId, _id: { $in: [...activityIds] } })
@@ -81,7 +94,7 @@ export async function resolveExpenseSourceTitles(
     accommodations: new Map(
       accommodations.map((accommodation) => [
         accommodation._id.toString(),
-        resolveStoredAccommodationTitle(accommodation),
+        resolveStoredAccommodationTitle(accommodation, accommodationFallbackName),
       ]),
     ),
     transports: new Map(
@@ -96,37 +109,34 @@ export async function resolveExpenseSourceTitles(
 export function resolveLinkedExpenseTitle(
   expense: PublicTripExpense,
   lookup: ExpenseSourceTitleLookup,
+  labels: Pick<FinanceLabels, "resolveUiText">,
 ): string {
+  const deletedFallback = labels.resolveUiText(FINANCE_UI_KEYS.deletedSourceFallback);
+
   if (expense.sourceType === "manual") {
-    return expense.title?.trim() || FINANCE_MESSAGES.deletedSourceFallback;
+    return expense.title?.trim() || deletedFallback;
   }
 
   const sourceId = expense.sourceId;
   if (!sourceId) {
-    return FINANCE_MESSAGES.deletedSourceFallback;
+    return deletedFallback;
   }
 
   switch (expense.sourceType) {
     case "activity":
-      return lookup.activities.get(sourceId) ?? FINANCE_MESSAGES.deletedSourceFallback;
+      return lookup.activities.get(sourceId) ?? deletedFallback;
     case "accommodation":
-      return lookup.accommodations.get(sourceId) ?? FINANCE_MESSAGES.deletedSourceFallback;
+      return lookup.accommodations.get(sourceId) ?? deletedFallback;
     case "transport":
-      return lookup.transports.get(sourceId) ?? FINANCE_MESSAGES.deletedSourceFallback;
+      return lookup.transports.get(sourceId) ?? deletedFallback;
     default:
-      return FINANCE_MESSAGES.deletedSourceFallback;
+      return deletedFallback;
   }
 }
 
-export function resolveLinkedExpenseSourceLabel(sourceType: PublicTripExpense["sourceType"]): string | null {
-  switch (sourceType) {
-    case "activity":
-      return FINANCE_MESSAGES.linkedToActivity;
-    case "accommodation":
-      return FINANCE_MESSAGES.linkedToAccommodation;
-    case "transport":
-      return FINANCE_MESSAGES.linkedToTransport;
-    default:
-      return null;
-  }
+export function resolveLinkedExpenseSourceLabel(
+  sourceType: PublicTripExpense["sourceType"],
+  labels: Pick<FinanceLabels, "resolveLinkedSourceLabel">,
+): string | null {
+  return labels.resolveLinkedSourceLabel(sourceType);
 }

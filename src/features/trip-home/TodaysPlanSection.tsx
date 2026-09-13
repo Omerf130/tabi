@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { IconActivityTransport } from "@/components/ui/icons";
 import type { TripHomeItinerarySection } from "./types";
 import styles from "./TripHomeContent.module.scss";
@@ -7,7 +8,12 @@ type TodaysPlanSectionProps = {
   section: TripHomeItinerarySection;
 };
 
-export function TodaysPlanSection({ section }: TodaysPlanSectionProps) {
+export async function TodaysPlanSection({ section }: TodaysPlanSectionProps) {
+  const [t, tCommon] = await Promise.all([
+    getTranslations("Home"),
+    getTranslations("Common"),
+  ]);
+
   return (
     <section className={styles.homeSection} aria-labelledby="trip-home-plan">
       <div className={styles.homeSectionHeader}>
@@ -35,12 +41,10 @@ export function TodaysPlanSection({ section }: TodaysPlanSectionProps) {
 
       {section.isEmpty ? (
         <div className={styles.duringPlanEmptyState}>
-          <p className={styles.duringPlanEmptyTitle}>אין תוכניות להיום עדיין</p>
-          <p className={styles.duringPlanEmptyHint}>
-            היום שלך עדיין פתוח. אפשר להוסיף פעילות למסלול.
-          </p>
+          <p className={styles.duringPlanEmptyTitle}>{t("todaysPlanEmptyTitle")}</p>
+          <p className={styles.duringPlanEmptyHint}>{t("todaysPlanEmptyHint")}</p>
           <Link href={section.ctaHref} className={styles.duringPlanEmptyAction}>
-            למסלול של היום
+            {t("todaysPlanEmptyCta")}
           </Link>
         </div>
       ) : (
@@ -58,7 +62,7 @@ export function TodaysPlanSection({ section }: TodaysPlanSectionProps) {
               >
                 <div className={styles.duringPlanTimeCol}>
                   {item.isUntimed ? (
-                    <span className={styles.duringPlanTimeMuted}>ללא שעה</span>
+                    <span className={styles.duringPlanTimeMuted}>{tCommon("noTime")}</span>
                   ) : (
                     <time className={styles.duringPlanTime}>{item.displayTime}</time>
                   )}
@@ -87,7 +91,9 @@ export function TodaysPlanSection({ section }: TodaysPlanSectionProps) {
           </ol>
 
           {section.overflowCount > 0 ? (
-            <p className={styles.duringPlanOverflow}>ועוד {section.overflowCount}</p>
+            <p className={styles.duringPlanOverflow}>
+              {tCommon("andMore", { count: section.overflowCount })}
+            </p>
           ) : null}
         </>
       )}

@@ -2,6 +2,7 @@
 
 import { useActionState, useCallback, useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
@@ -23,6 +24,7 @@ import {
   type TripReminderActionState,
 } from "@/features/trips/reminders/actions";
 import type { TripReminderViewModel } from "@/features/trips/reminders/types";
+import { translateReminderError } from "@/features/trips/reminders/translate-reminder-error";
 import reminderStyles from "@/features/trips/reminders/TripReminderSettings.module.scss";
 import type { DayDocumentLinkOptions } from "./build-day-document-link-options";
 import { ACTIVITY_TYPES } from "./activity-types";
@@ -78,10 +80,13 @@ function ReminderCreateForm({
   onSuccess: () => void;
   onDirtyChange: (dirty: boolean) => void;
 }) {
+  const t = useTranslations("Itinerary");
+  const tReminders = useTranslations("TripReminders");
   const [createState, createAction] = useActionState(
     createTripReminderAction,
     reminderInitialState,
   );
+  const createError = translateReminderError(tReminders, createState.errorCode);
 
   useEffect(() => {
     if (createState.ok) {
@@ -98,19 +103,19 @@ function ReminderCreateForm({
     >
       <input type="hidden" name="tripId" value={tripId} />
       <input type="hidden" name="date" value={date} />
-      <Field label="שעה" htmlFor="day-action-reminder-time">
+      <Field label={t("dayActionReminderTime")} htmlFor="day-action-reminder-time">
         <Input id="day-action-reminder-time" name="time" type="time" required />
       </Field>
-      <Field label="מה חשוב לזכור?" htmlFor="day-action-reminder-text">
+      <Field label={t("dayActionReminderPrompt")} htmlFor="day-action-reminder-text">
         <Textarea id="day-action-reminder-text" name="text" rows={3} required />
       </Field>
-      {createState.error ? (
+      {createError ? (
         <p className={reminderStyles.error} role="alert">
-          {createState.error}
+          {createError}
         </p>
       ) : null}
       <div className={overlayStyles.plannerFooter}>
-        <AuthSubmitButton>הוספת תזכורת</AuthSubmitButton>
+        <AuthSubmitButton>{t("dayActionReminderAdd")}</AuthSubmitButton>
       </div>
     </form>
   );
@@ -133,10 +138,14 @@ function ReminderEditForm({
   onSuccess: () => void;
   onDirtyChange: (dirty: boolean) => void;
 }) {
+  const t = useTranslations("Itinerary");
+  const tReminders = useTranslations("TripReminders");
+  const tCommon = useTranslations("Common");
   const [updateState, updateAction] = useActionState(
     updateTripReminderAction,
     reminderInitialState,
   );
+  const updateError = translateReminderError(tReminders, updateState.errorCode);
 
   useEffect(() => {
     if (updateState.ok) {
@@ -154,7 +163,7 @@ function ReminderEditForm({
       <input type="hidden" name="tripId" value={tripId} />
       <input type="hidden" name="reminderId" value={reminder.id} />
       <div className={reminderStyles.formRow}>
-        <Field label="תאריך" htmlFor={`day-action-edit-date-${reminder.id}`}>
+        <Field label={tCommon("date")} htmlFor={`day-action-edit-date-${reminder.id}`}>
           <Input
             id={`day-action-edit-date-${reminder.id}`}
             name="date"
@@ -165,7 +174,7 @@ function ReminderEditForm({
             required
           />
         </Field>
-        <Field label="שעה" htmlFor={`day-action-edit-time-${reminder.id}`}>
+        <Field label={tCommon("time")} htmlFor={`day-action-edit-time-${reminder.id}`}>
           <Input
             id={`day-action-edit-time-${reminder.id}`}
             name="time"
@@ -175,7 +184,7 @@ function ReminderEditForm({
           />
         </Field>
       </div>
-      <Field label="תוכן התזכורת" htmlFor={`day-action-edit-text-${reminder.id}`}>
+      <Field label={t("dayActionReminderContent")} htmlFor={`day-action-edit-text-${reminder.id}`}>
         <Textarea
           id={`day-action-edit-text-${reminder.id}`}
           name="text"
@@ -184,15 +193,15 @@ function ReminderEditForm({
           required
         />
       </Field>
-      {updateState.error ? (
+      {updateError ? (
         <p className={reminderStyles.error} role="alert">
-          {updateState.error}
+          {updateError}
         </p>
       ) : null}
       <div className={reminderStyles.rowActions}>
-        <AuthSubmitButton>שמירה</AuthSubmitButton>
+        <AuthSubmitButton>{tCommon("save")}</AuthSubmitButton>
         <Button type="button" variant="ghost" size="compact" onClick={onCancel}>
-          ביטול
+          {tCommon("cancel")}
         </Button>
       </div>
     </form>
@@ -216,6 +225,9 @@ export function DayActionSurface({
   financeBaseCurrency = "ILS",
   currencies = [],
 }: DayActionSurfaceProps) {
+  const t = useTranslations("Itinerary");
+  const tActivity = useTranslations("Activity");
+  const tCommon = useTranslations("Common");
   const router = useRouter();
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
@@ -226,21 +238,21 @@ export function DayActionSurface({
   const isFormState = state.kind !== "closed" && state.kind !== "menu";
   const showBack = canDayActionGoBack(state);
   const dayContextLabel = shouldShowDayContext(state)
-    ? formatActivityFormDayContext(startDate, endDate, date)
+    ? formatActivityFormDayContext(startDate, endDate, date, tCommon)
     : state.kind === "menu"
-      ? formatActivityFormDayContext(startDate, endDate, date)
+      ? formatActivityFormDayContext(startDate, endDate, date, tCommon)
       : null;
 
   const requestClose = useCallback(() => {
-    if (!confirmDayActionDiscard(dirty)) {
+    if (!confirmDayActionDiscard(dirty, tActivity)) {
       return;
     }
     setDirty(false);
     onClose();
-  }, [dirty, onClose]);
+  }, [dirty, onClose, tActivity]);
 
   const requestBack = useCallback(() => {
-    if (!confirmDayActionDiscard(dirty)) {
+    if (!confirmDayActionDiscard(dirty, tActivity)) {
       return;
     }
     setDirty(false);
@@ -248,7 +260,7 @@ export function DayActionSurface({
     if (target) {
       onStateChange(target);
     }
-  }, [dirty, onStateChange, state]);
+  }, [dirty, onStateChange, state, tActivity]);
 
   const handleMutationSuccess = useCallback(() => {
     setDirty(false);
@@ -323,7 +335,7 @@ export function DayActionSurface({
     return null;
   }
 
-  const title = getDayActionSurfaceTitle(state);
+  const title = getDayActionSurfaceTitle(state, t);
   const activity =
     state.kind === "activity-edit" || state.kind === "activity-move"
       ? activities.find((item) => item.id === state.activityId)
@@ -342,7 +354,7 @@ export function DayActionSurface({
       <button
         type="button"
         className={styles.sheetBackdrop}
-        aria-label="סגירה"
+        aria-label={t("dayActionCloseAria")}
         onClick={requestClose}
       />
       <div
@@ -360,7 +372,7 @@ export function DayActionSurface({
             <button
               type="button"
               className={styles.sheetBackButton}
-              aria-label="חזרה"
+              aria-label={t("dayActionBackAria")}
               onClick={requestBack}
             >
               ←
@@ -381,7 +393,7 @@ export function DayActionSurface({
           <button
             type="button"
             className={styles.sheetCloseButton}
-            aria-label="סגירה"
+            aria-label={t("dayActionCloseAria")}
             onClick={requestClose}
           >
             ✕
@@ -494,7 +506,7 @@ export function DayActionSurface({
               endDate={endDate}
               idPrefix="day-add-accommodation"
               action={createAccommodationAction}
-              submitLabel="הוספת מקום לינה"
+              submitLabel={t("dayActionAddAccommodation")}
               defaultCheckInDate={date}
               overlayNavigation
               plannerPresentation
@@ -516,7 +528,7 @@ export function DayActionSurface({
                 accommodationOptions={documentLinkOptions.accommodationOptions}
                 transportOptions={documentLinkOptions.transportOptions}
                 action={createTravelDocumentAction}
-                submitLabel="הוספת מסמך"
+                submitLabel={t("dayActionAddDocument")}
                 includeFile
                 initialLinkType={documentLinkOptions.initialLinkType}
                 initialActivityId={documentLinkOptions.initialActivityId}

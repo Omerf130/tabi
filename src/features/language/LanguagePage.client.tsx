@@ -1,8 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { CategoryGrid } from "./CategoryGrid";
-import { PHRASEBOOK_MESSAGES } from "./constants";
 import { PhraseListRow } from "./PhraseListRow";
 import { normalizeSearchText } from "./search-phrases";
 import type { LanguagePageViewModel } from "./types";
@@ -21,6 +21,7 @@ export function LanguagePageClient({
   initialCategory = null,
   showFavorites = false,
 }: LanguagePageClientProps) {
+  const t = useTranslations("Language.errors");
   const [query, setQuery] = useState("");
 
   const displayedPhrases = useMemo(() => {
@@ -45,14 +46,14 @@ export function LanguagePageClient({
     <div className={styles.page}>
       <div className={styles.searchWrap}>
         <label htmlFor="phrase-search" className={styles.searchLabel}>
-          {PHRASEBOOK_MESSAGES.searchPlaceholder}
+          {t("searchPlaceholder")}
         </label>
         <input
           id="phrase-search"
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder={PHRASEBOOK_MESSAGES.searchPlaceholder}
+          placeholder={t("searchPlaceholder")}
           className={styles.searchInput}
           autoComplete="off"
         />
@@ -67,7 +68,7 @@ export function LanguagePageClient({
 
       {displayedPhrases.length === 0 ? (
         <p className={styles.emptyState}>
-          {showFavorites ? PHRASEBOOK_MESSAGES.noFavorites : PHRASEBOOK_MESSAGES.noResults}
+          {showFavorites ? t("noFavorites") : t("noResults")}
         </p>
       ) : (
         <ul className={styles.phraseList}>

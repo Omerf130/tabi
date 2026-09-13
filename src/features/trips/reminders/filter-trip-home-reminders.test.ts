@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { createHebrewHomeTranslations } from "@/features/i18n/test-translators";
 import type { TripReminderViewModel } from "./types";
 import {
   filterRemindersForTab,
@@ -72,8 +73,9 @@ describe("groupRemindersForTab", () => {
 
 describe("getReminderManagerEmptyMessage", () => {
   it("returns tab-specific empty copy", () => {
-    expect(getReminderManagerEmptyMessage("today")).toBe("אין תזכורות להיום");
-    expect(getReminderManagerEmptyMessage("completed")).toBe(
+    const tHome = createHebrewHomeTranslations().tHome;
+    expect(getReminderManagerEmptyMessage("today", tHome)).toBe("אין תזכורות להיום");
+    expect(getReminderManagerEmptyMessage("completed", tHome)).toBe(
       "עדיין אין תזכורות שהושלמו",
     );
   });

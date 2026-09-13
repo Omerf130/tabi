@@ -1,21 +1,26 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { IconBack, IconCurrency } from "@/components/ui/icons";
+import { formatAppNumber } from "@/features/i18n/formatting";
+import { useLocale } from "next-intl";
+import { resolveAppLocale } from "@/features/i18n/locale";
 import { formatCurrencyAmount } from "@/features/currency/convert";
 import { FinanceCategoryDonut } from "./FinanceCategoryDonut";
 import { FinanceExpenseList } from "./FinanceExpenseList";
 import { FinanceExpenseSheet } from "./FinanceExpenseSheet.client";
 import { FinanceSettingsSheet } from "./FinanceSettingsSheet.client";
-import { FINANCE_MESSAGES } from "./constants";
 import type { ExpenseRowViewModel, FinancePageViewModel } from "./types";
 import styles from "./FinancePage.module.scss";
 
 type FinanceView = "home" | "all";
 
 export function FinancePageContent(model: FinancePageViewModel) {
+  const t = useTranslations("Finance");
+  const locale = resolveAppLocale(useLocale());
   const [view, setView] = useState<FinanceView>("home");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [expenseSheet, setExpenseSheet] = useState<"create" | ExpenseRowViewModel | null>(
@@ -24,9 +29,7 @@ export function FinancePageContent(model: FinancePageViewModel) {
 
   const { summary, settings, hero, pageState } = model;
   const budgetCtaLabel =
-    settings.budgetAmount === null
-      ? FINANCE_MESSAGES.setBudgetCta
-      : FINANCE_MESSAGES.editBudgetCta;
+    settings.budgetAmount === null ? t("setBudgetCta") : t("editBudgetCta");
 
   const progressPercent =
     summary.percentConsumed !== null ? Math.max(0, summary.percentConsumed) : null;
@@ -38,7 +41,7 @@ export function FinancePageContent(model: FinancePageViewModel) {
       <section className={styles.hero} aria-label={hero.title}>
         <Link href={`/app/trips/${model.tripId}/more`} className={styles.heroBack}>
           <IconBack className={styles.heroBackIcon} />
-          <span className={styles.srOnly}>חזרה לעוד</span>
+          <span className={styles.srOnly}>{t("backToMore")}</span>
         </Link>
 
         <div className={styles.heroMedia} aria-hidden>
@@ -58,12 +61,12 @@ export function FinancePageContent(model: FinancePageViewModel) {
 
       <div className={styles.surface}>
         <div className={styles.mainGrid}>
-          <section className={styles.budgetCard} aria-label="סיכום תקציב">
+          <section className={styles.budgetCard} aria-label={t("budgetSummaryAriaLabel")}>
             <header className={styles.budgetCardHeader}>
               <span className={styles.budgetCardIconWrap} aria-hidden>
                 <IconCurrency className={styles.budgetCardIcon} />
               </span>
-              <h2 className={styles.budgetCardTitle}>{FINANCE_MESSAGES.tripBudgetTitle}</h2>
+              <h2 className={styles.budgetCardTitle}>{t("tripBudgetTitle")}</h2>
               {model.isOwner ? (
                 <button
                   type="button"
@@ -94,7 +97,7 @@ export function FinancePageContent(model: FinancePageViewModel) {
                     <span className={styles.budgetStatValue}>
                       {formatCurrencyAmount(summary.totalExpenses, summary.baseCurrency)}
                     </span>
-                    <span className={styles.budgetStatLabel}>{FINANCE_MESSAGES.spent}</span>
+                    <span className={styles.budgetStatLabel}>{t("spent")}</span>
                   </div>
                   <div className={styles.budgetStat}>
                     <span
@@ -104,20 +107,20 @@ export function FinancePageContent(model: FinancePageViewModel) {
                       {formatCurrencyAmount(summary.remainingBudget ?? 0, summary.baseCurrency)}
                     </span>
                     <span className={styles.budgetStatLabel}>
-                      {model.isOverBudget ? "חריגה" : FINANCE_MESSAGES.remaining}
+                      {model.isOverBudget ? t("overBudgetShort") : t("remaining")}
                     </span>
                   </div>
                   <div className={styles.budgetStat}>
                     <span className={styles.budgetStatValue}>
                       {summary.percentConsumed !== null
-                        ? `${Math.round(summary.percentConsumed)}%`
+                        ? `${formatAppNumber(Math.round(summary.percentConsumed), locale)}%`
                         : "—"}
                     </span>
-                    <span className={styles.budgetStatLabel}>{FINANCE_MESSAGES.percentConsumed}</span>
+                    <span className={styles.budgetStatLabel}>{t("percentConsumed")}</span>
                   </div>
                 </div>
                 {model.isOverBudget ? (
-                  <p className={styles.overBudgetNotice}>{FINANCE_MESSAGES.overBudget}</p>
+                  <p className={styles.overBudgetNotice}>{t("overBudget")}</p>
                 ) : null}
               </>
             ) : (
@@ -127,19 +130,19 @@ export function FinancePageContent(model: FinancePageViewModel) {
                     {formatCurrencyAmount(summary.totalExpenses, summary.baseCurrency)}
                   </p>
                 ) : (
-                  <p className={styles.budgetPrimaryMuted}>{FINANCE_MESSAGES.noExpensesYet}</p>
+                  <p className={styles.budgetPrimaryMuted}>{t("noExpensesYet")}</p>
                 )}
-                <p className={styles.budgetSecondary}>{FINANCE_MESSAGES.totalExpenses}</p>
+                <p className={styles.budgetSecondary}>{t("totalExpenses")}</p>
                 {model.isOwner ? (
                   <button
                     type="button"
                     className={styles.budgetInlineAction}
                     onClick={() => setSettingsOpen(true)}
                   >
-                    {FINANCE_MESSAGES.setBudgetCta}
+                    {t("setBudgetCta")}
                   </button>
                 ) : (
-                  <p className={styles.memberNotice}>{FINANCE_MESSAGES.memberNoBudget}</p>
+                  <p className={styles.memberNotice}>{t("memberNoBudget")}</p>
                 )}
               </>
             )}
@@ -148,7 +151,7 @@ export function FinancePageContent(model: FinancePageViewModel) {
           <section className={styles.categoriesCard} aria-labelledby="finance-categories-title">
             <div className={styles.sectionHeader}>
               <h2 id="finance-categories-title" className={styles.sectionTitle}>
-                {FINANCE_MESSAGES.categoriesSectionTitle}
+                {t("categoriesSectionTitle")}
               </h2>
             </div>
 
@@ -159,7 +162,7 @@ export function FinancePageContent(model: FinancePageViewModel) {
                 baseCurrency={summary.baseCurrency}
               />
             ) : (
-              <p className={styles.emptyCopy}>{FINANCE_MESSAGES.noCategoriesYet}</p>
+              <p className={styles.emptyCopy}>{t("noCategoriesYet")}</p>
             )}
           </section>
         </div>
@@ -167,9 +170,7 @@ export function FinancePageContent(model: FinancePageViewModel) {
         <section className={styles.expensesSection} aria-labelledby="finance-expenses-title">
           <div className={styles.sectionHeader}>
             <h2 id="finance-expenses-title" className={styles.sectionTitle}>
-              {view === "all"
-                ? FINANCE_MESSAGES.allSectionTitle
-                : FINANCE_MESSAGES.recentSectionTitle}
+              {view === "all" ? t("allSectionTitle") : t("recentSectionTitle")}
             </h2>
             {model.expenseRows.length > model.recentExpenseRows.length ? (
               <button
@@ -177,7 +178,7 @@ export function FinancePageContent(model: FinancePageViewModel) {
                 className={styles.sectionAction}
                 onClick={() => setView(view === "all" ? "home" : "all")}
               >
-                {view === "all" ? FINANCE_MESSAGES.showRecent : FINANCE_MESSAGES.showAll}
+                {view === "all" ? t("showRecent") : t("showAll")}
               </button>
             ) : null}
           </div>
@@ -194,14 +195,14 @@ export function FinancePageContent(model: FinancePageViewModel) {
               }}
             />
           ) : (
-            <p className={styles.emptyCopy}>{FINANCE_MESSAGES.noExpensesYet}</p>
+            <p className={styles.emptyCopy}>{t("noExpensesYet")}</p>
           )}
         </section>
 
         {model.isOwner ? (
           <div className={styles.addExpenseBar}>
             <Button type="button" className={styles.addExpenseButton} onClick={() => setExpenseSheet("create")}>
-              + {FINANCE_MESSAGES.addExpense}
+              + {t("addExpense")}
             </Button>
           </div>
         ) : null}

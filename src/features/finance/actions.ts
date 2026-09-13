@@ -20,7 +20,7 @@ import {
   getOrCreateTripFinanceSettings,
   updateTripFinanceSettings,
 } from "./finance-settings-domain";
-import { FINANCE_MESSAGES } from "./constants";
+import { FINANCE_ERROR_CODES, type FinanceErrorCode } from "./constants";
 import { revalidateFinancePaths } from "./revalidation";
 import {
   createManualExpenseSchema,
@@ -30,9 +30,10 @@ import {
   updateManualExpenseSchema,
   updateTripFinanceSettingsSchema,
 } from "./schemas";
+
 export type FinanceSettingsActionState = {
   ok?: boolean;
-  error?: string;
+  errorCode?: FinanceErrorCode;
   fieldErrors?: {
     budgetAmount?: string;
     baseCurrency?: string;
@@ -54,7 +55,7 @@ export async function updateTripFinanceSettingsAction(
 
   if (!parsed.success) {
     return {
-      error: FINANCE_MESSAGES.validationFailed,
+      errorCode: FINANCE_ERROR_CODES.validationFailed,
       fieldErrors: Object.fromEntries(
         parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
       ),
@@ -76,18 +77,18 @@ export async function updateTripFinanceSettingsAction(
     return { ok: true };
   } catch (error) {
     if (error instanceof FinanceSettingsValidationError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
     if (error instanceof FinanceSettingsNotFoundError) {
-      return { error: FINANCE_MESSAGES.settingsNotFound };
+      return { errorCode: FINANCE_ERROR_CODES.settingsNotFound };
     }
-    return { error: FINANCE_MESSAGES.generic };
+    return { errorCode: FINANCE_ERROR_CODES.generic };
   }
 }
 
 export type ManualExpenseActionState = {
   ok?: boolean;
-  error?: string;
+  errorCode?: FinanceErrorCode;
   expenseId?: string;
   fieldErrors?: Record<string, string>;
 };
@@ -108,7 +109,7 @@ export async function createManualExpenseAction(
 
   if (!parsed.success) {
     return {
-      error: FINANCE_MESSAGES.validationFailed,
+      errorCode: FINANCE_ERROR_CODES.validationFailed,
       fieldErrors: Object.fromEntries(
         parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
       ),
@@ -122,12 +123,12 @@ export async function createManualExpenseAction(
     return { ok: true, expenseId };
   } catch (error) {
     if (error instanceof FinanceExpenseValidationError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
     if (error instanceof FrankfurterRequestError) {
-      return { error: FINANCE_MESSAGES.conversionPreviewFailed };
+      return { errorCode: FINANCE_ERROR_CODES.conversionPreviewFailed };
     }
-    return { error: FINANCE_MESSAGES.generic };
+    return { errorCode: FINANCE_ERROR_CODES.generic };
   }
 }
 
@@ -148,7 +149,7 @@ export async function updateManualExpenseAction(
 
   if (!parsed.success) {
     return {
-      error: FINANCE_MESSAGES.validationFailed,
+      errorCode: FINANCE_ERROR_CODES.validationFailed,
       fieldErrors: Object.fromEntries(
         parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
       ),
@@ -165,15 +166,20 @@ export async function updateManualExpenseAction(
       error instanceof FinanceExpenseValidationError ||
       error instanceof FinanceExpenseForbiddenError
     ) {
-      return { error: error.message };
+      return {
+        errorCode:
+          error instanceof FinanceExpenseValidationError
+            ? error.code
+            : FINANCE_ERROR_CODES.generic,
+      };
     }
     if (error instanceof FinanceExpenseNotFoundError) {
-      return { error: FINANCE_MESSAGES.generic };
+      return { errorCode: FINANCE_ERROR_CODES.generic };
     }
     if (error instanceof FrankfurterRequestError) {
-      return { error: FINANCE_MESSAGES.conversionPreviewFailed };
+      return { errorCode: FINANCE_ERROR_CODES.conversionPreviewFailed };
     }
-    return { error: FINANCE_MESSAGES.generic };
+    return { errorCode: FINANCE_ERROR_CODES.generic };
   }
 }
 
@@ -191,7 +197,7 @@ export async function updateLinkedExpenseAction(
 
   if (!parsed.success) {
     return {
-      error: FINANCE_MESSAGES.validationFailed,
+      errorCode: FINANCE_ERROR_CODES.validationFailed,
       fieldErrors: Object.fromEntries(
         parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
       ),
@@ -208,15 +214,20 @@ export async function updateLinkedExpenseAction(
       error instanceof FinanceExpenseValidationError ||
       error instanceof FinanceExpenseForbiddenError
     ) {
-      return { error: error.message };
+      return {
+        errorCode:
+          error instanceof FinanceExpenseValidationError
+            ? error.code
+            : FINANCE_ERROR_CODES.generic,
+      };
     }
     if (error instanceof FinanceExpenseNotFoundError) {
-      return { error: FINANCE_MESSAGES.generic };
+      return { errorCode: FINANCE_ERROR_CODES.generic };
     }
     if (error instanceof FrankfurterRequestError) {
-      return { error: FINANCE_MESSAGES.conversionPreviewFailed };
+      return { errorCode: FINANCE_ERROR_CODES.conversionPreviewFailed };
     }
-    return { error: FINANCE_MESSAGES.generic };
+    return { errorCode: FINANCE_ERROR_CODES.generic };
   }
 }
 
@@ -230,7 +241,7 @@ export async function removeLinkedExpenseCostAction(
   });
 
   if (!parsed.success) {
-    return { error: FINANCE_MESSAGES.validationFailed };
+    return { errorCode: FINANCE_ERROR_CODES.validationFailed };
   }
 
   try {
@@ -243,9 +254,9 @@ export async function removeLinkedExpenseCostAction(
       error instanceof FinanceExpenseNotFoundError ||
       error instanceof FinanceExpenseForbiddenError
     ) {
-      return { error: FINANCE_MESSAGES.generic };
+      return { errorCode: FINANCE_ERROR_CODES.generic };
     }
-    return { error: FINANCE_MESSAGES.generic };
+    return { errorCode: FINANCE_ERROR_CODES.generic };
   }
 }
 
@@ -259,7 +270,7 @@ export async function deleteManualExpenseAction(
   });
 
   if (!parsed.success) {
-    return { error: FINANCE_MESSAGES.validationFailed };
+    return { errorCode: FINANCE_ERROR_CODES.validationFailed };
   }
 
   try {
@@ -272,8 +283,8 @@ export async function deleteManualExpenseAction(
       error instanceof FinanceExpenseNotFoundError ||
       error instanceof FinanceExpenseForbiddenError
     ) {
-      return { error: FINANCE_MESSAGES.generic };
+      return { errorCode: FINANCE_ERROR_CODES.generic };
     }
-    return { error: FINANCE_MESSAGES.generic };
+    return { errorCode: FINANCE_ERROR_CODES.generic };
   }
 }

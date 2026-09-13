@@ -1,7 +1,9 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import {
   CREATE_TRIP_WIZARD_STEPS,
   getWizardStepIndex,
-  WIZARD_STEP_LABELS,
   type CreateTripWizardStep,
 } from "./wizard-state";
 import styles from "./CreateTripWizard.module.scss";
@@ -11,10 +13,11 @@ type WizardStepperProps = {
 };
 
 export function WizardStepper({ currentStep }: WizardStepperProps) {
+  const t = useTranslations("CreateTrip.steps");
   const currentIndex = getWizardStepIndex(currentStep);
 
   return (
-    <nav className={styles.stepper} aria-label="Create trip steps">
+    <nav className={styles.stepper} aria-label={t("ariaLabel")}>
       <ol className={styles.stepperList}>
         {CREATE_TRIP_WIZARD_STEPS.map((step, index) => {
           const isComplete = index < currentIndex;
@@ -43,7 +46,7 @@ export function WizardStepper({ currentStep }: WizardStepperProps) {
                 >
                   {markerContent}
                 </span>
-                <span className={styles.stepperLabel}>{WIZARD_STEP_LABELS[step]}</span>
+                <span className={styles.stepperLabel}>{t(step)}</span>
               </div>
             </li>
           );

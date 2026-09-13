@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
+import { createHebrewTravelHubTranslators } from "@/features/i18n/test-translators";
 import type { TripListSummaryViewModel } from "@/features/lists/types";
 import { buildTravelHubViewModel } from "./build-travel-hub-view-model";
+
+const travelHubTranslators = createHebrewTravelHubTranslators();
 
 const tripId = "507f1f77bcf86cd799439011";
 
@@ -75,6 +78,7 @@ describe("buildTravelHubViewModel", () => {
       documentCount: 0,
       currentTripDate: "2026-10-01",
       finance: emptyFinance,
+      ...travelHubTranslators,
     });
 
     expect(model.hero.title).toBe("כלי הטיול");
@@ -115,6 +119,7 @@ describe("buildTravelHubViewModel", () => {
         authorAttributions: [],
       },
       finance: emptyFinance,
+      ...travelHubTranslators,
     });
 
     expect(model.accommodation.detailLine).toBe("הבא: Hotel Gracery Shinjuku");
@@ -132,6 +137,7 @@ describe("buildTravelHubViewModel", () => {
       documentCount: 5,
       currentTripDate: "2026-10-01",
       finance: emptyFinance,
+      ...travelHubTranslators,
     });
 
     expect(model.transport.countLabel).toBe("2 קטעי תחבורה");

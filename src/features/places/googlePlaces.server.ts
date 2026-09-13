@@ -9,6 +9,7 @@ import {
   PLACES_DISPLAY_LANGUAGE_CODE,
   PLACES_GEOGRAPHIC_PRIMARY_TYPES,
   PLACES_LODGING_PRIMARY_TYPES,
+  PLACES_ERROR_CODES,
   PLACES_MESSAGES,
   PLACES_SEARCH_LANGUAGE_CODE,
 } from "./constants";
@@ -132,7 +133,7 @@ async function fetchPlaceDetails(
   });
 
   if (!response.ok) {
-    throw new GooglePlacesRequestError(PLACES_MESSAGES.resolveFailed);
+    throw new GooglePlacesRequestError(PLACES_ERROR_CODES.resolveFailed);
   }
 
   return (await response.json()) as GooglePlaceDetailsResponse;
@@ -176,7 +177,7 @@ export async function autocompletePlaces(input: {
   });
 
   if (!response.ok) {
-    throw new GooglePlacesRequestError(PLACES_MESSAGES.autocompleteFailed);
+    throw new GooglePlacesRequestError(PLACES_ERROR_CODES.autocompleteFailed);
   }
 
   const payload = (await response.json()) as GoogleAutocompleteResponse;
@@ -238,7 +239,7 @@ export async function autocompleteGeographicPlaces(input: {
   });
 
   if (!response.ok) {
-    throw new GooglePlacesRequestError(PLACES_MESSAGES.autocompleteFailed);
+    throw new GooglePlacesRequestError(PLACES_ERROR_CODES.autocompleteFailed);
   }
 
   const payload = (await response.json()) as GoogleAutocompleteResponse;
@@ -330,7 +331,7 @@ export async function resolveActivityPlaceSnapshot(input: {
   const latitude = details.location?.latitude;
   const longitude = details.location?.longitude;
   if (typeof latitude !== "number" || typeof longitude !== "number") {
-    throw new GooglePlacesRequestError(PLACES_MESSAGES.resolveFailed);
+    throw new GooglePlacesRequestError(PLACES_ERROR_CODES.resolveFailed);
   }
 
   const formattedAddress = details.formattedAddress?.trim();
@@ -357,6 +358,7 @@ export async function getPlaceDisplaySnapshot(
   options: {
     fallbackPrimaryText?: string;
     fallbackSecondaryText?: string;
+    fallbackName?: string;
     languageCode?: string;
   } = {},
 ): Promise<PlaceDisplaySnapshot | null> {
@@ -371,7 +373,8 @@ export async function getPlaceDisplaySnapshot(
     const name =
       details.displayName?.text?.trim() ||
       options.fallbackPrimaryText?.trim() ||
-      "מקום לינה";
+      options.fallbackName?.trim() ||
+      "Lodging";
     const formattedAddress = details.formattedAddress?.trim();
     const city =
       extractCityFromAddressComponents(details.addressComponents) ||
@@ -402,12 +405,15 @@ export async function getPlaceDisplaySnapshot(
 
 export async function getPlaceDisplayForTraveler(
   placeId: string,
+  fallbackName = "Lodging",
 ): Promise<PlaceDisplaySnapshot | null> {
   const english = await getPlaceDisplaySnapshot(placeId, {
     languageCode: PLACES_SEARCH_LANGUAGE_CODE,
+    fallbackName,
   });
   const japanese = await getPlaceDisplaySnapshot(placeId, {
     languageCode: PLACES_DISPLAY_LANGUAGE_CODE,
+    fallbackName,
   });
 
   if (!english && !japanese) {
@@ -418,7 +424,7 @@ export async function getPlaceDisplayForTraveler(
 
   return {
     placeId,
-    name: english?.name ?? japanese?.name ?? "מקום לינה",
+    name: english?.name ?? japanese?.name ?? fallbackName,
     nameJapanese: japanese?.name,
     ...(city ? { city } : {}),
     addressEnglish: english?.addressEnglish,

@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  HOME_REMINDER_EMPTY_MESSAGE,
   selectTodayHomeReminders,
   type TripReminderRecord,
 } from "./select-today-home-reminders";
@@ -98,7 +97,4 @@ describe("selectTodayHomeReminders", () => {
     expect(result).toEqual([]);
   });
 
-  it("exports the Home empty message", () => {
-    expect(HOME_REMINDER_EMPTY_MESSAGE).toBe("אין תזכורות חדשות");
-  });
 });

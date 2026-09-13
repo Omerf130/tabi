@@ -1,8 +1,9 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { togglePhraseFavoriteAction, type PhraseFavoriteActionState } from "./actions";
-import { DEFAULT_PHRASEBOOK_PACK_ID, PHRASEBOOK_MESSAGES } from "./constants";
+import { PHRASEBOOK_ERROR_CODES, DEFAULT_PHRASEBOOK_PACK_ID } from "./constants";
 import styles from "./LanguagePage.module.scss";
 
 const initialState: PhraseFavoriteActionState = {};
@@ -20,6 +21,7 @@ export function FavoriteToggle({
   initialIsFavorite,
   compact = false,
 }: FavoriteToggleProps) {
+  const t = useTranslations("Language.errors");
   const [state, formAction] = useActionState(togglePhraseFavoriteAction, initialState);
 
   const isFavorite =
@@ -27,9 +29,13 @@ export function FavoriteToggle({
       ? state.isFavorite
       : initialIsFavorite;
 
-  const label = isFavorite
-    ? PHRASEBOOK_MESSAGES.favoriteRemove
-    : PHRASEBOOK_MESSAGES.favoriteAdd;
+  const label = isFavorite ? t("favoriteRemove") : t("favoriteAdd");
+  const errorMessage =
+    state.errorCode === PHRASEBOOK_ERROR_CODES.favoriteFailed
+      ? t("favoriteFailed")
+      : state.errorCode
+        ? t("favoriteFailed")
+        : undefined;
 
   return (
     <form action={formAction} className={styles.favoriteForm}>
@@ -44,9 +50,9 @@ export function FavoriteToggle({
       >
         <span aria-hidden>{isFavorite ? "★" : "☆"}</span>
       </button>
-      {state.error ? (
+      {errorMessage ? (
         <span className={styles.favoriteError} role="alert">
-          {state.error}
+          {errorMessage}
         </span>
       ) : null}
     </form>

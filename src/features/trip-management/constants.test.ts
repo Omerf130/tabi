@@ -1,15 +1,20 @@
 import { describe, expect, it } from "vitest";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import {
   buildTripManagementHref,
   DEFAULT_TRIP_MANAGEMENT_SECTION,
-  getVisibleManagementSections,
   isOwnerOnlyManagementSection,
   LEGACY_SETTINGS_HASH_MAP,
   parseTripManagementSection,
-  TRIP_MANAGEMENT_SECTIONS,
+  TRIP_MANAGEMENT_SECTION_IDS,
 } from "./constants";
+import {
+  createTripManagementSections,
+  getVisibleManagementSections,
+} from "./trip-management-labels";
 
 const tripId = "507f1f77bcf86cd799439011";
+const t = createAppTranslator("TripManagement", "he");
 
 describe("trip-management constants", () => {
   it("builds manage section hrefs", () => {
@@ -38,15 +43,18 @@ describe("trip-management constants", () => {
   });
 
   it("hides owner-only sections from members", () => {
-    const memberSections = getVisibleManagementSections(false).map((s) => s.id);
+    const memberSections = getVisibleManagementSections(false, t).map((s) => s.id);
     expect(memberSections).toEqual(["details", "transport", "reminders", "members"]);
     expect(memberSections).not.toContain("accommodations");
     expect(memberSections).not.toContain("documents");
   });
 
   it("shows all sections to owners", () => {
-    expect(getVisibleManagementSections(true)).toHaveLength(
-      TRIP_MANAGEMENT_SECTIONS.length,
+    expect(getVisibleManagementSections(true, t)).toHaveLength(
+      createTripManagementSections(t).length,
+    );
+    expect(getVisibleManagementSections(true, t)).toHaveLength(
+      TRIP_MANAGEMENT_SECTION_IDS.length,
     );
   });
 

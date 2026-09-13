@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 import { TabiBrandMark } from "@/features/welcome/TabiBrandMark";
 import { MY_TRIPS_HERO_VISUAL } from "./constants";
 import { MyTripsAccountAffordance } from "./MyTripsAccountAffordance";
@@ -8,7 +9,9 @@ type MyTripsHeroProps = {
   userName: string;
 };
 
-export function MyTripsHero({ userName }: MyTripsHeroProps) {
+export async function MyTripsHero({ userName }: MyTripsHeroProps) {
+  const t = await getTranslations("MyTrips");
+
   return (
     <header className={styles.hero}>
       <div className={styles.heroMedia} aria-hidden="true">
@@ -26,14 +29,14 @@ export function MyTripsHero({ userName }: MyTripsHeroProps) {
       <div className={styles.heroTopBar}>
         <div className={styles.heroBrand}>
           <TabiBrandMark className={styles.heroMark} />
-          <span className={styles.heroBrandName}>Tabi</span>
+          <span className={styles.heroBrandName}>{t("brandName")}</span>
         </div>
         <MyTripsAccountAffordance userName={userName} variant="hero" />
       </div>
 
       <div className={styles.heroCopy}>
-        <h1 className={styles.heroTitle}>My Trips</h1>
-        <p className={styles.heroSubtitle}>Your adventures, all in one place.</p>
+        <h1 className={styles.heroTitle}>{t("title")}</h1>
+        <p className={styles.heroSubtitle}>{t("subtitle")}</p>
       </div>
     </header>
   );

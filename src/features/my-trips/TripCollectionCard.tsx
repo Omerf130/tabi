@@ -1,8 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
+import { useLocale, useTranslations } from "next-intl";
+import { formatAppDate, formatAppNumber } from "@/features/i18n/formatting";
+import { resolveAppLocale } from "@/features/i18n/locale";
+import { parseCalendarDateParts } from "@/features/trips/calendar-date";
 import { getTripDayCount } from "@/features/trips/trip-days";
-import { MY_TRIPS_PHASE_LABELS } from "./constants";
 import type { MyTripsCardItem } from "./types";
 import styles from "./MyTripsScreen.module.scss";
 
@@ -10,18 +14,38 @@ type TripCollectionCardProps = {
   trip: MyTripsCardItem;
 };
 
-function formatDurationLabel(startDate: string, endDate: string): string {
-  const dayCount = getTripDayCount(startDate, endDate);
-  return dayCount === 1 ? "1 day" : `${dayCount} days`;
+function calendarDateToUtcDate(value: string): Date {
+  const parts = parseCalendarDateParts(value);
+  if (!parts) {
+    return new Date(value);
+  }
+  return new Date(Date.UTC(parts.year, parts.month - 1, parts.day));
+}
+
+function formatCalendarDate(value: string, locale: ReturnType<typeof resolveAppLocale>): string {
+  return formatAppDate(calendarDateToUtcDate(value), locale, {
+    timeZone: "UTC",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
 
 export function TripCollectionCard({ trip }: TripCollectionCardProps) {
-  const dateRange = formatCalendarDateRangeDisplay(
-    trip.startDate,
-    trip.endDate,
-    "en-US",
-  );
-  const durationLabel = formatDurationLabel(trip.startDate, trip.endDate);
+  const locale = resolveAppLocale(useLocale());
+  const t = useTranslations("MyTrips");
+  const startFormatted = formatCalendarDate(trip.startDate, locale);
+  const endFormatted = formatCalendarDate(trip.endDate, locale);
+  const dateRange =
+    trip.startDate === trip.endDate
+      ? startFormatted
+      : `${startFormatted} – ${endFormatted}`;
+
+  const dayCount = getTripDayCount(trip.startDate, trip.endDate);
+  const durationLabel =
+    dayCount === 1
+      ? t("duration.oneDay")
+      : t("duration.manyDays", { count: formatAppNumber(dayCount, locale) });
   const accessibleName = `${trip.name}, ${dateRange}, ${durationLabel}`;
 
   return (
@@ -52,7 +76,7 @@ export function TripCollectionCard({ trip }: TripCollectionCardProps) {
             <div className={styles.tripCardActions}>
               {trip.phase === "active" ? (
                 <span className={styles.tripCardActiveBadge}>
-                  {MY_TRIPS_PHASE_LABELS.active}
+                  {t("phases.active")}
                 </span>
               ) : null}
               <span className={styles.tripCardChevron} aria-hidden="true">

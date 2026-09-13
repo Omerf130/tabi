@@ -1,10 +1,16 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { requireUser } from "@/features/auth/session";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import { revalidateItineraryPaths } from "@/features/itinerary/revalidation";
 import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireTripOwner } from "@/features/trips/authorization";
-import { TRAVEL_DOCUMENT_MESSAGES } from "./constants";
+import {
+  TRAVEL_DOCUMENT_ERROR_CODES,
+  type TravelDocumentErrorCode,
+  type TravelDocumentSuccessCode,
+} from "./constants";
 import {
   TravelDocumentNotFoundError,
   TravelDocumentValidationError,
@@ -28,8 +34,8 @@ import { getTravelDocumentForTrip } from "./queries";
 
 export type TravelDocumentActionState = {
   ok?: boolean;
-  error?: string;
-  success?: string;
+  errorCode?: TravelDocumentErrorCode;
+  successCode?: TravelDocumentSuccessCode;
   fieldErrors?: Record<string, string>;
 };
 
@@ -49,19 +55,19 @@ async function revalidateDocumentPaths(
 
 function mapFileValidationError(
   error: "missing" | "tooLarge" | "invalidType",
-): string {
+): TravelDocumentErrorCode {
   if (error === "tooLarge") {
-    return TRAVEL_DOCUMENT_MESSAGES.tooLarge;
+    return TRAVEL_DOCUMENT_ERROR_CODES.tooLarge;
   }
   if (error === "missing") {
-    return TRAVEL_DOCUMENT_MESSAGES.missingFile;
+    return TRAVEL_DOCUMENT_ERROR_CODES.missingFile;
   }
-  return TRAVEL_DOCUMENT_MESSAGES.invalidType;
+  return TRAVEL_DOCUMENT_ERROR_CODES.invalidType;
 }
 
 async function readValidatedFile(file: FormDataEntryValue | null) {
   if (!(file instanceof File)) {
-    return { error: TRAVEL_DOCUMENT_MESSAGES.missingFile } as const;
+    return { errorCode: TRAVEL_DOCUMENT_ERROR_CODES.missingFile } as const;
   }
 
   const bytes = new Uint8Array(await file.arrayBuffer());
@@ -72,7 +78,7 @@ async function readValidatedFile(file: FormDataEntryValue | null) {
   });
 
   if (!validation.ok) {
-    return { error: mapFileValidationError(validation.error) } as const;
+    return { errorCode: mapFileValidationError(validation.error) } as const;
   }
 
   return {
@@ -95,7 +101,7 @@ export async function createTravelDocumentAction(
 
   if (!parsed.success) {
     return {
-      error: TRAVEL_DOCUMENT_MESSAGES.generic,
+      errorCode: TRAVEL_DOCUMENT_ERROR_CODES.generic,
       fieldErrors: Object.fromEntries(
         parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
       ),
@@ -103,13 +109,15 @@ export async function createTravelDocumentAction(
   }
 
   const fileResult = await readValidatedFile(formData.get("file"));
-  if ("error" in fileResult) {
-    return { error: fileResult.error };
+  if ("errorCode" in fileResult) {
+    return { errorCode: fileResult.errorCode };
   }
 
+  const user = await requireUser();
+  const tDocuments = createAppTranslator("Documents", user.locale);
   const title =
     parsed.data.title?.trim() ||
-    deriveTitleFromFilename(fileResult.originalFilename);
+    deriveTitleFromFilename(fileResult.originalFilename, tDocuments("defaultTitle"));
 
   try {
     const trip = await requireTripOwner(parsed.data.tripId);
@@ -135,12 +143,12 @@ export async function createTravelDocumentAction(
       transportId: parsed.data.transportId,
     });
     await revalidateDocumentPaths(trip.id, documentId, itineraryDates);
-    return { ok: true, success: TRAVEL_DOCUMENT_MESSAGES.created };
+    return { ok: true, successCode: "created" };
   } catch (error) {
     if (error instanceof TravelDocumentValidationError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
-    return { error: TRAVEL_DOCUMENT_MESSAGES.generic };
+    return { errorCode: TRAVEL_DOCUMENT_ERROR_CODES.generic };
   }
 }
 
@@ -156,7 +164,7 @@ export async function updateTravelDocumentAction(
 
   if (!parsed.success) {
     return {
-      error: TRAVEL_DOCUMENT_MESSAGES.generic,
+      errorCode: TRAVEL_DOCUMENT_ERROR_CODES.generic,
       fieldErrors: Object.fromEntries(
         parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
       ),
@@ -196,15 +204,15 @@ export async function updateTravelDocumentAction(
       ...previousDates,
       ...nextDates,
     ]);
-    return { ok: true, success: TRAVEL_DOCUMENT_MESSAGES.updated };
+    return { ok: true, successCode: "updated" };
   } catch (error) {
     if (error instanceof TravelDocumentValidationError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
     if (error instanceof TravelDocumentNotFoundError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
-    return { error: TRAVEL_DOCUMENT_MESSAGES.generic };
+    return { errorCode: TRAVEL_DOCUMENT_ERROR_CODES.generic };
   }
 }
 
@@ -218,12 +226,12 @@ export async function replaceTravelDocumentFileAction(
   });
 
   if (!parsed.success) {
-    return { error: TRAVEL_DOCUMENT_MESSAGES.generic };
+    return { errorCode: TRAVEL_DOCUMENT_ERROR_CODES.generic };
   }
 
   const fileResult = await readValidatedFile(formData.get("file"));
-  if ("error" in fileResult) {
-    return { error: fileResult.error };
+  if ("errorCode" in fileResult) {
+    return { errorCode: fileResult.errorCode };
   }
 
   try {
@@ -254,12 +262,12 @@ export async function replaceTravelDocumentFileAction(
         })
       : [];
     await revalidateDocumentPaths(trip.id, parsed.data.documentId, itineraryDates);
-    return { ok: true, success: TRAVEL_DOCUMENT_MESSAGES.replaced };
+    return { ok: true, successCode: "replaced" };
   } catch (error) {
     if (error instanceof TravelDocumentNotFoundError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
-    return { error: TRAVEL_DOCUMENT_MESSAGES.generic };
+    return { errorCode: TRAVEL_DOCUMENT_ERROR_CODES.generic };
   }
 }
 
@@ -273,7 +281,7 @@ export async function deleteTravelDocumentAction(
   });
 
   if (!parsed.success) {
-    return { error: TRAVEL_DOCUMENT_MESSAGES.generic };
+    return { errorCode: TRAVEL_DOCUMENT_ERROR_CODES.generic };
   }
 
   try {
@@ -300,11 +308,11 @@ export async function deleteTravelDocumentAction(
         })
       : [];
     await revalidateDocumentPaths(trip.id, parsed.data.documentId, itineraryDates);
-    return { ok: true, success: TRAVEL_DOCUMENT_MESSAGES.deleted };
+    return { ok: true, successCode: "deleted" };
   } catch (error) {
     if (error instanceof TravelDocumentNotFoundError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
-    return { error: TRAVEL_DOCUMENT_MESSAGES.generic };
+    return { errorCode: TRAVEL_DOCUMENT_ERROR_CODES.generic };
   }
 }

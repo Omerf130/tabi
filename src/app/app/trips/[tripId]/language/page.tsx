@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { TripHeader } from "@/features/app-shell/TripHeader";
-import { PHRASEBOOK_PAGE_TITLE } from "@/features/language/constants";
 import { LanguagePageContent } from "@/features/language/LanguagePageContent";
 import { prepareLanguagePage } from "@/features/language/queries";
 import { requireTripMember } from "@/features/trips/authorization";
@@ -13,8 +13,11 @@ export async function generateMetadata({
   params: Promise<{ tripId: string }>;
 }): Promise<Metadata> {
   const { tripId } = await params;
-  const trip = await requireTripMember(tripId);
-  return { title: `${PHRASEBOOK_PAGE_TITLE} · ${trip.name}` };
+  const [trip, t] = await Promise.all([
+    requireTripMember(tripId),
+    getTranslations("Language"),
+  ]);
+  return { title: `${t("pageTitle")} · ${trip.name}` };
 }
 
 function parseCategoryParam(value: string | undefined): string | null {
@@ -35,13 +38,17 @@ export default async function LanguagePage({
 }) {
   const { tripId } = await params;
   const { category, favorites } = await searchParams;
-  const [trip, user] = await Promise.all([requireTripMember(tripId), requireUser()]);
+  const [trip, user, t] = await Promise.all([
+    requireTripMember(tripId),
+    requireUser(),
+    getTranslations("Language"),
+  ]);
   const pageData = await prepareLanguagePage(trip.id, user.id);
 
   return (
     <>
       <TripHeader
-        title={PHRASEBOOK_PAGE_TITLE}
+        title={t("pageTitle")}
         tripName={trip.name}
         showTripSwitch
         backHref={`/app/trips/${tripId}/more`}

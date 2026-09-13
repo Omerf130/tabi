@@ -1,8 +1,12 @@
-import { ACTIVITY_MESSAGES } from "./constants";
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 
-export function confirmDayActionDiscard(dirty: boolean): boolean {
-  if (!dirty) {
+export function confirmDayActionDiscard(
+  isDirty: boolean,
+  t: AppTranslator<"Activity">,
+): boolean {
+  if (!isDirty) {
     return true;
   }
-  return window.confirm(ACTIVITY_MESSAGES.discardConfirm);
+
+  return window.confirm(t("errors.discardConfirm"));
 }

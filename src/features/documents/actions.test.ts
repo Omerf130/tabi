@@ -7,6 +7,7 @@ import {
 } from "./actions";
 
 const {
+  requireUserMock,
   requireTripOwnerMock,
   createTravelDocumentMock,
   updateTravelDocumentMetadataMock,
@@ -15,6 +16,7 @@ const {
   getTravelDocumentForTripMock,
   resolveDocumentItineraryDatesMock,
 } = vi.hoisted(() => ({
+  requireUserMock: vi.fn(),
   requireTripOwnerMock: vi.fn(),
   createTravelDocumentMock: vi.fn(),
   updateTravelDocumentMetadataMock: vi.fn(),
@@ -22,6 +24,10 @@ const {
   deleteTravelDocumentMock: vi.fn(),
   getTravelDocumentForTripMock: vi.fn(),
   resolveDocumentItineraryDatesMock: vi.fn(),
+}));
+
+vi.mock("@/features/auth/session", () => ({
+  requireUser: requireUserMock,
 }));
 
 vi.mock("@/features/trips/authorization", () => ({
@@ -73,6 +79,13 @@ function pdfFile(size = 8): File {
 describe("travel document actions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    requireUserMock.mockResolvedValue({
+      id: "user-1",
+      name: "Test",
+      email: "test@example.com",
+      role: "user",
+      locale: "he",
+    });
     requireTripOwnerMock.mockResolvedValue({ id: tripId, role: "owner" });
     createTravelDocumentMock.mockResolvedValue(documentId);
     updateTravelDocumentMetadataMock.mockResolvedValue(undefined);
@@ -163,7 +176,7 @@ describe("travel document actions", () => {
 
     const result = await createTravelDocumentAction({}, formData);
 
-    expect(result.error).toBeDefined();
+    expect(result.errorCode).toBeDefined();
     expect(createTravelDocumentMock).not.toHaveBeenCalled();
   });
 });

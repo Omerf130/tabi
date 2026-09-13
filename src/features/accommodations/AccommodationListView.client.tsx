@@ -1,14 +1,17 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import {
-  ACCOMMODATION_FILTER_TABS,
   countAccommodationsByFilter,
   filterAccommodationList,
-  formatAccommodationFilterTabLabel,
-  getAccommodationFilterEmptyMessage,
   type AccommodationListFilter,
 } from "./filter-accommodation-list";
+import {
+  createAccommodationFilterTabs,
+  formatAccommodationFilterTabLabel,
+  getAccommodationFilterEmptyMessageKey,
+} from "./accommodation-labels";
 import { AccommodationListRow } from "./AccommodationListRow";
 import type { AccommodationListItemViewModel } from "./types";
 import styles from "./AccommodationsPage.module.scss";
@@ -24,7 +27,9 @@ export function AccommodationListView({
   currentTripDate,
   isOwner,
 }: AccommodationListViewProps) {
+  const t = useTranslations("Accommodation");
   const [activeFilter, setActiveFilter] = useState<AccommodationListFilter>("all");
+  const tabs = useMemo(() => createAccommodationFilterTabs(t), [t]);
   const counts = useMemo(
     () => countAccommodationsByFilter(items, currentTripDate),
     [items, currentTripDate],
@@ -37,8 +42,8 @@ export function AccommodationListView({
 
   return (
     <div className={styles.listView}>
-      <div className={styles.tabBar} role="tablist" aria-label="סינון מקומות לינה">
-        {ACCOMMODATION_FILTER_TABS.map((tab) => (
+      <div className={styles.tabBar} role="tablist" aria-label={t("filterAria")}>
+        {tabs.map((tab) => (
           <button
             key={tab.id}
             type="button"
@@ -48,24 +53,22 @@ export function AccommodationListView({
             aria-selected={activeFilter === tab.id}
             onClick={() => setActiveFilter(tab.id)}
           >
-            {formatAccommodationFilterTabLabel(tab.id, counts[tab.id])}
+            {formatAccommodationFilterTabLabel(tab.id, counts[tab.id], t)}
           </button>
         ))}
       </div>
 
       {!hasAnyAccommodation ? (
         <div className={styles.emptyState}>
-          <p className={styles.emptyTitle}>אין מקומות לינה</p>
+          <p className={styles.emptyTitle}>{t("emptyAll")}</p>
           <p className={styles.emptyHint}>
-            {isOwner
-              ? "הוסיפו מקומות לינה כדי שיופיעו כאן ובמסלול."
-              : "בעל הטיול עדיין לא הוסיף מקומות לינה."}
+            {isOwner ? t("emptyAllHintOwner") : t("emptyAllHintGuest")}
           </p>
         </div>
       ) : filteredItems.length === 0 ? (
         <div className={styles.filterEmptyState}>
           <p className={styles.emptyTitle}>
-            {getAccommodationFilterEmptyMessage(activeFilter)}
+            {t(getAccommodationFilterEmptyMessageKey(activeFilter))}
           </p>
         </div>
       ) : (

@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { TabiBrandMark } from "@/features/welcome/TabiBrandMark";
 import { CREATE_TRIP_HERO_VISUAL } from "./create-trip-visual";
 import { WizardStepper } from "./WizardStepper";
@@ -13,6 +16,8 @@ type WizardHeroProps = {
 };
 
 export function WizardHero({ step, canGoBack, onBack }: WizardHeroProps) {
+  const t = useTranslations("CreateTrip.hero");
+
   return (
     <header className={styles.hero}>
       <div className={styles.heroMedia} aria-hidden="true">
@@ -35,12 +40,12 @@ export function WizardHero({ step, canGoBack, onBack }: WizardHeroProps) {
             type="button"
             className={styles.heroBackButton}
             onClick={onBack}
-            aria-label="Go back"
+            aria-label={t("goBack")}
           >
             ‹
           </button>
         ) : (
-          <Link href="/app" className={styles.heroBackButton} aria-label="Back to My Trips">
+          <Link href="/app" className={styles.heroBackButton} aria-label={t("backToMyTrips")}>
             ‹
           </Link>
         )}

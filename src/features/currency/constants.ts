@@ -33,21 +33,6 @@ export const CURRENCY_PREFERENCE_KEYS = {
   to: "tabi.currency.v1.to",
 } as const;
 
-export const CURRENCY_MESSAGES = {
-  loadRateFailed: "לא ניתן לטעון את שער ההמרה כרגע.",
-  retry: "נסה שוב",
-  refreshFailed: "לא הצלחנו לרענן את השער. מוצג השער האחרון שנטען.",
-  estimatedRate: "שער משוער",
-  disclaimer:
-    "שער משוער. השער בפועל עשוי להשתנות בהתאם לחברת האשראי, לבנק או לספק ההמרה.",
-  invalidCurrency: "מטבע לא נתמך",
-  sameCurrency: "יש לבחור שני מטבעות שונים",
-  popularSection: "נפוצים",
-  allSection: "כל המטבעות",
-  searchPlaceholder: "חיפוש מטבע...",
-  noResults: "לא נמצאו מטבעות",
-} as const;
-
 export const FRANKFURTER_API_BASE = "https://api.frankfurter.dev";
 export const FRANKFURTER_REVALIDATE_SECONDS = 86_400;
 

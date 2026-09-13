@@ -15,19 +15,20 @@ import {
   createInviteSchema,
   revokeInviteSchema,
 } from "./schemas";
-import { INVITE_MESSAGES } from "./constants";
+import { INVITE_ERROR_CODES } from "./constants";
+import type { InviteErrorCode } from "./constants";
 
 export type CreateInviteActionState = {
-  error?: string;
+  errorCode?: InviteErrorCode;
   inviteUrl?: string;
 };
 
 export type AcceptInviteActionState = {
-  error?: string;
+  errorCode?: InviteErrorCode;
 };
 
 export type RevokeInviteActionState = {
-  error?: string;
+  errorCode?: InviteErrorCode;
 };
 
 export async function createTripInviteAction(
@@ -42,13 +43,13 @@ export async function createTripInviteAction(
   });
 
   if (!parsed.success) {
-    return { error: INVITE_MESSAGES.generic };
+    return { errorCode: INVITE_ERROR_CODES.generic };
   }
 
   try {
     await requireTripOwner(parsed.data.tripId);
   } catch {
-    return { error: INVITE_MESSAGES.generic };
+    return { errorCode: INVITE_ERROR_CODES.generic };
   }
 
   try {
@@ -63,7 +64,7 @@ export async function createTripInviteAction(
     revalidateTripManagement(parsed.data.tripId, "members");
     return { inviteUrl };
   } catch {
-    return { error: INVITE_MESSAGES.generic };
+    return { errorCode: INVITE_ERROR_CODES.generic };
   }
 }
 
@@ -78,7 +79,7 @@ export async function acceptTripInvitationAction(
   });
 
   if (!parsed.success) {
-    return { error: INVITE_MESSAGES.invalid };
+    return { errorCode: INVITE_ERROR_CODES.invalid };
   }
 
   let tripId: string;
@@ -86,12 +87,12 @@ export async function acceptTripInvitationAction(
     tripId = await acceptTripInvitation(user.id, parsed.data.token);
   } catch (error) {
     if (error instanceof AlreadyMemberError) {
-      return { error: INVITE_MESSAGES.alreadyMember };
+      return { errorCode: INVITE_ERROR_CODES.alreadyMember };
     }
     if (error instanceof InviteInvalidError) {
-      return { error: INVITE_MESSAGES.invalid };
+      return { errorCode: INVITE_ERROR_CODES.invalid };
     }
-    return { error: INVITE_MESSAGES.generic };
+    return { errorCode: INVITE_ERROR_CODES.generic };
   }
 
   redirect(`/app/trips/${tripId}`);
@@ -109,7 +110,7 @@ export async function revokeTripInvitationAction(
   });
 
   if (!parsed.success) {
-    return { error: INVITE_MESSAGES.generic };
+    return { errorCode: INVITE_ERROR_CODES.generic };
   }
 
   try {
@@ -119,6 +120,6 @@ export async function revokeTripInvitationAction(
     revalidateTripManagement(parsed.data.tripId, "members");
     return {};
   } catch {
-    return { error: INVITE_MESSAGES.generic };
+    return { errorCode: INVITE_ERROR_CODES.generic };
   }
 }

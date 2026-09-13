@@ -1,5 +1,6 @@
 import { buildAfterTripFinanceRecap } from "./build-after-trip-finance-recap";
 import { buildFinanceSummary } from "./build-finance-summary";
+import { createTestFinanceLabels } from "./finance-labels";
 
 export function buildTestNoExpensesRecap(tripId = "507f1f77bcf86cd799439011") {
   const settings = {
@@ -14,5 +15,6 @@ export function buildTestNoExpensesRecap(tripId = "507f1f77bcf86cd799439011") {
     settings,
     summary: buildFinanceSummary({ settings, expenses: [] }),
     hasExpenses: false,
+    labels: createTestFinanceLabels(),
   });
 }

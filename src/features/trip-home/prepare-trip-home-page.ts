@@ -4,6 +4,8 @@ import {
   compareAccommodations,
   isAccommodationOccupiedOnDate,
 } from "@/features/accommodations/accommodation-domain";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
+import { resolveRequestLocale } from "@/features/i18n/resolve-request-locale";
 import { listAccommodationsForTrip } from "@/features/accommodations/queries";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
 import { extractFocusedDayWeather } from "@/features/itinerary/focused-day-weather";
@@ -69,11 +71,22 @@ type PrepareTripHomePageOptions = {
   previewTime?: string | null;
 };
 
+async function resolveTripHomeTranslations() {
+  const locale = await resolveRequestLocale();
+
+  return {
+    tHome: createAppTranslator("Home", locale),
+    tCommon: createAppTranslator("Common", locale),
+    tReminders: createAppTranslator("TripReminders", locale),
+  };
+}
+
 export async function prepareTripHomePage(
   trip: TripWorkspace,
   userId: string,
   options: PrepareTripHomePageOptions = {},
 ): Promise<TripHomeViewModel> {
+  const translations = await resolveTripHomeTranslations();
   const previewContext = resolveTripHomePreviewContext({
     startDate: trip.startDate,
     endDate: trip.endDate,
@@ -147,15 +160,22 @@ export async function prepareTripHomePage(
       dayActivities,
       dayTransports,
       accommodations,
-      preparation: buildHomePreparation(trip.id, lists, listItems),
+      preparation: buildHomePreparation(
+        trip.id,
+        lists,
+        listItems,
+        translations.tHome,
+      ),
       upcomingReminders: selectUpcomingHomeReminders(
         reminderRecords,
         todayJapan,
+        translations.tReminders,
       ),
       allReminders,
       dayOnePhotoPresentation,
       usePreviewCountdownReference:
         "isPreview" in previewContext && previewContext.isPreview,
+      translations,
     });
   }
 
@@ -173,6 +193,7 @@ export async function prepareTripHomePage(
       financeRecap,
       activityCount: activities.length,
       accommodationCount: accommodations.length,
+      translations,
     });
   }
 
@@ -286,5 +307,6 @@ export async function prepareTripHomePage(
     tonightPhotoPresentation,
     weather,
     allReminders,
+    translations,
   });
 }

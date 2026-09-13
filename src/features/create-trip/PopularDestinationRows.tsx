@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import {
   POPULAR_DESTINATIONS,
   type PopularDestinationPreset,
@@ -17,6 +20,8 @@ export function PopularDestinationRows({
   selectedDestinationId,
   onSelect,
 }: PopularDestinationRowsProps) {
+  const t = useTranslations("CreateTrip.popularDestinations");
+
   return (
     <div className={styles.popularSection}>
       {POPULAR_DESTINATIONS.map((preset) => {
@@ -43,8 +48,8 @@ export function PopularDestinationRows({
               />
               <span className={styles.popularRowOverlay} />
               <span className={styles.popularRowCopy}>
-                <span className={styles.popularRowName}>{preset.label}</span>
-                <span className={styles.popularRowCategory}>{preset.categoryLabel}</span>
+                <span className={styles.popularRowName}>{t(preset.id)}</span>
+                <span className={styles.popularRowCategory}>{t("categoryCountry")}</span>
               </span>
               <span className={styles.popularRowChevron} aria-hidden="true">
                 {isLoading ? "…" : "›"}

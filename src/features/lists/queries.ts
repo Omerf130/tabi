@@ -1,11 +1,13 @@
 import "server-only";
 
 import mongoose from "mongoose";
+import { getTranslations } from "next-intl/server";
 import {
   TRIP_LIST_DEFINITIONS,
   type TripListType,
 } from "./constants";
 import { ensureTripListsSeeded } from "./list-domain";
+import { formatListProgressLabel } from "./list-progress-label";
 import { sortTripListItemsForDisplay } from "./list-item-order";
 import type {
   TripListDetailViewModel,
@@ -15,10 +17,6 @@ import type {
 } from "./types";
 import { connectDb } from "@/lib/db/connect";
 import { TripListItem } from "@/models/TripListItem";
-
-function formatProgressLabel(progress: TripListProgress): string {
-  return `${progress.completedCount} מתוך ${progress.totalCount} הושלמו`;
-}
 
 function toItemViewModel(item: {
   _id: mongoose.Types.ObjectId;
@@ -75,6 +73,8 @@ export async function listTripListsSummary(
   await connectDb();
   await ensureTripListsSeeded(tripId);
 
+  const t = await getTranslations("Lists");
+  const tDefinitions = await getTranslations("Lists.definitions");
   const progressMap = await aggregateProgressByListType(tripId);
 
   return TRIP_LIST_DEFINITIONS.map((definition) => {
@@ -86,10 +86,12 @@ export async function listTripListsSummary(
     return {
       type: definition.type,
       slug: definition.slug,
-      title: definition.title,
+      title: tDefinitions(definition.type),
       icon: definition.icon,
       progress,
-      progressLabel: formatProgressLabel(progress),
+      progressLabel: formatListProgressLabel(progress, (values) =>
+        t("progressLabel", values),
+      ),
     };
   });
 }
@@ -129,6 +131,9 @@ export async function getTripListDetail(
     throw new Error("Unknown list type");
   }
 
+  const t = await getTranslations("Lists");
+  const tDefinitions = await getTranslations("Lists.definitions");
+
   const items = await TripListItem.find({ tripId, listType }).lean();
   const sortedItems = sortTripListItemsForDisplay(
     items.map((item) => ({
@@ -150,9 +155,11 @@ export async function getTripListDetail(
   return {
     type: definition.type,
     slug: definition.slug,
-    title: definition.title,
+    title: tDefinitions(definition.type),
     progress,
-    progressLabel: formatProgressLabel(progress),
+    progressLabel: formatListProgressLabel(progress, (values) =>
+      t("progressLabel", values),
+    ),
     items: sortedItems
       .map((item) => itemMap.get(item.id))
       .filter((item): item is TripListItemViewModel => Boolean(item)),

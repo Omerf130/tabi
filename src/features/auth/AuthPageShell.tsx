@@ -5,6 +5,7 @@ import { AUTH_BACKGROUND_SRC } from "./auth-visual";
 import styles from "./AuthPageShell.module.scss";
 
 type AuthPageShellProps = {
+  brandName: string;
   title: string;
   subtitle: string;
   children: ReactNode;
@@ -13,6 +14,7 @@ type AuthPageShellProps = {
 };
 
 export function AuthPageShell({
+  brandName,
   title,
   subtitle,
   children,
@@ -20,7 +22,7 @@ export function AuthPageShell({
   legal,
 }: AuthPageShellProps) {
   return (
-    <div className={styles.screen} dir="ltr" lang="en">
+    <div className={styles.screen}>
       <div className={styles.backdrop} aria-hidden="true">
         <Image
           src={AUTH_BACKGROUND_SRC}
@@ -37,7 +39,7 @@ export function AuthPageShell({
         <div className={styles.mainColumn}>
           <header className={styles.brandBlock}>
             <TabiBrandMark className={styles.brandMark} />
-            <p className={styles.brandName}>Tabi</p>
+            <p className={styles.brandName}>{brandName}</p>
           </header>
 
           <div className={styles.heroBlock}>

@@ -1,9 +1,9 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { buildGoogleMapsCoordinatesUrl } from "@/lib/maps/google-maps-url";
-import { EMERGENCY_MESSAGES } from "./constants";
 import styles from "./EmergencyPage.module.scss";
 
 type LocationState =
@@ -13,12 +13,13 @@ type LocationState =
   | { status: "error"; message: string };
 
 export function CurrentLocationPanel() {
+  const t = useTranslations("Emergency");
   const [state, setState] = useState<LocationState>({ status: "idle" });
   const [copyMessage, setCopyMessage] = useState<string | undefined>();
 
   function requestLocation() {
     if (!navigator.geolocation) {
-      setState({ status: "error", message: EMERGENCY_MESSAGES.locationUnsupported });
+      setState({ status: "error", message: t("errors.locationUnsupported") });
       return;
     }
 
@@ -33,14 +34,14 @@ export function CurrentLocationPanel() {
       },
       (error) => {
         if (error.code === error.PERMISSION_DENIED) {
-          setState({ status: "error", message: EMERGENCY_MESSAGES.locationDenied });
+          setState({ status: "error", message: t("errors.locationDenied") });
           return;
         }
         if (error.code === error.TIMEOUT) {
-          setState({ status: "error", message: EMERGENCY_MESSAGES.locationTimeout });
+          setState({ status: "error", message: t("errors.locationTimeout") });
           return;
         }
-        setState({ status: "error", message: EMERGENCY_MESSAGES.locationUnavailable });
+        setState({ status: "error", message: t("errors.locationUnavailable") });
       },
       {
         enableHighAccuracy: true,
@@ -53,9 +54,9 @@ export function CurrentLocationPanel() {
   async function handleCopy(latitude: number, longitude: number) {
     try {
       await navigator.clipboard.writeText(`${latitude}, ${longitude}`);
-      setCopyMessage(EMERGENCY_MESSAGES.locationCopySuccess);
+      setCopyMessage(t("errors.locationCopySuccess"));
     } catch {
-      setCopyMessage(EMERGENCY_MESSAGES.locationCopyFailed);
+      setCopyMessage(t("errors.locationCopyFailed"));
     }
   }
 
@@ -67,9 +68,7 @@ export function CurrentLocationPanel() {
           onClick={requestLocation}
           disabled={state.status === "loading"}
         >
-          {state.status === "loading"
-            ? "מאתר מיקום…"
-            : EMERGENCY_MESSAGES.locationPrompt}
+          {state.status === "loading" ? t("locating") : t("errors.locationPrompt")}
         </Button>
       ) : null}
 
@@ -90,7 +89,7 @@ export function CurrentLocationPanel() {
               className={styles.actionButton}
               onClick={() => handleCopy(state.latitude, state.longitude)}
             >
-              העתקת קואורדינטות
+              {t("copyCoordinates")}
             </button>
             <a
               href={buildGoogleMapsCoordinatesUrl(state.latitude, state.longitude)}
@@ -98,10 +97,10 @@ export function CurrentLocationPanel() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              פתיחה במפה
+              {t("openInMap")}
             </a>
             <Button type="button" variant="ghost" size="compact" onClick={requestLocation}>
-              רענון
+              {t("refresh")}
             </Button>
           </div>
           {copyMessage ? <p className={styles.resourceMeta}>{copyMessage}</p> : null}

@@ -44,13 +44,19 @@ export const PLACES_RATE_LIMIT_MAX_REQUESTS = 40;
 
 export const PLACES_MESSAGES = {
   missingApiKey: "Google Places is not configured",
-  autocompleteFailed: "לא ניתן לטעון הצעות. נסו שוב.",
-  resolveFailed: "לא ניתן לטעון פרטי המקום. נסו שוב.",
   unauthorized: "Unauthorized",
   forbidden: "Forbidden",
   invalidInput: "Invalid request",
   rateLimited: "Too many requests",
 } as const;
+
+export const PLACES_ERROR_CODES = {
+  autocompleteFailed: "autocompleteFailed",
+  resolveFailed: "resolveFailed",
+} as const;
+
+export type PlacesErrorCode =
+  (typeof PLACES_ERROR_CODES)[keyof typeof PLACES_ERROR_CODES];
 
 export const GOOGLE_ATTRIBUTION = {
   label: "Google Maps",

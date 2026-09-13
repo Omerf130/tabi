@@ -71,12 +71,15 @@ describe("itinerary redesign contracts", () => {
 
   it("renders linked original cost labels and omits missing costs", () => {
     expect(
-      formatEntityLinkedCostDisplay({
-        label: "¥4,200",
-        amount: 4200,
-        currency: "JPY",
-        category: "activities",
-      }),
+      formatEntityLinkedCostDisplay(
+        {
+          label: "¥4,200",
+          amount: 4200,
+          currency: "JPY",
+          category: "activities",
+        },
+        "עלות",
+      ),
     ).toBe("עלות: ¥4,200");
 
     const day = buildDayWorkspaceViewModel({

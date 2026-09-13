@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildFinanceSummary } from "./build-finance-summary";
+import { createTestFinanceLabels } from "./finance-labels";
 import type { PublicTripExpense, PublicTripFinanceSettings } from "./types";
 
 const settings: PublicTripFinanceSettings = {
@@ -8,6 +9,8 @@ const settings: PublicTripFinanceSettings = {
   baseCurrency: "ILS",
   budgetAmount: null,
 };
+
+const labels = createTestFinanceLabels();
 
 function expense(
   overrides: Partial<PublicTripExpense> & Pick<PublicTripExpense, "id">,
@@ -62,8 +65,12 @@ describe("buildFinanceSummary", () => {
     expect(summary.remainingBudget).toBeNull();
     expect(summary.percentConsumed).toBeNull();
     expect(summary.byCategory).toEqual([
-      { category: "food", label: "אוכל", total: 120 },
-      { category: "transport", label: "תחבורה", total: 80 },
+      { category: "food", total: 120 },
+      { category: "transport", total: 80 },
+    ]);
+    expect(summary.byCategory.map((entry) => labels.getCategoryLabel(entry.category))).toEqual([
+      "אוכל",
+      "תחבורה",
     ]);
   });
 

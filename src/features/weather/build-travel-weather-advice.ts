@@ -1,3 +1,4 @@
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import type { WeatherSnapshot } from "./types";
 
 export type TravelWeatherAdviceIcon = "umbrella" | "water" | "jacket" | "layer" | "comfort";
@@ -26,8 +27,11 @@ function maxRainChance(snapshot: WeatherSnapshot): number {
   return values.length > 0 ? Math.max(...values) : 0;
 }
 
-export function buildTravelWeatherAdvice(snapshot: WeatherSnapshot): TravelWeatherAdvice {
-  const title = "מה כדאי לקחת היום";
+export function buildTravelWeatherAdvice(
+  snapshot: WeatherSnapshot,
+  t: AppTranslator<"Weather">,
+): TravelWeatherAdvice {
+  const title = t("adviceTitle");
   const { current, today } = snapshot;
   const rainChance = maxRainChance(snapshot);
 
@@ -36,20 +40,20 @@ export function buildTravelWeatherAdvice(snapshot: WeatherSnapshot): TravelWeath
     isRainRelatedCondition(current.condition.code) ||
     isRainRelatedCondition(today.condition.code)
   ) {
-    return { title, message: "יש סיכוי לגשם — כדאי לקחת מטרייה", icon: "umbrella" };
+    return { title, message: t("adviceUmbrella"), icon: "umbrella" };
   }
 
   if (current.temperatureC >= 30 || today.maxTemperatureC >= 32) {
-    return { title, message: "יום חם — כדאי להצטייד במים", icon: "water" };
+    return { title, message: t("adviceWater"), icon: "water" };
   }
 
   if (current.temperatureC <= 10 || today.minTemperatureC <= 8) {
-    return { title, message: "קריר היום — מומלץ מעיל", icon: "jacket" };
+    return { title, message: t("adviceJacket"), icon: "jacket" };
   }
 
   if (current.temperatureC <= 18 || today.minTemperatureC <= 14) {
-    return { title, message: "מומלץ לקחת שכבה קלה", icon: "layer" };
+    return { title, message: t("adviceLayer"), icon: "layer" };
   }
 
-  return { title, message: "מזג אוויר נוח לטיול", icon: "comfort" };
+  return { title, message: t("adviceComfort"), icon: "comfort" };
 }

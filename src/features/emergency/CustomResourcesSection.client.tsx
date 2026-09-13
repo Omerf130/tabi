@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button/Button";
@@ -7,7 +8,6 @@ import {
   deleteTripEmergencyResourceAction,
   type TripEmergencyResourceActionState,
 } from "./actions";
-import { EMERGENCY_MESSAGES } from "./constants";
 import { EmergencyResourceActions } from "./EmergencyResourceActions";
 import { TripEmergencyResourceForm } from "./TripEmergencyResourceForm.client";
 import type { TripEmergencyResourceViewModel } from "./types";
@@ -24,6 +24,7 @@ export function CustomResourcesSection({
   tripId,
   resources,
 }: CustomResourcesSectionProps) {
+  const t = useTranslations("Emergency");
   const router = useRouter();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -39,7 +40,7 @@ export function CustomResourcesSection({
   }, [deleteState.ok, router]);
 
   function handleDelete(resourceId: string) {
-    if (!window.confirm(EMERGENCY_MESSAGES.deleteConfirm)) {
+    if (!window.confirm(t("errors.deleteConfirm"))) {
       return;
     }
     const form = window.document.getElementById(
@@ -51,10 +52,10 @@ export function CustomResourcesSection({
   return (
     <section className={styles.section}>
       <div className={styles.customHeader}>
-        <h2 className={styles.sectionTitle}>{EMERGENCY_MESSAGES.myTripResources}</h2>
+        <h2 className={styles.sectionTitle}>{t("myTripResources")}</h2>
         {!showCreateForm ? (
           <Button type="button" size="compact" onClick={() => setShowCreateForm(true)}>
-            + {EMERGENCY_MESSAGES.addResource}
+            + {t("addResource")}
           </Button>
         ) : null}
       </div>
@@ -67,7 +68,7 @@ export function CustomResourcesSection({
       ) : null}
 
       {resources.length === 0 && !showCreateForm ? (
-        <p className={styles.empty}>{EMERGENCY_MESSAGES.noCustomResources}</p>
+        <p className={styles.empty}>{t("errors.noCustomResources")}</p>
       ) : (
         <ul className={styles.resourceList}>
           {resources.map((resource) =>
@@ -98,7 +99,7 @@ export function CustomResourcesSection({
                     size="compact"
                     onClick={() => setEditingId(resource.id)}
                   >
-                    {EMERGENCY_MESSAGES.edit}
+                    {t("edit")}
                   </Button>
                   <Button
                     type="button"
@@ -106,7 +107,7 @@ export function CustomResourcesSection({
                     size="compact"
                     onClick={() => handleDelete(resource.id)}
                   >
-                    {EMERGENCY_MESSAGES.delete}
+                    {t("delete")}
                   </Button>
                 </div>
                 <form

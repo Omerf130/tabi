@@ -1,7 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { EMERGENCY_MESSAGES } from "./constants";
 import type { EmergencyResourceAction } from "./types";
 import styles from "./EmergencyPage.module.scss";
 
@@ -14,6 +14,7 @@ export function EmergencyResourceActions({
   actions,
   primary = false,
 }: EmergencyResourceActionsProps) {
+  const t = useTranslations("Emergency");
   const [copyMessage, setCopyMessage] = useState<string | undefined>();
 
   if (actions.length === 0) {
@@ -23,9 +24,9 @@ export function EmergencyResourceActions({
   async function handleCopy(value: string) {
     try {
       await navigator.clipboard.writeText(value);
-      setCopyMessage(EMERGENCY_MESSAGES.copySuccess);
+      setCopyMessage(t("errors.copySuccess"));
     } catch {
-      setCopyMessage(EMERGENCY_MESSAGES.copyFailed);
+      setCopyMessage(t("errors.copyFailed"));
     }
   }
 

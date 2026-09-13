@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type InputHTMLAttributes } from "react";
+import { useTranslations } from "next-intl";
 import { IconEye, IconEyeOff, IconLock, IconMail } from "@/components/ui/icons";
 import styles from "./AuthField.module.scss";
 
@@ -58,6 +59,7 @@ export function AuthPasswordField({
   maxLength,
   name = "password",
 }: Omit<AuthFieldProps, "type" | "value" | "onChange">) {
+  const t = useTranslations("Auth.fields");
   const [visible, setVisible] = useState(false);
 
   return (
@@ -84,7 +86,7 @@ export function AuthPasswordField({
           type="button"
           className={styles.toggleButton}
           onClick={() => setVisible((current) => !current)}
-          aria-label={visible ? "Hide password" : "Show password"}
+          aria-label={visible ? t("hidePassword") : t("showPassword")}
           aria-pressed={visible}
         >
           {visible ? (

@@ -1,5 +1,6 @@
 import "server-only";
 
+import { getTranslations } from "next-intl/server";
 import { attachLinkedCostsToIds } from "@/features/finance/linked-expense-queries";
 import { isDateWithinTrip } from "@/features/trips/trip-days";
 import { connectDb } from "@/lib/db/connect";
@@ -50,6 +51,7 @@ export async function getTransportForTrip(
 export async function listTransportCardsForTrip(
   tripId: string,
 ): Promise<Record<TransportType, TransportCardViewModel[]>> {
+  const t = await getTranslations("Transport");
   const records = await listTransportsForTrip(tripId);
   const recordsWithCosts = await attachLinkedCostsToIds(tripId, "transport", records);
   const grouped = Object.fromEntries(
@@ -57,7 +59,7 @@ export async function listTransportCardsForTrip(
   ) as Record<TransportType, TransportCardViewModel[]>;
 
   for (const record of recordsWithCosts) {
-    grouped[record.type].push(toTransportCardViewModel(tripId, record));
+    grouped[record.type].push(toTransportCardViewModel(tripId, record, t));
   }
 
   return grouped;
@@ -81,10 +83,11 @@ export async function listTransportsForItineraryDay(
     .sort({ "departure.time": 1, createdAt: 1, _id: 1 })
     .lean();
 
+  const t = await getTranslations("Transport");
   const records = documents.map(toTransportRecord);
   const recordsWithCosts = await attachLinkedCostsToIds(tripId, "transport", records);
   return recordsWithCosts.map((record) =>
-    toTransportItineraryItemViewModel(tripId, record),
+    toTransportItineraryItemViewModel(tripId, record, t),
   );
 }
 
@@ -101,12 +104,13 @@ export async function listTransportsForItineraryTrip(
     .sort({ "departure.date": 1, "departure.time": 1, createdAt: 1, _id: 1 })
     .lean();
 
+  const t = await getTranslations("Transport");
   const records = documents.map(toTransportRecord);
   const recordsWithCosts = await attachLinkedCostsToIds(tripId, "transport", records);
   const grouped = new Map<string, TransportItineraryItemViewModel[]>();
 
   for (const record of recordsWithCosts) {
-    const item = toTransportItineraryItemViewModel(tripId, record);
+    const item = toTransportItineraryItemViewModel(tripId, record, t);
     const existing = grouped.get(record.departure.date) ?? [];
     existing.push(item);
     grouped.set(record.departure.date, existing);
@@ -125,7 +129,8 @@ export async function getTransportDetailViewModel(
     return null;
   }
 
-  return toTransportDetailViewModel(tripId, record, linkedDocuments);
+  const t = await getTranslations("Transport");
+  return toTransportDetailViewModel(tripId, record, linkedDocuments, t);
 }
 
 export async function listTransportLinkOptions(tripId: string): Promise<

@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import { resolveAccommodationIdentity } from "./resolve-accommodation-identity";
+
+const fallbackName = createAppTranslator("Accommodation", "he")("fallbackName");
 
 vi.mock("@/features/places/googlePlaces.server", () => ({
   getPlaceDisplayForTraveler: vi.fn(),
@@ -16,7 +19,7 @@ describe("resolveAccommodationIdentity", () => {
       city: "Tokyo",
       checkInDate: "2026-10-25",
       checkOutDate: "2026-10-28",
-    });
+    }, fallbackName);
 
     expect(identity.placeSource).toBe("manual");
     expect(identity.name).toBe("Legacy Hotel");
@@ -41,7 +44,7 @@ describe("resolveAccommodationIdentity", () => {
       googlePlaceId: "ChIJN1t_tDeuEmsRUsoyG83frY4",
       checkInDate: "2026-10-25",
       checkOutDate: "2026-10-28",
-    });
+    }, fallbackName);
 
     expect(identity.placeSource).toBe("google");
     expect(identity.nameJapanese).toBe("ホテルグレイスリー新宿");
@@ -58,7 +61,7 @@ describe("resolveAccommodationIdentity", () => {
       googlePlaceId: "ChIJBurjAlArab",
       checkInDate: "2026-10-25",
       checkOutDate: "2026-10-28",
-    });
+    }, fallbackName);
 
     expect(identity.name).toBe("מקום לינה");
     expect(identity.city).toBeUndefined();

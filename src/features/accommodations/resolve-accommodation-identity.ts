@@ -47,10 +47,11 @@ function optionalString(value: string | null | undefined): string | undefined {
 
 function resolveLegacyManualIdentity(
   accommodation: AccommodationRecord,
+  fallbackName: string,
 ): ResolvedAccommodationIdentity {
   return {
     placeSource: "manual",
-    name: accommodation.manualName?.trim() || accommodation.name?.trim() || "מקום לינה",
+    name: accommodation.manualName?.trim() || accommodation.name?.trim() || fallbackName,
     nameJapanese: optionalString(
       accommodation.manualNameJapanese ?? accommodation.nameJapanese,
     ),
@@ -70,10 +71,11 @@ function resolveLegacyManualIdentity(
 
 function resolveExplicitManualIdentity(
   accommodation: AccommodationRecord,
+  fallbackName: string,
 ): ResolvedAccommodationIdentity {
   return {
     placeSource: "manual",
-    name: accommodation.manualName?.trim() || "מקום לינה",
+    name: accommodation.manualName?.trim() || fallbackName,
     nameJapanese: optionalString(accommodation.manualNameJapanese),
     city: accommodation.manualCity?.trim() || "—",
     addressEnglish: optionalString(accommodation.manualAddressEnglish),
@@ -85,21 +87,22 @@ function resolveExplicitManualIdentity(
 
 export async function resolveAccommodationIdentity(
   accommodation: AccommodationRecord,
+  fallbackName: string,
 ): Promise<ResolvedAccommodationIdentity> {
   const placeSource = resolveStoredPlaceSource(accommodation.placeSource);
 
   if (placeSource === "google") {
     const googlePlaceId = accommodation.googlePlaceId?.trim();
     if (!googlePlaceId) {
-      return resolveLegacyManualIdentity(accommodation);
+      return resolveLegacyManualIdentity(accommodation, fallbackName);
     }
 
-    const display = await getPlaceDisplayForTraveler(googlePlaceId);
+    const display = await getPlaceDisplayForTraveler(googlePlaceId, fallbackName);
     if (!display) {
       return {
         placeSource: "google",
         googlePlaceId,
-        name: "מקום לינה",
+        name: fallbackName,
         usesGoogleAttribution: true,
       };
     }
@@ -118,8 +121,8 @@ export async function resolveAccommodationIdentity(
   }
 
   if (accommodation.manualName?.trim()) {
-    return resolveExplicitManualIdentity(accommodation);
+    return resolveExplicitManualIdentity(accommodation, fallbackName);
   }
 
-  return resolveLegacyManualIdentity(accommodation);
+  return resolveLegacyManualIdentity(accommodation, fallbackName);
 }

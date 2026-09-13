@@ -30,6 +30,29 @@ vi.mock("@/models/TripListItem", () => ({
   },
 }));
 
+vi.mock("next-intl/server", () => ({
+  getTranslations: vi.fn(async (namespace: string) => {
+    if (namespace === "Lists.definitions") {
+      return (key: string) => {
+        const titles: Record<string, string> = {
+          packing: "ציוד לארוז",
+          before_trip: "מטלות לפני הטיסה",
+          during_trip: "מטלות במהלך הטיול",
+          pre_trip_shopping: "קניות לקראת הטיול",
+        };
+        return titles[key] ?? key;
+      };
+    }
+
+    return (key: string, values?: Record<string, number>) => {
+      if (key === "progressLabel" && values) {
+        return `${values.completed} מתוך ${values.total} הושלמו`;
+      }
+      return key;
+    };
+  }),
+}));
+
 describe("trip list queries", () => {
   beforeEach(() => {
     vi.clearAllMocks();

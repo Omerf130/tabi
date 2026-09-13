@@ -1,16 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { TabiBrandMark } from "./TabiBrandMark";
 import styles from "./WelcomeScreen.module.scss";
 
-export function WelcomeScreen() {
+export async function WelcomeScreen() {
+  const t = await getTranslations("Welcome");
+
   return (
-    <section
-      className={styles.screen}
-      aria-labelledby="welcome-brand"
-      dir="ltr"
-      lang="en"
-    >
+    <section className={styles.screen} aria-labelledby="welcome-brand">
       <div className={styles.backdrop} aria-hidden="true">
         <div className={styles.backdropBlur} />
         <Image
@@ -28,23 +26,23 @@ export function WelcomeScreen() {
         <header className={styles.brandBlock}>
           <TabiBrandMark />
           <h1 id="welcome-brand" className={styles.brandName}>
-            Tabi
+            {t("brandName")}
           </h1>
           <p className={styles.tagline}>
-            Your journey.
+            {t("taglineLine1")}
             <br />
-            Perfectly planned.
+            {t("taglineLine2")}
           </p>
         </header>
 
         <div className={styles.actions}>
           <Link href="/register" className={styles.primaryCta}>
-            Get Started
+            {t("getStarted")}
           </Link>
           <p className={styles.signIn}>
-            Already have an account?{" "}
+            {t("signInPrompt")}{" "}
             <Link href="/login" className={styles.signInLink}>
-              Sign in
+              {t("signInLink")}
             </Link>
           </p>
         </div>

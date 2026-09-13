@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, type ReactNode } from "react";
 import { ACTIVITY_TYPE_ICONS } from "./activity-type-icons";
 import { isGoogleBackedActivity } from "./activity-place-domain";
@@ -21,6 +22,7 @@ export function ActivityRow({
   actions,
   photoHref,
 }: ActivityRowProps) {
+  const tCommon = useTranslations("Common");
   const Icon = ACTIVITY_TYPE_ICONS[activity.type];
   const [showDriver, setShowDriver] = useState(false);
   const hasPhoto = Boolean(photoHref);
@@ -95,7 +97,7 @@ export function ActivityRow({
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        ניווט
+                        {tCommon("navigate")}
                       </a>
                     ) : null}
                     {canShowDriver ? (
@@ -104,7 +106,7 @@ export function ActivityRow({
                         className={styles.timelineLocationAction}
                         onClick={() => setShowDriver(true)}
                       >
-                        הצג לנהג
+                        {tCommon("showDriver")}
                       </button>
                     ) : null}
                   </div>

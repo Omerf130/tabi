@@ -5,7 +5,10 @@ import { revalidateItineraryPaths } from "@/features/itinerary/revalidation";
 import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireUser } from "@/features/auth/session";
 import { requireTripMember } from "@/features/trips/authorization";
-import { TRIP_REMINDER_MESSAGES } from "./constants";
+import {
+  TRIP_REMINDER_ERROR_CODES,
+  TRIP_REMINDER_SUCCESS_CODES,
+} from "./constants";
 import {
   completeTripReminder,
   createTripReminder,
@@ -20,11 +23,15 @@ import {
   tripReminderMutationSchema,
   updateTripReminderSchema,
 } from "./schemas";
+import type {
+  TripReminderErrorCode,
+  TripReminderSuccessCode,
+} from "./constants";
 
 export type TripReminderActionState = {
   ok?: boolean;
-  error?: string;
-  success?: string;
+  errorCode?: TripReminderErrorCode;
+  successCode?: TripReminderSuccessCode;
   fieldErrors?: Record<string, string>;
 };
 
@@ -47,7 +54,7 @@ export async function createTripReminderAction(
 
   if (!parsed.success) {
     return {
-      error: TRIP_REMINDER_MESSAGES.generic,
+      errorCode: TRIP_REMINDER_ERROR_CODES.generic,
       fieldErrors: Object.fromEntries(
         parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
       ),
@@ -67,12 +74,12 @@ export async function createTripReminderAction(
       text: parsed.data.text,
     });
     revalidateTripReminderPaths(trip.id, [parsed.data.date]);
-    return { ok: true, success: TRIP_REMINDER_MESSAGES.created };
+    return { ok: true, successCode: TRIP_REMINDER_SUCCESS_CODES.created };
   } catch (error) {
     if (error instanceof TripReminderValidationError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
-    return { error: TRIP_REMINDER_MESSAGES.generic };
+    return { errorCode: TRIP_REMINDER_ERROR_CODES.generic };
   }
 }
 
@@ -90,7 +97,7 @@ export async function updateTripReminderAction(
 
   if (!parsed.success) {
     return {
-      error: TRIP_REMINDER_MESSAGES.generic,
+      errorCode: TRIP_REMINDER_ERROR_CODES.generic,
       fieldErrors: Object.fromEntries(
         parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
       ),
@@ -121,15 +128,15 @@ export async function updateTripReminderAction(
         ? [parsed.data.date, existing.date]
         : [parsed.data.date],
     );
-    return { ok: true, success: TRIP_REMINDER_MESSAGES.updated };
+    return { ok: true, successCode: TRIP_REMINDER_SUCCESS_CODES.updated };
   } catch (error) {
     if (error instanceof TripReminderValidationError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
     if (error instanceof TripReminderNotFoundError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
-    return { error: TRIP_REMINDER_MESSAGES.generic };
+    return { errorCode: TRIP_REMINDER_ERROR_CODES.generic };
   }
 }
 
@@ -143,7 +150,7 @@ export async function completeTripReminderAction(
   });
 
   if (!parsed.success) {
-    return { error: TRIP_REMINDER_MESSAGES.generic };
+    return { errorCode: TRIP_REMINDER_ERROR_CODES.generic };
   }
 
   try {
@@ -163,12 +170,12 @@ export async function completeTripReminderAction(
       parsed.data.tripId,
       existing ? [existing.date] : [],
     );
-    return { ok: true, success: TRIP_REMINDER_MESSAGES.completed };
+    return { ok: true, successCode: TRIP_REMINDER_SUCCESS_CODES.completed };
   } catch (error) {
     if (error instanceof TripReminderNotFoundError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
-    return { error: TRIP_REMINDER_MESSAGES.generic };
+    return { errorCode: TRIP_REMINDER_ERROR_CODES.generic };
   }
 }
 
@@ -182,7 +189,7 @@ export async function deleteTripReminderAction(
   });
 
   if (!parsed.success) {
-    return { error: TRIP_REMINDER_MESSAGES.generic };
+    return { errorCode: TRIP_REMINDER_ERROR_CODES.generic };
   }
 
   try {
@@ -202,11 +209,11 @@ export async function deleteTripReminderAction(
       parsed.data.tripId,
       existing ? [existing.date] : [],
     );
-    return { ok: true, success: TRIP_REMINDER_MESSAGES.deleted };
+    return { ok: true, successCode: TRIP_REMINDER_SUCCESS_CODES.deleted };
   } catch (error) {
     if (error instanceof TripReminderNotFoundError) {
-      return { error: error.message };
+      return { errorCode: error.code };
     }
-    return { error: TRIP_REMINDER_MESSAGES.generic };
+    return { errorCode: TRIP_REMINDER_ERROR_CODES.generic };
   }
 }

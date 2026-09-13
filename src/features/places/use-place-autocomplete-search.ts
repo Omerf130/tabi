@@ -1,12 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   PLACES_AUTOCOMPLETE_DEBOUNCE_MS,
   PLACES_AUTOCOMPLETE_MIN_INPUT_LENGTH,
+  PLACES_ERROR_CODES,
 } from "./constants";
 import { shouldApplyAutocompleteResponse } from "./place-autocomplete-race";
 import { createPlaceSessionToken } from "./placeSession";
+import { translatePlacesError } from "./translate-places-error";
 import type { PlacePrimaryTypes, PlaceSuggestion } from "./types";
 
 export type UsePlaceAutocompleteSearchInput = {
@@ -69,6 +72,7 @@ export function usePlaceAutocompleteSearch({
   enabled,
   includedPrimaryTypes,
 }: UsePlaceAutocompleteSearchInput): UsePlaceAutocompleteSearchResult {
+  const t = useTranslations("Places");
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
@@ -120,7 +124,7 @@ export function usePlaceAutocompleteSearch({
 
       setIsLoading(true);
       setError(null);
-      setStatus("טוען הצעות...");
+      setStatus(t("loadingSuggestions"));
 
       void fetchPlaceAutocompleteSuggestions(
         {
@@ -141,18 +145,18 @@ export function usePlaceAutocompleteSearch({
 
           if (!payload.ok) {
             setSuggestions([]);
-            setError(payload.error ?? "לא ניתן לטעון הצעות");
+            setError(
+              translatePlacesError(t, payload.error) ??
+                translatePlacesError(t, PLACES_ERROR_CODES.autocompleteFailed) ??
+                null,
+            );
             setStatus(null);
             return;
           }
 
           const nextSuggestions = payload.suggestions ?? [];
           setSuggestions(nextSuggestions);
-          setStatus(
-            nextSuggestions.length
-              ? null
-              : "לא נמצאו תוצאות. נסו חיפוש אחר או הזנה ידנית.",
-          );
+          setStatus(nextSuggestions.length ? null : t("noResults"));
         })
         .catch((fetchError: unknown) => {
           if (controller.signal.aborted) {
@@ -165,7 +169,9 @@ export function usePlaceAutocompleteSearch({
             return;
           }
           setSuggestions([]);
-          setError("לא ניתן לטעון הצעות");
+          setError(
+            translatePlacesError(t, PLACES_ERROR_CODES.autocompleteFailed) ?? null,
+          );
           setStatus(null);
         })
         .finally(() => {
@@ -185,7 +191,7 @@ export function usePlaceAutocompleteSearch({
         abortRef.current = null;
       }
     };
-  }, [canSearch, includedPrimaryTypes, trimmedQuery, tripId]);
+  }, [canSearch, includedPrimaryTypes, t, trimmedQuery, tripId]);
 
   return {
     suggestions,

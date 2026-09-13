@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { IconActivityOther, IconActivityRestaurant } from "@/components/ui/icons";
 import { PlaceImage } from "@/features/place-images/PlaceImage";
 import type { TripHomeActivityCard } from "./types";
@@ -11,6 +12,7 @@ type UpNextCardProps = {
 };
 
 export function UpNextCard({ card }: UpNextCardProps) {
+  const tHome = useTranslations("Home");
   const navAction = card.googleMapsUrl ? (
     <Link
       href={card.googleMapsUrl}
@@ -18,7 +20,7 @@ export function UpNextCard({ card }: UpNextCardProps) {
       data-tone="up-next"
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={`ניווט ל${card.title}`}
+      aria-label={tHome("navigateTo", { name: card.title })}
     >
       <IconActivityRestaurant className={styles.duringSemanticIconGlyph} aria-hidden />
     </Link>
@@ -34,7 +36,7 @@ export function UpNextCard({ card }: UpNextCardProps) {
 
       <div className={styles.duringCompactMain}>
         <p className={styles.duringUpNextEyebrow} id="trip-home-up-next">
-          הבא בתור
+          {tHome("upNextEyebrow")}
         </p>
         <h3 className={styles.duringCompactTitle} dir="auto">
           {card.title}

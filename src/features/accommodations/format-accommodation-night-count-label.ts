@@ -1,7 +1,12 @@
-export function formatAccommodationNightCountLabel(nightCount: number): string {
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
+
+export function formatAccommodationNightCountLabel(
+  nightCount: number,
+  t: AppTranslator<"Accommodation">,
+): string {
   if (nightCount === 1) {
-    return "לילה אחד";
+    return t("nightCountOne");
   }
 
-  return `${nightCount} לילות`;
+  return t("nightCountMany", { count: nightCount });
 }

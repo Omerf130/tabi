@@ -1,13 +1,14 @@
 export const AUTH_MESSAGES = {
-  generic: "Something went wrong. Please try again.",
-  invalidCredentials: "Email or password is incorrect",
-  duplicateEmail: "This email is already registered",
-  name: "Please enter a valid name",
-  email: "Please enter a valid email",
-  password: "Password must be between 8 and 256 characters",
-  googleSignInFailed:
-    "We couldn't sign you in with Google. Please try again.",
+  generic: "generic",
+  invalidCredentials: "invalidCredentials",
+  duplicateEmail: "duplicateEmail",
+  name: "name",
+  email: "email",
+  password: "password",
+  googleSignInFailed: "googleSignInFailed",
 } as const;
+
+export type AuthErrorCode = (typeof AUTH_MESSAGES)[keyof typeof AUTH_MESSAGES];
 
 export function isDuplicateKeyError(error: unknown): boolean {
   return (
@@ -18,6 +19,6 @@ export function isDuplicateKeyError(error: unknown): boolean {
   );
 }
 
-export function duplicateEmailMessage(): string {
+export function duplicateEmailMessage(): AuthErrorCode {
   return AUTH_MESSAGES.duplicateEmail;
 }

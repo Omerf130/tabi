@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { requireUser } from "@/features/auth/session";
 import { createTripWithOwnerMembership } from "./create-trip";
-import { TRIP_MESSAGES } from "./constants";
+import { TRIP_ERROR_CODES } from "./constants";
 import { createTripWizardSchema } from "./schemas";
 
 export type TripFieldErrors = {
@@ -31,15 +31,15 @@ function zodFieldErrors(error: {
       key === "googlePlaceId"
     ) {
       if (key === "name") {
-        fieldErrors.name = TRIP_MESSAGES.name;
+        fieldErrors.name = TRIP_ERROR_CODES.name;
       } else if (key === "startDate") {
-        fieldErrors.startDate = TRIP_MESSAGES.startDate;
+        fieldErrors.startDate = TRIP_ERROR_CODES.startDate;
       } else if (key === "endDate") {
         fieldErrors.endDate = issue.message.includes("before or equal")
-          ? TRIP_MESSAGES.dateOrder
+          ? TRIP_ERROR_CODES.dateOrder
           : issue.message.includes("maximum")
-            ? TRIP_MESSAGES.maxDuration
-            : TRIP_MESSAGES.endDate;
+            ? TRIP_ERROR_CODES.maxDuration
+            : TRIP_ERROR_CODES.endDate;
       } else if (key === "googlePlaceId") {
         fieldErrors.googlePlaceId = "Please select a valid destination";
       }
@@ -66,7 +66,7 @@ export async function createTripWizardAction(input: {
   try {
     tripId = await createTripWithOwnerMembership(user.id, parsed.data);
   } catch {
-    return { error: TRIP_MESSAGES.generic };
+    return { error: TRIP_ERROR_CODES.generic };
   }
 
   redirect(`/app/trips/${tripId}`);

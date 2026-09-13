@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import type { TripListItemViewModel, TripListSummaryViewModel } from "@/features/lists/types";
 import {
   buildHomePreparation,
@@ -6,6 +7,8 @@ import {
 } from "./build-home-preparation";
 
 const tripId = "507f1f77bcf86cd799439011";
+
+const tHome = createAppTranslator("Home", "he");
 
 function summary(
   type: TripListSummaryViewModel["type"],
@@ -52,6 +55,7 @@ describe("buildHomePreparation", () => {
         summary("pre_trip_shopping", 4, 1),
       ],
       [],
+      tHome,
     );
 
     expect(result).toMatchObject({
@@ -75,6 +79,7 @@ describe("buildHomePreparation", () => {
         tripId,
         [summary("packing", 0, 0), summary("before_trip", 0, 0)],
         [],
+        tHome,
       ),
     ).toBeNull();
   });
@@ -90,6 +95,7 @@ describe("buildHomePreparation", () => {
         item({ id: "4", text: "open 2", isCompleted: false, order: 3 }),
         item({ id: "5", text: "open 3", isCompleted: false, order: 4 }),
       ],
+      tHome,
     );
 
     expect(result?.previewItems).toHaveLength(PREPARATION_PREVIEW_ITEM_LIMIT);

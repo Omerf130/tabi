@@ -3,7 +3,12 @@ import "server-only";
 import { listAccommodationsForTrip } from "@/features/accommodations/queries";
 import { listTravelDocumentRecordsForTrip } from "@/features/documents/queries";
 import type { ResolvedTravelDocumentViewModel } from "@/features/documents/types";
-import { resolveTravelDocumentsBatch } from "@/features/documents/resolve-travel-documents-batch";
+import {
+  createTravelDocumentBatchLabels,
+  resolveTravelDocumentsBatch,
+} from "@/features/documents/resolve-travel-documents-batch";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
+import { resolveRequestLocale } from "@/features/i18n/resolve-request-locale";
 import { listTransportsForItineraryTrip, listTransportsForTrip } from "@/features/transport/queries";
 import type { TransportItineraryItemViewModel, TransportRecord } from "@/features/transport/types";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
@@ -47,12 +52,19 @@ export async function loadItineraryTripData(
     transportRecords.map((transport) => [transport.id, transport]),
   );
 
+  const locale = await resolveRequestLocale();
+  const labels = createTravelDocumentBatchLabels(
+    createAppTranslator("Documents", locale),
+    createAppTranslator("Activity", locale),
+    createAppTranslator("Transport", locale),
+  );
   const documents = resolveTravelDocumentsBatch(
     tripId,
     documentRecords,
     activityById,
     accommodationById,
     transportById,
+    labels,
   );
 
   return {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useId, useState } from "react";
+import { useTranslations } from "next-intl";
 import { GooglePlacesAttribution } from "@/features/places/GooglePlacesAttribution";
 import { PLACES_AUTOCOMPLETE_MIN_INPUT_LENGTH } from "@/features/places/constants";
 import { isValidPlaceSessionToken } from "@/features/places/placeSession";
@@ -15,17 +16,24 @@ type DestinationSearchFieldProps = {
   disabled?: boolean;
 };
 
+const AUTOCOMPLETE_STATUS_KEYS = {
+  "Searching destinations...": "searching",
+  "No destinations found. Try another search.": "noResults",
+} as const;
+
 export function DestinationSearchField({
   selection,
   onSelectionChange,
   disabled = false,
 }: DestinationSearchFieldProps) {
+  const t = useTranslations("CreateTrip.destination");
+  const tErrors = useTranslations("CreateTrip.errors");
   const fieldId = useId();
   const listboxId = `${fieldId}-suggestions`;
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [resolveStatus, setResolveStatus] = useState<string | null>(null);
-  const [resolveError, setResolveError] = useState<string | null>(null);
+  const [resolveStatus, setResolveStatus] = useState<"loading" | null>(null);
+  const [resolveError, setResolveError] = useState<"destinationLoadFailed" | null>(null);
 
   const {
     suggestions,
@@ -48,9 +56,25 @@ export function DestinationSearchField({
     resetSession();
   }, [onSelectionChange, resetSession]);
 
+  function localizeAutocompleteStatus(value: string | null): string | null {
+    if (!value) {
+      return null;
+    }
+    const key =
+      AUTOCOMPLETE_STATUS_KEYS[value as keyof typeof AUTOCOMPLETE_STATUS_KEYS];
+    return key ? t(key) : value;
+  }
+
+  function localizeAutocompleteError(value: string | null): string | null {
+    if (!value) {
+      return null;
+    }
+    return tErrors("suggestionsLoadFailed");
+  }
+
   async function selectSuggestion(suggestion: PlaceSuggestion) {
     setResolveError(null);
-    setResolveStatus("Loading destination...");
+    setResolveStatus("loading");
 
     if (!isValidPlaceSessionToken(getSessionToken())) {
       resetSession();
@@ -74,7 +98,7 @@ export function DestinationSearchField({
       };
 
       if (!response.ok || !payload.snapshot) {
-        setResolveError(payload.error ?? "Could not load this destination");
+        setResolveError("destinationLoadFailed");
         setResolveStatus(null);
         resetSession();
         return;
@@ -86,7 +110,7 @@ export function DestinationSearchField({
       setResolveStatus(null);
       resetSession();
     } catch {
-      setResolveError("Could not load this destination");
+      setResolveError("destinationLoadFailed");
       setResolveStatus(null);
       resetSession();
     }
@@ -103,7 +127,7 @@ export function DestinationSearchField({
         </div>
         {!disabled ? (
           <button type="button" className={styles.changeButton} onClick={clearSelection}>
-            Change
+            {t("change")}
           </button>
         ) : null}
         <GooglePlacesAttribution />
@@ -114,13 +138,17 @@ export function DestinationSearchField({
   const showSuggestions = suggestions.length > 0;
   const activeDescendantId =
     activeIndex >= 0 ? `${listboxId}-option-${activeIndex}` : undefined;
-  const combinedStatus = resolveStatus ?? status;
-  const combinedError = resolveError ?? error;
+  const combinedStatus = resolveStatus === "loading"
+    ? t("loading")
+    : localizeAutocompleteStatus(status);
+  const combinedError = resolveError
+    ? tErrors(resolveError)
+    : localizeAutocompleteError(error);
 
   return (
     <div className={styles.searchField}>
       <label className={styles.srOnly} htmlFor={fieldId}>
-        Search destination
+        {t("searchLabel")}
       </label>
       <div className={styles.searchInputWrap}>
         <span className={styles.searchIcon} aria-hidden="true">
@@ -163,7 +191,7 @@ export function DestinationSearchField({
               }
             }
           }}
-          placeholder="Search country, city, or place..."
+          placeholder={t("searchPlaceholder")}
           autoComplete="off"
           disabled={disabled}
           role="combobox"
@@ -179,7 +207,7 @@ export function DestinationSearchField({
             className={styles.suggestions}
             id={listboxId}
             role="listbox"
-            aria-label="Destination suggestions"
+            aria-label={t("suggestionsAriaLabel")}
           >
             {suggestions.map((suggestion, index) => (
               <li key={suggestion.placeId} role="presentation">

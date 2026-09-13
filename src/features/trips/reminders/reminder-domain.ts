@@ -3,19 +3,28 @@ import "server-only";
 import { connectDb } from "@/lib/db/connect";
 import { TripReminder } from "@/models/TripReminder";
 import { isDateWithinTrip } from "@/features/trips/trip-days";
-import { TRIP_REMINDER_MESSAGES } from "./constants";
+import {
+  TRIP_REMINDER_ERROR_CODES,
+  type TripReminderErrorCode,
+} from "./constants";
 
 export class TripReminderValidationError extends Error {
-  constructor(message: string) {
-    super(message);
+  readonly code: TripReminderErrorCode;
+
+  constructor(code: TripReminderErrorCode) {
+    super(code);
     this.name = "TripReminderValidationError";
+    this.code = code;
   }
 }
 
 export class TripReminderNotFoundError extends Error {
+  readonly code: TripReminderErrorCode;
+
   constructor() {
-    super(TRIP_REMINDER_MESSAGES.notFound);
+    super(TRIP_REMINDER_ERROR_CODES.notFound);
     this.name = "TripReminderNotFoundError";
+    this.code = TRIP_REMINDER_ERROR_CODES.notFound;
   }
 }
 
@@ -25,7 +34,7 @@ function assertReminderDateInTrip(
   endDate: string,
 ): void {
   if (!isDateWithinTrip(startDate, endDate, date)) {
-    throw new TripReminderValidationError(TRIP_REMINDER_MESSAGES.dateOutOfRange);
+    throw new TripReminderValidationError(TRIP_REMINDER_ERROR_CODES.dateOutOfRange);
   }
 }
 

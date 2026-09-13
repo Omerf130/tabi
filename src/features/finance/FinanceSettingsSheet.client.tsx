@@ -2,16 +2,17 @@
 
 import { useActionState, useEffect, useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { CurrencyPicker } from "@/features/currency/CurrencyPicker.client";
 import type { CurrencyOption } from "@/features/currency/types";
+import { resolveAppLocale } from "@/features/i18n/locale";
 import {
   updateTripFinanceSettingsAction,
   type FinanceSettingsActionState,
 } from "./actions";
-import { FINANCE_MESSAGES } from "./constants";
 import type { PublicTripFinanceSettings } from "./types";
 import styles from "./FinancePage.module.scss";
 
@@ -32,6 +33,9 @@ export function FinanceSettingsSheet({
   baseCurrencyLocked,
   onClose,
 }: FinanceSettingsSheetProps) {
+  const t = useTranslations("Finance");
+  const tErrors = useTranslations("Finance.errors");
+  const locale = resolveAppLocale(useLocale());
   const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -63,6 +67,9 @@ export function FinanceSettingsSheet({
   }, [state.ok, router, onClose]);
 
   const selectedCurrency = currencies.find((currency) => currency.code === baseCurrency);
+  const currencyDisplayName =
+    selectedCurrency &&
+    (locale === "he" ? selectedCurrency.hebrewName : selectedCurrency.englishName);
 
   function handleClose() {
     onClose();
@@ -90,19 +97,19 @@ export function FinanceSettingsSheet({
 
           <header className={styles.settingsHeader}>
             <h2 id={titleId} className={styles.settingsTitle}>
-              {FINANCE_MESSAGES.settingsTitle}
+              {t("settingsTitle")}
             </h2>
             <button
               type="button"
               className={styles.settingsClose}
               onClick={handleClose}
-              aria-label="סגירה"
+              aria-label={t("close")}
             >
               ×
             </button>
           </header>
 
-          <Field label={FINANCE_MESSAGES.budgetAmountLabel} htmlFor="budgetAmount">
+          <Field label={t("budgetAmountLabel")} htmlFor="budgetAmount">
             <Input
               id="budgetAmount"
               name="budgetAmount"
@@ -110,15 +117,15 @@ export function FinanceSettingsSheet({
               defaultValue={
                 settings.budgetAmount !== null ? String(settings.budgetAmount) : ""
               }
-              placeholder="לדוגמה: 30000"
+              placeholder={t("budgetAmountPlaceholder")}
               dir="ltr"
             />
           </Field>
 
-          <Field label={FINANCE_MESSAGES.baseCurrencyLabel} htmlFor="baseCurrency">
+          <Field label={t("baseCurrencyLabel")} htmlFor="baseCurrency">
             {baseCurrencyLocked ? (
               <p className={styles.lockedCurrency}>
-                {selectedCurrency?.hebrewName ?? baseCurrency} ({baseCurrency})
+                {currencyDisplayName ?? baseCurrency} ({baseCurrency})
               </p>
             ) : (
               <button
@@ -126,21 +133,23 @@ export function FinanceSettingsSheet({
                 className={styles.currencySelectButton}
                 onClick={() => setPickerOpen(true)}
               >
-                <span>{selectedCurrency?.hebrewName ?? baseCurrency}</span>
+                <span>{currencyDisplayName ?? baseCurrency}</span>
                 <span className={styles.currencyCode}>{baseCurrency}</span>
               </button>
             )}
           </Field>
 
-          {state.error ? <p className={styles.formError}>{state.error}</p> : null}
+          {state.errorCode ? (
+            <p className={styles.formError}>{tErrors(state.errorCode)}</p>
+          ) : null}
 
           <div className={styles.settingsActions}>
             {settings.budgetAmount !== null ? (
               <Button type="submit" name="clearBudget" value="true" variant="secondary">
-                {FINANCE_MESSAGES.clearBudget}
+                {t("clearBudget")}
               </Button>
             ) : null}
-            <Button type="submit">{FINANCE_MESSAGES.saveSettings}</Button>
+            <Button type="submit">{t("saveSettings")}</Button>
           </div>
         </form>
       </dialog>

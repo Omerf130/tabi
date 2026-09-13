@@ -20,9 +20,9 @@ describe("during trip journey UI contracts", () => {
     );
 
     expect(planSource).toContain("duringPlanTimeline");
-    expect(planSource).toContain("אין תוכניות להיום עדיין");
-    expect(planSource).toContain("היום שלך עדיין פתוח. אפשר להוסיף פעילות למסלול.");
-    expect(planSource).toContain("למסלול של היום");
+    expect(planSource).toContain('t("todaysPlanEmptyTitle")');
+    expect(planSource).toContain('t("todaysPlanEmptyHint")');
+    expect(planSource).toContain('t("todaysPlanEmptyCta")');
     expect(planSource).toContain("section.ctaHref");
   });
 

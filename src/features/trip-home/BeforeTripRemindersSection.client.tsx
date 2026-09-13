@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { UpcomingHomeReminderItem } from "@/features/trips/reminders/select-upcoming-home-reminders";
 import { useTripHomeReminders } from "./TripHomeRemindersContext.client";
 import styles from "./TripHomeContent.module.scss";
@@ -11,22 +12,23 @@ type BeforeTripRemindersSectionProps = {
 export function BeforeTripRemindersSection({
   reminders,
 }: BeforeTripRemindersSectionProps) {
+  const t = useTranslations("Home");
   const { openManager } = useTripHomeReminders();
 
   return (
-    <section className={styles.homeSection} aria-label="תזכורות קרובות">
+    <section className={styles.homeSection} aria-label={t("upcomingRemindersTitle")}>
       <div className={styles.homeSectionHeader}>
-        <h2 className={styles.homeSectionTitle}>תזכורות קרובות</h2>
+        <h2 className={styles.homeSectionTitle}>{t("upcomingRemindersTitle")}</h2>
         <button
           type="button"
           className={styles.homeSectionAction}
           onClick={() => openManager({ tab: "upcoming" })}
         >
-          לכל התזכורות
+          {t("upcomingRemindersAll")}
         </button>
       </div>
       {reminders.length === 0 ? (
-        <p className={styles.homeEmptyState}>אין תזכורות קרובות</p>
+        <p className={styles.homeEmptyState}>{t("upcomingRemindersEmpty")}</p>
       ) : (
         <ul className={styles.homeRowList}>
           {reminders.map((reminder) => (

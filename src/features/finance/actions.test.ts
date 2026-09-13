@@ -73,7 +73,7 @@ describe("finance settings actions", () => {
     const result = await updateTripFinanceSettingsAction({}, formData);
 
     expect(result.ok).toBeUndefined();
-    expect(result.error).toBeTruthy();
+    expect(result.errorCode).toBeTruthy();
     expect(updateTripFinanceSettingsMock).not.toHaveBeenCalled();
   });
 });

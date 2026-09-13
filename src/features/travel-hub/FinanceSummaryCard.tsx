@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { IconChevron, IconCurrency } from "@/components/ui/icons";
 import { formatCurrencyAmount } from "@/features/currency/convert";
-import { FINANCE_MESSAGES, FINANCE_PAGE_TITLE } from "@/features/finance/constants";
+import { formatAppNumber } from "@/features/i18n/formatting";
+import { resolveAppLocale } from "@/features/i18n/locale";
+import { useLocale } from "next-intl";
 import type { TravelHubFinanceSummary } from "@/features/finance/types";
 import styles from "./TravelHub.module.scss";
 
@@ -10,6 +15,8 @@ type FinanceSummaryCardProps = {
 };
 
 export function FinanceSummaryCard({ finance }: FinanceSummaryCardProps) {
+  const t = useTranslations("Finance");
+  const locale = resolveAppLocale(useLocale());
   const progressPercent =
     finance.percentConsumed !== null
       ? Math.min(Math.max(Math.round(finance.percentConsumed), 0), 100)
@@ -21,12 +28,12 @@ export function FinanceSummaryCard({ finance }: FinanceSummaryCardProps) {
         <span className={styles.financePreviewIconWrap} aria-hidden>
           <IconCurrency className={styles.financePreviewIcon} />
         </span>
-        <h2 className={styles.financePreviewTitle}>{FINANCE_PAGE_TITLE}</h2>
+        <h2 className={styles.financePreviewTitle}>{t("pageTitle")}</h2>
         <IconChevron className={styles.financeSummaryChevron} aria-hidden />
       </header>
 
       {!finance.hasExpenses ? (
-        <p className={styles.financeSummaryCopy}>{FINANCE_MESSAGES.hubNoExpenses}</p>
+        <p className={styles.financeSummaryCopy}>{t("hubNoExpenses")}</p>
       ) : (
         <>
           <p className={styles.financeSummaryPrimary}>
@@ -35,7 +42,9 @@ export function FinanceSummaryCard({ finance }: FinanceSummaryCardProps) {
           {finance.hasBudget && finance.budgetAmount !== null ? (
             <>
               <p className={styles.financeSummaryMeta}>
-                מתוך {formatCurrencyAmount(finance.budgetAmount, finance.baseCurrency)} תקציב
+                {t("hubBudgetMeta", {
+                  budget: formatCurrencyAmount(finance.budgetAmount, finance.baseCurrency),
+                })}
               </p>
               {progressPercent !== null ? (
                 <div
@@ -44,7 +53,10 @@ export function FinanceSummaryCard({ finance }: FinanceSummaryCardProps) {
                   aria-valuenow={progressPercent}
                   aria-valuemin={0}
                   aria-valuemax={100}
-                  aria-label={`${FINANCE_PAGE_TITLE}: ${progressPercent}% נוצל`}
+                  aria-label={t("hubProgressAriaLabel", {
+                    title: t("pageTitle"),
+                    percent: formatAppNumber(progressPercent, locale),
+                  })}
                 >
                   <span
                     className={styles.financeSummaryFill}
@@ -54,7 +66,7 @@ export function FinanceSummaryCard({ finance }: FinanceSummaryCardProps) {
               ) : null}
             </>
           ) : (
-            <p className={styles.financeSummaryMeta}>{FINANCE_MESSAGES.totalExpenses}</p>
+            <p className={styles.financeSummaryMeta}>{t("totalExpenses")}</p>
           )}
         </>
       )}

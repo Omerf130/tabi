@@ -1,8 +1,9 @@
-import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
+import { formatAppDate } from "@/features/i18n/formatting";
+import type { AppLocale } from "@/features/i18n/locale";
 import { resolveTripVisualSrc } from "@/features/destination-visuals/resolve-trip-visual-src";
 import { getExpenseCategoryPresentation } from "./category-presentation";
 import { buildExpenseRowViewModel } from "./build-expense-row-view-model";
-import { FINANCE_MESSAGES, FINANCE_PAGE_TITLE } from "./constants";
+import type { FinanceLabels } from "./finance-labels";
 import type {
   FinanceCategoryDonutSegment,
   FinanceHeroViewModel,
@@ -31,16 +32,19 @@ type BuildFinancePageViewModelInput = {
   baseCurrencyLocked: boolean;
   currencies: readonly CurrencyOption[];
   titleLookup: ExpenseSourceTitleLookup;
+  labels: FinanceLabels;
+  locale: AppLocale;
 };
 
 function buildDonutSegments(
   summary: FinanceSummary,
+  labels: FinanceLabels,
 ): FinanceCategoryDonutSegment[] {
   return summary.byCategory.map((entry) => {
     const presentation = getExpenseCategoryPresentation(entry.category);
     return {
       category: entry.category,
-      label: presentation.label,
+      label: labels.getCategoryLabel(entry.category),
       total: entry.total,
       color: presentation.color,
       percentage:
@@ -51,10 +55,30 @@ function buildDonutSegments(
   });
 }
 
+function formatDateRangeLabel(
+  startDate: string,
+  endDate: string,
+  locale: AppLocale,
+): string {
+  const formatDate = (value: string) =>
+    formatAppDate(value, locale, {
+      timeZone: "UTC",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+
+  if (startDate === endDate) {
+    return formatDate(startDate);
+  }
+
+  return `${formatDate(startDate)} – ${formatDate(endDate)}`;
+}
+
 export function buildFinancePageViewModel(
   input: BuildFinancePageViewModelInput,
 ): FinancePageViewModel {
-  const { settings, summary, expenses, hasExpenses } = input;
+  const { settings, summary, expenses, hasExpenses, labels, locale } = input;
   const hasBudget = settings.budgetAmount !== null;
   const pageState = hasBudget
     ? ("withBudget" as const)
@@ -71,16 +95,23 @@ export function buildFinancePageViewModel(
   const hero: FinanceHeroViewModel = {
     heroImageSrc: visual.imageSrc,
     tripName: input.trip.name,
-    dateRangeLabel: formatCalendarDateRangeDisplay(
+    dateRangeLabel: formatDateRangeLabel(
       input.trip.startDate,
       input.trip.endDate,
+      locale,
     ),
-    title: FINANCE_PAGE_TITLE,
-    subtitle: FINANCE_MESSAGES.heroSubtitle,
+    title: labels.pageTitle,
+    subtitle: labels.heroSubtitle,
   };
 
   const expenseRows = expenses.map((expense) =>
-    buildExpenseRowViewModel(expense, summary.baseCurrency, input.titleLookup),
+    buildExpenseRowViewModel(
+      expense,
+      summary.baseCurrency,
+      input.titleLookup,
+      labels,
+      locale,
+    ),
   );
 
   return {
@@ -95,9 +126,15 @@ export function buildFinancePageViewModel(
     currencies: input.currencies,
     expenseRows,
     recentExpenseRows: summary.recentExpenses.map((expense) =>
-      buildExpenseRowViewModel(expense, summary.baseCurrency, input.titleLookup),
+      buildExpenseRowViewModel(
+        expense,
+        summary.baseCurrency,
+        input.titleLookup,
+        labels,
+        locale,
+      ),
     ),
-    donutSegments: buildDonutSegments(summary),
+    donutSegments: buildDonutSegments(summary, labels),
     isOverBudget:
       summary.remainingBudget !== null && summary.remainingBudget < 0,
   };

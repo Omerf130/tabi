@@ -52,9 +52,10 @@ describe("finance presentation", () => {
 
   it("keeps budget hierarchy labels for spent, remaining, and percent", () => {
     const source = readFileSync(join(featureRoot, "FinancePageContent.tsx"), "utf8");
-    expect(source).toContain("FINANCE_MESSAGES.spent");
-    expect(source).toContain("FINANCE_MESSAGES.remaining");
-    expect(source).toContain("FINANCE_MESSAGES.percentConsumed");
+    expect(source).toContain('useTranslations("Finance")');
+    expect(source).toContain('"spent"');
+    expect(source).toContain('"remaining"');
+    expect(source).toContain('"percentConsumed"');
   });
 
   it("avoids horizontal overflow on finance hero", () => {

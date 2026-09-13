@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
@@ -14,6 +15,10 @@ import {
   type TripReminderActionState,
 } from "@/features/trips/reminders/actions";
 import type { TripReminderViewModel } from "@/features/trips/reminders/types";
+import {
+  translateReminderError,
+  translateReminderSuccess,
+} from "@/features/trips/reminders/translate-reminder-error";
 import {
   getTripSettingsSectionClassName,
   type TripSettingsVariant,
@@ -44,6 +49,8 @@ function ReminderRow({
   endDate,
   reminder,
 }: ReminderRowProps) {
+  const t = useTranslations("TripReminders");
+  const tCommon = useTranslations("Common");
   const [editing, setEditing] = useState(false);
   const [updateState, updateAction] = useActionState(
     updateTripReminderAction,
@@ -58,6 +65,11 @@ function ReminderRow({
     initialState,
   );
 
+  const updateError = translateReminderError(t, updateState.errorCode);
+  const completeError = translateReminderError(t, completeState.errorCode);
+  const deleteError = translateReminderError(t, deleteState.errorCode);
+  const rowError = completeError ?? deleteError;
+
   if (editing) {
     return (
       <li className={styles.item}>
@@ -65,7 +77,7 @@ function ReminderRow({
           <input type="hidden" name="tripId" value={tripId} />
           <input type="hidden" name="reminderId" value={reminder.id} />
           <div className={styles.formRow}>
-            <Field label="תאריך" htmlFor={`edit-date-${reminder.id}`}>
+            <Field label={tCommon("date")} htmlFor={`edit-date-${reminder.id}`}>
               <Input
                 id={`edit-date-${reminder.id}`}
                 name="date"
@@ -76,7 +88,7 @@ function ReminderRow({
                 required
               />
             </Field>
-            <Field label="שעה" htmlFor={`edit-time-${reminder.id}`}>
+            <Field label={tCommon("time")} htmlFor={`edit-time-${reminder.id}`}>
               <Input
                 id={`edit-time-${reminder.id}`}
                 name="time"
@@ -86,7 +98,7 @@ function ReminderRow({
               />
             </Field>
           </div>
-          <Field label="תוכן התזכורת" htmlFor={`edit-text-${reminder.id}`}>
+          <Field label={t("content")} htmlFor={`edit-text-${reminder.id}`}>
             <Textarea
               id={`edit-text-${reminder.id}`}
               name="text"
@@ -95,20 +107,20 @@ function ReminderRow({
               required
             />
           </Field>
-          {updateState.error ? (
+          {updateError ? (
             <p className={styles.error} role="alert">
-              {updateState.error}
+              {updateError}
             </p>
           ) : null}
           <div className={styles.rowActions}>
-            <AuthSubmitButton>שמירה</AuthSubmitButton>
+            <AuthSubmitButton>{tCommon("save")}</AuthSubmitButton>
             <Button
               type="button"
               variant="ghost"
               size="compact"
               onClick={() => setEditing(false)}
             >
-              ביטול
+              {tCommon("cancel")}
             </Button>
           </div>
         </form>
@@ -135,27 +147,27 @@ function ReminderRow({
             size="compact"
             onClick={() => setEditing(true)}
           >
-            עריכה
+            {tCommon("edit")}
           </Button>
           <form action={completeAction}>
             <input type="hidden" name="tripId" value={tripId} />
             <input type="hidden" name="reminderId" value={reminder.id} />
             <Button type="submit" variant="ghost" size="compact">
-              הושלם
+              {t("markComplete")}
             </Button>
           </form>
           <form action={deleteAction}>
             <input type="hidden" name="tripId" value={tripId} />
             <input type="hidden" name="reminderId" value={reminder.id} />
             <Button type="submit" variant="ghost" size="compact">
-              מחיקה
+              {tCommon("delete")}
             </Button>
           </form>
         </div>
       ) : null}
-      {completeState.error || deleteState.error ? (
+      {rowError ? (
         <p className={styles.error} role="alert">
-          {completeState.error ?? deleteState.error}
+          {rowError}
         </p>
       ) : null}
     </li>
@@ -169,6 +181,8 @@ export function TripReminderSettings({
   reminders,
   variant = "stack",
 }: TripReminderSettingsProps) {
+  const t = useTranslations("TripReminders");
+  const tCommon = useTranslations("Common");
   const [showCreate, setShowCreate] = useState(false);
   const createRef = useRef<HTMLDivElement>(null);
   const [createState, createAction] = useActionState(
@@ -177,6 +191,9 @@ export function TripReminderSettings({
   );
   const upcoming = reminders.filter((reminder) => !reminder.isCompleted);
   const completed = reminders.filter((reminder) => reminder.isCompleted);
+
+  const createError = translateReminderError(t, createState.errorCode);
+  const createSuccess = translateReminderSuccess(t, createState.successCode);
 
   const openCreate = () => {
     setShowCreate(true);
@@ -193,24 +210,22 @@ export function TripReminderSettings({
     >
       <div className={sectionStyles.header}>
         <h2 id="trip-reminders-title" className={sectionStyles.title}>
-          תזכורות אישיות
+          {t("settingsTitle")}
         </h2>
-        <p className={sectionStyles.hint}>
-          תזכורות פרטיות שלכם בלבד. חברי הטיול לא רואים אותן.
-        </p>
+        <p className={sectionStyles.hint}>{t("settingsHint")}</p>
       </div>
 
       {!showCreate ? (
         <Button type="button" variant="ghost" onClick={openCreate}>
-          + תזכורת חדשה
+          {t("addReminder")}
         </Button>
       ) : (
         <div ref={createRef}>
           <form action={createAction} className={styles.createForm}>
             <input type="hidden" name="tripId" value={tripId} />
-            <p className={styles.createLabel}>תזכורת חדשה</p>
+            <p className={styles.createLabel}>{t("newReminderLabel")}</p>
             <div className={styles.formRow}>
-              <Field label="תאריך" htmlFor="reminder-date">
+              <Field label={tCommon("date")} htmlFor="reminder-date">
                 <Input
                   id="reminder-date"
                   name="date"
@@ -220,30 +235,30 @@ export function TripReminderSettings({
                   required
                 />
               </Field>
-              <Field label="שעה" htmlFor="reminder-time">
+              <Field label={tCommon("time")} htmlFor="reminder-time">
                 <Input id="reminder-time" name="time" type="time" required />
               </Field>
             </div>
-            <Field label="תוכן התזכורת" htmlFor="reminder-text">
+            <Field label={t("content")} htmlFor="reminder-text">
               <Textarea id="reminder-text" name="text" rows={2} required />
             </Field>
-            {createState.error ? (
+            {createError ? (
               <p className={styles.error} role="alert">
-                {createState.error}
+                {createError}
               </p>
             ) : null}
-            {createState.success ? (
-              <p className={styles.success}>{createState.success}</p>
+            {createSuccess ? (
+              <p className={styles.success}>{createSuccess}</p>
             ) : null}
             <div className={styles.rowActions}>
-              <AuthSubmitButton>הוספה</AuthSubmitButton>
+              <AuthSubmitButton>{t("addSubmit")}</AuthSubmitButton>
               <Button
                 type="button"
                 variant="ghost"
                 size="compact"
                 onClick={() => setShowCreate(false)}
               >
-                ביטול
+                {tCommon("cancel")}
               </Button>
             </div>
           </form>
@@ -263,12 +278,12 @@ export function TripReminderSettings({
           ))}
         </ul>
       ) : (
-        <p className={styles.empty}>אין תזכורות קרובות.</p>
+        <p className={styles.empty}>{t("emptyUpcoming")}</p>
       )}
 
       {completed.length > 0 ? (
         <div className={styles.completedBlock}>
-          <h3 className={styles.completedTitle}>הושלמו</h3>
+          <h3 className={styles.completedTitle}>{t("completedSection")}</h3>
           <ul className={styles.list}>
             {completed.map((reminder) => (
               <ReminderRow

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import {
   IconAccommodation,
   IconChevron,
@@ -25,11 +26,11 @@ type TravelHubContentProps = {
   model: TravelHubViewModel;
 };
 
-function PrimaryToolIcon({ title }: { title: string }) {
-  if (title === "לינה") {
+function PrimaryToolIcon({ href }: { href: string }) {
+  if (href.endsWith("/accommodations")) {
     return <IconAccommodation className={styles.primaryRowIconSvg} aria-hidden />;
   }
-  if (title === "תחבורה") {
+  if (href.endsWith("/transport")) {
     return <IconTrain className={styles.primaryRowIconSvg} aria-hidden />;
   }
   return <IconGrid className={styles.primaryRowIconSvg} aria-hidden />;
@@ -50,8 +51,8 @@ function QuickToolIcon({ tool }: { tool: TravelHubQuickToolTile }) {
   }
 }
 
-function MaterialsIcon({ title }: { title: string }) {
-  if (title === "מסמכים") {
+function MaterialsIcon({ href }: { href: string }) {
+  if (href.endsWith("/documents")) {
     return <IconDocuments className={styles.materialsIconSvg} aria-hidden />;
   }
   return <IconGrid className={styles.materialsIconSvg} aria-hidden />;
@@ -73,7 +74,7 @@ function TravelHubPrimaryRow({ row }: { row: TravelHubPrimaryToolRow }) {
         </span>
       ) : (
         <span className={styles.primaryRowIconWrap} aria-hidden>
-          <PrimaryToolIcon title={row.title} />
+          <PrimaryToolIcon href={row.href} />
         </span>
       )}
 
@@ -98,7 +99,7 @@ function TravelHubMaterialsTileLink({ tile }: { tile: TravelHubMaterialsTile }) 
   return (
     <Link href={tile.href} className={styles.materialsTile}>
       <span className={styles.materialsIconWrap} aria-hidden>
-        <MaterialsIcon title={tile.title} />
+        <MaterialsIcon href={tile.href} />
       </span>
       <span className={styles.materialsCopy}>
         <span className={styles.materialsTitle}>{tile.primaryLine}</span>
@@ -129,10 +130,12 @@ function TravelHubQuickToolTileLink({ tool }: { tool: TravelHubQuickToolTile }) 
   );
 }
 
-export function TravelHubContent({ model }: TravelHubContentProps) {
+export async function TravelHubContent({ model }: TravelHubContentProps) {
+  const t = await getTranslations("TravelHub");
+
   return (
     <div className={styles.hub}>
-      <section className={styles.hero} aria-label="כלי הטיול">
+      <section className={styles.hero} aria-label={t("heroAria")}>
         <div className={styles.heroMedia} aria-hidden>
           <img src={model.hero.heroImageSrc} alt="" className={styles.heroImage} />
           <div className={styles.heroScrim} />
@@ -145,14 +148,14 @@ export function TravelHubContent({ model }: TravelHubContentProps) {
 
       <div className={styles.hubBody}>
         <div className={styles.hubMain}>
-          <section className={styles.primarySection} aria-label="כלי טיול עיקריים">
+          <section className={styles.primarySection} aria-label={t("primarySectionAria")}>
             <TravelHubPrimaryRow row={model.accommodation} />
             <TravelHubPrimaryRow row={model.transport} />
           </section>
 
           <FinanceSummaryCard finance={model.finance} />
 
-          <section className={styles.materialsSection} aria-label="חומרים והכנה">
+          <section className={styles.materialsSection} aria-label={t("materialsSectionAria")}>
             <div className={styles.materialsGrid}>
               <TravelHubMaterialsTileLink tile={model.materials.lists} />
               <TravelHubMaterialsTileLink tile={model.materials.documents} />
@@ -168,7 +171,7 @@ export function TravelHubContent({ model }: TravelHubContentProps) {
           </Link>
         </div>
 
-        <section className={styles.quickToolsSection} aria-label="כלי עזר מהירים">
+        <section className={styles.quickToolsSection} aria-label={t("quickToolsSectionAria")}>
           <div className={styles.quickToolsGrid}>
             {model.quickTools.map((tool) => (
               <TravelHubQuickToolTileLink key={tool.id} tool={tool} />

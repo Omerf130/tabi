@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { IconChevron } from "@/components/ui/icons";
-import { formatEntityLinkedCostDisplay } from "@/features/finance/entity-linked-cost-presentation";
+import { EntityLinkedCostDisplay } from "@/features/finance/EntityLinkedCostDisplay.client";
 import type { AccommodationListItemViewModel } from "./types";
 import styles from "./AccommodationsPage.module.scss";
 
@@ -9,6 +12,7 @@ type AccommodationListRowProps = {
 };
 
 export function AccommodationListRow({ item }: AccommodationListRowProps) {
+  const t = useTranslations("Weather");
   const hasPhoto = Boolean(item.placePhoto?.hasPhoto && item.placePhoto.photoHref);
 
   return (
@@ -31,11 +35,11 @@ export function AccommodationListRow({ item }: AccommodationListRowProps) {
           <span className={styles.rowDates}>{item.dateRangeCompactLabel}</span>
           <span className={styles.rowNights}>{item.nightCountLabel}</span>
           {item.isCurrentStay ? (
-            <span className={styles.currentBadge}>עכשיו</span>
+            <span className={styles.currentBadge}>{t("now")}</span>
           ) : null}
           {item.linkedCost ? (
             <span className={styles.rowMeta} dir="auto">
-              {formatEntityLinkedCostDisplay(item.linkedCost)}
+              <EntityLinkedCostDisplay linkedCost={item.linkedCost} />
             </span>
           ) : null}
         </span>

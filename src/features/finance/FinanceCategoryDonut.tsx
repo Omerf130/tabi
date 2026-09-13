@@ -1,6 +1,8 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { formatCurrencyAmount } from "@/features/currency/convert";
 import { getExpenseCategoryPresentation } from "./category-presentation";
-import { FINANCE_MESSAGES } from "./constants";
 import type { FinanceCategoryDonutSegment } from "./types";
 import styles from "./FinancePage.module.scss";
 
@@ -36,6 +38,7 @@ export function FinanceCategoryDonut({
   totalExpenses,
   baseCurrency,
 }: FinanceCategoryDonutProps) {
+  const t = useTranslations("Finance");
   const summaryText = segments
     .map((segment) => `${segment.label}: ${formatCurrencyAmount(segment.total, baseCurrency)}`)
     .join("; ");
@@ -46,13 +49,13 @@ export function FinanceCategoryDonut({
         className={styles.donutChart}
         style={{ background: buildConicGradient(segments) }}
         role="img"
-        aria-label={`${FINANCE_MESSAGES.categoriesSectionTitle}. ${summaryText}`}
+        aria-label={`${t("categoriesSectionTitle")}. ${summaryText}`}
       >
         <div className={styles.donutCenter}>
           <span className={styles.donutCenterAmount}>
             {formatCurrencyAmount(totalExpenses, baseCurrency)}
           </span>
-          <span className={styles.donutCenterLabel}>{FINANCE_MESSAGES.totalExpensesCenter}</span>
+          <span className={styles.donutCenterLabel}>{t("totalExpensesCenter")}</span>
         </div>
       </div>
 

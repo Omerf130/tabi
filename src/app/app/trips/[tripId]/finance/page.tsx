@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { AppPage } from "@/features/app-shell/AppPage";
-import { FINANCE_PAGE_TITLE } from "@/features/finance/constants";
 import { FinancePageContent } from "@/features/finance/FinancePageContent";
 import { prepareFinancePage } from "@/features/finance/queries";
 import { requireTripMember } from "@/features/trips/authorization";
@@ -10,8 +10,11 @@ export async function generateMetadata({
   params: Promise<{ tripId: string }>;
 }): Promise<Metadata> {
   const { tripId } = await params;
-  const trip = await requireTripMember(tripId);
-  return { title: `${FINANCE_PAGE_TITLE} · ${trip.name}` };
+  const [trip, t] = await Promise.all([
+    requireTripMember(tripId),
+    getTranslations("Finance"),
+  ]);
+  return { title: `${t("pageTitle")} · ${trip.name}` };
 }
 
 export default async function TripFinancePage({

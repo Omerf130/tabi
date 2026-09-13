@@ -1,9 +1,11 @@
 "use client";
 
 import { useActionState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button/Button";
 import { deleteActivityAction, type ActivityActionState } from "./actions";
-import { ACTIVITY_MESSAGES } from "./constants";
+import { ACTIVITY_ERROR_CODES } from "./constants";
+import { translateActivityError } from "./translate-activity-error";
 import styles from "./ActivityForm.module.scss";
 
 const initialState: ActivityActionState = {};
@@ -19,6 +21,7 @@ export function ActivityDeleteControl({
   activityId,
   onSuccess,
 }: ActivityDeleteControlProps) {
+  const t = useTranslations("Activity");
   const [state, formAction] = useActionState(deleteActivityAction, initialState);
 
   useEffect(() => {
@@ -32,7 +35,7 @@ export function ActivityDeleteControl({
       action={formAction}
       className={styles.deleteForm}
       onSubmit={(event) => {
-        if (!window.confirm(ACTIVITY_MESSAGES.deleteConfirm)) {
+        if (!window.confirm(t(`errors.${ACTIVITY_ERROR_CODES.deleteConfirm}`))) {
           event.preventDefault();
         }
       }}
@@ -41,11 +44,11 @@ export function ActivityDeleteControl({
       <input type="hidden" name="activityId" value={activityId} />
       {state.error ? (
         <p className={styles.formError} role="alert">
-          {state.error}
+          {translateActivityError(t, state.error)}
         </p>
       ) : null}
       <Button type="submit" variant="ghost" size="compact" className={styles.deleteButton}>
-        מחיקת פעילות
+        {t("deleteActivity")}
       </Button>
     </form>
   );

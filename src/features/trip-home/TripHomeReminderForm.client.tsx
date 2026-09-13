@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { Textarea } from "@/components/ui/Textarea/Textarea";
@@ -26,10 +27,13 @@ export function TripHomeReminderFormFields({
   timeId = "reminder-time",
   textId = "reminder-text",
 }: TripHomeReminderFormFieldsProps) {
+  const tCommon = useTranslations("Common");
+  const tHome = useTranslations("Home");
+
   return (
     <>
       <div className={styles.formRow}>
-        <Field label="תאריך" htmlFor={dateId}>
+        <Field label={tCommon("date")} htmlFor={dateId}>
           <Input
             id={dateId}
             name="date"
@@ -40,7 +44,7 @@ export function TripHomeReminderFormFields({
             required
           />
         </Field>
-        <Field label="שעה" htmlFor={timeId}>
+        <Field label={tCommon("time")} htmlFor={timeId}>
           <Input
             id={timeId}
             name="time"
@@ -50,7 +54,7 @@ export function TripHomeReminderFormFields({
           />
         </Field>
       </div>
-      <Field label="תוכן התזכורת" htmlFor={textId}>
+      <Field label={tHome("reminderContent")} htmlFor={textId}>
         <Textarea
           id={textId}
           name="text"

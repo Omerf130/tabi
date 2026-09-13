@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildFinancePageViewModel } from "./build-finance-page-view-model";
+import { createTestFinanceLabels } from "./finance-labels";
 import type { FinanceSummary, PublicTripExpense, PublicTripFinanceSettings } from "./types";
 
 const trip = {
@@ -41,6 +42,8 @@ const emptyTitleLookup = {
   transports: new Map<string, string>(),
 };
 
+const labels = createTestFinanceLabels();
+
 function summary(overrides: Partial<FinanceSummary> = {}): FinanceSummary {
   return {
     baseCurrency: "ILS",
@@ -66,6 +69,8 @@ describe("buildFinancePageViewModel", () => {
       baseCurrencyLocked: false,
       currencies: [{ code: "ILS", symbol: "₪", englishName: "ILS", hebrewName: "שקל" }],
       titleLookup: emptyTitleLookup,
+      labels,
+      locale: "he",
     });
 
     expect(model.pageState).toBe("noBudgetNoExpenses");
@@ -80,7 +85,7 @@ describe("buildFinancePageViewModel", () => {
       settings,
       summary: summary({
         totalExpenses: 100,
-        byCategory: [{ category: "food", label: "אוכל", total: 100 }],
+        byCategory: [{ category: "food", total: 100 }],
         recentExpenses: [expense],
       }),
       expenses: [expense],
@@ -88,6 +93,8 @@ describe("buildFinancePageViewModel", () => {
       baseCurrencyLocked: true,
       currencies: [],
       titleLookup: emptyTitleLookup,
+      labels,
+      locale: "he",
     });
 
     expect(model.pageState).toBe("noBudgetWithExpenses");
@@ -105,7 +112,7 @@ describe("buildFinancePageViewModel", () => {
         totalExpenses: 150,
         remainingBudget: -50,
         percentConsumed: 150,
-        byCategory: [{ category: "food", label: "אוכל", total: 150 }],
+        byCategory: [{ category: "food", total: 150 }],
         recentExpenses: [expense],
       }),
       expenses: [expense],
@@ -113,6 +120,8 @@ describe("buildFinancePageViewModel", () => {
       baseCurrencyLocked: true,
       currencies: [],
       titleLookup: emptyTitleLookup,
+      labels,
+      locale: "he",
     });
 
     expect(model.pageState).toBe("withBudget");

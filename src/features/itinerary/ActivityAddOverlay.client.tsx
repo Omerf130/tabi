@@ -1,12 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { AuthSubmitButton } from "@/features/auth/AuthSubmitButton";
 import type { CurrencyOption } from "@/features/currency/types";
 import { EntityCostFields } from "@/features/finance/EntityCostFields.client";
 import {
   ACTIVITY_TYPES,
-  ACTIVITY_TYPE_LABELS,
+  createActivityTypeLabelResolver,
   type ActivityType,
 } from "./activity-types";
 import {
@@ -19,6 +20,7 @@ import {
 } from "./ActivityLocationSection";
 import { PlaceModeSegment } from "./PlaceModeSegment.client";
 import { shouldExpandActivityDetails } from "./should-expand-activity-details";
+import { translateActivityError } from "./translate-activity-error";
 import type { ActivityFormValues } from "./types";
 import styles from "./AddItemFlow.module.scss";
 
@@ -45,12 +47,16 @@ export function ActivityAddOverlay({
   financeBaseCurrency = "ILS",
   currencies = [],
 }: ActivityAddOverlayProps) {
+  const t = useTranslations("Activity");
+  const tCommon = useTranslations("Common");
+  const resolveTypeLabel = createActivityTypeLabelResolver(t);
   const [state, formAction] = useActionState(createActivityAction, initialState);
   const titleRef = useRef<HTMLInputElement>(null);
   const [placeMode, setPlaceMode] = useState<ActivityPlaceMode>("google");
   const [hasGooglePlace, setHasGooglePlace] = useState(false);
   const detailsExpanded = shouldExpandActivityDetails(defaultValues, "create");
   const showDetails = placeMode === "manual" || hasGooglePlace;
+  const errorMessage = translateActivityError(t, state.error);
 
   useEffect(() => {
     if (state.ok && onSuccess) {
@@ -101,9 +107,9 @@ export function ActivityAddOverlay({
       <input type="hidden" name="tripId" value={tripId} />
       {lockDate ? <input type="hidden" name="date" value={defaultValues.date} /> : null}
 
-      {state.error ? (
+      {errorMessage ? (
         <p className={styles.overlayError} role="alert">
-          {state.error}
+          {errorMessage}
         </p>
       ) : null}
 
@@ -111,13 +117,13 @@ export function ActivityAddOverlay({
         <PlaceModeSegment
           mode={placeMode}
           onChange={handlePlaceModeChange}
-          googleLabel="חיפוש מקום"
-          manualLabel="הזנה ידנית"
+          googleLabel={t("placeSearchGoogle")}
+          manualLabel={t("placeSearchManual")}
         />
 
         {placeMode === "google" ? (
           <div className={styles.activitySearchBlock}>
-            <p className={styles.blockLabel}>איפה?</p>
+            <p className={styles.blockLabel}>{t("whereQuestion")}</p>
             <ActivityLocationSection
               tripId={tripId}
               defaultValues={defaultValues}
@@ -134,7 +140,7 @@ export function ActivityAddOverlay({
           <>
             <div className={styles.blockField}>
               <label className={styles.blockLabel} htmlFor="activity-title">
-                מה עושים?
+                {t("whatQuestion")}
               </label>
               <input
                 ref={titleRef}
@@ -156,11 +162,11 @@ export function ActivityAddOverlay({
             </div>
 
             <div className={styles.blockField}>
-              <p className={styles.blockLabel}>שעה</p>
+              <p className={styles.blockLabel}>{t("whenQuestion")}</p>
               <div className={styles.pairRow}>
                 <div className={styles.pairCell}>
                   <label className={styles.pairLabel} htmlFor="startTime">
-                    התחלה
+                    {tCommon("start")}
                   </label>
                   <input
                     id="startTime"
@@ -173,7 +179,7 @@ export function ActivityAddOverlay({
                 </div>
                 <div className={styles.pairCell}>
                   <label className={styles.pairLabel} htmlFor="endTime">
-                    סיום
+                    {tCommon("end")}
                   </label>
                   <input
                     id="endTime"
@@ -189,7 +195,7 @@ export function ActivityAddOverlay({
 
             {placeMode === "manual" ? (
               <div className={styles.blockField}>
-                <p className={styles.blockLabel}>איפה?</p>
+                <p className={styles.blockLabel}>{t("whereQuestion")}</p>
                 <ActivityLocationSection
                   tripId={tripId}
                   defaultValues={defaultValues}
@@ -202,11 +208,11 @@ export function ActivityAddOverlay({
             ) : null}
 
             <details className={styles.compactDetails} open={detailsExpanded}>
-              <summary className={styles.compactDetailsSummary}>פרטים נוספים</summary>
+              <summary className={styles.compactDetailsSummary}>{t("moreDetails")}</summary>
               <div className={styles.compactDetailsBody}>
                 <div className={styles.blockField}>
                   <label className={styles.pairLabel} htmlFor="type">
-                    סוג פעילות
+                    {t("activityType")}
                   </label>
                   <select
                     id="type"
@@ -218,14 +224,14 @@ export function ActivityAddOverlay({
                   >
                     {ACTIVITY_TYPES.map((type) => (
                       <option key={type} value={type}>
-                        {ACTIVITY_TYPE_LABELS[type as ActivityType]}
+                        {resolveTypeLabel(type as ActivityType)}
                       </option>
                     ))}
                   </select>
                 </div>
                 <div className={styles.blockField}>
                   <label className={styles.pairLabel} htmlFor="notes">
-                    הערות
+                    {tCommon("notes")}
                   </label>
                   <textarea
                     id="notes"
@@ -258,7 +264,7 @@ export function ActivityAddOverlay({
 
       {showDetails ? (
         <div className={styles.overlayFooter}>
-          <AuthSubmitButton>הוספת פעילות</AuthSubmitButton>
+          <AuthSubmitButton>{t("createSubmit")}</AuthSubmitButton>
         </div>
       ) : null}
     </form>

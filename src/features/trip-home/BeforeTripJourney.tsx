@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import {
   IconAccommodation,
   IconActivityOther,
@@ -20,21 +21,26 @@ type BeforeTripJourneyProps = {
   journey: TripHomeBeforeJourneyViewModel;
 };
 
-function ListTilesSection({
+async function ListTilesSection({
   preparation,
 }: {
   preparation: HomePreparationViewModel;
 }) {
+  const [t, tCommon] = await Promise.all([
+    getTranslations("Home"),
+    getTranslations("Common"),
+  ]);
+
   if (preparation.listTiles.length === 0) {
     return null;
   }
 
   return (
-    <section className={styles.homeSection} aria-label="רשימות והכנות">
+    <section className={styles.homeSection} aria-label={t("listsSectionAria")}>
       <div className={styles.homeSectionHeader}>
-        <h2 className={styles.homeSectionTitle}>רשימות והכנות</h2>
+        <h2 className={styles.homeSectionTitle}>{t("listsSectionTitle")}</h2>
         <Link href={preparation.listsHref} className={styles.homeSectionAction}>
-          הכל
+          {tCommon("all")}
         </Link>
       </div>
       <ul className={styles.listTileGrid}>
@@ -70,16 +76,20 @@ function DayOnePreviewIcon({ item }: { item: DayOnePreviewItem }) {
   return <IconActivityOther className={styles.dayOneItemIcon} aria-hidden />;
 }
 
-function DayOneSection({ dayOne }: { dayOne: TripHomeDayOnePreview }) {
+async function DayOneSection({ dayOne }: { dayOne: TripHomeDayOnePreview }) {
+  const [t, tCommon] = await Promise.all([
+    getTranslations("Home"),
+    getTranslations("Common"),
+  ]);
   const hasPhoto = dayOne.photoPresentation.hasPhoto;
   const primaryItem = dayOne.items[0];
 
   return (
-    <section className={styles.homeSection} aria-label="מבט ליום הראשון">
+    <section className={styles.homeSection} aria-label={t("dayOneSectionAria")}>
       <div className={styles.homeSectionHeader}>
-        <h2 className={styles.homeSectionTitle}>מבט ליום הראשון</h2>
+        <h2 className={styles.homeSectionTitle}>{t("dayOneSectionTitle")}</h2>
         <Link href={dayOne.dayHref} className={styles.homeSectionAction}>
-          פרטים
+          {tCommon("details")}
         </Link>
       </div>
 
@@ -121,7 +131,9 @@ function DayOneSection({ dayOne }: { dayOne: TripHomeDayOnePreview }) {
                 </ul>
               ) : null}
               {dayOne.overflowCount > 0 ? (
-                <p className={styles.dayOneOverflow}>ועוד {dayOne.overflowCount}</p>
+                <p className={styles.dayOneOverflow}>
+                  {tCommon("andMore", { count: dayOne.overflowCount })}
+                </p>
               ) : null}
             </>
           ) : null}
@@ -133,9 +145,11 @@ function DayOneSection({ dayOne }: { dayOne: TripHomeDayOnePreview }) {
   );
 }
 
-export function BeforeTripJourney({ journey }: BeforeTripJourneyProps) {
+export async function BeforeTripJourney({ journey }: BeforeTripJourneyProps) {
+  const t = await getTranslations("Home");
+
   return (
-    <section className={styles.beforeJourney} aria-label="הכנה לטיול">
+    <section className={styles.beforeJourney} aria-label={t("beforeJourneyAria")}>
       <BeforeTripRemindersSection reminders={journey.upcomingReminders ?? []} />
 
       {journey.preparation ? (

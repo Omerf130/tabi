@@ -1,3 +1,4 @@
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import type { PlacePhotoPresentation } from "@/features/place-images/types";
 import { isAccommodationOccupiedOnDate } from "./accommodation-domain";
 import { buildAccommodationLocationLabel } from "./build-accommodation-location-label";
@@ -13,6 +14,7 @@ export function buildAccommodationListItem(
   tripId: string,
   accommodation: AccommodationViewModel,
   currentTripDate: string,
+  t: AppTranslator<"Accommodation">,
   placePhoto?: PlacePhotoPresentation,
 ): AccommodationListItemViewModel {
   const locationLabel = buildAccommodationLocationLabel(accommodation);
@@ -24,7 +26,7 @@ export function buildAccommodationListItem(
       accommodation.checkInDate,
       accommodation.checkOutDate,
     ),
-    nightCountLabel: formatAccommodationNightCountLabel(accommodation.nightCount),
+    nightCountLabel: formatAccommodationNightCountLabel(accommodation.nightCount, t),
     detailHref: buildAccommodationDetailHref(tripId, accommodation.id),
     isCurrentStay: isAccommodationOccupiedOnDate(
       accommodation.checkInDate,

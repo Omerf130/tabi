@@ -9,6 +9,7 @@ import type { TransportRecord } from "@/features/transport/types";
 import { getJapanCalendarDate } from "@/features/trips/calendar-date";
 import { prepareTravelHubFinanceSummary } from "@/features/finance/queries";
 import { getTripPhase } from "@/features/trips/trip-phase";
+import { getTranslations } from "next-intl/server";
 import { buildTravelHubViewModel } from "./build-travel-hub-view-model";
 import { selectContextualAccommodation } from "./select-contextual-accommodation";
 import type { TravelHubViewModel } from "./types";
@@ -59,6 +60,8 @@ export async function prepareTravelHubPage(
   }
 
   const finance = await prepareTravelHubFinanceSummary(input.trip.id);
+  const t = await getTranslations("TravelHub");
+  const tLists = await getTranslations("Lists");
 
   return buildTravelHubViewModel({
     trip: input.trip,
@@ -69,5 +72,7 @@ export async function prepareTravelHubPage(
     currentTripDate,
     accommodationPhotoPresentation,
     finance,
+    t,
+    tLists,
   });
 }

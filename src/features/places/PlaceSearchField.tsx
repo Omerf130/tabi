@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useId, useState } from "react";
+import { useTranslations } from "next-intl";
 import type {
   PlacePrimaryTypes,
   PlaceSuggestion,
@@ -36,8 +37,8 @@ type PlaceSearchFieldProps = {
 export function PlaceSearchField({
   tripId,
   inputId,
-  label = "חפשו את מקום הלינה",
-  placeholder = "Hotel Gracery Shinjuku...",
+  label,
+  placeholder,
   selectedPreviewLabel,
   includedPrimaryTypes,
   resolvePurpose = "accommodation",
@@ -48,6 +49,10 @@ export function PlaceSearchField({
   presentation = "default",
   hideLabel = false,
 }: PlaceSearchFieldProps) {
+  const t = useTranslations("Activity");
+  const tCommon = useTranslations("Common");
+  const resolvedLabel = label ?? t("placeSearchAccommodationLabel");
+  const resolvedPlaceholder = placeholder ?? t("placeSearchPlaceholder");
   const isPlanner = presentation === "planner";
   const generatedId = useId();
   const fieldId = inputId ?? generatedId;
@@ -91,7 +96,7 @@ export function PlaceSearchField({
 
   async function selectSuggestion(suggestion: PlaceSuggestion) {
     setResolveError(null);
-    setResolveStatus("טוען פרטי מקום...");
+    setResolveStatus(t("placeSearchLoading"));
 
     if (!isValidPlaceSessionToken(getSessionToken())) {
       resetSession();
@@ -117,7 +122,7 @@ export function PlaceSearchField({
       };
 
       if (!response.ok || !payload.preview) {
-        setResolveError(payload.error ?? "לא ניתן לטעון פרטי המקום");
+        setResolveError(payload.error ?? t("placeSearchError"));
         setResolveStatus(null);
         resetSession();
         return;
@@ -130,7 +135,7 @@ export function PlaceSearchField({
       setResolveStatus(null);
       resetSession();
     } catch {
-      setResolveError("לא ניתן לטעון פרטי המקום");
+      setResolveError(t("placeSearchError"));
       setResolveStatus(null);
       resetSession();
     }
@@ -197,7 +202,7 @@ export function PlaceSearchField({
                 className={styles.plannerChangeButton}
                 onClick={clearSelection}
               >
-                שינוי מקום
+                {tCommon("changePlace")}
               </button>
             ) : null}
           </div>
@@ -239,7 +244,7 @@ export function PlaceSearchField({
               className={styles.changeButton}
               onClick={clearSelection}
             >
-              שינוי מקום
+              {tCommon("changePlace")}
             </button>
           ) : null}
         </div>
@@ -262,7 +267,7 @@ export function PlaceSearchField({
       <div className={styles.plannerSearch}>
         {!hideLabel ? (
           <label className={styles.labelPlanner} htmlFor={fieldId}>
-            {label}
+            {resolvedLabel}
           </label>
         ) : null}
         <div className={styles.plannerSearchBar}>
@@ -274,7 +279,7 @@ export function PlaceSearchField({
             value={query}
             onChange={(event) => handleQueryChange(event.target.value)}
             onKeyDown={handleInputKeyDown}
-            placeholder={placeholder}
+            placeholder={resolvedPlaceholder}
             autoComplete="off"
             disabled={disabled}
             dir="auto"
@@ -292,7 +297,7 @@ export function PlaceSearchField({
             className={styles.plannerResults}
             id={listboxId}
             role="listbox"
-            aria-label={label}
+            aria-label={resolvedLabel}
           >
             {suggestions.map((suggestion, index) => (
               <li key={suggestion.placeId} role="presentation">
@@ -338,7 +343,7 @@ export function PlaceSearchField({
     <div className={styles.searchField}>
       {!hideLabel ? (
         <label className={styles.label} htmlFor={fieldId}>
-          {label}
+          {resolvedLabel}
         </label>
       ) : null}
       <div className={styles.inputWrap}>
@@ -368,7 +373,7 @@ export function PlaceSearchField({
             className={styles.suggestions}
             id={listboxId}
             role="listbox"
-            aria-label={label}
+            aria-label={resolvedLabel}
           >
             {suggestions.map((suggestion, index) => (
               <li key={suggestion.placeId} role="presentation">

@@ -1,5 +1,6 @@
 import type { TransportType } from "./transport-types";
-import { TRANSPORT_TYPE_SINGULAR_LABELS } from "./transport-types";
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
+import { createTransportTypeSingularLabelResolver } from "./transport-types";
 
 export const TRANSPORT_LOCATION_NAME_MAX_LENGTH = 200;
 export const TRANSPORT_LOCATION_CODE_MAX_LENGTH = 20;
@@ -19,16 +20,28 @@ export const TRANSPORT_VEHICLE_NOTES_MAX_LENGTH = 200;
 
 export const DEFAULT_JAPAN_TRANSPORT_TIMEZONE = "Asia/Tokyo";
 
-export const TRANSPORT_MESSAGES = {
-  notFound: "קטע התחבורה לא נמצא",
-  invalidEndpoint: "פרטי מיקום או שעה לא תקינים",
-  invalidChronology: "שעת ההגעה חייבת להיות אחרי שעת היציאה",
-  invalidTimezone: "אזור זמן לא נתמך",
-  invalidType: "סוג תחבורה לא תקין",
-  saveFailed: "לא ניתן לשמור את התחבורה",
-  deleteFailed: "לא ניתן למחוק את התחבורה",
-  deleteConfirm: "למחוק את קטע התחבורה?",
+export const TRANSPORT_ERROR_CODES = {
+  notFound: "notFound",
+  invalidEndpoint: "invalidEndpoint",
+  invalidChronology: "invalidChronology",
+  invalidTimezone: "invalidTimezone",
+  invalidType: "invalidType",
+  saveFailed: "saveFailed",
+  invalidCostData: "invalidCostData",
+  deleteFailed: "deleteFailed",
 } as const;
+
+export type TransportErrorCode =
+  (typeof TRANSPORT_ERROR_CODES)[keyof typeof TRANSPORT_ERROR_CODES];
+
+export const TRANSPORT_SUCCESS_CODES = {
+  saved: "saved",
+  updated: "updated",
+  deleted: "deleted",
+} as const;
+
+export type TransportSuccessCode =
+  (typeof TRANSPORT_SUCCESS_CODES)[keyof typeof TRANSPORT_SUCCESS_CODES];
 
 export function buildTransportHref(tripId: string): string {
   return `/app/trips/${tripId}/transport`;
@@ -60,6 +73,10 @@ export function buildTransportEditHref(tripId: string, transportId: string): str
   return `/app/trips/${tripId}/transport/${transportId}/edit`;
 }
 
-export function getAddTransportTypeLabel(type: TransportType): string {
-  return `הוספת ${TRANSPORT_TYPE_SINGULAR_LABELS[type]}`;
+export function getAddTransportTypeLabel(
+  type: TransportType,
+  t: AppTranslator<"Transport">,
+): string {
+  const singular = createTransportTypeSingularLabelResolver(t)(type);
+  return t("addType", { type: singular });
 }

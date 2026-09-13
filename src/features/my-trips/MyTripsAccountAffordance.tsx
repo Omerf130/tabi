@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { logoutAction } from "@/features/auth/actions";
 import styles from "./MyTripsScreen.module.scss";
 
@@ -17,6 +18,7 @@ export function MyTripsAccountAffordance({
   userName,
   variant = "default",
 }: MyTripsAccountAffordanceProps) {
+  const t = useTranslations("MyTrips.account");
   const initial = getInitial(userName);
 
   return (
@@ -25,7 +27,7 @@ export function MyTripsAccountAffordance({
         variant === "hero" ? `${styles.accountMenu} ${styles.accountMenuHero}` : styles.accountMenu
       }
     >
-      <summary className={styles.accountTrigger} aria-label="Account menu">
+      <summary className={styles.accountTrigger} aria-label={t("menuAriaLabel")}>
         <span
           className={
             variant === "hero"
@@ -41,7 +43,7 @@ export function MyTripsAccountAffordance({
         <p className={styles.accountName}>{userName}</p>
         <form action={logoutAction}>
           <button type="submit" className={styles.accountSignOut}>
-            Sign out
+            {t("signOut")}
           </button>
         </form>
       </div>

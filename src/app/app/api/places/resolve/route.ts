@@ -8,6 +8,7 @@ import {
   resolveSelectedPlace,
 } from "@/features/places/googlePlaces.server";
 import {
+  PLACES_ERROR_CODES,
   PLACES_MESSAGES,
   PLACES_RATE_LIMIT_MAX_REQUESTS,
   PLACES_RATE_LIMIT_WINDOW_MS,
@@ -72,6 +73,6 @@ export async function POST(request: Request) {
     if (error instanceof GooglePlacesRequestError) {
       return NextResponse.json({ error: error.message }, { status: 502 });
     }
-    return NextResponse.json({ error: PLACES_MESSAGES.resolveFailed }, { status: 500 });
+    return NextResponse.json({ error: PLACES_ERROR_CODES.resolveFailed }, { status: 500 });
   }
 }

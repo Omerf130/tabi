@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import type { TripListSummaryViewModel } from "@/features/lists/types";
 import { selectAttentionList } from "./select-attention-list";
 
@@ -20,11 +21,12 @@ function makeList(
     title: type,
     icon: "grid",
     progress: { totalCount, completedCount },
-    progressLabel: `${completedCount} מתוך ${totalCount} הושלמו`,
+    progressLabel: `${completedCount}/${totalCount}`,
   };
 }
 
 describe("selectAttentionList", () => {
+  const t = createAppTranslator("TravelHub", "he");
   const lists = [
     makeList("before_trip", 6, 2),
     makeList("pre_trip_shopping", 6, 0),
@@ -33,7 +35,7 @@ describe("selectAttentionList", () => {
   ];
 
   it("prioritizes before_trip during upcoming trip", () => {
-    const result = selectAttentionList(lists, "upcoming");
+    const result = selectAttentionList(lists, "upcoming", t);
 
     expect(result?.list.type).toBe("before_trip");
     expect(result?.sectionLabel).toBe("לקראת הטיול");
@@ -47,6 +49,7 @@ describe("selectAttentionList", () => {
         makeList("packing", 8, 1),
       ],
       "upcoming",
+      t,
     );
 
     expect(result?.list.type).toBe("pre_trip_shopping");
@@ -60,13 +63,14 @@ describe("selectAttentionList", () => {
         makeList("packing", 8, 3),
       ],
       "upcoming",
+      t,
     );
 
     expect(result?.list.type).toBe("packing");
   });
 
   it("only considers during_trip during active trip", () => {
-    const result = selectAttentionList(lists, "active");
+    const result = selectAttentionList(lists, "active", t);
 
     expect(result?.list.type).toBe("during_trip");
     expect(result?.sectionLabel).toBe("במהלך הטיול");
@@ -76,6 +80,7 @@ describe("selectAttentionList", () => {
     const result = selectAttentionList(
       [makeList("before_trip", 0, 0), makeList("packing", 5, 2)],
       "upcoming",
+      t,
     );
 
     expect(result?.list.type).toBe("packing");
@@ -89,12 +94,13 @@ describe("selectAttentionList", () => {
         makeList("packing", 8, 8),
       ],
       "upcoming",
+      t,
     );
 
     expect(result).toBeNull();
   });
 
   it("returns null for completed trips", () => {
-    expect(selectAttentionList(lists, "completed")).toBeNull();
+    expect(selectAttentionList(lists, "completed", t)).toBeNull();
   });
 });

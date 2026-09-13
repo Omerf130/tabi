@@ -1,3 +1,4 @@
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import { compareCalendarDates } from "@/features/trips/calendar-date";
 import { formatTripDayHeading } from "@/features/trips/trip-days";
 import { compareTripReminders } from "./compare-trip-reminders";
@@ -75,15 +76,18 @@ export function groupRemindersForTab(
     .sort((left, right) => compareReminderGroups(left, right, tab));
 }
 
-export function getReminderManagerEmptyMessage(tab: ReminderManagerTab): string {
+export function getReminderManagerEmptyMessage(
+  tab: ReminderManagerTab,
+  t: AppTranslator<"Home">,
+): string {
   switch (tab) {
     case "today":
-      return "אין תזכורות להיום";
+      return t("remindersEmptyToday");
     case "upcoming":
-      return "אין תזכורות קרובות";
+      return t("remindersEmptyUpcoming");
     case "all":
-      return "אין תזכורות פתוחות";
+      return t("remindersEmptyAll");
     case "completed":
-      return "עדיין אין תזכורות שהושלמו";
+      return t("remindersEmptyCompleted");
   }
 }

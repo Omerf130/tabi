@@ -167,11 +167,14 @@ export function parseTravelDocumentMetadataFromFormData(
   };
 }
 
-export function deriveTitleFromFilename(filename: string): string {
+export function deriveTitleFromFilename(
+  filename: string,
+  fallbackTitle: string,
+): string {
   const withoutExtension = filename.replace(/\.[^.]+$/, "");
   const trimmed = withoutExtension.trim();
   if (!trimmed) {
-    return "מסמך";
+    return fallbackTitle;
   }
   return trimmed.slice(0, TRAVEL_DOCUMENT_TITLE_MAX_LENGTH);
 }

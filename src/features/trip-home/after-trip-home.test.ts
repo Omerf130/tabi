@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { createHebrewHomeTranslations } from "@/features/i18n/test-translators";
 import { buildTestNoExpensesRecap } from "@/features/finance/after-trip-finance-recap-fixture";
 import { resolveTripVisualSrc } from "@/features/destination-visuals/resolve-trip-visual-src";
 import { AFTER_SURFACE_SECTION_ORDER } from "./AfterTripJourney";
@@ -10,6 +11,8 @@ const trip = {
   startDate: "2026-10-25",
   endDate: "2026-11-18",
 };
+
+const translations = createHebrewHomeTranslations();
 
 describe("after trip home", () => {
   it("defines the after surface section order", () => {
@@ -29,6 +32,7 @@ describe("after trip home", () => {
     });
 
     const model = buildTripHomeViewModel({
+      translations,
       trip: {
         ...trip,
         coverImage: { pathname: "cover.jpg", contentType: "image/jpeg" },
@@ -50,6 +54,7 @@ describe("after trip home", () => {
 
   it("uses real inclusive trip duration without hardcoded Japan", () => {
     const model = buildTripHomeViewModel({
+      translations,
       trip: {
         ...trip,
         destination: {
@@ -76,6 +81,7 @@ describe("after trip home", () => {
   it("links itinerary revisit to the real route", () => {
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-12-01",
       nowJapanTime: "10:00",
       financeRecap: buildTestNoExpensesRecap(),
@@ -95,6 +101,7 @@ describe("after trip home", () => {
   it("includes finance recap and avoids highlights", () => {
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-12-01",
       nowJapanTime: "10:00",
       financeRecap: buildTestNoExpensesRecap(),
@@ -113,12 +120,14 @@ describe("after trip home", () => {
   it("keeps before and during view models unchanged", () => {
     const before = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-10-01",
       nowJapanTime: "10:00",
     });
 
     const during = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-11-01",
       nowJapanTime: "13:00",
     });

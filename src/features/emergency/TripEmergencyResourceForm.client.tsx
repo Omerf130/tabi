@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useTranslations } from "next-intl";
+import { useActionState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
@@ -12,8 +13,9 @@ import {
   updateTripEmergencyResourceAction,
   type TripEmergencyResourceActionState,
 } from "./actions";
-import { EMERGENCY_CUSTOM_CATEGORY_LABELS, EMERGENCY_MESSAGES } from "./constants";
+import { createEmergencyCategoryLabelResolver } from "./emergency-labels";
 import { EMERGENCY_CUSTOM_CATEGORIES } from "./types";
+import { translateEmergencyError } from "./translate-emergency-error";
 import type { TripEmergencyResourceViewModel } from "./types";
 import styles from "./EmergencyPage.module.scss";
 
@@ -30,12 +32,18 @@ export function TripEmergencyResourceForm({
   resource,
   onCancel,
 }: TripEmergencyResourceFormProps) {
+  const t = useTranslations("Emergency");
+  const resolveCategoryLabel = useMemo(
+    () => createEmergencyCategoryLabelResolver(t),
+    [t],
+  );
   const router = useRouter();
   const action = resource
     ? updateTripEmergencyResourceAction
     : createTripEmergencyResourceAction;
   const [state, formAction] = useActionState(action, initialState);
   const idPrefix = resource ? `edit-${resource.id}` : "create";
+  const errorMessage = translateEmergencyError(t, state.errorCode);
 
   useEffect(() => {
     if (state.ok) {
@@ -49,7 +57,7 @@ export function TripEmergencyResourceForm({
       <input type="hidden" name="tripId" value={tripId} />
       {resource ? <input type="hidden" name="resourceId" value={resource.id} /> : null}
 
-      <Field label="כותרת" htmlFor={`${idPrefix}-title`}>
+      <Field label={t("form.title")} htmlFor={`${idPrefix}-title`}>
         <Input
           id={`${idPrefix}-title`}
           name="title"
@@ -58,7 +66,7 @@ export function TripEmergencyResourceForm({
         />
       </Field>
 
-      <Field label="קטגוריה" htmlFor={`${idPrefix}-category`}>
+      <Field label={t("form.category")} htmlFor={`${idPrefix}-category`}>
         <select
           id={`${idPrefix}-category`}
           name="category"
@@ -67,17 +75,17 @@ export function TripEmergencyResourceForm({
         >
           {EMERGENCY_CUSTOM_CATEGORIES.map((category) => (
             <option key={category} value={category}>
-              {EMERGENCY_CUSTOM_CATEGORY_LABELS[category]}
+              {resolveCategoryLabel(category)}
             </option>
           ))}
         </select>
       </Field>
 
-      <Field label="טלפון (אופציונלי)" htmlFor={`${idPrefix}-phone`}>
+      <Field label={t("form.phoneOptional")} htmlFor={`${idPrefix}-phone`}>
         <Input id={`${idPrefix}-phone`} name="phone" defaultValue={resource?.phone ?? ""} />
       </Field>
 
-      <Field label="טלפון נוסף (אופציונלי)" htmlFor={`${idPrefix}-secondary-phone`}>
+      <Field label={t("form.secondaryPhoneOptional")} htmlFor={`${idPrefix}-secondary-phone`}>
         <Input
           id={`${idPrefix}-secondary-phone`}
           name="secondaryPhone"
@@ -85,19 +93,19 @@ export function TripEmergencyResourceForm({
         />
       </Field>
 
-      <Field label="אימייל (אופציונלי)" htmlFor={`${idPrefix}-email`}>
+      <Field label={t("form.emailOptional")} htmlFor={`${idPrefix}-email`}>
         <Input id={`${idPrefix}-email`} name="email" defaultValue={resource?.email ?? ""} />
       </Field>
 
-      <Field label="כתובת (אופציונלי)" htmlFor={`${idPrefix}-address`}>
+      <Field label={t("form.addressOptional")} htmlFor={`${idPrefix}-address`}>
         <Input id={`${idPrefix}-address`} name="address" defaultValue={resource?.address ?? ""} />
       </Field>
 
-      <Field label="אתר (אופציונלי)" htmlFor={`${idPrefix}-url`}>
+      <Field label={t("form.websiteOptional")} htmlFor={`${idPrefix}-url`}>
         <Input id={`${idPrefix}-url`} name="url" defaultValue={resource?.url ?? ""} />
       </Field>
 
-      <Field label="מספר/אסמכתא (אופציונלי)" htmlFor={`${idPrefix}-reference`}>
+      <Field label={t("form.referenceOptional")} htmlFor={`${idPrefix}-reference`}>
         <Input
           id={`${idPrefix}-reference`}
           name="reference"
@@ -105,7 +113,7 @@ export function TripEmergencyResourceForm({
         />
       </Field>
 
-      <Field label="הערות (אופציונלי)" htmlFor={`${idPrefix}-notes`}>
+      <Field label={t("form.notesOptional")} htmlFor={`${idPrefix}-notes`}>
         <Textarea
           id={`${idPrefix}-notes`}
           name="notes"
@@ -114,17 +122,17 @@ export function TripEmergencyResourceForm({
         />
       </Field>
 
-      {state.error ? (
+      {errorMessage ? (
         <p className={styles.error} role="alert">
-          {state.error}
+          {errorMessage}
         </p>
       ) : null}
 
       <div className={styles.formActions}>
-        <AuthSubmitButton>{EMERGENCY_MESSAGES.saveResource}</AuthSubmitButton>
+        <AuthSubmitButton>{t("saveResource")}</AuthSubmitButton>
         {onCancel ? (
           <Button type="button" variant="ghost" size="compact" onClick={onCancel}>
-            {EMERGENCY_MESSAGES.cancel}
+            {t("cancel")}
           </Button>
         ) : null}
       </div>

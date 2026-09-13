@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { TripHeader } from "@/features/app-shell/TripHeader";
 import { DocumentsPageContent } from "@/features/documents/DocumentsPageContent";
 import { listTravelDocumentsForTrip } from "@/features/documents/queries";
@@ -10,8 +11,11 @@ export async function generateMetadata({
   params: Promise<{ tripId: string }>;
 }): Promise<Metadata> {
   const { tripId } = await params;
-  const trip = await requireTripMember(tripId);
-  return { title: `מסמכים · ${trip.name}` };
+  const [trip, t] = await Promise.all([
+    requireTripMember(tripId),
+    getTranslations("Documents"),
+  ]);
+  return { title: `${t("listPageTitle")} · ${trip.name}` };
 }
 
 export default async function DocumentsPage({
@@ -20,13 +24,16 @@ export default async function DocumentsPage({
   params: Promise<{ tripId: string }>;
 }) {
   const { tripId } = await params;
-  const trip = await requireTripMember(tripId);
+  const [trip, t] = await Promise.all([
+    requireTripMember(tripId),
+    getTranslations("Documents"),
+  ]);
   const documents = await listTravelDocumentsForTrip(trip.id);
 
   return (
     <>
       <TripHeader
-        title="מסמכים"
+        title={t("listPageTitle")}
         tripName={trip.name}
         showTripSwitch
       />

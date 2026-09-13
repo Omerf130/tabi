@@ -1,5 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans_Hebrew } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
+import {
+  localeToDirection,
+  localeToHtmlLang,
+} from "@/features/i18n/locale";
+import { resolveRequestLocale } from "@/features/i18n/resolve-request-locale";
 import "@/styles/globals.scss";
 
 const notoSansHebrew = Noto_Sans_Hebrew({
@@ -9,10 +16,17 @@ const notoSansHebrew = Noto_Sans_Hebrew({
   variable: "--font-ui",
 });
 
-export const metadata: Metadata = {
-  title: "Tabi",
-  description: "תכנון וניהול טיולים",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Welcome");
+
+  return {
+    title: {
+      default: "Tabi",
+      template: "%s · Tabi",
+    },
+    description: t("metadataDescription"),
+  };
+}
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -20,19 +34,27 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await resolveRequestLocale();
+  const messages = await getMessages();
+  const dir = localeToDirection(locale);
+
   return (
     <html
-      lang="he"
-      dir="rtl"
+      lang={localeToHtmlLang(locale)}
+      dir={dir}
       data-color-scheme="light"
       className={notoSansHebrew.variable}
     >
-      <body>{children}</body>
+      <body>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          {children}
+        </NextIntlClientProvider>
+      </body>
     </html>
   );
 }

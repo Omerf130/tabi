@@ -1,3 +1,4 @@
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import { formatHourlyTimeLabel } from "./format-weather";
 import type { WeatherCondition, WeatherHourSummary, WeatherSnapshot } from "./types";
 
@@ -58,10 +59,12 @@ function pickFutureHourlySlots(
 
 export function buildNearTermWeatherColumns(
   snapshot: WeatherSnapshot,
+  t: AppTranslator<"Weather">,
+  locale = "he-IL",
 ): NearTermWeatherColumn[] {
   const columns: NearTermWeatherColumn[] = [
     {
-      label: "עכשיו",
+      label: t("now"),
       temperatureC: snapshot.current.temperatureC,
       condition: snapshot.current.condition,
       isNow: true,
@@ -74,7 +77,7 @@ export function buildNearTermWeatherColumns(
 
   for (const hour of pickFutureHourlySlots(snapshot.hourly, snapshot.observedAt)) {
     columns.push({
-      label: formatHourlyTimeLabel(hour.time),
+      label: formatHourlyTimeLabel(hour.time, locale),
       temperatureC: hour.temperatureC,
       condition: hour.condition,
       isNow: false,
@@ -85,5 +88,9 @@ export function buildNearTermWeatherColumns(
 }
 
 export function shouldShowNearTermStrip(snapshot: WeatherSnapshot): boolean {
-  return buildNearTermWeatherColumns(snapshot).length >= 2;
+  if (!hasHourlyWeatherData(snapshot)) {
+    return false;
+  }
+
+  return pickFutureHourlySlots(snapshot.hourly, snapshot.observedAt).length >= 1;
 }

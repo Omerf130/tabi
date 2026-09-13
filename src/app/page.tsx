@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { WelcomeScreen } from "@/features/welcome/WelcomeScreen";
 
-export const metadata: Metadata = {
-  title: "Tabi — Your journey. Perfectly planned.",
-  description:
-    "Plan and travel with everything in one place — itinerary, stays, transport, and documents.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Welcome");
+
+  return {
+    title: t("metadataTitle"),
+    description: t("metadataDescription"),
+  };
+}
 
 export default function HomePage() {
   return <WelcomeScreen />;

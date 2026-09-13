@@ -2,6 +2,8 @@ import "server-only";
 
 import { connectDb } from "@/lib/db/connect";
 import { TripReminder } from "@/models/TripReminder";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
+import { resolveRequestLocale } from "@/features/i18n/resolve-request-locale";
 import {
   formatReminderDateLabel,
   formatReminderDisplayLine,
@@ -19,6 +21,7 @@ type TripReminderLean = {
 function toTripReminderViewModel(
   reminder: TripReminderLean,
   todayJapan: string,
+  t: ReturnType<typeof createAppTranslator<"TripReminders">>,
 ): TripReminderViewModel {
   return {
     id: reminder._id.toString(),
@@ -26,11 +29,12 @@ function toTripReminderViewModel(
     time: reminder.time,
     text: reminder.text,
     isCompleted: reminder.isCompleted,
-    dateLabel: formatReminderDateLabel(reminder.date, todayJapan),
+    dateLabel: formatReminderDateLabel(reminder.date, todayJapan, t),
     displayLine: formatReminderDisplayLine(
       reminder.date,
       reminder.time,
       todayJapan,
+      t,
     ),
   };
 }
@@ -40,12 +44,15 @@ export async function listRemindersForUserTrip(
   userId: string,
   todayJapan: string,
 ): Promise<TripReminderViewModel[]> {
+  const locale = await resolveRequestLocale();
+  const t = createAppTranslator("TripReminders", locale);
+
   await connectDb();
   const reminders = await TripReminder.find({ tripId, userId })
     .sort({ date: 1, time: 1, _id: 1 })
     .lean();
 
-  return reminders.map((reminder) => toTripReminderViewModel(reminder, todayJapan));
+  return reminders.map((reminder) => toTripReminderViewModel(reminder, todayJapan, t));
 }
 
 export async function listRemindersForUserTripDay(
@@ -54,12 +61,15 @@ export async function listRemindersForUserTripDay(
   date: string,
   todayJapan: string,
 ): Promise<TripReminderViewModel[]> {
+  const locale = await resolveRequestLocale();
+  const t = createAppTranslator("TripReminders", locale);
+
   await connectDb();
   const reminders = await TripReminder.find({ tripId, userId, date })
     .sort({ isCompleted: 1, time: 1, _id: 1 })
     .lean();
 
-  return reminders.map((reminder) => toTripReminderViewModel(reminder, todayJapan));
+  return reminders.map((reminder) => toTripReminderViewModel(reminder, todayJapan, t));
 }
 
 export async function listIncompleteRemindersForUserTripDay(

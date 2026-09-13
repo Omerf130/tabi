@@ -1,3 +1,4 @@
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import { getTripDayCount } from "@/features/trips/trip-days";
 
 export type AfterTripDestination = {
@@ -41,6 +42,7 @@ function resolveAfterTripPlaceLabel(
 export function buildAfterTripDurationLabel(
   startDate: string,
   endDate: string,
+  t: AppTranslator<"Home">,
   destination?: AfterTripDestination | null,
   tripName?: string,
 ): string {
@@ -48,12 +50,14 @@ export function buildAfterTripDurationLabel(
   const place = resolveAfterTripPlaceLabel(destination, tripName);
 
   if (dayCount === 1) {
-    return place ? `יום ב${place}` : "יום אחד";
+    return place
+      ? t("durationOneDayInPlace", { place })
+      : t("durationOneDay");
   }
 
   if (place) {
-    return `${dayCount} ימים ב${place}`;
+    return t("durationDaysInPlace", { count: dayCount, place });
   }
 
-  return `${dayCount} ימים`;
+  return t("durationDays", { count: dayCount });
 }

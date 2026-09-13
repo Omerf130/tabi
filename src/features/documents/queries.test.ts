@@ -39,6 +39,10 @@ vi.mock("@/features/accommodations/resolve-accommodation-identity", () => ({
   resolveAccommodationIdentity: resolveAccommodationIdentityMock,
 }));
 
+vi.mock("@/features/i18n/resolve-request-locale", () => ({
+  resolveRequestLocale: vi.fn(async () => "he"),
+}));
+
 describe("travel document queries", () => {
   beforeEach(() => {
     vi.clearAllMocks();

@@ -11,17 +11,30 @@ import {
   getSessionCookie,
   setSessionCookie,
 } from "./cookies";
+import { resolveAppLocale, type AppLocale } from "@/features/i18n/locale";
+import { clearLocaleCookie, setLocaleCookie } from "@/features/i18n/locale-cookie";
 import { toPublicUser, type PublicUser } from "./public-user";
 import { isSessionExpired } from "./session-expiry";
 import { generateSessionToken, hashSessionToken } from "./token";
 
-export async function createSession(userId: string): Promise<void> {
+export async function createSession(
+  userId: string,
+  locale?: AppLocale,
+): Promise<void> {
   await connectDb();
   const token = generateSessionToken();
   const tokenHash = hashSessionToken(token);
   const expiresAt = new Date(Date.now() + SESSION_MAX_AGE_SECONDS * 1000);
   await Session.create({ userId, tokenHash, expiresAt });
   await setSessionCookie(token);
+
+  if (locale) {
+    await setLocaleCookie(locale);
+    return;
+  }
+
+  const user = await User.findById(userId).select("locale").lean();
+  await setLocaleCookie(resolveAppLocale(user?.locale));
 }
 
 export const getCurrentUser = cache(async (): Promise<PublicUser | null> => {
@@ -60,4 +73,5 @@ export async function deleteCurrentSession(): Promise<void> {
     await Session.deleteOne({ tokenHash: hashSessionToken(token) });
   }
   await clearSessionCookie();
+  await clearLocaleCookie();
 }

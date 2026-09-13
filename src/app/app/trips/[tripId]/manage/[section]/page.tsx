@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { listAccommodationsForTripSettings } from "@/features/accommodations/queries";
 import { prepareEntityCostFormContext } from "@/features/finance/linked-expense-queries";
@@ -24,8 +25,8 @@ import { getJapanCalendarDate } from "@/features/trips/calendar-date";
 import {
   isOwnerOnlyManagementSection,
   parseTripManagementSection,
-  TRIP_MANAGEMENT_SECTIONS,
 } from "@/features/trip-management/constants";
+import { getTripManagementSectionLabel } from "@/features/trip-management/trip-management-labels";
 import { TripMembersManagementClient } from "@/features/trip-management/TripMembersManagement.client";
 
 export async function generateMetadata({
@@ -34,11 +35,14 @@ export async function generateMetadata({
   params: Promise<{ tripId: string; section: string }>;
 }): Promise<Metadata> {
   const { tripId, section: sectionParam } = await params;
-  const trip = await requireTripMember(tripId);
+  const [trip, tTripManagement] = await Promise.all([
+    requireTripMember(tripId),
+    getTranslations("TripManagement"),
+  ]);
   const section = parseTripManagementSection(sectionParam);
-  const label =
-    TRIP_MANAGEMENT_SECTIONS.find((item) => item.id === section)?.label ??
-    "ניהול הטיול";
+  const label = section
+    ? getTripManagementSectionLabel(section, tTripManagement)
+    : tTripManagement("title");
   return { title: `${label} · ${trip.name}` };
 }
 

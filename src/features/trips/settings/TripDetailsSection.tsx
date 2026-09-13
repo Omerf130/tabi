@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { TripWorkspace } from "@/features/trips/public-trip";
 import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
 import {
@@ -11,10 +12,12 @@ type TripDetailsSectionProps = {
   variant?: TripSettingsVariant;
 };
 
-export function TripDetailsSection({
+export async function TripDetailsSection({
   trip,
   variant = "stack",
 }: TripDetailsSectionProps) {
+  const t = await getTranslations("TripSettings");
+
   return (
     <section
       className={getTripSettingsSectionClassName(variant)}
@@ -22,17 +25,17 @@ export function TripDetailsSection({
     >
       <div className={styles.header}>
         <h2 id="trip-details-title" className={styles.title}>
-          פרטי הטיול
+          {t("detailsTitle")}
         </h2>
-        <p className={styles.hint}>מידע בסיסי על הטיול. ניהול מלא יתווסף בהמשך.</p>
+        <p className={styles.hint}>{t("detailsHint")}</p>
       </div>
       <dl className={styles.detailsList}>
         <div className={styles.detailItem}>
-          <dt>שם הטיול</dt>
+          <dt>{t("tripName")}</dt>
           <dd>{trip.name}</dd>
         </div>
         <div className={styles.detailItem}>
-          <dt>תאריכים</dt>
+          <dt>{t("dates")}</dt>
           <dd>{formatCalendarDateRangeDisplay(trip.startDate, trip.endDate)}</dd>
         </div>
       </dl>

@@ -15,8 +15,6 @@ export type TodayHomeReminderItem = {
   text: string;
 };
 
-export const HOME_REMINDER_EMPTY_MESSAGE = "אין תזכורות חדשות";
-
 export function selectTodayHomeReminders(
   reminders: readonly TripReminderRecord[],
   phase: TripPhase,

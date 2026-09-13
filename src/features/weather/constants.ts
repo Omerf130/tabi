@@ -21,23 +21,6 @@ export const WEATHER_PLACES_SEARCH_LANGUAGE_CODE = "he";
 
 export const WEATHER_FORECAST_DAYS = 3;
 
-export const WEATHER_MESSAGES = {
-  loadFailed: "לא הצלחנו לטעון את מזג האוויר כרגע",
-  retry: "נסו שוב",
-  refreshFailed:
-    "לא הצלחנו לרענן את מזג האוויר. מוצג המידע האחרון שנטען.",
-  updated: "עודכן",
-  feelsLike: "מרגיש כמו",
-  today: "היום",
-  forecast: "תחזית לימים הקרובים",
-  rainChance: "סיכוי לגשם",
-  searchPlaceholder: "חיפוש עיר או יעד...",
-  changeLocation: "חיפוש מיקום",
-  noResults: "לא נמצאו מיקומים",
-  invalidLocation: "מיקום לא תקין",
-  searchLocation: "חיפוש מיקום",
-} as const;
-
 export const WEATHER_API_BASE = "https://api.weatherapi.com/v1";
 
 export function buildWeatherHref(tripId: string): string {

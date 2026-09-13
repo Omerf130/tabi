@@ -10,20 +10,28 @@ import {
   deleteTravelDocumentBlob,
   uploadTravelDocumentBlob,
 } from "./blob-storage";
-import { TRAVEL_DOCUMENT_MESSAGES } from "./constants";
+import {
+  TRAVEL_DOCUMENT_ERROR_CODES,
+  type TravelDocumentErrorCode,
+} from "./constants";
 import { sanitizeOriginalFilename } from "./sanitize-filename";
 import type { TravelDocumentMetadataInput } from "./schemas";
 
 export class TravelDocumentValidationError extends Error {
-  constructor(message: string) {
-    super(message);
+  readonly code: TravelDocumentErrorCode;
+
+  constructor(code: TravelDocumentErrorCode) {
+    super(code);
     this.name = "TravelDocumentValidationError";
+    this.code = code;
   }
 }
 
 export class TravelDocumentNotFoundError extends Error {
+  readonly code = TRAVEL_DOCUMENT_ERROR_CODES.notFound;
+
   constructor() {
-    super(TRAVEL_DOCUMENT_MESSAGES.notFound);
+    super(TRAVEL_DOCUMENT_ERROR_CODES.notFound);
     this.name = "TravelDocumentNotFoundError";
   }
 }
@@ -53,7 +61,7 @@ async function assertActivityBelongsToTrip(
   await connectDb();
   const activity = await Activity.findOne({ _id: activityId, tripId }).lean();
   if (!activity) {
-    throw new TravelDocumentValidationError(TRAVEL_DOCUMENT_MESSAGES.invalidLink);
+    throw new TravelDocumentValidationError(TRAVEL_DOCUMENT_ERROR_CODES.invalidLink);
   }
 }
 
@@ -67,7 +75,7 @@ async function assertAccommodationBelongsToTrip(
     tripId,
   }).lean();
   if (!accommodation) {
-    throw new TravelDocumentValidationError(TRAVEL_DOCUMENT_MESSAGES.invalidLink);
+    throw new TravelDocumentValidationError(TRAVEL_DOCUMENT_ERROR_CODES.invalidLink);
   }
 }
 
@@ -78,7 +86,7 @@ async function assertTransportBelongsToTrip(
   await connectDb();
   const transport = await Transport.findOne({ _id: transportId, tripId }).lean();
   if (!transport) {
-    throw new TravelDocumentValidationError(TRAVEL_DOCUMENT_MESSAGES.invalidLink);
+    throw new TravelDocumentValidationError(TRAVEL_DOCUMENT_ERROR_CODES.invalidLink);
   }
 }
 
@@ -87,7 +95,7 @@ async function validateContextLinks(
   metadata: TravelDocumentMetadataInput,
 ): Promise<void> {
   if (countContextLinks(metadata) > 1) {
-    throw new TravelDocumentValidationError(TRAVEL_DOCUMENT_MESSAGES.bothLinks);
+    throw new TravelDocumentValidationError(TRAVEL_DOCUMENT_ERROR_CODES.bothLinks);
   }
 
   if (metadata.activityId) {

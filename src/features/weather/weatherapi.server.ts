@@ -1,11 +1,14 @@
 import "server-only";
 
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
+import { resolveRequestLocale } from "@/features/i18n/resolve-request-locale";
 import {
   WEATHER_API_BASE,
   WEATHER_FORECAST_DAYS,
   WEATHER_SEARCH_REVALIDATE_SECONDS,
   WEATHER_SNAPSHOT_REVALIDATE_SECONDS,
 } from "./constants";
+import { createConditionLabelResolver } from "./weather-labels";
 import {
   buildLocationQuery,
   normalizeSearchResult,
@@ -102,5 +105,9 @@ export async function fetchWeatherForecast(
   }
 
   const payload = (await response.json()) as WeatherApiForecastResponse;
-  return normalizeWeatherSnapshot(payload, location);
+  const locale = await resolveRequestLocale();
+  const resolveConditionLabel = createConditionLabelResolver(
+    createAppTranslator("Weather", locale),
+  );
+  return normalizeWeatherSnapshot(payload, location, resolveConditionLabel);
 }

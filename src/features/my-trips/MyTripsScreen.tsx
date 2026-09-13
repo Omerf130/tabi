@@ -9,9 +9,9 @@ type MyTripsScreenProps = {
   trips: MyTripsCardItem[];
 };
 
-export function MyTripsScreen({ user, trips }: MyTripsScreenProps) {
+export async function MyTripsScreen({ user, trips }: MyTripsScreenProps) {
   return (
-    <div className={styles.screen} dir="ltr" lang="en">
+    <div className={styles.screen}>
       <MyTripsHero userName={user.name} />
       <MyTripsContent trips={trips} />
     </div>

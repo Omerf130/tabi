@@ -1,6 +1,12 @@
 import { buildGoogleMapsSearchUrl, buildTelHref } from "@/lib/maps/google-maps-url";
 import type { EmergencyResourceAction } from "./types";
 
+export type EmergencyResourceActionLabels = {
+  openWebsite: string;
+  openInMap: string;
+  copyReference: string;
+};
+
 export function buildEmergencyResourceActions(input: {
   phone?: string;
   secondaryPhone?: string;
@@ -9,7 +15,7 @@ export function buildEmergencyResourceActions(input: {
   address?: string;
   url?: string;
   reference?: string;
-}): EmergencyResourceAction[] {
+}, labels: EmergencyResourceActionLabels): EmergencyResourceAction[] {
   const actions: EmergencyResourceAction[] = [];
 
   if (input.phone?.trim()) {
@@ -56,7 +62,7 @@ export function buildEmergencyResourceActions(input: {
     const value = input.url.trim();
     actions.push({
       type: "url",
-      label: "פתיחת אתר",
+      label: labels.openWebsite,
       href: value,
       value,
     });
@@ -66,7 +72,7 @@ export function buildEmergencyResourceActions(input: {
     const value = input.address.trim();
     actions.push({
       type: "address",
-      label: "פתיחה במפה",
+      label: labels.openInMap,
       href: buildGoogleMapsSearchUrl(value),
       value,
     });
@@ -75,7 +81,7 @@ export function buildEmergencyResourceActions(input: {
   if (input.reference?.trim()) {
     actions.push({
       type: "copy",
-      label: "העתקת מספר/אסמכתא",
+      label: labels.copyReference,
       value: input.reference.trim(),
     });
   }

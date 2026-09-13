@@ -22,9 +22,9 @@ describe("auth presentation contracts", () => {
     const login = readSource("app/login/page.tsx");
     const register = readSource("app/register/page.tsx");
 
-    expect(shell).toContain('dir="ltr"');
-    expect(login).toContain("Welcome back");
-    expect(register).toContain("Save your journey");
+    expect(shell).not.toContain('dir="ltr"');
+    expect(login).toContain('getTranslations("Auth.login")');
+    expect(register).toContain('getTranslations("Auth.register")');
     expect(shell).not.toContain("formPanel");
     expect(shell).not.toContain("visualPanel");
   });
@@ -34,9 +34,9 @@ describe("auth presentation contracts", () => {
     const field = readSource("features/auth/AuthField.tsx");
 
     expect(google).toContain("buildGoogleAuthHref");
-    expect(google).toContain("Continue with Google");
-    expect(field).toContain("Show password");
-    expect(field).toContain("Hide password");
+    expect(google).toContain('useTranslations("Auth.actions")');
+    expect(field).toContain('t("showPassword")');
+    expect(field).toContain('t("hidePassword")');
   });
 
   it("derives registration names without exposing a separate name field", () => {

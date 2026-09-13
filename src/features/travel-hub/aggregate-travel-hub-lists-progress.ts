@@ -8,6 +8,7 @@ export type TravelHubListsProgress = {
 
 export function aggregateTravelHubListsProgress(
   lists: readonly TripListSummaryViewModel[],
+  formatProgressLabel: (values: { completed: number; total: number }) => string,
 ): TravelHubListsProgress {
   const totalCount = lists.reduce((sum, list) => sum + list.progress.totalCount, 0);
   const completedCount = lists.reduce(
@@ -19,6 +20,8 @@ export function aggregateTravelHubListsProgress(
     totalCount,
     completedCount,
     progressLabel:
-      totalCount > 0 ? `${completedCount} מתוך ${totalCount} הושלמו` : null,
+      totalCount > 0
+        ? formatProgressLabel({ completed: completedCount, total: totalCount })
+        : null,
   };
 }

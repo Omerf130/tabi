@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { getCurrentUser } from "@/features/auth/session";
 import { getPublicInviteState } from "@/features/trips/invitations/queries";
 import { InviteLanding } from "@/features/trips/invitations/InviteLanding";
 
-export const metadata: Metadata = {
-  title: "הזמנה לטיול · Tabi",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("TripInvitations");
+  return { title: `${t("landingTitle")} · Tabi` };
+}
 
 export default async function InvitePage({
   params,

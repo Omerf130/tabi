@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import {
   IconActivityAttraction,
   IconActivityHotel,
@@ -8,7 +9,7 @@ import {
   IconChevron,
   IconDocuments,
 } from "@/components/ui/icons";
-import { DAY_ADD_MENU_OPTIONS } from "./day-action-menu";
+import { getDayAddMenuOptions } from "./day-action-menu";
 import type { DayAddMenuAction } from "./day-action-surface.types";
 import styles from "./AddItemFlow.module.scss";
 
@@ -25,9 +26,12 @@ type DayAddItemChooserProps = {
 };
 
 export function DayAddItemChooser({ onSelect }: DayAddItemChooserProps) {
+  const t = useTranslations("Itinerary");
+  const options = getDayAddMenuOptions(t);
+
   return (
     <ul className={styles.chooserList}>
-      {DAY_ADD_MENU_OPTIONS.map((option) => {
+      {options.map((option) => {
         const Icon = CHOOSER_ICONS[option.id];
         return (
           <li key={option.id}>

@@ -76,6 +76,11 @@
   width: 0.875rem;
   height: 0.875rem;
   opacity: 0.88;
+  transform: scaleX(-1);
+}
+
+:global(html[dir="ltr"]) .switchGlyph {
+  transform: none;
 }
 
 .backLink {

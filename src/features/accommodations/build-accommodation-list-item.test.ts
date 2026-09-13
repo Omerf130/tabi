@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import { buildAccommodationListItem } from "./build-accommodation-list-item";
 import type { AccommodationViewModel } from "./types";
 
 const tripId = "507f1f77bcf86cd799439011";
+const t = createAppTranslator("Accommodation", "he");
 
 const baseAccommodation: AccommodationViewModel = {
   id: "acc-1",
@@ -26,6 +28,7 @@ describe("buildAccommodationListItem", () => {
       tripId,
       baseAccommodation,
       "2026-10-25",
+      t,
     );
 
     expect(item.locationLabel).toBe("Kyoto");
@@ -39,11 +42,13 @@ describe("buildAccommodationListItem", () => {
       tripId,
       baseAccommodation,
       "2026-10-25",
+      t,
     );
     const future = buildAccommodationListItem(
       tripId,
       baseAccommodation,
       "2026-10-20",
+      t,
     );
 
     expect(current.isCurrentStay).toBe(true);
@@ -55,6 +60,7 @@ describe("buildAccommodationListItem", () => {
       tripId,
       baseAccommodation,
       "2026-10-25",
+      t,
       {
         hasPhoto: true,
         photoHref: `/app/trips/${tripId}/accommodations/acc-1/photo`,
@@ -65,6 +71,7 @@ describe("buildAccommodationListItem", () => {
       tripId,
       baseAccommodation,
       "2026-10-25",
+      t,
       { hasPhoto: false, authorAttributions: [] },
     );
 

@@ -5,14 +5,6 @@ export type NavSection =
   | "settings"
   | "more";
 
-export const NAV_LABELS: Record<NavSection, string> = {
-  home: "בית",
-  itinerary: "מסלול",
-  documents: "מסמכים",
-  settings: "הגדרות",
-  more: "עוד",
-};
-
 export const NAV_SECTIONS: NavSection[] = [
   "home",
   "itinerary",

@@ -1,9 +1,14 @@
-import { getDefaultJapanTransportTimezone } from "./timezone-options";
+import {
+  getDefaultJapanTransportTimezone,
+  TRANSPORT_TIMEZONE_OPTIONS,
+} from "./timezone-options";
 import type { TransportFormValues, TransportRecord } from "./types";
 import type { TransportType } from "./transport-types";
 
 export function createEmptyTransportFormValues(type: TransportType): TransportFormValues {
-  const defaultTimezone = getDefaultJapanTransportTimezone();
+  const defaultTimezone = getDefaultJapanTransportTimezone(
+    TRANSPORT_TIMEZONE_OPTIONS,
+  );
 
   return {
     type,

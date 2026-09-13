@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import styles from "./AddItemFlow.module.scss";
 
 type PlaceMode = "google" | "manual";
@@ -14,11 +15,19 @@ type PlaceModeSegmentProps = {
 export function PlaceModeSegment({
   mode,
   onChange,
-  googleLabel = "חיפוש מקום",
-  manualLabel = "הזנה ידנית",
+  googleLabel,
+  manualLabel,
 }: PlaceModeSegmentProps) {
+  const t = useTranslations("Activity");
+  const resolvedGoogleLabel = googleLabel ?? t("placeSearchGoogle");
+  const resolvedManualLabel = manualLabel ?? t("placeSearchManual");
+
   return (
-    <div className={styles.segmentedControl} role="tablist" aria-label="אופן הזנת מקום">
+    <div
+      className={styles.segmentedControl}
+      role="tablist"
+      aria-label={t("placeSearchModeAria")}
+    >
       <button
         type="button"
         role="tab"
@@ -27,7 +36,7 @@ export function PlaceModeSegment({
         data-selected={mode === "google" ? "true" : "false"}
         onClick={() => onChange("google")}
       >
-        {googleLabel}
+        {resolvedGoogleLabel}
       </button>
       <button
         type="button"
@@ -37,7 +46,7 @@ export function PlaceModeSegment({
         data-selected={mode === "manual" ? "true" : "false"}
         onClick={() => onChange("manual")}
       >
-        {manualLabel}
+        {resolvedManualLabel}
       </button>
     </div>
   );

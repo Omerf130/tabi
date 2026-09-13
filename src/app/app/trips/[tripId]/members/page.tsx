@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { requireTripMember } from "@/features/trips/authorization";
 import { buildTripManagementHref } from "@/features/trip-management/constants";
@@ -9,8 +10,11 @@ export async function generateMetadata({
   params: Promise<{ tripId: string }>;
 }): Promise<Metadata> {
   const { tripId } = await params;
-  const trip = await requireTripMember(tripId);
-  return { title: `חברי הטיול · ${trip.name}` };
+  const [trip, t] = await Promise.all([
+    requireTripMember(tripId),
+    getTranslations("TripMembers"),
+  ]);
+  return { title: `${t("pageTitle")} · ${trip.name}` };
 }
 
 export default async function TripMembersPage({

@@ -18,40 +18,44 @@ export type TripListSlug = (typeof TRIP_LIST_SLUGS)[number];
 
 export const TRIP_LIST_ITEM_TEXT_MAX_LENGTH = 120;
 
-export const TRIP_LIST_MESSAGES = {
-  created: "הפריט נוסף",
-  updated: "הפריט עודכן",
-  deleted: "הפריט נמחק",
-  completed: "הפריט סומן כהושלם",
-  uncompleted: "הפריט סומן כלא הושלם",
-  generic: "לא ניתן לעדכן את הרשימה. נסו שוב.",
-  notFound: "הפריט לא נמצא",
-  deleteConfirm: "למחוק את הפריט?",
+export const TRIP_LIST_ERROR_CODES = {
+  generic: "generic",
+  notFound: "notFound",
 } as const;
+
+export type TripListErrorCode =
+  (typeof TRIP_LIST_ERROR_CODES)[keyof typeof TRIP_LIST_ERROR_CODES];
+
+export const TRIP_LIST_SUCCESS_CODES = {
+  created: "created",
+  updated: "updated",
+  deleted: "deleted",
+  completed: "completed",
+  uncompleted: "uncompleted",
+} as const;
+
+export type TripListSuccessCode =
+  (typeof TRIP_LIST_SUCCESS_CODES)[keyof typeof TRIP_LIST_SUCCESS_CODES];
 
 export const TRIP_LIST_DEFINITIONS: ReadonlyArray<{
   type: TripListType;
   slug: TripListSlug;
-  title: string;
   icon: "grid" | "plane" | "itinerary" | "shopping";
 }> = [
-  { type: "packing", slug: "packing", title: "ציוד לארוז", icon: "grid" },
+  { type: "packing", slug: "packing", icon: "grid" },
   {
     type: "before_trip",
     slug: "before-trip",
-    title: "מטלות לפני הטיסה",
     icon: "plane",
   },
   {
     type: "during_trip",
     slug: "during-trip",
-    title: "מטלות במהלך הטיול",
     icon: "itinerary",
   },
   {
     type: "pre_trip_shopping",
     slug: "pre-trip-shopping",
-    title: "קניות לקראת הטיול",
     icon: "shopping",
   },
 ];

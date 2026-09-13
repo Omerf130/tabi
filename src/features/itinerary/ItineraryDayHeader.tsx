@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { ItineraryDayHeaderViewModel } from "./types";
 import styles from "./ItineraryExperience.module.scss";
 
@@ -5,7 +6,11 @@ type ItineraryDayHeaderProps = {
   header: ItineraryDayHeaderViewModel;
 };
 
-export function ItineraryDayHeader({ header }: ItineraryDayHeaderProps) {
+export async function ItineraryDayHeader({ header }: ItineraryDayHeaderProps) {
+  const [t, tCommon] = await Promise.all([
+    getTranslations("Itinerary"),
+    getTranslations("Common"),
+  ]);
   const contextLine = [header.locationLabel, header.weather?.temperatureLabel]
     .filter(Boolean)
     .join(" · ");
@@ -13,11 +18,13 @@ export function ItineraryDayHeader({ header }: ItineraryDayHeaderProps) {
   return (
     <header className={styles.dayHeader}>
       <div className={styles.dayHeaderMain}>
-        <h2 className={styles.dayHeaderNumber}>יום {header.dayNumber}</h2>
+        <h2 className={styles.dayHeaderNumber}>
+          {tCommon("dayNumber", { dayNumber: header.dayNumber })}
+        </h2>
         <p className={styles.dayHeaderMeta}>
           {header.weekdayLabel}, {header.dateLabel}
           {header.isToday ? (
-            <span className={styles.dayHeaderToday}> · היום</span>
+            <span className={styles.dayHeaderToday}>{t("dayHeaderToday")}</span>
           ) : null}
         </p>
         {contextLine ? (

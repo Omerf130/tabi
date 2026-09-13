@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { CURRENCY_MESSAGES } from "./constants";
+import { useLocale, useTranslations } from "next-intl";
 import {
   filterCurrencyOptions,
   getPriorityCurrencies,
 } from "./currency-metadata";
+import { resolveAppLocale } from "@/features/i18n/locale";
 import type { CurrencyOption } from "./types";
 import styles from "./CurrencyConverter.module.scss";
 
@@ -16,12 +17,18 @@ type CurrencyPickerProps = {
   onClose: () => void;
 };
 
+function getCurrencyDisplayName(currency: CurrencyOption, locale: "he" | "en"): string {
+  return locale === "he" ? currency.hebrewName : currency.englishName;
+}
+
 export function CurrencyPicker({
   currencies,
   selectedCode,
   onSelect,
   onClose,
 }: CurrencyPickerProps) {
+  const t = useTranslations("Currency");
+  const locale = resolveAppLocale(useLocale());
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const [query, setQuery] = useState("");
@@ -85,13 +92,13 @@ export function CurrencyPicker({
       <div className={styles.pickerInner}>
         <div className={styles.pickerHeader}>
           <h2 id={titleId} className={styles.pickerTitle}>
-            בחירת מטבע
+            {t("pickerTitle")}
           </h2>
           <button
             type="button"
             className={styles.pickerClose}
             onClick={handleClose}
-            aria-label="סגירה"
+            aria-label={t("close")}
           >
             ×
           </button>
@@ -102,20 +109,20 @@ export function CurrencyPicker({
           className={styles.searchInput}
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder={CURRENCY_MESSAGES.searchPlaceholder}
+          placeholder={t("searchPlaceholder")}
           autoComplete="off"
           enterKeyHint="search"
         />
 
         <div className={styles.pickerSections}>
           {filtered.length === 0 ? (
-            <p className={styles.emptyResults}>{CURRENCY_MESSAGES.noResults}</p>
+            <p className={styles.emptyResults}>{t("noResults")}</p>
           ) : (
             <>
               {priorityFiltered.length > 0 ? (
                 <section>
                   <h3 className={styles.pickerSectionTitle}>
-                    {CURRENCY_MESSAGES.popularSection}
+                    {t("popularSection")}
                   </h3>
                   <ul className={styles.pickerList}>
                     {priorityFiltered.map((currency) => (
@@ -135,7 +142,7 @@ export function CurrencyPicker({
                             </span>
                           </span>
                           <span className={styles.pickerOptionName}>
-                            {currency.hebrewName}
+                            {getCurrencyDisplayName(currency, locale)}
                           </span>
                         </button>
                       </li>
@@ -147,7 +154,7 @@ export function CurrencyPicker({
               {otherFiltered.length > 0 ? (
                 <section>
                   <h3 className={styles.pickerSectionTitle}>
-                    {CURRENCY_MESSAGES.allSection}
+                    {t("allSection")}
                   </h3>
                   <ul className={styles.pickerList}>
                     {otherFiltered.map((currency) => (
@@ -167,7 +174,7 @@ export function CurrencyPicker({
                             </span>
                           </span>
                           <span className={styles.pickerOptionName}>
-                            {currency.hebrewName}
+                            {getCurrencyDisplayName(currency, locale)}
                           </span>
                         </button>
                       </li>

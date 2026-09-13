@@ -66,7 +66,6 @@ export type PublicTripExpense = {
 
 export type FinanceCategoryTotal = {
   category: ExpenseCategory;
-  label: string;
   total: number;
 };
 

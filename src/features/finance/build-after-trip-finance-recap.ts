@@ -1,6 +1,7 @@
 import { formatCurrencyAmount } from "@/features/currency/convert";
 import { getExpenseCategoryPresentation } from "./category-presentation";
-import { buildFinanceHref, FINANCE_MESSAGES } from "./constants";
+import { buildFinanceHref } from "./constants";
+import type { FinanceLabels } from "./finance-labels";
 import type { ExpenseCategory, FinanceSummary, PublicTripFinanceSettings } from "./types";
 
 export type AfterTripFinanceCategoryBar = {
@@ -29,7 +30,7 @@ export type AfterTripFinanceRecapWithExpenses = {
   hasBudget: boolean;
   budgetLabel: string | null;
   remainingLabel: string | null;
-  remainingHeading: "נותר" | "חריגה" | null;
+  remainingHeading: "remaining" | "overBudgetShort" | null;
   isOverBudget: boolean;
   categoryBars: AfterTripFinanceCategoryBar[];
   ctaLabel: string;
@@ -46,16 +47,18 @@ export function buildAfterTripFinanceRecap(input: {
   settings: PublicTripFinanceSettings;
   summary: FinanceSummary;
   hasExpenses: boolean;
+  labels: FinanceLabels;
 }): AfterTripFinanceRecapViewModel {
   const href = buildFinanceHref(input.tripId);
+  const { labels } = input;
 
   if (!input.hasExpenses) {
     return {
       variant: "noExpenses",
       href,
-      title: FINANCE_MESSAGES.pageTitle,
-      message: FINANCE_MESSAGES.afterNoExpenses,
-      ctaLabel: FINANCE_MESSAGES.afterOpenFinanceCta,
+      title: labels.pageTitle,
+      message: labels.afterNoExpenses,
+      ctaLabel: labels.afterOpenFinanceCta,
     };
   }
 
@@ -71,7 +74,7 @@ export function buildAfterTripFinanceRecap(input: {
       const presentation = getExpenseCategoryPresentation(entry.category);
       return {
         category: entry.category,
-        label: presentation.label,
+        label: labels.getCategoryLabel(entry.category),
         total: entry.total,
         color: presentation.color,
         percentage:
@@ -84,7 +87,7 @@ export function buildAfterTripFinanceRecap(input: {
   return {
     variant: "hasExpenses",
     href,
-    title: FINANCE_MESSAGES.afterRecapTitle,
+    title: labels.afterRecapTitle,
     totalExpenses: summary.totalExpenses,
     totalExpensesLabel: formatCurrencyAmount(
       summary.totalExpenses,
@@ -105,11 +108,11 @@ export function buildAfterTripFinanceRecap(input: {
         : null,
     remainingHeading: hasBudget
       ? isOverBudget
-        ? "חריגה"
-        : FINANCE_MESSAGES.remaining
+        ? "overBudgetShort"
+        : "remaining"
       : null,
     isOverBudget,
     categoryBars,
-    ctaLabel: FINANCE_MESSAGES.afterFullFinanceCta,
+    ctaLabel: labels.afterFullFinanceCta,
   };
 }

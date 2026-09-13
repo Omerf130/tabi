@@ -8,7 +8,7 @@ import { isValidCalendarDateString } from "@/features/trips/calendar-date";
 import { connectDb } from "@/lib/db/connect";
 import { Transport } from "@/models/Transport";
 import { TripExpense } from "@/models/TripExpense";
-import { FINANCE_MESSAGES } from "./constants";
+import { FINANCE_ERROR_CODES } from "./constants";
 import {
   buildExpenseConversionSnapshot,
   FrankfurterRequestError,
@@ -58,13 +58,13 @@ export function resolveTransportExpenseCategory(type: TransportType): ExpenseCat
 async function assertSupportedCurrency(currency: string): Promise<void> {
   const currencies = await getSupportedCurrencies();
   if (!isSupportedCurrencyCode(currencies, currency)) {
-    throw new FinanceExpenseValidationError(FINANCE_MESSAGES.baseCurrencyInvalid);
+    throw new FinanceExpenseValidationError(FINANCE_ERROR_CODES.baseCurrencyInvalid);
   }
 }
 
 function assertValidExpenseDate(expenseDate: string): void {
   if (!isValidCalendarDateString(expenseDate)) {
-    throw new FinanceExpenseValidationError(FINANCE_MESSAGES.validationFailed);
+    throw new FinanceExpenseValidationError(FINANCE_ERROR_CODES.validationFailed);
   }
 }
 
@@ -274,7 +274,7 @@ export async function updateLinkedTripExpenseFromFinance(input: {
 
   if (existing.sourceType === "activity") {
     if (!input.category) {
-      throw new FinanceExpenseValidationError(FINANCE_MESSAGES.categoryInvalid);
+      throw new FinanceExpenseValidationError(FINANCE_ERROR_CODES.categoryInvalid);
     }
   }
 

@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
+import { localeToIntlLocale, resolveAppLocale } from "@/features/i18n/locale";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { IconBack, IconSearch, IconWeather } from "@/components/ui/icons";
 import { buildTravelWeatherAdvice } from "./build-travel-weather-advice";
 import {
-  WEATHER_MESSAGES,
   buildWeatherSnapshotHref,
   makeWeatherLocationKey,
 } from "./constants";
@@ -61,9 +62,9 @@ function WeatherIcon({ iconUrl, className }: { iconUrl: string; className?: stri
   );
 }
 
-function WeatherSkeleton() {
+function WeatherSkeleton({ loadingAria }: { loadingAria: string }) {
   return (
-    <div className={styles.skeletonLayout} aria-busy="true" aria-label="טוען מזג אוויר">
+    <div className={styles.skeletonLayout} aria-busy="true" aria-label={loadingAria}>
       <div className={styles.skeletonLocation}>
         <div className={`${styles.skeletonBlock} ${styles.skeletonLocationName}`} />
         <div className={`${styles.skeletonBlock} ${styles.skeletonLocationDate}`} />
@@ -94,6 +95,8 @@ export function WeatherPage({
   defaultLocation,
   initialSnapshot,
 }: WeatherPageProps) {
+  const t = useTranslations("Weather");
+  const intlLocale = localeToIntlLocale(resolveAppLocale(useLocale()));
   const initialState = createInitialSnapshotState(defaultLocation, initialSnapshot);
   const storedLocation = useSyncExternalStore(
     subscribeToWeatherLocationPreference,
@@ -202,20 +205,22 @@ export function WeatherPage({
   }
 
   const showSkeleton = isFetching && !snapshot;
-  const advice = snapshot ? buildTravelWeatherAdvice(snapshot) : null;
+  const advice = snapshot ? buildTravelWeatherAdvice(snapshot, t) : null;
   const forecastDays = snapshot ? getWeatherForecastDaysForDisplay(snapshot) : [];
-  const nearTermColumns = snapshot ? buildNearTermWeatherColumns(snapshot) : [];
+  const nearTermColumns = snapshot
+    ? buildNearTermWeatherColumns(snapshot, t, intlLocale)
+    : [];
   const showNearTermStrip = snapshot ? shouldShowNearTermStrip(snapshot) : false;
 
   return (
     <div className={styles.weather}>
       <header className={styles.weatherHeader}>
-        <Link href={backHref} className={styles.backLink} aria-label="חזרה">
+        <Link href={backHref} className={styles.backLink} aria-label={t("backAria")}>
           <IconBack className={styles.backGlyph} aria-hidden />
         </Link>
         <div className={styles.weatherHeaderTitleGroup}>
           <IconWeather className={styles.weatherHeaderIcon} aria-hidden />
-          <h1 className={styles.weatherHeaderTitle}>מזג אוויר</h1>
+          <h1 className={styles.weatherHeaderTitle}>{t("pageTitle")}</h1>
         </div>
         <button
           type="button"
@@ -223,7 +228,7 @@ export function WeatherPage({
           onClick={() => setSearchOpen(true)}
           aria-haspopup="dialog"
           aria-expanded={searchOpen}
-          aria-label={WEATHER_MESSAGES.searchLocation}
+          aria-label={t("searchLocation")}
         >
           <IconSearch className={styles.headerSearchIcon} aria-hidden />
         </button>
@@ -232,7 +237,9 @@ export function WeatherPage({
       <div className={styles.locationBlock}>
         <h2 className={styles.locationName}>{location.label}</h2>
         {snapshot ? (
-          <p className={styles.locationDate}>{formatWeatherHeroDate(snapshot.observedAt)}</p>
+          <p className={styles.locationDate}>
+            {formatWeatherHeroDate(snapshot.observedAt, intlLocale)}
+          </p>
         ) : (
           <p className={styles.locationDatePlaceholder} aria-hidden />
         )}
@@ -240,17 +247,17 @@ export function WeatherPage({
 
       {loadFailed ? (
         <div className={styles.errorBlock} role="alert">
-          <p className={styles.errorText}>{WEATHER_MESSAGES.loadFailed}</p>
+          <p className={styles.errorText}>{t("loadFailed")}</p>
           <button type="button" className={styles.retryButton} onClick={handleRetry}>
-            {WEATHER_MESSAGES.retry}
+            {t("retry")}
           </button>
         </div>
       ) : showSkeleton ? (
-        <WeatherSkeleton />
+        <WeatherSkeleton loadingAria={t("loadingAria")} />
       ) : snapshot ? (
         <div className={styles.weatherBody}>
           <div className={styles.primaryStack}>
-            <section className={styles.currentSection} aria-label="מזג אוויר נוכחי">
+            <section className={styles.currentSection} aria-label={t("currentSectionAria")}>
               <div className={styles.currentHero}>
                 {snapshot.current.condition.iconUrl ? (
                   <div className={styles.currentIconWrap}>
@@ -262,13 +269,15 @@ export function WeatherPage({
                 ) : null}
                 <div className={styles.currentDetails}>
                   <p className={styles.currentTemp}>
-                    {formatTemperatureC(snapshot.current.temperatureC)}
+                    {formatTemperatureC(snapshot.current.temperatureC, intlLocale)}
                   </p>
                   <p className={styles.currentCondition}>{snapshot.current.condition.label}</p>
                   <p className={styles.currentHighLow}>
                     {formatHighLowRange(
                       snapshot.today.maxTemperatureC,
                       snapshot.today.minTemperatureC,
+                      t,
+                      intlLocale,
                     )}
                   </p>
                 </div>
@@ -276,7 +285,7 @@ export function WeatherPage({
             </section>
 
             {showNearTermStrip ? (
-              <section className={styles.hourlySection} aria-label="תחזית לטווח קצר">
+              <section className={styles.hourlySection} aria-label={t("nearTermSectionAria")}>
                 <div
                   className={styles.hourlyStrip}
                   style={{
@@ -296,7 +305,7 @@ export function WeatherPage({
                         />
                       ) : null}
                       <span className={styles.hourlyTemp}>
-                        {formatTemperatureC(column.temperatureC)}
+                        {formatTemperatureC(column.temperatureC, intlLocale)}
                       </span>
                       <span className={styles.srOnly}>{column.condition.label}</span>
                     </div>
@@ -324,13 +333,15 @@ export function WeatherPage({
               aria-labelledby="weather-forecast-title"
             >
               <h2 id="weather-forecast-title" className={styles.forecastTitle}>
-                {WEATHER_MESSAGES.forecast}
+                {t("forecast")}
               </h2>
               {forecastDays.length > 0 ? (
                 <ul className={styles.forecastList}>
                   {forecastDays.map((day) => (
                     <li key={day.date} className={styles.forecastRow}>
-                      <span className={styles.forecastDate}>{formatForecastRowLabel(day.date)}</span>
+                      <span className={styles.forecastDate}>
+                        {formatForecastRowLabel(day.date, intlLocale)}
+                      </span>
                       <span className={styles.forecastIconCell}>
                         {day.condition.iconUrl ? (
                           <WeatherIcon
@@ -341,10 +352,10 @@ export function WeatherPage({
                         <span className={styles.srOnly}>{day.condition.label}</span>
                       </span>
                       <span className={styles.forecastHigh}>
-                        {formatTemperatureC(day.maxTemperatureC)}
+                        {formatTemperatureC(day.maxTemperatureC, intlLocale)}
                       </span>
                       <span className={styles.forecastLow}>
-                        {formatTemperatureC(day.minTemperatureC)}
+                        {formatTemperatureC(day.minTemperatureC, intlLocale)}
                       </span>
                     </li>
                   ))}
@@ -354,10 +365,10 @@ export function WeatherPage({
 
             <footer className={styles.metaFooter}>
               <p className={styles.freshness}>
-                {WEATHER_MESSAGES.updated} · {formatObservedAt(snapshot.observedAt)}
+                {t("updated")} · {formatObservedAt(snapshot.observedAt, intlLocale)}
               </p>
               {refreshFailed ? (
-                <p className={styles.refreshNotice}>{WEATHER_MESSAGES.refreshFailed}</p>
+                <p className={styles.refreshNotice}>{t("refreshFailed")}</p>
               ) : null}
             </footer>
           </div>

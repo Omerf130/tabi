@@ -1,7 +1,4 @@
-import {
-  EXPENSE_CATEGORIES,
-  EXPENSE_CATEGORY_LABELS,
-} from "./constants";
+import { EXPENSE_CATEGORIES } from "./constants";
 import type {
   FinanceSummary,
   PublicTripExpense,
@@ -33,7 +30,6 @@ export function buildFinanceSummary(input: {
 
   const byCategory = EXPENSE_CATEGORIES.map((category) => ({
     category,
-    label: EXPENSE_CATEGORY_LABELS[category],
     total: byCategoryMap.get(category) ?? 0,
   })).filter((entry) => entry.total > 0);
 

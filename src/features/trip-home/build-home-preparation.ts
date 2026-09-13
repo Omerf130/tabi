@@ -2,7 +2,6 @@ import {
   buildListDetailHref,
   buildListsLandingHref,
   getTripListSlugFromType,
-  TRIP_LIST_DEFINITIONS,
 } from "@/features/lists/constants";
 import type { TripListType } from "@/features/lists/constants";
 import type {
@@ -10,6 +9,7 @@ import type {
   TripListSummaryViewModel,
 } from "@/features/lists/types";
 import { compareTripListItemsForDisplay } from "@/features/lists/list-item-order";
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 
 export const PREPARATION_LIST_TYPES = [
   "packing",
@@ -88,6 +88,7 @@ export function buildHomePreparation(
   tripId: string,
   lists: readonly TripListSummaryViewModel[],
   listItems: readonly TripListItemViewModel[],
+  t: AppTranslator<"Home">,
 ): HomePreparationViewModel | null {
   const listByType = new Map(lists.map((list) => [list.type, list]));
   let totalCount = 0;
@@ -116,10 +117,10 @@ export function buildHomePreparation(
       continue;
     }
 
-    const definition = TRIP_LIST_DEFINITIONS.find((entry) => entry.type === type);
+    const listSummary = listByType.get(type);
     listTiles.push({
       type,
-      title: definition?.title ?? type,
+      title: listSummary?.title ?? type,
       completedCount: progress.completedCount,
       totalCount: progress.totalCount,
       href: buildListDetailHref(tripId, getTripListSlugFromType(type)),
@@ -162,7 +163,7 @@ export function buildHomePreparation(
     completedCount,
     remainingCount,
     percentage,
-    progressLabel: `${completedCount} מתוך ${totalCount} הושלמו`,
+    progressLabel: t("preparationProgress", { completed: completedCount, total: totalCount }),
     previewItems,
     listTiles,
     listsHref: buildListsLandingHref(tripId),

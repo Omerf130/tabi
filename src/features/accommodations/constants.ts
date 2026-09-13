@@ -8,22 +8,25 @@ export const ACCOMMODATION_GOOGLE_MAPS_URL_MAX_LENGTH = 2000;
 
 export const ACCOMMODATION_PLACE_ID_MAX_LENGTH = 512;
 
-export const ACCOMMODATION_MESSAGES = {
-  created: "מקום הלינה נוסף",
-  updated: "מקום הלינה עודכן",
-  deleted: "מקום הלינה נמחק",
-  generic: "לא ניתן לשמור את מקום הלינה. נסו שוב.",
-  notFound: "מקום הלינה לא נמצא",
-  dateOutOfRange: "תאריכי Check-in ו-Check-out חייבים להיות בתוך טווח הטיול",
-  invalidDateRange: "תאריך Check-out חייב להיות אחרי תאריך Check-in (לפחות לילה אחד)",
-  deleteConfirm: "למחוק את מקום הלינה הזה מהטיול?",
-  deleteConfirmDetail:
-    "פעולה זו מסירה את מקום הלינה מ-Tabi בלבד — היא לא מבטלת את ההזמנה בבית המלון.",
+export const ACCOMMODATION_ERROR_CODES = {
+  generic: "generic",
+  notFound: "notFound",
+  dateOutOfRange: "dateOutOfRange",
+  invalidDateRange: "invalidDateRange",
+  invalidCostData: "invalidCostData",
 } as const;
 
-export function formatAccommodationDeleteConfirm(): string {
-  return `${ACCOMMODATION_MESSAGES.deleteConfirm}\n\n${ACCOMMODATION_MESSAGES.deleteConfirmDetail}`;
-}
+export type AccommodationErrorCode =
+  (typeof ACCOMMODATION_ERROR_CODES)[keyof typeof ACCOMMODATION_ERROR_CODES];
+
+export const ACCOMMODATION_SUCCESS_CODES = {
+  created: "created",
+  updated: "updated",
+  deleted: "deleted",
+} as const;
+
+export type AccommodationSuccessCode =
+  (typeof ACCOMMODATION_SUCCESS_CODES)[keyof typeof ACCOMMODATION_SUCCESS_CODES];
 
 export function getAccommodationsSettingsHref(tripId: string): string {
   return `/app/trips/${tripId}/manage/accommodations`;

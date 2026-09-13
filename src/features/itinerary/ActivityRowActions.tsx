@@ -1,12 +1,14 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
   deleteActivityAction,
   reorderActivityAction,
 } from "./actions";
-import { ACTIVITY_MESSAGES } from "./constants";
+import { ACTIVITY_ERROR_CODES } from "./constants";
+import { translateActivityError } from "./translate-activity-error";
 import styles from "./ItineraryPage.module.scss";
 
 type ActivityRowActionsProps = {
@@ -28,6 +30,9 @@ export function ActivityRowActions({
   onMove,
   onMutation,
 }: ActivityRowActionsProps) {
+  const t = useTranslations("Activity");
+  const tItinerary = useTranslations("Itinerary");
+  const tCommon = useTranslations("Common");
   const router = useRouter();
   const [, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
@@ -45,12 +50,12 @@ export function ActivityRowActions({
         router.refresh();
         return;
       }
-      setError(result.error);
+      setError(translateActivityError(t, result.error));
     });
   }
 
   function handleDelete() {
-    if (!window.confirm(ACTIVITY_MESSAGES.deleteConfirm)) {
+    if (!window.confirm(t(`errors.${ACTIVITY_ERROR_CODES.deleteConfirm}`))) {
       return;
     }
 
@@ -65,7 +70,7 @@ export function ActivityRowActions({
         router.refresh();
         return;
       }
-      setError(result.error);
+      setError(translateActivityError(t, result.error));
     });
   }
 
@@ -73,7 +78,7 @@ export function ActivityRowActions({
     <div className={styles.activityActions}>
       <div className={styles.activityActionRow}>
         <button type="button" className={styles.actionLink} onClick={onEdit}>
-          עריכה
+          {tCommon("edit")}
         </button>
         <button
           type="button"
@@ -81,7 +86,7 @@ export function ActivityRowActions({
           onClick={onToggle}
           aria-expanded={isOpen}
         >
-          פעולות
+          {tItinerary("activityActions")}
         </button>
       </div>
       {isOpen ? (
@@ -91,24 +96,24 @@ export function ActivityRowActions({
             className={styles.secondaryAction}
             onClick={() => submitReorder("up")}
           >
-            הזזה למעלה
+            {tItinerary("moveUp")}
           </button>
           <button
             type="button"
             className={styles.secondaryAction}
             onClick={() => submitReorder("down")}
           >
-            הזזה למטה
+            {tItinerary("moveDown")}
           </button>
           <button type="button" className={styles.secondaryAction} onClick={onMove}>
-            העברה ליום אחר
+            {tItinerary("moveToDay")}
           </button>
           <button
             type="button"
             className={styles.secondaryActionDanger}
             onClick={handleDelete}
           >
-            מחיקה
+            {tCommon("delete")}
           </button>
           {error ? (
             <p className={styles.inlineError} role="alert">

@@ -1,14 +1,18 @@
 import { describe, expect, it } from "vitest";
+import enMessages from "../../../messages/en.json";
+import heMessages from "../../../messages/he.json";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import {
-  TRAVEL_WALLET_VISUAL_FILTERS,
-  filterDocumentsByVisualFilter,
-  formatDocumentCountHebrew,
-  formatLinkedCountHebrew,
-} from "./document-filter-ui";
+  createTravelWalletVisualFilterOptions,
+  formatDocumentLinkedCount,
+  formatDocumentWalletCount,
+} from "./document-labels";
+import { filterDocumentsByVisualFilter } from "./document-filter-ui";
 
 describe("travel wallet visual filters", () => {
   it("renders traveler-facing filter labels", () => {
-    expect(TRAVEL_WALLET_VISUAL_FILTERS.map((option) => option.label)).toEqual([
+    const t = createAppTranslator("Documents", "he");
+    expect(createTravelWalletVisualFilterOptions(t).map((option) => option.label)).toEqual([
       "הכל",
       "טיסות",
       "לינה",
@@ -16,6 +20,19 @@ describe("travel wallet visual filters", () => {
       "כרטיסים",
       "ביטוח",
       "עוד",
+    ]);
+  });
+
+  it("renders English filter labels", () => {
+    const t = createAppTranslator("Documents", "en");
+    expect(createTravelWalletVisualFilterOptions(t).map((option) => option.label)).toEqual([
+      "All",
+      "Flights",
+      "Stays",
+      "Trains",
+      "Tickets",
+      "Insurance",
+      "More",
     ]);
   });
 
@@ -31,13 +48,23 @@ describe("travel wallet visual filters", () => {
     expect(filterDocumentsByVisualFilter(documents, "flight")).toHaveLength(1);
   });
 
-  it("formats Hebrew document counts", () => {
-    expect(formatDocumentCountHebrew(1)).toBe("1 מסמך בארנק");
-    expect(formatDocumentCountHebrew(3)).toBe("3 מסמכים בארנק");
+  it("formats localized document counts", () => {
+    const tHe = createAppTranslator("Documents", "he");
+    const tEn = createAppTranslator("Documents", "en");
+    expect(formatDocumentWalletCount(1, tHe)).toBe("1 מסמך בארנק");
+    expect(formatDocumentWalletCount(3, tHe)).toBe("3 מסמכים בארנק");
+    expect(formatDocumentWalletCount(1, tEn)).toBe("1 document in wallet");
   });
 
-  it("formats Hebrew linked counts", () => {
-    expect(formatLinkedCountHebrew(1)).toBe("1 מסמך מקושר");
-    expect(formatLinkedCountHebrew(2)).toBe("2 מסמכים מקושרים");
+  it("formats localized linked counts", () => {
+    const tHe = createAppTranslator("Documents", "he");
+    expect(formatDocumentLinkedCount(1, tHe)).toBe("1 מסמך מקושר");
+    expect(formatDocumentLinkedCount(2, tHe)).toBe("2 מסמכים מקושרים");
+  });
+
+  it("keeps Hebrew and English Documents namespaces aligned", () => {
+    expect(Object.keys(heMessages.Documents.categories)).toEqual(
+      Object.keys(enMessages.Documents.categories),
+    );
   });
 });

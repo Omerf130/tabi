@@ -1,5 +1,9 @@
 import { resolveStoredActivityPlaceSource } from "./activity-place-domain";
-import { ACTIVITY_TYPE_LABELS } from "./activity-types";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
+import {
+  createActivityTypeLabelResolver,
+  type ActivityTypeLabelResolver,
+} from "./activity-types";
 import { formatActivityTimeDisplay } from "./time";
 import type { ActivityFormValues, ActivityViewModel } from "./types";
 
@@ -32,7 +36,14 @@ function optionalNumber(value: number | null | undefined): number | undefined {
   return typeof value === "number" && Number.isFinite(value) ? value : undefined;
 }
 
-export function toActivityViewModel(activity: ActivityRecord): ActivityViewModel {
+const defaultActivityTypeLabelResolver = createActivityTypeLabelResolver(
+  createAppTranslator("Activity", "he"),
+);
+
+export function toActivityViewModel(
+  activity: ActivityRecord,
+  getTypeLabel: ActivityTypeLabelResolver = defaultActivityTypeLabelResolver,
+): ActivityViewModel {
   const startTime = optionalString(activity.startTime);
   const endTime = optionalString(activity.endTime);
   const placeSource = resolveStoredActivityPlaceSource(activity.placeSource);
@@ -42,7 +53,7 @@ export function toActivityViewModel(activity: ActivityRecord): ActivityViewModel
     date: activity.date,
     title: activity.title,
     type: activity.type,
-    typeLabel: ACTIVITY_TYPE_LABELS[activity.type],
+    typeLabel: getTypeLabel(activity.type),
     order: activity.order,
     startTime,
     endTime,
@@ -59,6 +70,8 @@ export function toActivityViewModel(activity: ActivityRecord): ActivityViewModel
     notes: optionalString(activity.notes),
   };
 }
+
+export { createActivityTypeLabelResolver };
 
 export function toActivityFormValues(activity: ActivityViewModel): ActivityFormValues {
   return {

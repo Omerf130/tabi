@@ -1,14 +1,15 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { AppPage } from "@/features/app-shell/AppPage";
 import { Card } from "@/components/ui/Card/Card";
 import { CurrentLocationPanel } from "./CurrentLocationPanel.client";
 import { CustomResourcesSection } from "./CustomResourcesSection.client";
-import { EMERGENCY_MESSAGES } from "./constants";
 import { EmergencyResourceActions } from "./EmergencyResourceActions";
 import type { EmergencyPageViewModel } from "./types";
 import styles from "./EmergencyPage.module.scss";
 
-export function EmergencyPageContent(model: EmergencyPageViewModel) {
+export async function EmergencyPageContent(model: EmergencyPageViewModel) {
+  const t = await getTranslations("Emergency");
   const sourceMeta = model.assistanceResources[0]?.source;
 
   return (
@@ -16,7 +17,7 @@ export function EmergencyPageContent(model: EmergencyPageViewModel) {
       <div className={styles.page}>
         <section className={styles.section} aria-labelledby="urgent-heading">
           <h2 id="urgent-heading" className={styles.sectionTitle}>
-            {EMERGENCY_MESSAGES.urgentSection}
+            {t("urgentSection")}
           </h2>
           <ul className={styles.urgentList}>
             {model.urgentResources.map((resource) => (
@@ -33,7 +34,7 @@ export function EmergencyPageContent(model: EmergencyPageViewModel) {
 
         <section className={styles.section} aria-labelledby="assistance-heading">
           <h2 id="assistance-heading" className={styles.sectionTitle}>
-            {EMERGENCY_MESSAGES.assistanceSection}
+            {t("assistanceSection")}
           </h2>
           <ul className={styles.resourceList}>
             {model.assistanceResources.map((resource) => (
@@ -53,7 +54,7 @@ export function EmergencyPageContent(model: EmergencyPageViewModel) {
 
         <section className={styles.section} aria-labelledby="location-heading">
           <h2 id="location-heading" className={styles.sectionTitle}>
-            {EMERGENCY_MESSAGES.myLocation}
+            {t("myLocation")}
           </h2>
           <CurrentLocationPanel />
         </section>
@@ -61,7 +62,7 @@ export function EmergencyPageContent(model: EmergencyPageViewModel) {
         {model.currentAccommodation ? (
           <section className={styles.section} aria-labelledby="accommodation-heading">
             <h2 id="accommodation-heading" className={styles.sectionTitle}>
-              {EMERGENCY_MESSAGES.currentAccommodation}
+              {t("currentAccommodation")}
             </h2>
             <Card variant="standard">
               <p className={styles.resourceTitle} dir="auto">
@@ -79,10 +80,10 @@ export function EmergencyPageContent(model: EmergencyPageViewModel) {
               ) : null}
               <div className={styles.actions}>
                 <Link href={model.currentAccommodation.detailHref} className={styles.actionButton}>
-                  פרטי לינה
+                  {t("accommodationDetails")}
                 </Link>
                 <Link href={model.currentAccommodation.taxiHref} className={styles.actionButton}>
-                  Taxi Mode
+                  {t("taxiMode")}
                 </Link>
                 {model.currentAccommodation.mapsHref ? (
                   <a
@@ -91,7 +92,7 @@ export function EmergencyPageContent(model: EmergencyPageViewModel) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    פתיחה במפה
+                    {t("openInMap")}
                   </a>
                 ) : null}
               </div>
@@ -101,10 +102,10 @@ export function EmergencyPageContent(model: EmergencyPageViewModel) {
 
         <section className={styles.section} aria-labelledby="documents-heading">
           <h2 id="documents-heading" className={styles.sectionTitle}>
-            {EMERGENCY_MESSAGES.emergencyDocuments}
+            {t("emergencyDocuments")}
           </h2>
           {model.documents.length === 0 ? (
-            <p className={styles.empty}>{EMERGENCY_MESSAGES.noDocuments}</p>
+            <p className={styles.empty}>{t("errors.noDocuments")}</p>
           ) : (
             <ul className={styles.linkList}>
               {model.documents.map((document) => (
@@ -125,7 +126,7 @@ export function EmergencyPageContent(model: EmergencyPageViewModel) {
 
         <section className={styles.section} aria-labelledby="phrases-heading">
           <h2 id="phrases-heading" className={styles.sectionTitle}>
-            {EMERGENCY_MESSAGES.emergencyPhrases}
+            {t("emergencyPhrases")}
           </h2>
           <ul className={styles.linkList}>
             {model.phraseLinks.map((phrase) => (
@@ -137,13 +138,13 @@ export function EmergencyPageContent(model: EmergencyPageViewModel) {
             ))}
           </ul>
           <Link href={model.allEmergencyPhrasesHref} className={styles.actionButton}>
-            {EMERGENCY_MESSAGES.allEmergencyPhrases}
+            {t("allEmergencyPhrases")}
           </Link>
         </section>
 
         {sourceMeta ? (
           <p className={styles.footerNote}>
-            {EMERGENCY_MESSAGES.sourceNote} ({sourceMeta.verifiedAt})
+            {t("sourceNote")} ({sourceMeta.verifiedAt})
           </p>
         ) : null}
       </div>

@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { requireUser } from "@/features/auth/session";
 import { listTripInvitations } from "@/features/trips/invitations/queries";
 import { listTripMembers } from "@/features/trips/members/queries";
@@ -15,6 +16,7 @@ type MembersPageContentProps = {
 export async function MembersPageContent({ tripId }: MembersPageContentProps) {
   const user = await requireUser();
   const trip = await requireTripMember(tripId);
+  const t = await getTranslations("TripMembers");
   const members = await listTripMembers(tripId);
   const invitations = trip.role === "owner" ? await listTripInvitations(tripId) : [];
   const isOwnerView = trip.role === "owner";
@@ -38,7 +40,7 @@ export async function MembersPageContent({ tripId }: MembersPageContentProps) {
           <CreateInviteForm tripId={tripId} />
           {invitations.length > 0 ? (
             <section>
-              <h2 className={styles.sectionTitle}>הזמנות פעילות ואחרונות</h2>
+              <h2 className={styles.sectionTitle}>{t("invitationsSection")}</h2>
               <div className={styles.inviteList}>
                 {invitations.map((invitation) => (
                   <InvitationRow

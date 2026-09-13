@@ -1,5 +1,6 @@
 import type { AccommodationViewModel } from "@/features/accommodations/types";
 import { resolveTripVisualSrc } from "@/features/destination-visuals/resolve-trip-visual-src";
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import type { ActivityViewModel } from "@/features/itinerary/types";
 import type { PlacePhotoPresentation } from "@/features/place-images/types";
 import {
@@ -51,6 +52,11 @@ const EMPTY_PHOTO: PlacePhotoPresentation = {
   authorAttributions: [],
 };
 
+export type TripHomeTranslations = {
+  tHome: AppTranslator<"Home">;
+  tCommon: AppTranslator<"Common">;
+};
+
 type BuildTripHomeViewModelInput = {
   trip: {
     id: string;
@@ -83,6 +89,7 @@ type BuildTripHomeViewModelInput = {
   accommodationCount?: number;
   usePreviewCountdownReference?: boolean;
   allReminders?: readonly TripReminderViewModel[];
+  translations: TripHomeTranslations;
 };
 
 function buildRemindersManager(
@@ -125,15 +132,18 @@ function buildDayOnePreviewSection(
   totalDays: number,
   preview: ReturnType<typeof buildDayOneHomePreview>,
   photoPresentation: PlacePhotoPresentation,
+  translations: TripHomeTranslations,
 ): TripHomeDayOnePreview {
+  const { tHome, tCommon } = translations;
+
   return {
     weekdayLabel: formatTripDayWeekday(startDate),
     dateLabel: formatTripDayDateLabel(startDate),
-    dayMeta: `יום 1 מתוך ${totalDays}`,
+    dayMeta: tCommon("dayMeta", { dayNumber: 1, totalDays }),
     items: preview.items,
     overflowCount: preview.overflowCount,
     isEmpty: preview.isEmpty,
-    emptyMessage: "היום הראשון עדיין מחכה לתכנון",
+    emptyMessage: tHome("dayOneEmpty"),
     photoPresentation,
     dayHref: `/app/trips/${tripId}/itinerary/${startDate}`,
   };
@@ -151,6 +161,7 @@ function buildBeforeJourney(
     preparation = null,
     dayOnePhotoPresentation = EMPTY_PHOTO,
     accommodations = [],
+    translations,
   } = input;
 
   const dayOnePreview = buildDayOneHomePreview(
@@ -171,9 +182,10 @@ function buildBeforeJourney(
       totalDays,
       dayOnePreview,
       dayOnePhotoPresentation,
+      translations,
     ),
     itineraryCta: {
-      label: "למסלול המלא",
+      label: translations.tHome("itineraryCta"),
       href: itineraryHref,
     },
   };
@@ -185,18 +197,22 @@ function buildTodaysPlanSection(
   dayNumber: number,
   totalDays: number,
   preview: ReturnType<typeof buildActiveHomeItineraryPreview>,
+  translations: TripHomeTranslations,
 ): TripHomeItinerarySection {
+  const { tHome, tCommon } = translations;
   const itineraryHref = `/app/trips/${tripId}/itinerary/${todayJapan}`;
 
   return {
-    title: "המסלול של היום",
+    title: tHome("todaysPlanTitle"),
     subtitle: `${formatTripDayWeekday(todayJapan)} · ${formatTripDayDateLabel(todayJapan)}`,
-    dayMeta: `יום ${dayNumber} מתוך ${totalDays}`,
+    dayMeta: tCommon("dayMeta", { dayNumber, totalDays }),
     items: preview.items,
     overflowCount: preview.overflowCount,
     isEmpty: preview.isEmpty,
-    emptyMessage: "היום עדיין פנוי",
-    ctaLabel: preview.isEmpty ? "למסלול של היום" : "למסלול המלא של היום",
+    emptyMessage: tHome("todaysPlanEmptyDay"),
+    ctaLabel: preview.isEmpty
+      ? tHome("todaysPlanEmptyCta")
+      : tHome("todaysPlanFullCta"),
     ctaHref: itineraryHref,
   };
 }
@@ -236,11 +252,13 @@ export function buildTripHomeViewModel(
     weather,
     todayJapan = getJapanCalendarDate(),
     nowJapanTime = getJapanWallClockTime(),
+    translations,
   } = input;
 
   const phase = getTripPhase(trip.startDate, trip.endDate, todayJapan);
   const totalDays = getTripDayCount(trip.startDate, trip.endDate);
   const heroBase = buildHeroBase(input);
+  const { tHome } = translations;
 
   if (phase === "upcoming") {
     const referenceMs = input.usePreviewCountdownReference
@@ -281,25 +299,29 @@ export function buildTripHomeViewModel(
       hero: {
         ...heroBase,
         tripIdentityLabel: resolveAfterTripIdentityLabel(trip.name, destination),
-        completionMessage: "הטיול הסתיים",
+        completionMessage: tHome("tripCompleted"),
         durationLabel: buildAfterTripDurationLabel(
           trip.startDate,
           trip.endDate,
+          tHome,
           destination,
           trip.name,
         ),
       },
-      tripSummary: buildAfterTripSummary({
-        startDate: trip.startDate,
-        endDate: trip.endDate,
-        activityCount: input.activityCount ?? 0,
-        accommodationCount: input.accommodationCount ?? 0,
-      }),
+      tripSummary: buildAfterTripSummary(
+        {
+          startDate: trip.startDate,
+          endDate: trip.endDate,
+          activityCount: input.activityCount ?? 0,
+          accommodationCount: input.accommodationCount ?? 0,
+        },
+        tHome,
+      ),
       financeRecap: input.financeRecap,
       itineraryRevisit: {
         href: `/app/trips/${trip.id}/itinerary`,
-        title: "המסלול של הטיול",
-        description: "עברו שוב על הימים והרגעים",
+        title: tHome("itineraryRevisitTitle"),
+        description: tHome("itineraryRevisitDescription"),
       },
     } satisfies TripHomeCompletedViewModel;
   }
@@ -363,6 +385,7 @@ export function buildTripHomeViewModel(
     dayNumber,
     totalDays,
     preview,
+    translations,
   );
 
   return {

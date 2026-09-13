@@ -1,3 +1,5 @@
+import { resolveAppLocale, type AppLocale } from "@/features/i18n/locale";
+
 export type PlatformRole = "user" | "admin";
 
 export type PublicUser = {
@@ -5,6 +7,7 @@ export type PublicUser = {
   name: string;
   email: string;
   role: PlatformRole;
+  locale: AppLocale;
 };
 
 export function toPublicUser(user: {
@@ -12,6 +15,7 @@ export function toPublicUser(user: {
   name: string;
   email: string;
   role: PlatformRole;
+  locale?: AppLocale | null;
   passwordHash?: string | null;
   googleSubject?: string | null;
 }): PublicUser {
@@ -20,6 +24,7 @@ export function toPublicUser(user: {
     name: user.name,
     email: user.email,
     role: user.role,
+    locale: resolveAppLocale(user.locale),
   };
 }
 

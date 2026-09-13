@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { buildAfterTripFinanceRecap } from "./build-after-trip-finance-recap";
 import { buildFinanceSummary } from "./build-finance-summary";
-import { buildFinanceHref, FINANCE_MESSAGES } from "./constants";
+import { buildFinanceHref } from "./constants";
+import { createTestFinanceLabels } from "./finance-labels";
 import type { PublicTripFinanceSettings, PublicTripExpense } from "./types";
 
 const tripId = "507f1f77bcf86cd799439011";
+const labels = createTestFinanceLabels();
 
 function settings(overrides: Partial<PublicTripFinanceSettings> = {}): PublicTripFinanceSettings {
   return {
@@ -43,6 +45,7 @@ describe("buildAfterTripFinanceRecap", () => {
       settings: settings(),
       summary: buildFinanceSummary({ settings: settings(), expenses: [] }),
       hasExpenses: false,
+      labels,
     });
 
     expect(recap.variant).toBe("noExpenses");
@@ -50,10 +53,10 @@ describe("buildAfterTripFinanceRecap", () => {
       return;
     }
 
-    expect(recap.title).toBe(FINANCE_MESSAGES.pageTitle);
-    expect(recap.message).toBe(FINANCE_MESSAGES.afterNoExpenses);
+    expect(recap.title).toBe(labels.pageTitle);
+    expect(recap.message).toBe(labels.afterNoExpenses);
     expect(recap.href).toBe(buildFinanceHref(tripId));
-    expect(recap.ctaLabel).toBe(FINANCE_MESSAGES.afterOpenFinanceCta);
+    expect(recap.ctaLabel).toBe(labels.afterOpenFinanceCta);
   });
 
   it("shows expenses without budget and no fake budget rows", () => {
@@ -64,6 +67,7 @@ describe("buildAfterTripFinanceRecap", () => {
       settings: tripSettings,
       summary: buildFinanceSummary({ settings: tripSettings, expenses }),
       hasExpenses: true,
+      labels,
     });
 
     expect(recap.variant).toBe("hasExpenses");
@@ -71,13 +75,13 @@ describe("buildAfterTripFinanceRecap", () => {
       return;
     }
 
-    expect(recap.title).toBe(FINANCE_MESSAGES.afterRecapTitle);
+    expect(recap.title).toBe(labels.afterRecapTitle);
     expect(recap.totalExpenses).toBe(500);
     expect(recap.hasBudget).toBe(false);
     expect(recap.budgetLabel).toBeNull();
     expect(recap.remainingLabel).toBeNull();
     expect(recap.href).toBe(buildFinanceHref(tripId));
-    expect(recap.ctaLabel).toBe(FINANCE_MESSAGES.afterFullFinanceCta);
+    expect(recap.ctaLabel).toBe(labels.afterFullFinanceCta);
   });
 
   it("shows budget, remaining, and category summary with real totals", () => {
@@ -91,6 +95,7 @@ describe("buildAfterTripFinanceRecap", () => {
       settings: tripSettings,
       summary: buildFinanceSummary({ settings: tripSettings, expenses }),
       hasExpenses: true,
+      labels,
     });
 
     expect(recap.variant).toBe("hasExpenses");
@@ -100,7 +105,7 @@ describe("buildAfterTripFinanceRecap", () => {
 
     expect(recap.totalExpenses).toBe(500);
     expect(recap.budgetLabel).toMatch(/1,000|1000/);
-    expect(recap.remainingHeading).toBe(FINANCE_MESSAGES.remaining);
+    expect(recap.remainingHeading).toBe("remaining");
     expect(recap.isOverBudget).toBe(false);
     expect(recap.categoryBars).toHaveLength(2);
     expect(recap.categoryBars.every((bar) => bar.total > 0)).toBe(true);
@@ -119,10 +124,11 @@ describe("buildAfterTripFinanceRecap", () => {
         totalExpenses: 500,
         remainingBudget: -100,
         percentConsumed: 125,
-        byCategory: [{ category: "food", label: "אוכל", total: 500 }],
+        byCategory: [{ category: "food", total: 500 }],
         recentExpenses: [],
       },
       hasExpenses: true,
+      labels,
     });
 
     expect(recap.variant).toBe("hasExpenses");
@@ -131,7 +137,7 @@ describe("buildAfterTripFinanceRecap", () => {
     }
 
     expect(recap.isOverBudget).toBe(true);
-    expect(recap.remainingHeading).toBe("חריגה");
+    expect(recap.remainingHeading).toBe("overBudgetShort");
     expect(recap.remainingLabel).toMatch(/100/);
   });
 
@@ -145,10 +151,11 @@ describe("buildAfterTripFinanceRecap", () => {
         totalExpenses: 100,
         remainingBudget: null,
         percentConsumed: null,
-        byCategory: [{ category: "food", label: "אוכל", total: 100 }],
+        byCategory: [{ category: "food", total: 100 }],
         recentExpenses: [],
       },
       hasExpenses: true,
+      labels,
     });
 
     expect(recap.variant).toBe("hasExpenses");

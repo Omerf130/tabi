@@ -97,7 +97,7 @@ export async function createActivityAction(
 
   const costParsed = parseActivityEntityCostFromFormData(formData);
   if (!costParsed.ok) {
-    return { error: costParsed.error };
+    return { error: ACTIVITY_MESSAGES.invalidCostData };
   }
 
   try {
@@ -148,7 +148,7 @@ export async function updateActivityAction(
     ? parseActivityEntityCostFromFormData(formData)
     : null;
   if (costSync && !costSync.ok) {
-    return { error: costSync.error };
+    return { error: ACTIVITY_MESSAGES.invalidCostData };
   }
 
   try {

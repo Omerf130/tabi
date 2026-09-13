@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { createHebrewTransportTranslator } from "@/features/i18n/test-translators";
 import { buildTransportNewHref } from "./constants";
 import { resolveTransportVisualSrc } from "./resolve-transport-visual-src";
 import { toTransportCardViewModel } from "./to-transport-view-model";
@@ -38,7 +39,11 @@ const baseTransportRecord: TransportRecord = {
 
 describe("transport page presentation", () => {
   it("derives list fields from real transport data", () => {
-    const card = toTransportCardViewModel(tripId, baseTransportRecord);
+    const card = toTransportCardViewModel(
+      tripId,
+      baseTransportRecord,
+      createHebrewTransportTranslator(),
+    );
 
     expect(card.listTitle).toBe("טיסה לTokyo");
     expect(card.departureDate).toBe("2026-10-24");

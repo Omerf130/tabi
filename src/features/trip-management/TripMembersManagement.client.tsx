@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { CreateInviteForm } from "@/features/trips/members/CreateInviteForm";
@@ -24,6 +26,7 @@ export function TripMembersManagementClient({
   isOwnerView,
   currentUserId,
 }: TripMembersManagementClientProps) {
+  const t = useTranslations("TripManagement");
   const [showInvite, setShowInvite] = useState(false);
   const inviteRef = useRef<HTMLDivElement>(null);
 
@@ -38,15 +41,15 @@ export function TripMembersManagementClient({
     <div className={styles.embedded}>
       {isOwnerView ? (
         <div className={styles.toolbar}>
-          <h2 className={styles.toolbarTitle}>חברי הטיול</h2>
+          <h2 className={styles.toolbarTitle}>{t("membersTitle")}</h2>
           {!showInvite ? (
             <Button type="button" variant="ghost" size="compact" onClick={openInvite}>
-              + הזמנה חדשה
+              {t("newInvite")}
             </Button>
           ) : null}
         </div>
       ) : (
-        <h2 className={styles.toolbarTitle}>חברי הטיול</h2>
+        <h2 className={styles.toolbarTitle}>{t("membersTitle")}</h2>
       )}
 
       <section className={styles.memberList}>
@@ -69,7 +72,7 @@ export function TripMembersManagementClient({
 
       {isOwnerView && invitations.length > 0 ? (
         <section>
-          <h2 className={styles.sectionTitle}>הזמנות פעילות ואחרונות</h2>
+          <h2 className={styles.sectionTitle}>{t("invitationsSection")}</h2>
           <div className={styles.inviteList}>
             {invitations.map((invitation) => (
               <InvitationRow

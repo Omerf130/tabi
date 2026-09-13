@@ -1,5 +1,6 @@
 import { AppPage } from "@/features/app-shell/AppPage";
 import { requireUser } from "@/features/auth/session";
+import { getTranslations } from "next-intl/server";
 import type { TripWorkspace } from "@/features/trips/public-trip";
 import { getJapanCalendarDate } from "@/features/trips/calendar-date";
 import { listTransportsForItineraryDay } from "@/features/transport/queries";
@@ -41,6 +42,7 @@ function toActivityPhotoMap(
 
 export async function DayPageContent({ trip, date }: DayPageContentProps) {
   const user = await requireUser();
+  const tItinerary = await getTranslations("Itinerary");
   const todayJapan = getJapanCalendarDate();
   const validatedDate = parseItineraryDateParam(date, trip.startDate, trip.endDate);
   if (!validatedDate) {
@@ -75,6 +77,7 @@ export async function DayPageContent({ trip, date }: DayPageContentProps) {
       transports,
       accommodations: tripData.accommodations,
       transportRecords: tripData.transportById,
+      t: tItinerary,
     }),
   ]);
 
@@ -102,7 +105,7 @@ export async function DayPageContent({ trip, date }: DayPageContentProps) {
     day.accommodations,
   );
 
-  const hero = buildItineraryHero({ trip });
+  const hero = buildItineraryHero({ trip }, tItinerary);
   const dayStrip = buildItineraryDayStrip({
     tripId: trip.id,
     startDate: trip.startDate,

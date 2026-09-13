@@ -15,14 +15,19 @@ export type BottomNavItem = {
 type BottomNavProps = {
   items: BottomNavItem[];
   variant?: "bottom" | "rail";
+  ariaLabel: string;
 };
 
-export function BottomNav({ items, variant = "bottom" }: BottomNavProps) {
+export function BottomNav({
+  items,
+  variant = "bottom",
+  ariaLabel,
+}: BottomNavProps) {
   return (
     <nav
       className={styles.nav}
       data-variant={variant}
-      aria-label="ניווט ראשי"
+      aria-label={ariaLabel}
     >
       {items.map((item) => (
         <Link

@@ -10,7 +10,7 @@ import {
   GooglePlacesRequestError,
   fetchPlaceGeographyDetails,
 } from "./googlePlaces.server";
-import { PLACES_MESSAGES } from "./constants";
+import { PLACES_ERROR_CODES } from "./constants";
 import { isGeographicWeatherPlace } from "@/features/weather/is-geographic-place";
 
 export type TripDestinationSnapshot = {
@@ -58,19 +58,19 @@ export async function resolveDestinationSnapshot(
   });
 
   if (!isGeographicWeatherPlace(details.types, details.primaryType)) {
-    throw new GooglePlacesRequestError(PLACES_MESSAGES.resolveFailed);
+    throw new GooglePlacesRequestError(PLACES_ERROR_CODES.resolveFailed);
   }
 
   const latitude = details.location?.latitude;
   const longitude = details.location?.longitude;
   if (typeof latitude !== "number" || typeof longitude !== "number") {
-    throw new GooglePlacesRequestError(PLACES_MESSAGES.resolveFailed);
+    throw new GooglePlacesRequestError(PLACES_ERROR_CODES.resolveFailed);
   }
 
   const displayName =
     details.displayName?.text?.trim() || options.primaryText?.trim();
   if (!displayName) {
-    throw new GooglePlacesRequestError(PLACES_MESSAGES.resolveFailed);
+    throw new GooglePlacesRequestError(PLACES_ERROR_CODES.resolveFailed);
   }
 
   const country = extractCountryFromAddressComponents(details.addressComponents);

@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import type { TripHomeHeroViewModel } from "./types";
 import type { TripPhase } from "@/features/trips/trip-phase";
 import styles from "./TripHomeContent.module.scss";
@@ -7,7 +8,11 @@ type TripHomeHeroProps = {
   phase: TripPhase;
 };
 
-export function TripHomeHero({ hero, phase }: TripHomeHeroProps) {
+export async function TripHomeHero({ hero, phase }: TripHomeHeroProps) {
+  const [t, tCommon] = await Promise.all([
+    getTranslations("Home"),
+    getTranslations("Common"),
+  ]);
   const hasImage = Boolean(hero.heroImageSrc);
 
   return (
@@ -15,7 +20,7 @@ export function TripHomeHero({ hero, phase }: TripHomeHeroProps) {
       className={styles.hero}
       data-phase={phase}
       data-has-image={hasImage ? "true" : "false"}
-      aria-label="זהות הטיול"
+      aria-label={t("heroIdentityAria")}
     >
       <div className={styles.heroMedia} aria-hidden>
         {hasImage ? (
@@ -31,7 +36,10 @@ export function TripHomeHero({ hero, phase }: TripHomeHeroProps) {
             <p className={styles.heroTripIdentity}>{hero.tripName}</p>
             <p className={styles.heroTripRange}>{hero.dateRangeLabel}</p>
             <h1 className={styles.heroDayHeadline}>
-              יום {hero.currentDay.dayNumber} מתוך {hero.currentDay.totalDays}
+              {tCommon("dayMeta", {
+                dayNumber: hero.currentDay.dayNumber,
+                totalDays: hero.currentDay.totalDays,
+              })}
             </h1>
             <div className={styles.heroActiveContextRow}>
               <p className={styles.heroDateLine}>

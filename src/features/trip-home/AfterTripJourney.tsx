@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { IconChevron, IconItinerary } from "@/components/ui/icons";
 import type { AfterTripFinanceRecapViewModel } from "@/features/finance/types";
 import { AfterTripFinanceRecap } from "./AfterTripFinanceRecap";
@@ -18,16 +19,18 @@ type AfterTripJourneyProps = {
   itineraryRevisit: TripHomeItineraryRevisit;
 };
 
-export function AfterTripJourney({
+export async function AfterTripJourney({
   tripSummary,
   financeRecap,
   itineraryRevisit,
 }: AfterTripJourneyProps) {
+  const t = await getTranslations("Home");
+
   return (
-    <section className={styles.afterJourney} aria-label="אחרי הטיול">
-      <section className={styles.homeSection} aria-label="סיכום הטיול">
+    <section className={styles.afterJourney} aria-label={t("afterJourneyAria")}>
+      <section className={styles.homeSection} aria-label={t("tripSummaryAria")}>
         <div className={styles.homeSectionHeader}>
-          <h2 className={styles.homeSectionTitle}>סיכום הטיול</h2>
+          <h2 className={styles.homeSectionTitle}>{t("tripSummaryTitle")}</h2>
         </div>
         <ul className={styles.summaryMetricGrid}>
           {tripSummary.map((metric) => (
@@ -41,7 +44,7 @@ export function AfterTripJourney({
 
       <AfterTripFinanceRecap recap={financeRecap} />
 
-      <section className={styles.homeSection} aria-label="מסלול">
+      <section className={styles.homeSection} aria-label={t("itineraryRevisitAria")}>
         <Link href={itineraryRevisit.href} className={styles.afterEntryRow}>
           <span className={styles.afterEntryIconWrap} aria-hidden>
             <IconItinerary className={styles.afterEntryIcon} />

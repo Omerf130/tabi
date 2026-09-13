@@ -1,0 +1,1370 @@
+{
+
+  "Navigation": {
+
+    "home": "Home",
+
+    "itinerary": "Itinerary",
+
+    "documents": "Documents",
+
+    "settings": "Settings",
+
+    "more": "More",
+
+    "ariaLabel": "Primary navigation"
+
+  },
+
+  "TripHeader": {
+
+    "back": "Back",
+
+    "myTrips": "My Trips"
+
+  },
+
+  "AccountMenu": {
+
+    "footerAriaLabel": "Account and navigation",
+
+    "myTrips": "My Trips",
+
+    "logout": "Sign out",
+
+    "interfaceLanguage": "Interface language",
+
+    "languageHebrew": "עברית",
+
+    "languageEnglish": "English"
+
+  },
+
+  "TripManagement": {
+
+    "title": "Trip management",
+
+    "introTitle": "Trip management",
+
+    "introLead": "Everything you need to update and manage your trip in one place.",
+
+    "navAria": "Trip management",
+
+    "sections": {
+
+      "details": { "label": "Trip details", "shortLabel": "Trip details" },
+
+      "accommodations": { "label": "Stays", "shortLabel": "Stays" },
+
+      "transport": { "label": "Transport", "shortLabel": "Transport" },
+
+      "documents": { "label": "Documents", "shortLabel": "Documents" },
+
+      "reminders": { "label": "Reminders", "shortLabel": "Reminders" },
+
+      "members": { "label": "Trip members", "shortLabel": "Members" }
+
+    },
+
+    "membersTitle": "Trip members",
+
+    "newInvite": "+ New invite",
+
+    "invitationsSection": "Active and recent invites"
+
+  },
+
+  "Errors": {
+
+    "invalidLocale": "The selected interface language is not supported."
+
+  },
+
+  "Common": {
+    "today": "Today",
+    "all": "All",
+    "details": "Details",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "backToList": "Back to list",
+    "navigate": "Navigate",
+    "changePlace": "Change place",
+    "date": "Date",
+    "time": "Time",
+    "start": "Start",
+    "end": "End",
+    "day": "Day",
+    "dayNumber": "Day {dayNumber}",
+    "dayMeta": "Day {dayNumber} of {totalDays}",
+    "dayContext": "Day {dayNumber} · {dateLabel}",
+    "andMore": "and {count} more",
+    "noTime": "No time",
+    "notes": "Notes",
+    "markComplete": "Mark complete",
+    "placeName": "Place name",
+    "address": "Address",
+    "targetDay": "Target day",
+    "move": "Move",
+    "showDriver": "Show driver",
+    "tripDays": "{count, plural, one {# day} other {# days}}",
+    "items": "{count, plural, one {# item} other {# items}}",
+    "activityCount": "{count, plural, =0 {No activities} one {One activity} other {# activities}}",
+    "transportCount": "{count, plural, one {One transport} other {# transport}}",
+    "documentCount": "{count, plural, one {One document} other {# documents}}",
+    "tripCount": "{count, plural, one {One trip} other {# trips}}",
+    "reminderCount": "{count, plural, one {One reminder} other {# reminders}}",
+    "rideCount": "{count, plural, one {One ride} other {# rides}}",
+    "noItems": "No items",
+    "openReminderAria": "Open reminder"
+  },
+
+  "Home": {
+    "heroIdentityAria": "Trip identity",
+    "beforeJourneyAria": "Trip preparation",
+    "duringJourneyAria": "Today on the trip",
+    "afterJourneyAria": "After the trip",
+    "listsSectionAria": "Lists and preparation",
+    "listsSectionTitle": "Lists and preparation",
+    "dayOneSectionAria": "Day 1 preview",
+    "dayOneSectionTitle": "Day 1 preview",
+    "dayOneEmpty": "Day 1 is still waiting to be planned",
+    "itineraryCta": "Full itinerary",
+    "upcomingRemindersTitle": "Upcoming reminders",
+    "upcomingRemindersAll": "All reminders",
+    "upcomingRemindersEmpty": "No upcoming reminders",
+    "remindersTitle": "Reminders",
+    "remindersAll": "All reminders",
+    "remindersNew": "New reminder",
+    "remindersEdit": "Edit reminder",
+    "remindersDelete": "Delete reminder",
+    "remindersFilterAria": "Filter reminders",
+    "remindersTabToday": "Today",
+    "remindersTabUpcoming": "Upcoming",
+    "remindersTabAll": "All",
+    "remindersTabCompleted": "Completed",
+    "remindersEmptyToday": "No reminders for today",
+    "remindersEmptyUpcoming": "No upcoming reminders",
+    "remindersEmptyAll": "No open reminders",
+    "remindersEmptyCompleted": "No completed reminders yet",
+    "reminderContent": "Reminder content",
+    "importantToday": "Important today",
+    "importantTodayAria": "Important today: {text}",
+    "nowSectionAria": "Now",
+    "nowEyebrow": "Now",
+    "upNextSectionAria": "Up next",
+    "upNextEyebrow": "Up next",
+    "todaySummaryAria": "Today's summary",
+    "todaySummaryTitle": "Today's summary",
+    "tonightLabel": "Tonight",
+    "weatherLabel": "Weather",
+    "todayItineraryLabel": "Today on the itinerary",
+    "todaysPlanTitle": "Today's itinerary",
+    "todaysPlanEmptyDay": "Today is still open",
+    "todaysPlanEmptyTitle": "No plans for today yet",
+    "todaysPlanEmptyHint": "Your day is still open. You can add an activity to the itinerary.",
+    "todaysPlanEmptyCta": "Today's itinerary",
+    "todaysPlanFullCta": "Full itinerary for today",
+    "tripSummaryAria": "Trip summary",
+    "tripSummaryTitle": "Trip summary",
+    "itineraryRevisitAria": "Itinerary",
+    "itineraryRevisitTitle": "Trip itinerary",
+    "itineraryRevisitDescription": "Revisit the days and moments",
+    "tripCompleted": "Trip completed",
+    "durationOneDay": "One day",
+    "durationOneDayInPlace": "One day in {place}",
+    "durationDaysInPlace": "{count} days in {place}",
+    "durationDays": "{count} days",
+    "summaryDays": "Days",
+    "summaryActivities": "Activities",
+    "summaryStays": "Stays",
+    "preparationProgress": "{completed} of {total} completed",
+    "countdownDays": "Days",
+    "countdownHours": "Hours",
+    "countdownMinutes": "Minutes",
+    "countdownSeconds": "Seconds",
+    "countdownAria": "{days} days, {hours} hours, {minutes} minutes and {seconds} seconds until the trip starts",
+    "navigateTo": "Navigate to {name}"
+  },
+
+  "Itinerary": {
+    "heroTitle": "Trip itinerary",
+    "dayStripAria": "Trip days",
+    "dayStripScrollPrev": "Scroll to previous days",
+    "dayStripScrollNext": "Scroll to next days",
+    "dayHeaderToday": " · Today",
+    "dayTimelineTitle": "Day schedule",
+    "dayTimelineEmptyTitle": "No plans for this day yet",
+    "dayTimelineEmptyHint": "Add activities, transport, or reminders to build the day.",
+    "addItemToDay": "+ Add item to this day",
+    "addActivity": "+ Add activity",
+    "sideColumnAria": "Supplementary day info",
+    "accommodationSection": "Stay",
+    "accommodationManageOne": "Manage stay",
+    "accommodationManageMany": "Manage stays",
+    "documentsSection": "Documents",
+    "emptyDay": "No items on this day",
+    "focusedDayOpenAria": "Day {dayNumber}, {weekdayLabel}, {dateLabel}. Open full day",
+    "focusedNextHeading": "Up next",
+    "focusedWeatherAria": "Weather: {condition}, {temperature}, {location}",
+    "focusedOpenDay": "Open full day",
+    "hasOpenReminderAria": "Has an open reminder",
+    "dayActionMenu": "Add to day",
+    "dayActionActivityCreate": "Add activity",
+    "dayActionActivityEdit": "Edit activity",
+    "dayActionActivityMove": "Move to another day",
+    "dayActionTransportCreate": "Add transport",
+    "dayActionTransportEdit": "Edit transport",
+    "dayActionAccommodationCreate": "Add stay",
+    "dayActionDocumentCreate": "Add document",
+    "dayActionReminderCreate": "Add reminder",
+    "dayActionReminderEdit": "Edit reminder",
+    "dayActionAddMenuActivity": "Activity",
+    "dayActionAddMenuActivityDesc": "Attraction, restaurant, museum, and more",
+    "dayActionAddMenuTransport": "Transport",
+    "dayActionAddMenuTransportDesc": "Train, flight, bus, car, or taxi",
+    "dayActionAddMenuAccommodation": "Stay",
+    "dayActionAddMenuAccommodationDesc": "Hotel or accommodation on the trip",
+    "dayActionAddMenuReminder": "Reminder",
+    "dayActionAddMenuReminderDesc": "Something personal to remember",
+    "dayActionAddMenuDocument": "Document",
+    "dayActionAddMenuDocumentDesc": "A file relevant to this day",
+    "dayActionReminderTime": "Time",
+    "dayActionReminderPrompt": "What should you remember?",
+    "dayActionReminderAdd": "Add reminder",
+    "dayActionReminderContent": "Reminder content",
+    "dayActionAddAccommodation": "Add stay",
+    "dayActionAddDocument": "Add document",
+    "dayActionCloseAria": "Close",
+    "dayActionBackAria": "Back",
+    "dayRemindersTitle": "Personal reminders",
+    "dayRemindersHint": "Private — only you can see them.",
+    "dayRemindersAdd": "+ Reminder",
+    "dayRemindersEmpty": "No open reminders for this day.",
+    "dayRemindersCompleted": "Completed ({count})",
+    "activityActions": "Actions",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "moveToDay": "Move to another day",
+    "checkIn": "Check-in: {name}",
+    "checkOut": "Check-out: {name}",
+    "stayingTonight": "Staying tonight at {name}",
+    "itineraryCount": "{count, plural, =0 {No items} one {One item} other {# items}}",
+    "itineraryCountActivitiesOnly": "{count, plural, one {One activity} other {# activities}}",
+    "itineraryCountTransportOnly": "{count, plural, one {One transport} other {# transport}}",
+    "itineraryCountMixed": "{count, plural, one {One item} other {# items}}"
+  },
+
+  "Activity": {
+    "whereQuestion": "Where?",
+    "whatQuestion": "What are you doing?",
+    "whenQuestion": "What time?",
+    "dayField": "Day",
+    "activityType": "Activity type",
+    "moreDetails": "More details",
+    "createSubmit": "Add activity",
+    "updateSubmit": "Save changes",
+    "deleteActivity": "Delete activity",
+    "placeSearchGoogle": "Search place",
+    "placeSearchManual": "Enter manually",
+    "placeSearchModeAria": "Place entry mode",
+    "placeSearchPlaceholder": "Search place...",
+    "placeSearchAccommodationLabel": "Search for your stay",
+    "placeSearchLoading": "Loading place details...",
+    "placeSearchError": "Could not load place details",
+    "transportType": "Transport type",
+    "transportTypeAria": "Transport type",
+    "types": {
+      "attraction": "Attraction",
+      "transport": "Transport",
+      "restaurant": "Restaurant",
+      "hotel": "Stay",
+      "freeTime": "Free time",
+      "shopping": "Shopping",
+      "other": "Other"
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "created": "Activity added to the itinerary.",
+      "updated": "Activity updated.",
+      "deleted": "Activity deleted.",
+      "dateOutOfRange": "The date is outside the trip range.",
+      "notFound": "Activity not found.",
+      "deleteConfirm": "Delete this activity?",
+      "discardConfirm": "Discard changes?",
+      "invalidCostData": "Invalid cost details"
+    }
+  },
+
+  "Finance": {
+
+    "pageTitle": "Trip finances",
+
+    "heroSubtitle": "Track expenses and budget in one place",
+
+    "tripBudgetTitle": "Trip budget",
+
+    "budgetSummaryAriaLabel": "Budget summary",
+
+    "backToMore": "Back to more",
+
+    "spent": "Spent",
+
+    "remaining": "Remaining",
+
+    "overBudgetShort": "Over budget",
+
+    "percentConsumed": "Used",
+
+    "overBudget": "Over budget",
+
+    "totalExpenses": "Total expenses",
+
+    "totalBudget": "Budget",
+
+    "totalExpensesCenter": "Total expenses",
+
+    "noExpensesYet": "No expenses yet",
+
+    "noCategoriesYet": "No expenses by category yet",
+
+    "memberNoBudget": "No budget set for this trip",
+
+    "setBudgetCta": "Set trip budget",
+
+    "editBudgetCta": "Edit budget",
+
+    "categoriesSectionTitle": "Expenses by category",
+
+    "recentSectionTitle": "Recent expenses",
+
+    "allSectionTitle": "All expenses",
+
+    "showAll": "Show all",
+
+    "showRecent": "Back to summary",
+
+    "addExpense": "Add expense",
+
+    "editExpense": "Edit expense",
+
+    "addExpenseSubtitle": "Add an expense to the trip",
+
+    "saveExpense": "Save",
+
+    "deleteExpense": "Delete expense",
+
+    "deleteExpenseConfirm": "Delete this expense?",
+
+    "removeLinkedCost": "Remove cost",
+
+    "removeLinkedCostConfirm": "Remove this cost? The source item will stay unchanged.",
+
+    "cancel": "Cancel",
+
+    "close": "Close",
+
+    "titleLabel": "Description / name",
+
+    "categoryLabel": "Category",
+
+    "dateLabel": "Date",
+
+    "amountLabel": "Amount",
+
+    "currencyLabel": "Currency",
+
+    "notesLabel": "Notes (optional)",
+
+    "conversionPreview": "At current exchange rate",
+
+    "conversionPreviewFailed": "Could not load exchange rate right now",
+
+    "settingsTitle": "Finance settings",
+
+    "baseCurrencyLabel": "Base currency",
+
+    "budgetAmountLabel": "Total budget",
+
+    "budgetAmountPlaceholder": "For example: 30000",
+
+    "saveSettings": "Save",
+
+    "clearBudget": "Clear budget",
+
+    "entityCostSectionTitle": "Cost",
+
+    "entityCostHelper": "You can leave this empty and add it later",
+
+    "entityCostDisplayPrefix": "Cost",
+
+    "activityCostCategoryLabel": "Expense category",
+
+    "linkedSourceTitleLabel": "Source item",
+
+    "afterRecapTitle": "Expense summary",
+
+    "afterNoExpenses": "No expenses recorded for this trip",
+
+    "afterFullFinanceCta": "View full finance summary",
+
+    "afterOpenFinanceCta": "Open finances",
+
+    "hubNoExpenses": "No expenses added yet",
+
+    "hubBudgetMeta": "of {budget} budget",
+
+    "hubProgressAriaLabel": "{title}: {percent}% used",
+
+    "linkedToActivity": "Linked to activity",
+
+    "linkedToAccommodation": "Linked to accommodation",
+
+    "linkedToTransport": "Linked to transport",
+
+    "deletedSourceFallback": "Deleted item",
+
+    "accommodationFallbackName": "Accommodation",
+
+    "categories": {
+
+      "accommodation": "Accommodation",
+
+      "food": "Food",
+
+      "transport": "Transport",
+
+      "activities": "Activities",
+
+      "shopping": "Shopping",
+
+      "flights": "Flights",
+
+      "other": "Other"
+
+    },
+
+    "errors": {
+
+      "generic": "Something went wrong. Please try again.",
+
+      "validationFailed": "Invalid data",
+
+      "settingsNotFound": "Finance settings not found",
+
+      "budgetRequired": "Enter a positive budget amount",
+
+      "budgetInvalid": "Invalid budget amount",
+
+      "baseCurrencyInvalid": "Unsupported base currency",
+
+      "baseCurrencyLocked": "Base currency cannot be changed after expenses were added",
+
+      "expenseAmountInvalid": "Expense amount must be greater than zero",
+
+      "manualTitleRequired": "Enter an expense name",
+
+      "linkedSourceRequired": "Linked expense is missing a source id",
+
+      "manualSourceIdForbidden": "Manual expenses cannot be linked to an entity",
+
+      "linkedTitleForbidden": "Linked expenses do not store a title",
+
+      "categoryInvalid": "Invalid category",
+
+      "sourceTypeInvalid": "Invalid source type",
+
+      "conversionPreviewFailed": "Could not load exchange rate right now",
+
+      "invalidCostData": "Invalid cost details"
+
+    }
+
+  },
+
+  "Currency": {
+
+    "pageTitle": "Currency",
+
+    "loadRateFailed": "Could not load the exchange rate right now.",
+
+    "retry": "Try again",
+
+    "refreshFailed": "We couldn't refresh the rate. Showing the last loaded rate.",
+
+    "estimatedRate": "Estimated rate",
+
+    "disclaimer": "Estimated rate. The actual rate may vary by card issuer, bank, or exchange provider.",
+
+    "invalidCurrency": "Unsupported currency",
+
+    "sameCurrency": "Choose two different currencies",
+
+    "popularSection": "Popular",
+
+    "allSection": "All currencies",
+
+    "searchPlaceholder": "Search currency...",
+
+    "noResults": "No currencies found",
+
+    "pickerTitle": "Choose currency",
+
+    "close": "Close",
+
+    "fromCurrencyPanelAriaLabel": "Source currency",
+
+    "toCurrencyPanelAriaLabel": "Target currency",
+
+    "amountToConvertAriaLabel": "Amount to convert",
+
+    "swapCurrenciesAriaLabel": "Swap currencies",
+
+    "selectSourceCurrencyAriaLabel": "Choose source currency: {code} {name}",
+
+    "selectTargetCurrencyAriaLabel": "Choose target currency: {code} {name}"
+
+  },
+
+  "Lists": {
+
+    "pageTitle": "Lists",
+
+    "progressLabel": "{completed} of {total} completed",
+
+    "deleteConfirm": "Delete this item?",
+
+    "addItemPlaceholder": "Add item",
+
+    "addItemButton": "Add",
+
+    "editButton": "Edit",
+
+    "deleteButton": "Delete",
+
+    "saveButton": "Save",
+
+    "cancelButton": "Cancel",
+
+    "markCompletedAriaLabel": "Mark as completed",
+
+    "markIncompleteAriaLabel": "Mark as not completed",
+
+    "definitions": {
+
+      "packing": "Packing list",
+
+      "before_trip": "Before the flight",
+
+      "during_trip": "During the trip",
+
+      "pre_trip_shopping": "Pre-trip shopping"
+
+    },
+
+    "errors": {
+
+      "generic": "Couldn't update the list. Please try again.",
+
+      "notFound": "Item not found",
+
+      "textRequired": "Enter item text",
+
+      "textTooLong": "Text is too long"
+
+    },
+
+    "success": {
+
+      "created": "Item added",
+
+      "updated": "Item updated",
+
+      "deleted": "Item deleted",
+
+      "completed": "Item marked as completed",
+
+      "uncompleted": "Item marked as not completed"
+
+    }
+
+  },
+
+  "Documents": {
+    "pageTitle": "Travel wallet",
+    "listPageTitle": "Documents",
+    "pageSubtitleLine1": "All tickets, bookings, and important documents",
+    "pageSubtitleLine2": "in one place — for a smoother trip.",
+    "filterAria": "Filter by category",
+    "summaryAria": "Wallet summary",
+    "walletCount": "{count, plural, one {1 document in wallet} other {# documents in wallet}}",
+    "linkedCount": "{count, plural, one {1 linked document} other {# linked documents}}",
+    "emptyAll": "No documents yet",
+    "emptyFilter": "No documents in this category",
+    "emptyAllHintOwner": "Add flight tickets, bookings, and insurance so everyone on the trip can access them.",
+    "emptyAllHintGuest": "The trip owner has not added documents yet.",
+    "emptyFilterHint": "Try a different category.",
+    "addInSettings": "Add a document in settings",
+    "addedOn": "Added {date}",
+    "detailBreadcrumbWallet": "Travel wallet",
+    "detailBreadcrumbDocument": "Document",
+    "description": "Description",
+    "pdfHint": "To view the PDF, use the Open button — your browser will display the document securely.",
+    "open": "Open",
+    "defaultTitle": "Document",
+    "view": "View",
+    "download": "Download",
+    "contextActivityAria": "Linked activity",
+    "contextAccommodationAria": "Linked stay",
+    "settingsTitle": "Documents",
+    "settingsHint": "Flight tickets, bookings, insurance, and important documents — available to everyone on the trip.",
+    "addDocument": "+ Add document",
+    "addDocumentLabel": "Add document",
+    "addSubmit": "Add",
+    "saveSubmit": "Save",
+    "replaceFile": "Replace file",
+    "replaceSubmit": "Replace",
+    "newFile": "New file",
+    "edit": "Edit",
+    "delete": "Delete",
+    "emptySettings": "No documents yet.",
+    "file": "File",
+    "title": "Title",
+    "titlePlaceholder": "Optional — taken from filename",
+    "category": "Category",
+    "descriptionOptional": "Description (optional)",
+    "linkedTo": "Linked to",
+    "linkNone": "No link",
+    "linkActivity": "Activity",
+    "linkAccommodation": "Stay",
+    "linkTransport": "Transport",
+    "selectActivity": "Select activity",
+    "selectAccommodation": "Select stay",
+    "selectTransport": "Select transport segment",
+    "emergency": "Emergency",
+    "showInEmergency": "Show on emergency screen",
+    "filters": {
+      "all": "All",
+      "flight": "Flights",
+      "accommodation": "Stays",
+      "train": "Trains",
+      "ticket": "Tickets",
+      "insurance": "Insurance",
+      "more": "More"
+    },
+    "categories": {
+      "flight": "Flights",
+      "accommodation": "Stays",
+      "train": "Trains",
+      "ticket": "Tickets",
+      "insurance": "Insurance",
+      "reservation": "Reservations",
+      "transport": "Transport",
+      "other": "Other"
+    },
+    "errors": {
+      "created": "Document added.",
+      "updated": "Document updated.",
+      "replaced": "File replaced.",
+      "deleted": "Document deleted.",
+      "generic": "Could not save the document. Please try again.",
+      "notFound": "Document not found.",
+      "missingFile": "Please choose a file.",
+      "tooLarge": "File is too large (max 15MB).",
+      "invalidType": "Unsupported file type. PDF, JPEG, PNG, or WebP only.",
+      "invalidLink": "Invalid document link.",
+      "bothLinks": "A document can link to only one item (activity, stay, or transport).",
+      "deleteConfirm": "Delete this document?"
+    }
+  },
+
+  "TravelHub": {
+    "heroTitle": "Travel tools",
+    "heroSubtitle": "What you need for a smooth trip",
+    "heroAria": "Travel tools",
+    "primarySectionAria": "Primary travel tools",
+    "materialsSectionAria": "Materials and preparation",
+    "quickToolsSectionAria": "Quick helper tools",
+    "managementLabel": "Trip management",
+    "accommodationTitle": "Stays",
+    "accommodationEmpty": "No stays added yet",
+    "accommodationCountOne": "One stay",
+    "accommodationCountMany": "{count} stays",
+    "accommodationDetailCurrent": "Now: {name}",
+    "accommodationDetailUpcoming": "Next: {name}",
+    "transportTitle": "Transport",
+    "transportEmpty": "No rides added yet",
+    "transportCountOne": "One transport segment",
+    "transportCountMany": "{count} transport segments",
+    "listsTitle": "Lists",
+    "listsEmptyPrimary": "Trip lists",
+    "documentsTitle": "Documents",
+    "documentsEmptyPrimary": "Important trip documents",
+    "documentsCountOne": "One document",
+    "documentsCountMany": "{count} documents",
+    "quickTools": {
+      "currency": { "label": "Currency", "description": "Currency conversion" },
+      "weather": { "label": "Weather", "description": "Trip forecast" },
+      "language": { "label": "Language", "description": "Language and communication" },
+      "emergency": { "label": "Emergency", "description": "Important information" }
+    },
+    "attentionSections": { "upcoming": "Before the trip", "active": "During the trip" },
+    "contextualAccommodation": { "current": "Your stay now", "upcoming": "Your next stay" },
+    "attentionMessages": {
+      "packingOne": "One item left to pack",
+      "packingMany": "{count} items left to pack",
+      "beforeTripOne": "One task left before the flight",
+      "beforeTripMany": "{count} tasks left before the flight",
+      "duringTripOne": "One task left during the trip",
+      "duringTripMany": "{count} tasks left during the trip",
+      "preTripShoppingOne": "One shopping item left",
+      "preTripShoppingMany": "{count} shopping items left",
+      "defaultOne": "One item left",
+      "defaultMany": "{count} items left"
+    },
+    "managementHubTitle": "Settings and management",
+    "tripSettings": "Trip settings",
+    "tripMembers": "Trip members",
+    "myTrips": "My trips"
+  },
+
+  "Accommodation": {
+    "pageTitle": "Stays",
+    "addButtonAria": "Add stay",
+    "settingsTitle": "Stays",
+    "settingsHint": "Search for a real stay on Google. Tabi stores the place identity; you add dates, booking, and notes.",
+    "addStay": "+ Add stay",
+    "addStayLabel": "Add stay",
+    "addSubmit": "Add",
+    "deleteStay": "Delete stay",
+    "emptySettings": "No stays yet.",
+    "googleSource": "Source: Google Places",
+    "hotelSearch": "Search hotel",
+    "hotelSearchPlaceholder": "Search hotel...",
+    "manualEntryPrompt": "Can't find the place? Enter manually",
+    "backToGoogleSearch": "Back to Google search",
+    "manualName": "Stay name",
+    "manualNameJapanese": "Stay name in Japanese",
+    "manualNameJapaneseHint": "Optional — for taxi mode",
+    "googleMapsLink": "Google Maps link",
+    "fallbackName": "Stay",
+    "nightCountOne": "One night",
+    "nightCountMany": "{count} nights",
+    "taxiModePageTitle": "Taxi mode",
+    "taxiMissingAddress": "No address on file. Add an address in trip settings.",
+    "filterAria": "Filter stays",
+    "filters": { "all": "All", "upcoming": "Upcoming", "past": "Past" },
+    "filterTab": "{label} ({count})",
+    "emptyAll": "No stays",
+    "emptyUpcoming": "No upcoming stays",
+    "emptyPast": "No past stays",
+    "emptyAllHintOwner": "Add stays so they appear here and on the itinerary.",
+    "emptyAllHintGuest": "The trip owner has not added stays yet.",
+    "name": "Name",
+    "nameJapanese": "Name in Japanese",
+    "city": "City",
+    "checkIn": "Check-in",
+    "checkOut": "Check-out",
+    "addressEnglish": "Address in English",
+    "addressJapanese": "Address in Japanese",
+    "cost": "Cost",
+    "bookingReference": "Booking reference",
+    "notes": "Notes",
+    "openInGoogleMaps": "Open in Google Maps",
+    "showDriver": "Show driver",
+    "errors": {
+      "created": "Stay added.",
+      "updated": "Stay updated.",
+      "deleted": "Stay deleted.",
+      "generic": "Could not save the stay. Please try again.",
+      "notFound": "Stay not found.",
+      "dateOutOfRange": "Check-in and check-out dates must be within the trip range.",
+      "invalidDateRange": "Check-out must be after check-in (at least one night).",
+      "invalidCostData": "Invalid cost details",
+      "deleteConfirm": "Remove this stay from the trip?",
+      "deleteConfirmDetail": "This removes the stay from Tabi only — it does not cancel the hotel booking."
+    }
+  },
+
+  "Transport": {
+    "pageTitle": "Transport",
+    "filterAria": "Filter transport",
+    "addMenuAria": "Add transport",
+    "addMenuTypeAria": "Transport type",
+    "filters": { "all": "All", "flight": "Flights", "train": "Trains", "other": "Other" },
+    "filterTab": "{label} ({count})",
+    "emptyAll": "No transport",
+    "emptyAllHintOwner": "Add flights, trains, and rides so they appear here and on the itinerary.",
+    "emptyAllHintGuest": "The trip owner has not added transport yet.",
+    "emptyFlight": "No flights on this trip yet",
+    "emptyTrain": "No trains on this trip yet",
+    "emptyOther": "No other rides on this trip yet",
+    "listTitles": {
+      "flight": "Flight to {destination}",
+      "flightNoDestination": "Flight",
+      "train": "Train to {destination}",
+      "trainNoDestination": "Train",
+      "bus": "Bus to {destination}",
+      "busNoDestination": "Bus",
+      "ferry": "Ferry to {destination}",
+      "ferryNoDestination": "Ferry",
+      "taxi": "Taxi to {destination}",
+      "taxiNoDestination": "Taxi",
+      "carWithDestination": "Rental car · {destination}",
+      "car": "Rental car"
+    },
+    "addType": "Add {type}",
+    "types": {
+      "flight": "Flights",
+      "train": "Trains",
+      "bus": "Buses",
+      "ferry": "Ferries",
+      "car": "Car / transfer",
+      "taxi": "Taxis"
+    },
+    "typesSingular": {
+      "flight": "Flight",
+      "train": "Train",
+      "bus": "Bus",
+      "ferry": "Ferry",
+      "car": "Car / transfer",
+      "taxi": "Taxi"
+    },
+    "trainCategories": {
+      "shinkansen": "Shinkansen",
+      "limited_express": "Limited Express",
+      "reserved": "Reserved train",
+      "local": "Local train",
+      "other": "Train"
+    },
+    "timezone": "Time zone",
+    "timezones": {
+      "japan": "Japan",
+      "israel": "Israel",
+      "london": "United Kingdom (London)",
+      "paris": "France (Paris)",
+      "newYork": "United States (New York)",
+      "losAngeles": "United States (Los Angeles)",
+      "seoul": "South Korea (Seoul)",
+      "hongKong": "Hong Kong",
+      "singapore": "Singapore",
+      "sydney": "Australia (Sydney)",
+      "auckland": "New Zealand (Auckland)",
+      "utc": "UTC"
+    },
+    "airline": "Airline",
+    "flightNumber": "Flight number",
+    "departureTerminal": "Departure terminal",
+    "arrivalTerminal": "Arrival terminal",
+    "gate": "Gate",
+    "seat": "Seat",
+    "trainType": "Train type",
+    "serviceName": "Service name",
+    "trainNumber": "Train number",
+    "carNumber": "Car",
+    "seats": "Seats",
+    "operator": "Operator / company",
+    "serviceNumber": "Service / vehicle number",
+    "vehicleNotes": "Vehicle / service details",
+    "type": "Type",
+    "route": "Route",
+    "times": "Times",
+    "moreDetails": "More details",
+    "departureLocationCode": "Departure code (airport / station)",
+    "arrivalLocationCode": "Arrival code (airport / station)",
+    "from": "From",
+    "to": "To",
+    "details": "Details",
+    "departure": "Departure",
+    "arrival": "Arrival",
+    "cost": "Cost",
+    "bookingReference": "Booking reference",
+    "notes": "Notes",
+    "linkedDocuments": "Linked documents",
+    "fromSection": "From",
+    "toSection": "To",
+    "location": "Location",
+    "locationCode": "Code (airport / station)",
+    "date": "Date",
+    "time": "Time",
+    "start": "Start",
+    "end": "End",
+    "detailsSection": "Details",
+    "createSubmit": "Save",
+    "createPlannerSubmit": "Add transport",
+    "updateSubmit": "Save changes",
+    "edit": "Edit",
+    "delete": "Delete",
+    "addTitle": "Add {type}",
+    "editTitle": "Edit {type}",
+    "genericType": "Transport",
+    "noneOption": "None",
+    "saved": "Saved",
+    "updated": "Updated",
+    "deleted": "Deleted",
+    "errors": {
+      "notFound": "Transport segment not found.",
+      "invalidEndpoint": "Invalid location or time details.",
+      "invalidChronology": "Arrival time must be after departure time.",
+      "invalidTimezone": "Unsupported time zone.",
+      "invalidType": "Invalid transport type.",
+      "saveFailed": "Could not save transport.",
+      "invalidCostData": "Invalid cost details",
+      "deleteFailed": "Could not delete transport.",
+      "deleteConfirm": "Delete this transport segment?"
+    }
+  },
+
+  "Weather": {
+    "pageTitle": "Weather",
+    "backAria": "Back",
+    "loadingAria": "Loading weather",
+    "currentSectionAria": "Current weather",
+    "nearTermSectionAria": "Short-term forecast",
+    "loadFailed": "We couldn't load the weather right now.",
+    "retry": "Try again",
+    "refreshFailed": "We couldn't refresh the weather. Showing the last loaded data.",
+    "updated": "Updated",
+    "feelsLike": "Feels like",
+    "today": "Today",
+    "forecast": "Forecast for the coming days",
+    "rainChance": "Chance of rain",
+    "searchPlaceholder": "Search city or destination...",
+    "changeLocation": "Search location",
+    "noResults": "No locations found",
+    "invalidLocation": "Invalid location",
+    "searchLocation": "Search location",
+    "searching": "Searching...",
+    "closeAria": "Close",
+    "now": "Now",
+    "highLowRange": "High {max} · Low {min}",
+    "adviceTitle": "What to bring today",
+    "adviceUmbrella": "Rain is likely — bring an umbrella",
+    "adviceWater": "It's hot — bring water",
+    "adviceJacket": "It's cool today — a jacket is recommended",
+    "adviceLayer": "A light layer is recommended",
+    "adviceComfort": "Comfortable weather for travel",
+    "conditions": {
+      "1000": "Clear", "1003": "Partly cloudy", "1006": "Cloudy", "1009": "Overcast", "1030": "Mist",
+      "1063": "Patchy rain", "1066": "Patchy snow", "1069": "Rain and snow mix", "1072": "Freezing drizzle", "1087": "Thunderstorms",
+      "1114": "Blowing snow", "1117": "Blizzard", "1135": "Fog", "1147": "Freezing fog", "1150": "Light drizzle",
+      "1153": "Drizzle", "1168": "Freezing drizzle", "1171": "Heavy freezing drizzle", "1180": "Light rain", "1183": "Patchy light rain",
+      "1186": "Moderate rain", "1189": "Heavy rain", "1192": "Very heavy rain", "1195": "Extreme rain", "1198": "Light freezing rain",
+      "1201": "Freezing rain", "1204": "Heavy freezing rain", "1207": "Heavy freezing rain", "1210": "Light snow", "1213": "Snow",
+      "1216": "Heavy snow", "1219": "Heavy snow", "1222": "Heavy snow", "1225": "Blizzard", "1237": "Ice pellets",
+      "1240": "Rain and hail", "1243": "Heavy rain and hail", "1246": "Extreme hail", "1249": "Freezing rain and hail", "1252": "Heavy freezing rain and hail",
+      "1255": "Extreme freezing hail", "1258": "Freezing rain, hail and snow", "1261": "Heavy freezing rain, hail and snow", "1264": "Hail storm",
+      "1273": "Light showers", "1276": "Moderate showers", "1279": "Heavy showers", "1282": "Extreme showers"
+    }
+  },
+
+  "Emergency": {
+    "pageTitle": "Emergency and help",
+    "urgentSection": "Immediate emergency",
+    "assistanceSection": "Tourist and consular assistance",
+    "myLocation": "My location",
+    "currentAccommodation": "Current stay",
+    "accommodationDetails": "Stay details",
+    "taxiMode": "Taxi Mode",
+    "openInMap": "Open in map",
+    "openWebsite": "Open website",
+    "copyReference": "Copy number/reference",
+    "emergencyDocuments": "Important documents",
+    "myTripResources": "My trip resources",
+    "emergencyPhrases": "Useful emergency phrases",
+    "allEmergencyPhrases": "All emergency phrases",
+    "sourceNote": "Official information manually verified against the cited sources.",
+    "categories": {
+      "insurance": "Insurance",
+      "medical": "Medical",
+      "personal_contact": "Personal contact",
+      "financial": "Financial",
+      "transport": "Transport",
+      "local_contact": "Local contact",
+      "other": "Other"
+    },
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "locating": "Locating…",
+    "copyCoordinates": "Copy coordinates",
+    "refresh": "Refresh",
+    "addResource": "Add",
+    "saveResource": "Save",
+    "form": {
+      "title": "Title",
+      "category": "Category",
+      "phoneOptional": "Phone (optional)",
+      "secondaryPhoneOptional": "Secondary phone (optional)",
+      "emailOptional": "Email (optional)",
+      "addressOptional": "Address (optional)",
+      "urlOptional": "Link (optional)",
+      "websiteOptional": "Website (optional)",
+      "referenceOptional": "Reference number (optional)",
+      "notesOptional": "Notes (optional)"
+    },
+    "errors": {
+      "notFound": "Resource not found.",
+      "validationFailed": "Could not save the resource.",
+      "deleteConfirm": "Delete this resource?",
+      "noCustomResources": "No custom emergency resources yet.",
+      "noDocuments": "No documents marked for emergency.",
+      "locationPrompt": "Show my location",
+      "locationDenied": "Location access was denied. You can allow it in browser settings.",
+      "locationUnavailable": "Location is unavailable right now.",
+      "locationTimeout": "The location request took too long.",
+      "locationUnsupported": "This browser does not support location.",
+      "locationCopySuccess": "Coordinates copied.",
+      "locationCopyFailed": "Could not copy.",
+      "copySuccess": "Copied.",
+      "copyFailed": "Could not copy.",
+      "addResource": "Add",
+      "saveResource": "Save"
+    }
+  },
+
+  "Language": {
+    "pageTitle": "Language and communication",
+    "categoryNavAria": "Phrase categories",
+    "categories": {
+      "basics": "Basics",
+      "restaurants": "Restaurants",
+      "transport": "Transport",
+      "hotel": "Hotel",
+      "shopping": "Shopping",
+      "directions": "Directions",
+      "emergency": "Emergency and health",
+      "numbers_time": "Numbers and time"
+    },
+    "errors": {
+      "notFound": "Phrase not found.",
+      "favoriteFailed": "Could not update favorites.",
+      "noResults": "No phrases found.",
+      "noFavorites": "No favorites yet.",
+      "favoritesSection": "Favorites",
+      "searchPlaceholder": "Search phrase…",
+      "showAll": "All phrases",
+      "favoriteAdd": "Add to favorites",
+      "favoriteRemove": "Remove from favorites"
+    }
+  },
+
+  "Welcome": {
+    "brandName": "Tabi",
+    "taglineLine1": "Your journey.",
+    "taglineLine2": "Perfectly planned.",
+    "getStarted": "Get Started",
+    "signInPrompt": "Already have an account?",
+    "signInLink": "Sign in",
+    "metadataTitle": "Tabi — Your journey. Perfectly planned.",
+    "metadataDescription": "Plan and travel with everything in one place — itinerary, stays, transport, and documents."
+  },
+
+  "Auth": {
+    "brandName": "Tabi",
+    "login": {
+      "metadataTitle": "Sign in · Tabi",
+      "title": "Welcome back",
+      "subtitle": "Log in to continue your journey",
+      "footerPrompt": "Don't have an account?",
+      "footerLink": "Sign Up"
+    },
+    "register": {
+      "metadataTitle": "Create account · Tabi",
+      "title": "Save your journey",
+      "subtitle": "Create an account to plan, save and access your trips from anywhere.",
+      "footerPrompt": "Already have an account?",
+      "footerLink": "Log in",
+      "legal": "By creating an account, you agree to our Terms of Service and Privacy Policy."
+    },
+    "fields": {
+      "email": "Email",
+      "emailPlaceholder": "Email Address",
+      "password": "Password",
+      "passwordPlaceholder": "Password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
+    },
+    "actions": {
+      "logIn": "Log In",
+      "createAccount": "Create Account",
+      "continueWithGoogle": "Continue with Google",
+      "or": "or"
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "invalidCredentials": "Email or password is incorrect",
+      "duplicateEmail": "This email is already registered",
+      "name": "Please enter a valid name",
+      "email": "Please enter a valid email",
+      "password": "Password must be between 8 and 256 characters",
+      "googleSignInFailed": "We couldn't sign you in with Google. Please try again."
+    }
+  },
+
+  "MyTrips": {
+    "metadataTitle": "My Trips · Tabi",
+    "brandName": "Tabi",
+    "title": "My Trips",
+    "subtitle": "Your adventures, all in one place.",
+    "filters": {
+      "ariaLabel": "Trip filters",
+      "all": "All",
+      "upcoming": "Upcoming",
+      "past": "Past"
+    },
+    "phases": {
+      "active": "Active"
+    },
+    "createTrip": {
+      "ariaLabel": "Create new trip"
+    },
+    "account": {
+      "menuAriaLabel": "Account menu",
+      "signOut": "Sign out"
+    },
+    "duration": {
+      "oneDay": "1 day",
+      "manyDays": "{count} days"
+    },
+    "empty": {
+      "all": {
+        "title": "No trips yet",
+        "body": "Start planning your next adventure and keep all your trips in one place.",
+        "cta": "Plan Your First Trip →"
+      },
+      "upcoming": {
+        "title": "No upcoming trips",
+        "body": "When you plan your next journey, it will appear here.",
+        "cta": "Plan a Trip →"
+      },
+      "past": {
+        "title": "No past trips yet",
+        "body": "Completed adventures will be collected here for you to revisit."
+      }
+    }
+  },
+
+  "Places": {
+    "loadingSuggestions": "Loading suggestions...",
+    "noResults": "No results found. Try another search or enter manually.",
+    "manualEntryPrompt": "Can't find the place? Enter manually",
+    "errors": {
+      "autocompleteFailed": "Could not load suggestions. Please try again.",
+      "resolveFailed": "Could not load place details. Please try again."
+    }
+  },
+
+  "Trips": {
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "name": "Please enter a valid trip name",
+      "startDate": "Please choose a valid start date",
+      "endDate": "Please choose a valid end date",
+      "dateOrder": "End date must be on or after the start date",
+      "maxDuration": "Trip duration cannot exceed 180 days"
+    },
+    "phases": {
+      "upcoming": "Upcoming",
+      "active": "Active",
+      "completed": "Completed"
+    },
+    "roles": {
+      "owner": "Owner",
+      "member": "Trip member"
+    }
+  },
+
+  "TripMembers": {
+    "createInviteTitle": "Create invite link",
+    "permission": "Permission",
+    "createInviteSubmit": "Create invite link",
+    "copyLinkHint": "Copy the link now. It cannot be recovered after refreshing the page.",
+    "inviteUrlAria": "Invite link",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied",
+    "invitationsSection": "Active and recent invites",
+    "pageTitle": "Trip members",
+    "leaveTripConfirm": "Leave this trip?",
+    "removeMemberConfirm": "Remove {name} from the trip?",
+    "removeOwnerConfirm": "Remove owner permissions? Owners will not be able to manage members and invites.",
+    "roleAria": "Role for {name}",
+    "leaveTrip": "Leave trip",
+    "removeMember": "Remove",
+    "revokeInvite": "Revoke invite",
+    "expiresOn": "Expires",
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "lastOwner": "The last trip owner cannot be removed.",
+      "removed": "Member removed from the trip.",
+      "roleChanged": "Role updated."
+    }
+  },
+
+  "TripInvitations": {
+    "landingTitle": "Trip invitation",
+    "enterTrip": "Enter trip",
+    "invitedEyebrow": "You were invited to join a trip",
+    "roleLabel": "Role: {role}",
+    "joinTrip": "Join trip",
+    "signIn": "Sign in",
+    "createAccountAndJoin": "Create account and join",
+    "statuses": {
+      "active": "Active",
+      "used": "Used",
+      "expired": "Expired",
+      "revoked": "Revoked"
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "invalid": "This link is invalid or has expired.",
+      "alreadyMember": "You are already a member of this trip.",
+      "accepted": "You joined the trip successfully.",
+      "revoked": "The invitation was revoked.",
+      "ownerHint": "Owners can manage trip members and create additional invites."
+    }
+  },
+
+  "TripReminders": {
+    "pageTitle": "Reminders",
+    "settingsTitle": "Personal reminders",
+    "settingsHint": "Private reminders only you can see. Trip members cannot see them.",
+    "addReminder": "+ New reminder",
+    "newReminderLabel": "New reminder",
+    "addSubmit": "Add",
+    "content": "Reminder content",
+    "emptyUpcoming": "No upcoming reminders.",
+    "completedSection": "Completed",
+    "markComplete": "Complete",
+    "todayLabel": "Today",
+    "homeEmptyNew": "No new reminders",
+    "errors": {
+      "created": "Reminder added",
+      "updated": "Reminder updated",
+      "completed": "Reminder marked complete",
+      "deleted": "Reminder deleted",
+      "generic": "Could not save the reminder. Please try again.",
+      "notFound": "Reminder not found",
+      "dateOutOfRange": "Date must be within the trip range"
+    }
+  },
+
+  "TripCover": {
+    "title": "Trip cover photo",
+    "hint": "A personal photo shown at the top of Home. JPEG, PNG, or WebP up to 5MB.",
+    "empty": "No trip photo selected yet.",
+    "replacePhoto": "+ Replace photo",
+    "uploadPhoto": "+ Upload photo",
+    "uploadField": "Upload photo",
+    "replaceSubmit": "Replace",
+    "uploadSubmit": "Upload",
+    "remove": "Remove",
+    "errors": {
+      "generic": "Could not update the trip photo. Please try again.",
+      "invalidType": "Upload JPEG, PNG, or WebP only.",
+      "tooLarge": "File exceeds the 5MB limit.",
+      "missingFile": "No file selected.",
+      "removed": "Trip photo removed.",
+      "uploaded": "Trip photo updated."
+    }
+  },
+
+  "TripSettings": {
+    "pageTitle": "Settings",
+    "detailsTitle": "Trip details",
+    "detailsHint": "Basic trip information. Full management will be added later.",
+    "tripName": "Trip name",
+    "dates": "Dates"
+  },
+
+  "More": {
+    "pageTitle": "More"
+  },
+
+  "ItineraryPage": {
+    "pageTitle": "Itinerary",
+    "dayPageTitle": "Day {dayNumber}"
+  },
+
+  "FinancePreview": {
+    "title": "Trip money",
+    "badge": "Coming soon",
+    "headline": "Budget and expenses in one place",
+    "footer": "Budget tracking • Expenses • Categories"
+  },
+
+  "CreateTrip": {
+    "metadataTitle": "Create trip · Tabi",
+    "brandName": "Tabi",
+    "hero": {
+      "goBack": "Go back",
+      "backToMyTrips": "Back to My Trips"
+    },
+    "steps": {
+      "ariaLabel": "Create trip steps",
+      "destination": "Destination",
+      "dates": "Dates",
+      "details": "Trip Details"
+    },
+    "destination": {
+      "title": "Where are you going?",
+      "subtitle": "Choose your destination for this trip.",
+      "searchLabel": "Search destination",
+      "searchPlaceholder": "Search country, city, or place...",
+      "suggestionsAriaLabel": "Destination suggestions",
+      "change": "Change",
+      "searching": "Searching destinations...",
+      "loading": "Loading destination...",
+      "noResults": "No destinations found. Try another search.",
+      "continue": "Continue →"
+    },
+    "dates": {
+      "title": "When are you traveling?",
+      "subtitle": "Select your travel dates.",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "selectDate": "Select date",
+      "durationOneDay": "1 day",
+      "durationManyDays": "{count} days",
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "selectDay": "Select {day}",
+      "startDateSelected": "{day}, start date",
+      "endDateSelected": "{day}, end date",
+      "continue": "Continue →",
+      "back": "Back"
+    },
+    "details": {
+      "title": "Name your trip",
+      "subtitle": "Give this journey a name you'll recognize later.",
+      "tripName": "Trip Name",
+      "tripDescription": "Trip Description",
+      "optional": "(optional)",
+      "descriptionPlaceholder": "Our honeymoon in Japan",
+      "summaryTitle": "Trip summary",
+      "summaryDestination": "Destination",
+      "summaryDates": "Dates",
+      "creating": "Creating trip...",
+      "create": "Create Trip →",
+      "back": "Back"
+    },
+    "popularDestinations": {
+      "categoryCountry": "Country",
+      "japan": "Japan",
+      "thailand": "Thailand",
+      "italy": "Italy",
+      "france": "France",
+      "usa": "USA"
+    },
+    "errors": {
+      "destinationLoadFailed": "Could not load this destination",
+      "suggestionsLoadFailed": "Could not load suggestions"
+    }
+  }
+
+}
+
+

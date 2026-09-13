@@ -1,8 +1,8 @@
 import { buildAccommodationListHref } from "@/features/accommodations/constants";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import type { PlacePhotoPresentation } from "@/features/place-images/types";
 import type { TripPhase } from "@/features/trips/trip-phase";
-import { TRAVEL_HUB_ACCOMMODATION } from "./constants";
 import { selectContextualAccommodation } from "./select-contextual-accommodation";
 import type { TravelHubPrimaryToolRow } from "./types";
 
@@ -12,6 +12,7 @@ type BuildTravelHubAccommodationRowInput = {
   tripPhase: TripPhase;
   currentTripDate: string;
   accommodationPhotoPresentation?: PlacePhotoPresentation | null;
+  t: AppTranslator<"TravelHub">;
 };
 
 export function buildTravelHubAccommodationRow({
@@ -20,14 +21,15 @@ export function buildTravelHubAccommodationRow({
   tripPhase,
   currentTripDate,
   accommodationPhotoPresentation = null,
+  t,
 }: BuildTravelHubAccommodationRowInput): TravelHubPrimaryToolRow {
   const count = accommodations.length;
   const countLabel =
     count === 0
       ? null
       : count === 1
-        ? TRAVEL_HUB_ACCOMMODATION.countOne
-        : TRAVEL_HUB_ACCOMMODATION.countMany(count);
+        ? t("accommodationCountOne")
+        : t("accommodationCountMany", { count });
 
   const contextualSelection = selectContextualAccommodation(
     accommodations,
@@ -43,8 +45,12 @@ export function buildTravelHubAccommodationRow({
   if (contextualSelection) {
     detailLine =
       contextualSelection.variant === "current"
-        ? TRAVEL_HUB_ACCOMMODATION.detailCurrent(contextualSelection.accommodation.name)
-        : TRAVEL_HUB_ACCOMMODATION.detailUpcoming(contextualSelection.accommodation.name);
+        ? t("accommodationDetailCurrent", {
+            name: contextualSelection.accommodation.name,
+          })
+        : t("accommodationDetailUpcoming", {
+            name: contextualSelection.accommodation.name,
+          });
 
     if (
       accommodationPhotoPresentation?.hasPhoto &&
@@ -58,10 +64,10 @@ export function buildTravelHubAccommodationRow({
 
   return {
     href: buildAccommodationListHref(tripId),
-    title: TRAVEL_HUB_ACCOMMODATION.title,
+    title: t("accommodationTitle"),
     countLabel,
     detailLine: count > 0 ? detailLine : null,
-    emptyLine: count === 0 ? TRAVEL_HUB_ACCOMMODATION.emptyLine : null,
+    emptyLine: count === 0 ? t("accommodationEmpty") : null,
     thumbnail,
     showGoogleAttribution,
     thumbnailAlt,

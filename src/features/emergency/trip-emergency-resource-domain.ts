@@ -2,22 +2,25 @@ import "server-only";
 
 import { connectDb } from "@/lib/db/connect";
 import { TripEmergencyResource } from "@/models/TripEmergencyResource";
-import { EMERGENCY_MESSAGES } from "./constants";
+import { EMERGENCY_ERROR_CODES } from "./constants";
 import type {
   CreateTripEmergencyResourceInput,
   UpdateTripEmergencyResourceInput,
 } from "./schemas";
 
 export class TripEmergencyResourceValidationError extends Error {
-  constructor(message: string) {
-    super(message);
+  readonly code: (typeof EMERGENCY_ERROR_CODES)[keyof typeof EMERGENCY_ERROR_CODES];
+
+  constructor(code: (typeof EMERGENCY_ERROR_CODES)[keyof typeof EMERGENCY_ERROR_CODES]) {
+    super(code);
+    this.code = code;
     this.name = "TripEmergencyResourceValidationError";
   }
 }
 
 export class TripEmergencyResourceNotFoundError extends Error {
   constructor() {
-    super(EMERGENCY_MESSAGES.notFound);
+    super(EMERGENCY_ERROR_CODES.notFound);
     this.name = "TripEmergencyResourceNotFoundError";
   }
 }

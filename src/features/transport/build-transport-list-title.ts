@@ -1,28 +1,37 @@
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import type { TransportType } from "./transport-types";
-
-function withDestination(prefix: string, destination: string): string {
-  const trimmed = destination.trim();
-  return trimmed ? `${prefix}${trimmed}` : prefix.replace(/ ל$/, "").trim();
-}
 
 export function buildTransportListTitle(
   type: TransportType,
   arrivalLocationName: string,
+  t: AppTranslator<"Transport">,
 ): string {
   const destination = arrivalLocationName.trim();
 
   switch (type) {
     case "flight":
-      return withDestination("טיסה ל", destination);
+      return destination
+        ? t("listTitles.flight", { destination })
+        : t("listTitles.flightNoDestination");
     case "train":
-      return withDestination("רכבת ל", destination);
+      return destination
+        ? t("listTitles.train", { destination })
+        : t("listTitles.trainNoDestination");
     case "bus":
-      return withDestination("אוטובוס ל", destination);
+      return destination
+        ? t("listTitles.bus", { destination })
+        : t("listTitles.busNoDestination");
     case "ferry":
-      return withDestination("מעבורת ל", destination);
+      return destination
+        ? t("listTitles.ferry", { destination })
+        : t("listTitles.ferryNoDestination");
     case "taxi":
-      return withDestination("מונית ל", destination);
+      return destination
+        ? t("listTitles.taxi", { destination })
+        : t("listTitles.taxiNoDestination");
     case "car":
-      return destination ? `רכב שכור · ${destination}` : "רכב שכור";
+      return destination
+        ? t("listTitles.carWithDestination", { destination })
+        : t("listTitles.car");
   }
 }

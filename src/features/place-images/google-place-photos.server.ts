@@ -1,6 +1,6 @@
 import "server-only";
 
-import { PLACES_MESSAGES } from "@/features/places/constants";
+import { PLACES_ERROR_CODES } from "@/features/places/constants";
 import {
   GooglePlacesConfigError,
   GooglePlacesRequestError,
@@ -64,7 +64,7 @@ export async function fetchPlacePhotoMetadata(
   });
 
   if (!response.ok) {
-    throw new GooglePlacesRequestError(PLACES_MESSAGES.resolveFailed);
+    throw new GooglePlacesRequestError(PLACES_ERROR_CODES.resolveFailed);
   }
 
   const payload = (await response.json()) as GooglePhotoResponse;

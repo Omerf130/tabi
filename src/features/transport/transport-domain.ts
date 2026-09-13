@@ -9,20 +9,23 @@ import {
 import { connectDb } from "@/lib/db/connect";
 import { withTransaction } from "@/lib/db/transaction";
 import { Transport } from "@/models/Transport";
-import { TRANSPORT_MESSAGES } from "./constants";
+import { TRANSPORT_ERROR_CODES } from "./constants";
 import type { CreateTransportInput, UpdateTransportInput } from "./schemas";
 import { isArrivalAfterDeparture } from "./transport-datetime";
 
 export class TransportValidationError extends Error {
-  constructor(message: string) {
-    super(message);
+  readonly code: (typeof TRANSPORT_ERROR_CODES)[keyof typeof TRANSPORT_ERROR_CODES];
+
+  constructor(code: (typeof TRANSPORT_ERROR_CODES)[keyof typeof TRANSPORT_ERROR_CODES]) {
+    super(code);
+    this.code = code;
     this.name = "TransportValidationError";
   }
 }
 
 export class TransportNotFoundError extends Error {
   constructor() {
-    super(TRANSPORT_MESSAGES.notFound);
+    super(TRANSPORT_ERROR_CODES.notFound);
     this.name = "TransportNotFoundError";
   }
 }
@@ -86,7 +89,7 @@ function normalizeDetails(input: CreateTransportInput) {
 
 function assertValidChronology(input: CreateTransportInput): void {
   if (!isArrivalAfterDeparture(input.departure, input.arrival)) {
-    throw new TransportValidationError(TRANSPORT_MESSAGES.invalidChronology);
+    throw new TransportValidationError(TRANSPORT_ERROR_CODES.invalidChronology);
   }
 }
 

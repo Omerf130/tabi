@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/Badge/Badge";
 import { IconChevron } from "@/components/ui/icons";
 import { ACTIVITY_TYPES } from "./activity-types";
@@ -9,7 +10,7 @@ import { ActivityForm } from "./ActivityForm";
 import { ActivityMovePanel } from "./ActivityMovePanel";
 import { ActivityRow } from "./ActivityRow";
 import { ActivityRowActions } from "./ActivityRowActions";
-import { ACTIVITY_MESSAGES } from "./constants";
+import { confirmDayActionDiscard } from "./confirm-day-action-discard";
 import { formatDayItineraryCount } from "./format-day-itinerary-count";
 import { TransportItineraryRow } from "./TransportItineraryRow";
 import {
@@ -34,13 +35,6 @@ type ItineraryDayAccordionProps = {
   initialExpandedDate: string | null;
 };
 
-function confirmDiscard(dirty: boolean): boolean {
-  if (!dirty) {
-    return true;
-  }
-  return window.confirm(ACTIVITY_MESSAGES.discardConfirm);
-}
-
 function isEditorActive(editor: EditorState): boolean {
   return editor.kind !== "idle";
 }
@@ -59,6 +53,9 @@ export function ItineraryDayAccordion({
   isOwner,
   initialExpandedDate,
 }: ItineraryDayAccordionProps) {
+  const t = useTranslations("Itinerary");
+  const tCommon = useTranslations("Common");
+  const tActivity = useTranslations("Activity");
   const router = useRouter();
   const [expandedDate, setExpandedDate] = useState<string | null>(
     initialExpandedDate,
@@ -75,8 +72,8 @@ export function ItineraryDayAccordion({
     if (!isEditorActive(editor)) {
       return true;
     }
-    return confirmDiscard(isEditorDirty(editor));
-  }, [editor]);
+    return confirmDayActionDiscard(isEditorDirty(editor), tActivity);
+  }, [editor, tActivity]);
 
   const handleMutationSuccess = useCallback(
     (result: ActivityActionState) => {
@@ -132,7 +129,7 @@ export function ItineraryDayAccordion({
   }
 
   function handleCancelEditor() {
-    if (!confirmDiscard(isEditorDirty(editor))) {
+    if (!confirmDayActionDiscard(isEditorDirty(editor), tActivity)) {
       return;
     }
     resetEditor();
@@ -228,16 +225,18 @@ export function ItineraryDayAccordion({
               />
               <span className={styles.dayToggleCopy}>
                 <span className={styles.dayToggleTitle}>
-                  <span className={styles.dayNumber}>יום {day.dayNumber}</span>
+                  <span className={styles.dayNumber}>
+                    {tCommon("dayNumber", { dayNumber: day.dayNumber })}
+                  </span>
                   <span className={styles.dayMetaInline}>
                     {day.weekdayLabel}, {day.dateLabel}
                   </span>
                   {day.temporalState === "today" ? (
-                    <Badge tone="accent">היום</Badge>
+                    <Badge tone="accent">{tCommon("today")}</Badge>
                   ) : null}
                 </span>
                 <span className={styles.dayCount}>
-                  {formatDayItineraryCount(day.items)}
+                  {formatDayItineraryCount(day.items, t, tCommon)}
                 </span>
               </span>
             </button>
@@ -260,7 +259,7 @@ export function ItineraryDayAccordion({
                     })}
                   </div>
                 ) : (
-                  <p className={styles.emptyDay}>אין פריטים ביום זה</p>
+                  <p className={styles.emptyDay}>{t("emptyDay")}</p>
                 )}
 
                 {editor.kind === "create" ? (
@@ -291,7 +290,7 @@ export function ItineraryDayAccordion({
                       className={styles.dayAddButton}
                       onClick={startCreate}
                     >
-                      + הוספת פעילות
+                      {t("addActivity")}
                     </button>
                   </div>
                 ) : null}

@@ -2,7 +2,10 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import { buildAccommodationListItem } from "./build-accommodation-list-item";
+
+const t = createAppTranslator("Accommodation", "he");
 import { getAccommodationsSettingsHref } from "./constants";
 import type { AccommodationViewModel } from "./types";
 
@@ -31,6 +34,7 @@ describe("accommodation page presentation", () => {
       tripId,
       baseAccommodation,
       "2026-10-25",
+      t,
       {
         hasPhoto: true,
         photoHref: `/app/trips/${tripId}/accommodations/acc-1/photo`,

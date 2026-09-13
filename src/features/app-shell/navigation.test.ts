@@ -3,7 +3,6 @@ import {
   buildTripNavHref,
   getActiveNavSection,
   isSecondaryTripRoute,
-  NAV_LABELS,
   NAV_SECTIONS,
 } from "./navigation";
 
@@ -20,7 +19,7 @@ describe("navigation", () => {
       "more",
     ]);
     expect(NAV_SECTIONS).not.toContain("memories");
-    expect(NAV_LABELS.settings).toBe("הגדרות");
+    expect(NAV_SECTIONS[3]).toBe("settings");
   });
 
   it("builds trip nav hrefs", () => {

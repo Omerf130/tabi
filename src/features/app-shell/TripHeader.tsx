@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { AppHeader } from "@/components/ui/AppHeader/AppHeader";
 import { IconBack, IconChevron } from "@/components/ui/icons";
 import styles from "./TripHeader.module.scss";
@@ -12,13 +13,14 @@ type TripHeaderProps = {
   trailing?: ReactNode;
 };
 
-export function TripHeader({
+export async function TripHeader({
   title,
   tripName,
   showTripSwitch = false,
   backHref,
   trailing,
 }: TripHeaderProps) {
+  const t = await getTranslations("TripHeader");
   const mode = showTripSwitch ? "section" : "trip";
 
   return (
@@ -33,7 +35,7 @@ export function TripHeader({
         }
         leading={
           backHref ? (
-            <Link href={backHref} className={styles.backLink} aria-label="חזרה">
+            <Link href={backHref} className={styles.backLink} aria-label={t("back")}>
               <IconBack className={styles.backGlyph} />
             </Link>
           ) : undefined
@@ -44,7 +46,7 @@ export function TripHeader({
         <div className={styles.contextRow}>
           <span className={styles.tripName}>{tripName}</span>
           <Link href="/app" className={styles.switchLink}>
-            <span className={styles.switchLabel}>הטיולים שלי</span>
+            <span className={styles.switchLabel}>{t("myTrips")}</span>
             <IconChevron className={styles.switchGlyph} aria-hidden />
           </Link>
         </div>

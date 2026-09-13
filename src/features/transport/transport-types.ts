@@ -1,3 +1,5 @@
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
+
 export const TRANSPORT_TYPES = [
   "flight",
   "train",
@@ -19,31 +21,19 @@ export const TRAIN_CATEGORIES = [
 
 export type TrainCategory = (typeof TRAIN_CATEGORIES)[number];
 
-export const TRANSPORT_TYPE_LABELS: Record<TransportType, string> = {
-  flight: "טיסות",
-  train: "רכבות",
-  bus: "אוטובוסים",
-  ferry: "מעבורות",
-  car: "רכב / הסעה",
-  taxi: "מוניות",
-};
+export function createTransportTypeLabelResolver(t: AppTranslator<"Transport">) {
+  return (type: TransportType) => t(`types.${type}`);
+}
 
-export const TRANSPORT_TYPE_SINGULAR_LABELS: Record<TransportType, string> = {
-  flight: "טיסה",
-  train: "רכבת",
-  bus: "אוטובוס",
-  ferry: "מעבורת",
-  car: "רכב / הסעה",
-  taxi: "מונית",
-};
+export function createTransportTypeSingularLabelResolver(
+  t: AppTranslator<"Transport">,
+) {
+  return (type: TransportType) => t(`typesSingular.${type}`);
+}
 
-export const TRAIN_CATEGORY_LABELS: Record<TrainCategory, string> = {
-  shinkansen: "Shinkansen",
-  limited_express: "Limited Express",
-  reserved: "רכבת שמורה",
-  local: "רכבת מקומית",
-  other: "רכבת",
-};
+export function createTrainCategoryLabelResolver(t: AppTranslator<"Transport">) {
+  return (category: TrainCategory) => t(`trainCategories.${category}`);
+}
 
 export function isTransportType(value: string): value is TransportType {
   return (TRANSPORT_TYPES as readonly string[]).includes(value);

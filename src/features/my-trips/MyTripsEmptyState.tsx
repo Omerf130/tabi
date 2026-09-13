@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
-import { CREATE_TRIP_PATH, MY_TRIPS_EMPTY_COPY } from "./constants";
+import { useTranslations } from "next-intl";
+import { CREATE_TRIP_PATH } from "./constants";
 import type { MyTripsFilter } from "./filter-my-trips";
 import styles from "./MyTripsScreen.module.scss";
 
@@ -9,7 +12,7 @@ type MyTripsEmptyStateProps = {
 };
 
 export function MyTripsEmptyState({ filter, hasAnyTrips }: MyTripsEmptyStateProps) {
-  const copy = MY_TRIPS_EMPTY_COPY[filter];
+  const t = useTranslations(`MyTrips.empty.${filter}`);
   const titleId = `my-trips-empty-${filter}`;
 
   return (
@@ -43,12 +46,12 @@ export function MyTripsEmptyState({ filter, hasAnyTrips }: MyTripsEmptyStateProp
 
       <div className={styles.emptyCopy}>
         <h2 id={titleId} className={styles.emptyTitle}>
-          {copy.title}
+          {t("title")}
         </h2>
-        <p className={styles.emptyBody}>{copy.body}</p>
-        {copy.cta ? (
+        <p className={styles.emptyBody}>{t("body")}</p>
+        {filter !== "past" ? (
           <Link href={CREATE_TRIP_PATH} className={styles.emptyCta}>
-            {copy.cta}
+            {t("cta")}
           </Link>
         ) : null}
       </div>

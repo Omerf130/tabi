@@ -6,7 +6,7 @@ import { getSupportedCurrencies } from "@/features/currency/queries";
 import { isValidCalendarDateString } from "@/features/trips/calendar-date";
 import { connectDb } from "@/lib/db/connect";
 import { TripExpense } from "@/models/TripExpense";
-import { FINANCE_MESSAGES } from "./constants";
+import { FINANCE_ERROR_CODES, type FinanceErrorCode } from "./constants";
 import {
   buildExpenseConversionSnapshot,
   FrankfurterRequestError,
@@ -17,8 +17,11 @@ import type { ExpenseCategory } from "./types";
 export { FrankfurterRequestError };
 
 export class FinanceExpenseValidationError extends Error {
-  constructor(message: string) {
-    super(message);
+  readonly code: FinanceErrorCode;
+
+  constructor(code: FinanceErrorCode) {
+    super(code);
+    this.code = code;
     this.name = "FinanceExpenseValidationError";
   }
 }
@@ -40,13 +43,13 @@ export class FinanceExpenseForbiddenError extends Error {
 async function assertSupportedCurrency(currency: string): Promise<void> {
   const currencies = await getSupportedCurrencies();
   if (!isSupportedCurrencyCode(currencies, currency)) {
-    throw new FinanceExpenseValidationError(FINANCE_MESSAGES.baseCurrencyInvalid);
+    throw new FinanceExpenseValidationError(FINANCE_ERROR_CODES.baseCurrencyInvalid);
   }
 }
 
 function assertValidExpenseDate(expenseDate: string): void {
   if (!isValidCalendarDateString(expenseDate)) {
-    throw new FinanceExpenseValidationError(FINANCE_MESSAGES.validationFailed);
+    throw new FinanceExpenseValidationError(FINANCE_ERROR_CODES.validationFailed);
   }
 }
 

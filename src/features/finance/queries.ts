@@ -1,6 +1,9 @@
 import "server-only";
 
+import { getLocale, getTranslations } from "next-intl/server";
 import { getSupportedCurrencies } from "@/features/currency/queries";
+import { createFinanceLabels } from "@/features/finance/finance-labels";
+import { resolveAppLocale } from "@/features/i18n/locale";
 import { connectDb } from "@/lib/db/connect";
 import { TripExpense } from "@/models/TripExpense";
 import { buildAfterTripFinanceRecap } from "./build-after-trip-finance-recap";
@@ -21,6 +24,13 @@ import type {
   PublicTripFinanceSettings,
   TravelHubFinanceSummary,
 } from "./types";
+
+async function getFinanceLabels() {
+  const t = await getTranslations("Finance");
+  const tCategories = await getTranslations("Finance.categories");
+  return createFinanceLabels(t, tCategories);
+}
+
 export async function listTripExpenses(tripId: string): Promise<PublicTripExpense[]> {
   await connectDb();
   const expenses = await TripExpense.find({ tripId })
@@ -58,13 +68,19 @@ export async function prepareFinancePage(input: {
   };
   isOwner: boolean;
 }): Promise<FinancePageViewModel> {
+  const locale = resolveAppLocale(await getLocale());
+  const labels = await getFinanceLabels();
   const [{ settings, expenses, summary, hasExpenses }, currencies] =
     await Promise.all([
       getFinanceSummaryInput(input.trip.id),
       getSupportedCurrencies(),
     ]);
 
-  const titleLookup = await resolveExpenseSourceTitles(input.trip.id, expenses);
+  const titleLookup = await resolveExpenseSourceTitles(
+    input.trip.id,
+    expenses,
+    labels,
+  );
 
   return buildFinancePageViewModel({
     trip: input.trip,
@@ -76,6 +92,8 @@ export async function prepareFinancePage(input: {
     baseCurrencyLocked: hasExpenses,
     currencies,
     titleLookup,
+    labels,
+    locale,
   });
 }
 
@@ -94,11 +112,13 @@ export async function prepareTravelHubFinanceSummary(
 export async function prepareAfterTripFinanceRecap(
   tripId: string,
 ): Promise<AfterTripFinanceRecapViewModel> {
+  const labels = await getFinanceLabels();
   const { settings, summary, hasExpenses } = await getFinanceSummaryInput(tripId);
   return buildAfterTripFinanceRecap({
     tripId,
     settings,
     summary,
     hasExpenses,
+    labels,
   });
 }

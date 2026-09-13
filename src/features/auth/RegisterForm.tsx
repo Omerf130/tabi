@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { useTranslations } from "next-intl";
 import { registerAction, type AuthActionState } from "./actions";
 import { deriveRegistrationNameFromEmail } from "./derive-registration-name";
 import { AuthEmailField, AuthPasswordField } from "./AuthField";
@@ -14,6 +15,9 @@ type RegisterFormProps = {
 };
 
 export function RegisterForm({ nextPath }: RegisterFormProps) {
+  const tFields = useTranslations("Auth.fields");
+  const tActions = useTranslations("Auth.actions");
+  const tErrors = useTranslations("Auth.errors");
   const [state, action] = useActionState(registerAction, initialState);
   const [email, setEmail] = useState("");
 
@@ -25,34 +29,42 @@ export function RegisterForm({ nextPath }: RegisterFormProps) {
         name="name"
         value={deriveRegistrationNameFromEmail(email)}
       />
-      {state.error ? (
+      {state.errorCode ? (
         <p className={styles.formError} role="alert">
-          {state.error}
+          {tErrors(state.errorCode)}
         </p>
       ) : null}
       <AuthEmailField
         id="email"
         name="email"
-        label="Email"
-        placeholder="Email Address"
+        label={tFields("email")}
+        placeholder={tFields("emailPlaceholder")}
         autoComplete="email"
         required
         value={email}
         onChange={(event) => setEmail(event.target.value)}
-        error={state.fieldErrors?.email}
+        error={
+          state.fieldErrorCodes?.email
+            ? tErrors(state.fieldErrorCodes.email)
+            : undefined
+        }
       />
       <AuthPasswordField
         id="password"
-        label="Password"
-        placeholder="Password"
+        label={tFields("password")}
+        placeholder={tFields("passwordPlaceholder")}
         autoComplete="new-password"
         required
         minLength={8}
         maxLength={256}
-        error={state.fieldErrors?.password}
+        error={
+          state.fieldErrorCodes?.password
+            ? tErrors(state.fieldErrorCodes.password)
+            : undefined
+        }
       />
       <div className={styles.authSubmit}>
-        <AuthSubmitButton>Create Account</AuthSubmitButton>
+        <AuthSubmitButton>{tActions("createAccount")}</AuthSubmitButton>
       </div>
     </form>
   );

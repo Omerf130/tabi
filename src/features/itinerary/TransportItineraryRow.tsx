@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { IconActivityTransport } from "@/components/ui/icons";
-import { formatEntityLinkedCostDisplay } from "@/features/finance/entity-linked-cost-presentation";
+import { EntityLinkedCostDisplay } from "@/features/finance/EntityLinkedCostDisplay.client";
 import type { TransportItineraryItemViewModel } from "@/features/transport/types";
 import actionStyles from "./ItineraryPage.module.scss";
 import styles from "./ItineraryExperience.module.scss";
@@ -16,6 +19,8 @@ export function TransportItineraryRow({
   isOwner = false,
   onEdit,
 }: TransportItineraryRowProps) {
+  const tCommon = useTranslations("Common");
+
   return (
     <li className={styles.timelineEntry}>
       <time className={styles.timelineTime}>{transport.departureTime}</time>
@@ -55,7 +60,7 @@ export function TransportItineraryRow({
                           className={actionStyles.actionLink}
                           onClick={onEdit}
                         >
-                          עריכה
+                          {tCommon("edit")}
                         </button>
                       </div>
                     </div>
@@ -77,7 +82,7 @@ export function TransportItineraryRow({
 
               {transport.linkedCost ? (
                 <p className={styles.timelineCardCost}>
-                  {formatEntityLinkedCostDisplay(transport.linkedCost)}
+                  <EntityLinkedCostDisplay linkedCost={transport.linkedCost} />
                 </p>
               ) : null}
             </div>

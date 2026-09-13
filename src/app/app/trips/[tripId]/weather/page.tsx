@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { AppPage } from "@/features/app-shell/AppPage";
 import { WeatherPage } from "@/features/weather/WeatherPage.client";
 import { prepareWeatherPage } from "@/features/weather/queries";
@@ -10,8 +11,11 @@ export async function generateMetadata({
   params: Promise<{ tripId: string }>;
 }): Promise<Metadata> {
   const { tripId } = await params;
-  const trip = await requireTripMember(tripId);
-  return { title: `מזג אוויר · ${trip.name}` };
+  const [trip, t] = await Promise.all([
+    requireTripMember(tripId),
+    getTranslations("Weather"),
+  ]);
+  return { title: `${t("pageTitle")} · ${trip.name}` };
 }
 
 export default async function TripWeatherPage({

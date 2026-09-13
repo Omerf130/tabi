@@ -21,8 +21,8 @@ const listSlugSchema = z.enum(TRIP_LIST_SLUGS);
 const itemTextSchema = z
   .string()
   .trim()
-  .min(1, "יש להזין טקסט לפריט")
-  .max(TRIP_LIST_ITEM_TEXT_MAX_LENGTH, "הטקסט ארוך מדי");
+  .min(1, "textRequired")
+  .max(TRIP_LIST_ITEM_TEXT_MAX_LENGTH, "textTooLong");
 
 const completionStateSchema = z.preprocess((value) => {
   if (value === "true" || value === true) {

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { buildTaxiModeContent } from "@/features/accommodations/build-taxi-mode-content";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
 import styles from "./TaxiModeOverlay.module.scss";
@@ -14,7 +15,9 @@ export function TaxiModeOverlay({
   tripId,
   accommodation,
 }: TaxiModeOverlayProps) {
-  const content = buildTaxiModeContent(accommodation);
+  const t = useTranslations("Accommodation");
+  const tCommon = useTranslations("Common");
+  const content = buildTaxiModeContent(accommodation, t("taxiMissingAddress"));
 
   return (
     <div className={styles.overlay} role="dialog" aria-modal="true">
@@ -60,7 +63,7 @@ export function TaxiModeOverlay({
         href={`/app/trips/${tripId}/accommodations/${accommodation.id}`}
         className={styles.closeButton}
       >
-        סגירה
+        {tCommon("close")}
       </Link>
     </div>
   );

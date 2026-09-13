@@ -11,19 +11,25 @@ import { connectDb } from "@/lib/db/connect";
 import { withTransaction } from "@/lib/db/transaction";
 import { Accommodation } from "@/models/Accommodation";
 import { isDateWithinTrip } from "@/features/trips/trip-days";
-import { ACCOMMODATION_MESSAGES } from "./constants";
+import {
+  ACCOMMODATION_ERROR_CODES,
+  type AccommodationErrorCode,
+} from "./constants";
 import type { AccommodationFieldsInput } from "./schemas";
 
 export class AccommodationValidationError extends Error {
-  constructor(message: string) {
-    super(message);
+  readonly code: AccommodationErrorCode;
+
+  constructor(code: AccommodationErrorCode) {
+    super(code);
+    this.code = code;
     this.name = "AccommodationValidationError";
   }
 }
 
 export class AccommodationNotFoundError extends Error {
   constructor() {
-    super(ACCOMMODATION_MESSAGES.notFound);
+    super(ACCOMMODATION_ERROR_CODES.notFound);
     this.name = "AccommodationNotFoundError";
   }
 }
@@ -52,15 +58,15 @@ export function assertAccommodationDateRange(
   endDate: string,
 ): void {
   if (compareCalendarDates(checkOutDate, checkInDate) <= 0) {
-    throw new AccommodationValidationError(ACCOMMODATION_MESSAGES.invalidDateRange);
+    throw new AccommodationValidationError(ACCOMMODATION_ERROR_CODES.invalidDateRange);
   }
 
   if (!isDateWithinTrip(startDate, endDate, checkInDate)) {
-    throw new AccommodationValidationError(ACCOMMODATION_MESSAGES.dateOutOfRange);
+    throw new AccommodationValidationError(ACCOMMODATION_ERROR_CODES.dateOutOfRange);
   }
 
   if (!isDateWithinTrip(startDate, endDate, checkOutDate)) {
-    throw new AccommodationValidationError(ACCOMMODATION_MESSAGES.dateOutOfRange);
+    throw new AccommodationValidationError(ACCOMMODATION_ERROR_CODES.dateOutOfRange);
   }
 }
 

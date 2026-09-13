@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
 import { AuthSubmitButton } from "@/features/auth/AuthSubmitButton";
@@ -10,6 +11,10 @@ import {
   type TripCoverActionState,
 } from "@/features/trips/cover/actions";
 import { getTripCoverPath } from "@/features/trips/cover/constants";
+import {
+  translateCoverError,
+  translateCoverSuccess,
+} from "@/features/trips/cover/translate-cover-error";
 import {
   getTripSettingsSectionClassName,
   type TripSettingsVariant,
@@ -32,6 +37,8 @@ export function TripCoverSettings({
   isOwner,
   variant = "stack",
 }: TripCoverSettingsProps) {
+  const t = useTranslations("TripCover");
+  const tCommon = useTranslations("Common");
   const [showUpload, setShowUpload] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadState, uploadAction] = useActionState(
@@ -43,6 +50,11 @@ export function TripCoverSettings({
     initialState,
   );
 
+  const uploadError = translateCoverError(t, uploadState.errorCode);
+  const uploadSuccess = translateCoverSuccess(t, uploadState.successCode);
+  const removeError = translateCoverError(t, removeState.errorCode);
+  const removeSuccess = translateCoverSuccess(t, removeState.successCode);
+
   const openUpload = () => {
     setShowUpload(true);
     requestAnimationFrame(() => {
@@ -53,10 +65,8 @@ export function TripCoverSettings({
   return (
     <section className={getTripSettingsSectionClassName(variant)}>
       <div className={styles.header}>
-        <h2 className={sectionStyles.title}>תמונת הטיול</h2>
-        <p className={sectionStyles.hint}>
-          תמונה אישית שתופיע בראש מסך הבית. JPEG, PNG או WebP עד 5MB.
-        </p>
+        <h2 className={sectionStyles.title}>{t("title")}</h2>
+        <p className={sectionStyles.hint}>{t("hint")}</p>
       </div>
 
       {hasCover ? (
@@ -69,19 +79,19 @@ export function TripCoverSettings({
           />
         </div>
       ) : (
-        <p className={styles.empty}>עדיין לא נבחרה תמונת טיול.</p>
+        <p className={styles.empty}>{t("empty")}</p>
       )}
 
       {isOwner ? (
         <div className={styles.actions}>
           {!showUpload ? (
             <Button type="button" variant="ghost" onClick={openUpload}>
-              {hasCover ? "+ החלפת תמונה" : "+ העלאת תמונה"}
+              {hasCover ? t("replacePhoto") : t("uploadPhoto")}
             </Button>
           ) : (
             <form action={uploadAction} className={styles.uploadForm}>
               <input type="hidden" name="tripId" value={tripId} />
-              <Field label="העלאת תמונה" htmlFor="trip-cover">
+              <Field label={t("uploadField")} htmlFor="trip-cover">
                 <input
                   ref={fileInputRef}
                   id="trip-cover"
@@ -91,23 +101,25 @@ export function TripCoverSettings({
                   className={styles.fileInput}
                 />
               </Field>
-              {uploadState.error ? (
+              {uploadError ? (
                 <p className={styles.error} role="alert">
-                  {uploadState.error}
+                  {uploadError}
                 </p>
               ) : null}
-              {uploadState.success ? (
-                <p className={styles.success}>{uploadState.success}</p>
+              {uploadSuccess ? (
+                <p className={styles.success}>{uploadSuccess}</p>
               ) : null}
               <div className={styles.uploadActions}>
-                <AuthSubmitButton>{hasCover ? "החלפה" : "העלאה"}</AuthSubmitButton>
+                <AuthSubmitButton>
+                  {hasCover ? t("replaceSubmit") : t("uploadSubmit")}
+                </AuthSubmitButton>
                 <Button
                   type="button"
                   variant="ghost"
                   size="compact"
                   onClick={() => setShowUpload(false)}
                 >
-                  ביטול
+                  {tCommon("cancel")}
                 </Button>
               </div>
             </form>
@@ -117,15 +129,15 @@ export function TripCoverSettings({
             <form action={removeAction}>
               <input type="hidden" name="tripId" value={tripId} />
               <Button type="submit" variant="ghost" size="compact">
-                הסרה
+                {t("remove")}
               </Button>
-              {removeState.error ? (
+              {removeError ? (
                 <p className={styles.error} role="alert">
-                  {removeState.error}
+                  {removeError}
                 </p>
               ) : null}
-              {removeState.success ? (
-                <p className={styles.success}>{removeState.success}</p>
+              {removeSuccess ? (
+                <p className={styles.success}>{removeSuccess}</p>
               ) : null}
             </form>
           ) : null}

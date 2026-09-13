@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useActionState, useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
@@ -10,6 +11,7 @@ import {
 } from "./actions";
 import { appendActivityFormValuesToFormData } from "./append-activity-form-values";
 import { toActivityFormValues } from "./to-activity-view-model";
+import { translateActivityError } from "./translate-activity-error";
 import type { ActivityViewModel } from "./types";
 import styles from "./ItineraryPage.module.scss";
 
@@ -30,10 +32,16 @@ export function ActivityMovePanel({
   onCancel,
   onSuccess,
 }: ActivityMovePanelProps) {
+  const t = useTranslations("Activity");
+  const tCommon = useTranslations("Common");
   const [state, formAction] = useActionState(updateActivityAction, initialState);
   const [targetDate, setTargetDate] = useState(activity.date);
   const [, startTransition] = useTransition();
   const values = toActivityFormValues(activity);
+  const errorMessage = translateActivityError(t, state.error);
+  const dateError = state.fieldErrors?.date
+    ? translateActivityError(t, state.fieldErrors.date)
+    : undefined;
 
   useEffect(() => {
     if (state.ok) {
@@ -59,17 +67,17 @@ export function ActivityMovePanel({
 
   return (
     <div className={styles.movePanel}>
-      {state.error ? (
+      {errorMessage ? (
         <p className={styles.inlineError} role="alert">
-          {state.error}
+          {errorMessage}
         </p>
       ) : null}
-      {state.fieldErrors?.date ? (
+      {dateError ? (
         <p className={styles.inlineError} role="alert">
-          {state.fieldErrors.date}
+          {dateError}
         </p>
       ) : null}
-      <Field label="יום יעד" htmlFor={`move-date-${activity.id}`}>
+      <Field label={tCommon("targetDay")} htmlFor={`move-date-${activity.id}`}>
         <Select
           id={`move-date-${activity.id}`}
           value={targetDate}
@@ -84,10 +92,10 @@ export function ActivityMovePanel({
       </Field>
       <div className={styles.moveActions}>
         <Button type="button" size="compact" onClick={handleSubmit}>
-          העברה
+          {tCommon("move")}
         </Button>
         <Button type="button" variant="ghost" size="compact" onClick={onCancel}>
-          ביטול
+          {tCommon("cancel")}
         </Button>
       </div>
     </div>

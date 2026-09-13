@@ -53,6 +53,10 @@ vi.mock("./resolve-trip-home-preview-context", () => ({
   resolveTripHomePreviewContext: resolveTripHomePreviewContextMock,
 }));
 
+vi.mock("@/features/i18n/resolve-request-locale", () => ({
+  resolveRequestLocale: vi.fn(async () => "he"),
+}));
+
 const trip = {
   id: "507f1f77bcf86cd799439011",
   name: "Japan 2026",

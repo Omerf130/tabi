@@ -11,11 +11,9 @@ export type TaxiModeContent = {
   showJapaneseHierarchy: boolean;
 };
 
-const MISSING_ADDRESS_MESSAGE =
-  "לא הוזנה כתובת. הוסיפו כתובת בהגדרות הטיול.";
-
 export function buildTaxiModeContent(
   accommodation: AccommodationTaxiFields,
+  missingAddressMessage: string,
 ): TaxiModeContent {
   const nameJapanese = accommodation.nameJapanese?.trim();
   const addressJapanese = accommodation.addressJapanese?.trim();
@@ -33,7 +31,7 @@ export function buildTaxiModeContent(
       primaryAddress: hasJapaneseAddress ? addressJapanese : undefined,
       primaryAddressLang: hasJapaneseAddress ? "ja" : undefined,
       secondaryAddress: hasEnglishAddress ? addressEnglish : undefined,
-      missingAddressMessage: hasAnyAddress ? undefined : MISSING_ADDRESS_MESSAGE,
+      missingAddressMessage: hasAnyAddress ? undefined : missingAddressMessage,
       showJapaneseHierarchy: true,
     };
   }
@@ -57,7 +55,7 @@ export function buildTaxiModeContent(
     primaryAddress,
     primaryAddressLang,
     secondaryAddress,
-    missingAddressMessage: primaryAddress ? undefined : MISSING_ADDRESS_MESSAGE,
+    missingAddressMessage: primaryAddress ? undefined : missingAddressMessage,
     showJapaneseHierarchy: false,
   };
 }

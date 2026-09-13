@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { createHebrewHomeTranslations } from "@/features/i18n/test-translators";
 import { isAccommodationOccupiedOnDate } from "@/features/accommodations/accommodation-domain";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
 import type { ActivityViewModel } from "@/features/itinerary/types";
@@ -16,6 +17,8 @@ const trip = {
   startDate: "2026-10-25",
   endDate: "2026-11-18",
 };
+
+const translations = createHebrewHomeTranslations();
 
 function activity(
   overrides: Partial<ActivityViewModel> & Pick<ActivityViewModel, "id">,
@@ -66,6 +69,7 @@ describe("during trip home", () => {
   it("preserves today's plan full-day route in the view model", () => {
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-11-01",
       nowJapanTime: "13:00",
       dayActivities: [
@@ -124,6 +128,7 @@ describe("during trip home", () => {
 
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-11-01",
       nowJapanTime: "13:00",
       dayActivities,
@@ -162,6 +167,7 @@ describe("during trip home", () => {
   it("omits important today when there are no reminders", () => {
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-11-01",
       nowJapanTime: "10:00",
     });
@@ -187,6 +193,7 @@ describe("during trip home", () => {
 
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-11-01",
       nowJapanTime: "20:00",
       tonightAccommodation,
@@ -204,6 +211,7 @@ describe("during trip home", () => {
   it("CASE A — empty active day keeps today's plan with CTA and no NOW/UP NEXT", () => {
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-11-01",
       nowJapanTime: "13:00",
       dayActivities: [],
@@ -252,6 +260,7 @@ describe("during trip home", () => {
 
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-11-01",
       nowJapanTime: "13:00",
       dayActivities,
@@ -278,6 +287,7 @@ describe("during trip home", () => {
   it("limits during Google image slots to now, up next, and tonight", () => {
     const model = buildTripHomeViewModel({
       trip,
+      translations,
       todayJapan: "2026-11-01",
       nowJapanTime: "13:00",
       dayActivities: [

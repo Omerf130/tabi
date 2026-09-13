@@ -1,3 +1,4 @@
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import { compareCalendarDates } from "@/features/trips/calendar-date";
 import { formatReminderDateLabel } from "./format-reminder";
 import { compareTripReminders } from "./reminder-domain";
@@ -23,6 +24,7 @@ export const UPCOMING_HOME_REMINDERS_LIMIT = 3;
 export function selectUpcomingHomeReminders(
   reminders: readonly UpcomingHomeReminderRecord[],
   todayJapan: string,
+  t: AppTranslator<"TripReminders">,
   limit = UPCOMING_HOME_REMINDERS_LIMIT,
 ): UpcomingHomeReminderItem[] {
   return reminders
@@ -38,6 +40,6 @@ export function selectUpcomingHomeReminders(
       date: reminder.date,
       time: reminder.time,
       text: reminder.text,
-      dateLabel: formatReminderDateLabel(reminder.date, todayJapan),
+      dateLabel: formatReminderDateLabel(reminder.date, todayJapan, t),
     }));
 }

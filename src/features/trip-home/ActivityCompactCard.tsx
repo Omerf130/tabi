@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { IconActivityOther, IconNavigation } from "@/components/ui/icons";
 import { PlaceImage } from "@/features/place-images/PlaceImage";
 import type { TripHomeActivityCard } from "./types";
@@ -11,12 +12,13 @@ type ActivityCompactCardProps = {
   headingId: string;
 };
 
-export function ActivityCompactCard({
+export async function ActivityCompactCard({
   card,
   tone,
   eyebrow,
   headingId,
 }: ActivityCompactCardProps) {
+  const tCommon = await getTranslations("Common");
   const hasPhoto = card.photoPresentation.hasPhoto;
 
   return (
@@ -49,7 +51,7 @@ export function ActivityCompactCard({
             rel="noopener noreferrer"
           >
             <IconNavigation className={styles.activityCompactActionIcon} aria-hidden />
-            ניווט
+            {tCommon("navigate")}
           </Link>
         ) : null}
       </div>

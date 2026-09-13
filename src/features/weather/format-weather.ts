@@ -1,5 +1,7 @@
-export function formatTemperatureC(value: number): string {
-  return `${new Intl.NumberFormat("he-IL", {
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
+
+export function formatTemperatureC(value: number, locale = "he-IL"): string {
+  return `${new Intl.NumberFormat(locale, {
     maximumFractionDigits: 0,
   }).format(Math.round(value))}°`;
 }
@@ -82,8 +84,16 @@ export function formatForecastRowLabel(date: string, locale = "he-IL"): string {
   return `${weekday}, ${dayMonth}`;
 }
 
-export function formatHighLowRange(maxC: number, minC: number): string {
-  return `מקס׳ ${formatTemperatureC(maxC)} · מינ׳ ${formatTemperatureC(minC)}`;
+export function formatHighLowRange(
+  maxC: number,
+  minC: number,
+  t: AppTranslator<"Weather">,
+  locale = "he-IL",
+): string {
+  return t("highLowRange", {
+    max: formatTemperatureC(maxC, locale),
+    min: formatTemperatureC(minC, locale),
+  });
 }
 
 export function formatHourlyTimeLabel(value: string, locale = "he-IL"): string {

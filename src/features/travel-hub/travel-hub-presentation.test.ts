@@ -5,10 +5,12 @@ import { describe, expect, it } from "vitest";
 import { buildAccommodationListHref } from "@/features/accommodations/constants";
 import { getActiveNavSection } from "@/features/app-shell/navigation";
 import { buildFinanceHref } from "@/features/finance/constants";
+import { createHebrewTravelHubTranslators } from "@/features/i18n/test-translators";
 import { buildTravelHubViewModel } from "./build-travel-hub-view-model";
 import { TRAVEL_HUB_QUICK_TOOLS } from "./constants";
 
 const tripId = "507f1f77bcf86cd799439011";
+const travelHubTranslators = createHebrewTravelHubTranslators();
 const featureRoot = dirname(fileURLToPath(import.meta.url));
 
 const emptyFinance = {
@@ -30,9 +32,25 @@ describe("travel hub presentation", () => {
       "language",
       "emergency",
     ]);
-    expect(TRAVEL_HUB_QUICK_TOOLS.every((tool) => tool.description.length > 0)).toBe(
+    expect(TRAVEL_HUB_QUICK_TOOLS.every((tool) => tool.colorClass.length > 0)).toBe(
       true,
     );
+    const model = buildTravelHubViewModel({
+      trip: {
+        id: tripId,
+        name: "Japan 2026",
+        startDate: "2026-10-25",
+        endDate: "2026-11-18",
+      },
+      accommodations: [],
+      transports: [],
+      lists: [],
+      documentCount: 0,
+      currentTripDate: "2026-10-01",
+      finance: emptyFinance,
+      ...travelHubTranslators,
+    });
+    expect(model.quickTools.every((tool) => tool.description.length > 0)).toBe(true);
   });
 
   it("renders live finance summary card linked to Finance route", () => {
@@ -57,6 +75,7 @@ describe("travel hub presentation", () => {
       documentCount: 0,
       currentTripDate: "2026-10-01",
       finance: emptyFinance,
+      ...travelHubTranslators,
     });
 
     expect(model.accommodation.href).toBe(`/app/trips/${tripId}/accommodations`);
@@ -128,6 +147,7 @@ describe("travel hub presentation", () => {
       documentCount: 0,
       currentTripDate: "2026-10-01",
       finance: emptyFinance,
+      ...travelHubTranslators,
     });
 
     expect(model.accommodation.detailLine).toBe("הבא: Hotel Gracery Shinjuku");
@@ -157,6 +177,7 @@ describe("travel hub presentation", () => {
       documentCount: 0,
       currentTripDate: "2026-10-01",
       finance: emptyFinance,
+      ...travelHubTranslators,
     });
 
     expect(model.materials.lists.secondaryLine).toBe("3 מתוך 8 הושלמו");

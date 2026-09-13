@@ -5,6 +5,7 @@ import {
   isAccommodationOccupiedOnDate,
 } from "@/features/accommodations/accommodation-domain";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
+import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import type { TransportRecord } from "@/features/transport/types";
 import { getWeatherSnapshot } from "@/features/weather/queries";
 import { formatTemperatureC } from "@/features/weather/format-weather";
@@ -18,6 +19,7 @@ import type { ItineraryDayHeaderViewModel } from "./types";
 function buildAccommodationContext(
   accommodations: readonly AccommodationViewModel[],
   date: string,
+  t: AppTranslator<"Itinerary">,
 ): string | undefined {
   const occupied = accommodations
     .filter((accommodation) =>
@@ -35,14 +37,14 @@ function buildAccommodationContext(
   }
 
   if (primary.checkInDate === date) {
-    return `צ'ק-אין: ${primary.name}`;
+    return t("checkIn", { name: primary.name });
   }
 
   if (primary.checkOutDate === date) {
-    return `צ'ק-אאוט: ${primary.name}`;
+    return t("checkOut", { name: primary.name });
   }
 
-  return `הלילה ישנים ב־${primary.name}`;
+  return t("stayingTonight", { name: primary.name });
 }
 
 export async function resolveDayHeaderContext(input: {
@@ -55,10 +57,12 @@ export async function resolveDayHeaderContext(input: {
   transports: readonly TransportItineraryItemViewModel[];
   accommodations: readonly AccommodationViewModel[];
   transportRecords: ReadonlyMap<string, TransportRecord>;
+  t: AppTranslator<"Itinerary">;
 }): Promise<Pick<ItineraryDayHeaderViewModel, "locationLabel" | "weather" | "accommodationContext">> {
   const accommodationContext = buildAccommodationContext(
     input.accommodations,
     input.date,
+    input.t,
   );
 
   const resolvedLocation = await resolveDayLocation({

@@ -6,27 +6,17 @@ export type TripManagementSection =
   | "reminders"
   | "members";
 
-export type TripManagementSectionDefinition = {
-  id: TripManagementSection;
-  label: string;
-  shortLabel: string;
-  ownerOnly: boolean;
-};
+export const TRIP_MANAGEMENT_SECTION_IDS: readonly TripManagementSection[] = [
+  "details",
+  "accommodations",
+  "transport",
+  "documents",
+  "reminders",
+  "members",
+] as const;
 
-export const TRIP_MANAGEMENT_SECTIONS: readonly TripManagementSectionDefinition[] =
-  [
-    { id: "details", label: "פרטי הטיול", shortLabel: "פרטי הטיול", ownerOnly: false },
-    {
-      id: "accommodations",
-      label: "מקומות לינה",
-      shortLabel: "לינה",
-      ownerOnly: true,
-    },
-    { id: "transport", label: "תחבורה", shortLabel: "תחבורה", ownerOnly: false },
-    { id: "documents", label: "מסמכים", shortLabel: "מסמכים", ownerOnly: true },
-    { id: "reminders", label: "תזכורות", shortLabel: "תזכורות", ownerOnly: false },
-    { id: "members", label: "חברי הטיול", shortLabel: "חברים", ownerOnly: false },
-  ] as const;
+export const TRIP_MANAGEMENT_OWNER_ONLY_SECTIONS: readonly TripManagementSection[] =
+  ["accommodations", "documents"] as const;
 
 export const DEFAULT_TRIP_MANAGEMENT_SECTION: TripManagementSection = "details";
 
@@ -40,19 +30,13 @@ export function buildTripManagementHref(
 export function parseTripManagementSection(
   value: string,
 ): TripManagementSection | null {
-  return TRIP_MANAGEMENT_SECTIONS.some((section) => section.id === value)
+  return TRIP_MANAGEMENT_SECTION_IDS.includes(value as TripManagementSection)
     ? (value as TripManagementSection)
     : null;
 }
 
 export function isOwnerOnlyManagementSection(section: TripManagementSection): boolean {
-  return TRIP_MANAGEMENT_SECTIONS.find((item) => item.id === section)?.ownerOnly ?? false;
-}
-
-export function getVisibleManagementSections(isOwner: boolean) {
-  return TRIP_MANAGEMENT_SECTIONS.filter(
-    (section) => !section.ownerOnly || isOwner,
-  );
+  return TRIP_MANAGEMENT_OWNER_ONLY_SECTIONS.includes(section);
 }
 
 export const LEGACY_SETTINGS_HASH_MAP: Record<string, TripManagementSection> = {

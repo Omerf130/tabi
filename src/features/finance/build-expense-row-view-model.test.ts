@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { buildExpenseRowViewModel } from "./build-expense-row-view-model";
+import { createTestFinanceLabels } from "./finance-labels";
 import type { PublicTripExpense } from "./types";
+
+const labels = createTestFinanceLabels();
 
 const baseExpense: PublicTripExpense = {
   id: "expense-1",
@@ -28,7 +31,7 @@ const emptyLookup = {
 
 describe("buildExpenseRowViewModel", () => {
   it("shows base equivalent for cross-currency rows", () => {
-    const row = buildExpenseRowViewModel(baseExpense, "ILS", emptyLookup);
+    const row = buildExpenseRowViewModel(baseExpense, "ILS", emptyLookup, labels, "he");
     expect(row.showBaseEquivalent).toBe(true);
     expect(row.originalAmountLabel).toContain("8");
     expect(row.baseAmountLabel).toContain("185");
@@ -45,6 +48,8 @@ describe("buildExpenseRowViewModel", () => {
       },
       "ILS",
       emptyLookup,
+      labels,
+      "he",
     );
 
     expect(row.showBaseEquivalent).toBe(false);
@@ -66,6 +71,8 @@ describe("buildExpenseRowViewModel", () => {
       },
       "ILS",
       lookup,
+      labels,
+      "he",
     );
 
     expect(row.isLinked).toBe(true);
