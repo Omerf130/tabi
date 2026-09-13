@@ -8,7 +8,6 @@ import {
   PLACES_DETAILS_GEOGRAPHY_FIELD_MASK,
   PLACES_DISPLAY_LANGUAGE_CODE,
   PLACES_GEOGRAPHIC_PRIMARY_TYPES,
-  PLACES_INCLUDED_REGION_CODES,
   PLACES_LODGING_PRIMARY_TYPES,
   PLACES_MESSAGES,
   PLACES_SEARCH_LANGUAGE_CODE,
@@ -169,7 +168,6 @@ export async function autocompletePlaces(input: {
     body: JSON.stringify({
       input: input.query,
       sessionToken: input.sessionToken,
-      includedRegionCodes: [...PLACES_INCLUDED_REGION_CODES],
       ...(includedPrimaryTypes ? { includedPrimaryTypes: [...includedPrimaryTypes] } : {}),
       languageCode: PLACES_SEARCH_LANGUAGE_CODE,
       includeQueryPredictions: false,
@@ -374,11 +372,11 @@ export async function getPlaceDisplaySnapshot(
       details.displayName?.text?.trim() ||
       options.fallbackPrimaryText?.trim() ||
       "מקום לינה";
+    const formattedAddress = details.formattedAddress?.trim();
     const city =
       extractCityFromAddressComponents(details.addressComponents) ||
       extractCityFromSecondaryText(options.fallbackSecondaryText) ||
-      "Japan";
-    const formattedAddress = details.formattedAddress?.trim();
+      extractCityFromFormattedAddress(formattedAddress);
 
     const snapshot: PlaceDisplaySnapshot = {
       placeId,
@@ -387,7 +385,7 @@ export async function getPlaceDisplaySnapshot(
         languageCode === PLACES_DISPLAY_LANGUAGE_CODE
           ? details.displayName?.text?.trim()
           : undefined,
-      city,
+      ...(city ? { city } : {}),
       addressEnglish:
         languageCode === PLACES_SEARCH_LANGUAGE_CODE ? formattedAddress : undefined,
       addressJapanese:
@@ -416,15 +414,28 @@ export async function getPlaceDisplayForTraveler(
     return null;
   }
 
+  const city = english?.city ?? japanese?.city;
+
   return {
     placeId,
     name: english?.name ?? japanese?.name ?? "מקום לינה",
     nameJapanese: japanese?.name,
-    city: english?.city ?? japanese?.city ?? "Japan",
+    ...(city ? { city } : {}),
     addressEnglish: english?.addressEnglish,
     addressJapanese: japanese?.addressJapanese,
     googleMapsUrl: english?.googleMapsUrl ?? japanese?.googleMapsUrl,
   };
+}
+
+function extractCityFromFormattedAddress(
+  formattedAddress: string | undefined,
+): string | undefined {
+  if (!formattedAddress) {
+    return undefined;
+  }
+
+  const firstSegment = formattedAddress.split(",")[0]?.trim();
+  return firstSegment || undefined;
 }
 
 export function getGooglePlacesApiKeyForTests(): string | undefined {

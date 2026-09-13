@@ -24,7 +24,7 @@ export type PlaceDisplaySnapshot = {
   placeId: string;
   name: string;
   nameJapanese?: string;
-  city: string;
+  city?: string;
   addressEnglish?: string;
   addressJapanese?: string;
   googleMapsUrl?: string;

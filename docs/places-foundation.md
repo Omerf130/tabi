@@ -60,11 +60,12 @@ Google display fields (name, address, Maps URI) are resolved at selection previe
 
 Legacy Phase 9 fields (`name`, `city`, …) remain readable for backward compatibility and are treated as manual identity when `placeSource` is absent.
 
-## Japan configuration
+## Global search configuration
 
-- Autocomplete: `includedRegionCodes: ["jp"]`, `includedPrimaryTypes: ["lodging"]` for Accommodation (default when omitted)
+- Accommodation autocomplete: global scope with `includedPrimaryTypes: ["lodging"]` (default when omitted)
+- Activity autocomplete: global scope with no primary-type filter when `includedPrimaryTypes` is empty
 - Search language: `en` for readable suggestions
-- Resolve/read Japanese presentation: `languageCode: "ja"` on Place Details
+- Accommodation resolve/read Japanese presentation: `languageCode: "ja"` on Place Details
 
 ## Security
 

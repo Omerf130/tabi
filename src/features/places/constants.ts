@@ -2,7 +2,6 @@ export const PLACES_AUTOCOMPLETE_MIN_INPUT_LENGTH = 3;
 export const PLACES_AUTOCOMPLETE_MAX_INPUT_LENGTH = 120;
 export const PLACES_AUTOCOMPLETE_DEBOUNCE_MS = 300;
 export const PLACES_AUTOCOMPLETE_MAX_SUGGESTIONS = 5;
-export const PLACES_INCLUDED_REGION_CODES = ["jp"] as const;
 export const PLACES_SEARCH_LANGUAGE_CODE = "en";
 export const PLACES_DISPLAY_LANGUAGE_CODE = "ja";
 
@@ -10,7 +9,7 @@ export const PLACES_DISPLAY_LANGUAGE_CODE = "ja";
 export const PLACES_LODGING_PRIMARY_TYPES = ["lodging"] as const;
 
 /**
- * Activity POI search: empty array means no primary-type filter (Japan region only).
+ * Activity POI search: empty array means no primary-type filter.
  * Passed explicitly from Activity PlaceSearchField; Accommodation omits the prop instead.
  */
 export const PLACES_ACTIVITY_PRIMARY_TYPES = [] as const;

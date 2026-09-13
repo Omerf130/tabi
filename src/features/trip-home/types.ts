@@ -87,7 +87,7 @@ export type TripHomeActivityCard = {
 export type TripHomeTonightCard = {
   id: string;
   name: string;
-  city: string;
+  city?: string;
   stayContext?: string;
   googleMapsUrl?: string;
   photoPresentation: PlacePhotoPresentation;

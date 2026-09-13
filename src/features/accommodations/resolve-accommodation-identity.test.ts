@@ -47,4 +47,20 @@ describe("resolveAccommodationIdentity", () => {
     expect(identity.nameJapanese).toBe("ホテルグレイスリー新宿");
     expect(identity.usesGoogleAttribution).toBe(true);
   });
+
+  it("does not fabricate Japan when google display lookup fails", async () => {
+    vi.mocked(getPlaceDisplayForTraveler).mockResolvedValue(null);
+
+    const identity = await resolveAccommodationIdentity({
+      _id: { toString: () => "1" },
+      tripId: { toString: () => "trip" },
+      placeSource: "google",
+      googlePlaceId: "ChIJBurjAlArab",
+      checkInDate: "2026-10-25",
+      checkOutDate: "2026-10-28",
+    });
+
+    expect(identity.name).toBe("מקום לינה");
+    expect(identity.city).toBeUndefined();
+  });
 });

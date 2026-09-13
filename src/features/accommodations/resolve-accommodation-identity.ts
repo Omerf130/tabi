@@ -34,7 +34,7 @@ export type ResolvedAccommodationIdentity = {
   googlePlaceId?: string;
   name: string;
   nameJapanese?: string;
-  city: string;
+  city?: string;
   addressEnglish?: string;
   addressJapanese?: string;
   googleMapsUrl?: string;
@@ -100,7 +100,6 @@ export async function resolveAccommodationIdentity(
         placeSource: "google",
         googlePlaceId,
         name: "מקום לינה",
-        city: "Japan",
         usesGoogleAttribution: true,
       };
     }
@@ -110,7 +109,7 @@ export async function resolveAccommodationIdentity(
       googlePlaceId,
       name: display.name,
       nameJapanese: display.nameJapanese,
-      city: display.city,
+      ...(display.city ? { city: display.city } : {}),
       addressEnglish: display.addressEnglish,
       addressJapanese: display.addressJapanese,
       googleMapsUrl: display.googleMapsUrl,

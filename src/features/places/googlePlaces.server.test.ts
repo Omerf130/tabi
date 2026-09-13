@@ -15,7 +15,6 @@ import {
   PLACES_DETAILS_GEOGRAPHY_FIELD_MASK,
   PLACES_DISPLAY_LANGUAGE_CODE,
   PLACES_GEOGRAPHIC_PRIMARY_TYPES,
-  PLACES_INCLUDED_REGION_CODES,
   PLACES_LODGING_PRIMARY_TYPES,
   PLACES_SEARCH_LANGUAGE_CODE,
 } from "./constants";
@@ -40,7 +39,7 @@ describe("googlePlaces.server", () => {
     ).rejects.toBeInstanceOf(GooglePlacesConfigError);
   });
 
-  it("normalizes autocomplete suggestions with japan lodging config", async () => {
+  it("normalizes global lodging autocomplete suggestions", async () => {
     fetchMock.mockResolvedValue({
       ok: true,
       json: async () => ({
@@ -76,10 +75,47 @@ describe("googlePlaces.server", () => {
     expect(init.headers["X-Goog-FieldMask"]).toBe(PLACES_AUTOCOMPLETE_FIELD_MASK);
     expect(init.headers["X-Goog-Api-Key"]).toBe("test-key");
     const body = JSON.parse(String(init.body));
-    expect(body.includedRegionCodes).toEqual([...PLACES_INCLUDED_REGION_CODES]);
+    expect(body.includedRegionCodes).toBeUndefined();
     expect(body.includedPrimaryTypes).toEqual([...PLACES_LODGING_PRIMARY_TYPES]);
     expect(body.languageCode).toBe(PLACES_SEARCH_LANGUAGE_CODE);
     expect(JSON.stringify(body)).not.toContain("test-key");
+  });
+
+  it("returns global Dubai lodging suggestions for accommodation search", async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        suggestions: [
+          {
+            placePrediction: {
+              placeId: "ChIJBurjAlArab",
+              structuredFormat: {
+                mainText: { text: "Burj Al Arab" },
+                secondaryText: { text: "Jumeirah, Dubai" },
+              },
+            },
+          },
+        ],
+      }),
+    });
+
+    const suggestions = await autocompletePlaces({
+      query: "Burj Al Arab",
+      sessionToken: "11111111-1111-4111-8111-111111111111",
+    });
+
+    expect(suggestions).toEqual([
+      {
+        placeId: "ChIJBurjAlArab",
+        primaryText: "Burj Al Arab",
+        secondaryText: "Jumeirah, Dubai",
+      },
+    ]);
+
+    const [, init] = fetchMock.mock.calls[0]!;
+    const body = JSON.parse(String(init.body));
+    expect(body.includedRegionCodes).toBeUndefined();
+    expect(body.includedPrimaryTypes).toEqual(["lodging"]);
   });
 
   it("autocomplete geographic places with explicit caller language", async () => {
@@ -164,7 +200,7 @@ describe("googlePlaces.server", () => {
     expect(JSON.stringify(details)).not.toContain("test-key");
   });
 
-  it("omits primary type filter for activity POI search", async () => {
+  it("omits primary type filter for activity POI search without region restriction", async () => {
     fetchMock.mockResolvedValue({
       ok: true,
       json: async () => ({ suggestions: [] }),
@@ -179,7 +215,45 @@ describe("googlePlaces.server", () => {
     const [, init] = fetchMock.mock.calls[0]!;
     const body = JSON.parse(String(init.body));
     expect(body.includedPrimaryTypes).toBeUndefined();
-    expect(body.includedRegionCodes).toEqual([...PLACES_INCLUDED_REGION_CODES]);
+    expect(body.includedRegionCodes).toBeUndefined();
+  });
+
+  it("returns global Dubai activity suggestions without region restriction", async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        suggestions: [
+          {
+            placePrediction: {
+              placeId: "ChIJDubaiMall",
+              structuredFormat: {
+                mainText: { text: "The Dubai Mall" },
+                secondaryText: { text: "Downtown Dubai, Dubai" },
+              },
+            },
+          },
+        ],
+      }),
+    });
+
+    const suggestions = await autocompletePlaces({
+      query: "Dubai Mall",
+      sessionToken: "11111111-1111-4111-8111-111111111111",
+      includedPrimaryTypes: PLACES_ACTIVITY_PRIMARY_TYPES,
+    });
+
+    expect(suggestions).toEqual([
+      {
+        placeId: "ChIJDubaiMall",
+        primaryText: "The Dubai Mall",
+        secondaryText: "Downtown Dubai, Dubai",
+      },
+    ]);
+
+    const [, init] = fetchMock.mock.calls[0]!;
+    const body = JSON.parse(String(init.body));
+    expect(body.includedRegionCodes).toBeUndefined();
+    expect(body.includedPrimaryTypes).toBeUndefined();
   });
 
   it("resolves activity place snapshot with geography fields", async () => {

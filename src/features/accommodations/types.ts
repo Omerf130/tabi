@@ -9,7 +9,7 @@ export type AccommodationViewModel = {
   googlePlaceId?: string;
   name: string;
   nameJapanese?: string;
-  city: string;
+  city?: string;
   checkInDate: string;
   checkOutDate: string;
   addressEnglish?: string;
