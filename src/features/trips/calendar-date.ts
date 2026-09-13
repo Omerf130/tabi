@@ -114,3 +114,34 @@ export function formatCalendarDateRangeDisplay(
   }
   return `${formatCalendarDateDisplay(startDate, locale)} – ${formatCalendarDateDisplay(endDate, locale)}`;
 }
+
+/** Formats YYYY-MM-DD with weekday for display without timezone conversion. */
+export function formatCalendarDateWithWeekdayDisplay(
+  value: string,
+  locale = "en-US",
+): string {
+  const parts = parseCalendarDateParts(value);
+  if (!parts) {
+    return value;
+  }
+
+  const utcDate = new Date(Date.UTC(parts.year, parts.month - 1, parts.day));
+  return new Intl.DateTimeFormat(locale, {
+    timeZone: "UTC",
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(utcDate);
+}
+
+export function formatCalendarDateRangeWithWeekdayDisplay(
+  startDate: string,
+  endDate: string,
+  locale = "en-US",
+): string {
+  if (startDate === endDate) {
+    return formatCalendarDateWithWeekdayDisplay(startDate, locale);
+  }
+  return `${formatCalendarDateWithWeekdayDisplay(startDate, locale)} – ${formatCalendarDateWithWeekdayDisplay(endDate, locale)}`;
+}

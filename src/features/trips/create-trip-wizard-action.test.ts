@@ -47,6 +47,7 @@ describe("createTripWizardAction", () => {
     expect(createTripWithOwnerMembershipMock).toHaveBeenCalledWith("user-1", {
       googlePlaceId: "ChIJ1worBWrCCDARq60jfE0JAJ8",
       name: "Japan 2026",
+      description: "",
       startDate: "2026-04-01",
       endDate: "2026-04-14",
     });
@@ -60,6 +61,39 @@ describe("createTripWizardAction", () => {
       endDate: "2026-04-14",
       coverVisualKey: "europe-01",
     } as never);
+
+    expect(result.fieldErrors ?? result.error).toBeTruthy();
+    expect(createTripWithOwnerMembershipMock).not.toHaveBeenCalled();
+  });
+
+  it("accepts an optional trip description", async () => {
+    await expect(
+      createTripWizardAction({
+        googlePlaceId: "ChIJ1worBWrCCDARq60jfE0JAJ8",
+        name: "Japan 2026",
+        description: "Our honeymoon in Japan",
+        startDate: "2026-04-01",
+        endDate: "2026-04-14",
+      }),
+    ).rejects.toThrow("REDIRECT:/app/trips/507f1f77bcf86cd799439011");
+
+    expect(createTripWithOwnerMembershipMock).toHaveBeenCalledWith("user-1", {
+      googlePlaceId: "ChIJ1worBWrCCDARq60jfE0JAJ8",
+      name: "Japan 2026",
+      description: "Our honeymoon in Japan",
+      startDate: "2026-04-01",
+      endDate: "2026-04-14",
+    });
+  });
+
+  it("rejects descriptions longer than 300 characters", async () => {
+    const result = await createTripWizardAction({
+      googlePlaceId: "ChIJ1worBWrCCDARq60jfE0JAJ8",
+      name: "Japan 2026",
+      description: "x".repeat(301),
+      startDate: "2026-04-01",
+      endDate: "2026-04-14",
+    });
 
     expect(result.fieldErrors ?? result.error).toBeTruthy();
     expect(createTripWithOwnerMembershipMock).not.toHaveBeenCalled();

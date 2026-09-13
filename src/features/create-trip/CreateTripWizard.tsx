@@ -1,31 +1,28 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import { useMemo, useRef, useState, useTransition } from "react";
-import { classifyDestinationVisualGroup } from "@/features/destination-visuals/classify-visual-group";
-import { getRepresentativeVisualSrcForGroup } from "@/features/destination-visuals/registry";
-import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
+import { useRef, useState, useTransition } from "react";
+import {
+  formatCalendarDateDisplay,
+  formatCalendarDateRangeWithWeekdayDisplay,
+} from "@/features/trips/calendar-date";
+import { TRIP_DESCRIPTION_MAX_LENGTH } from "@/features/trips/constants";
+import { getTripDayCount } from "@/features/trips/trip-days";
 import { createTripWizardAction, type TripActionState } from "@/features/trips/actions";
-import { TabiBrandMark } from "@/features/welcome/TabiBrandMark";
 import { DestinationSearchField } from "./DestinationSearchField";
+import { PopularDestinationRows } from "./PopularDestinationRows";
 import { POPULAR_DESTINATIONS } from "./popular-destinations";
 import { resolveDestinationFromQuery } from "./resolve-destination-client";
+import { TripDateRangeCalendar } from "./TripDateRangeCalendar";
+import { WizardHero } from "./WizardHero";
 import {
   CREATE_TRIP_WIZARD_STEPS,
   createInitialWizardState,
   getWizardStepIndex,
+  isValidWizardDateRange,
   suggestTripName,
   type CreateTripWizardStep,
 } from "./wizard-state";
 import styles from "./CreateTripWizard.module.scss";
-
-const STEP_TITLES: Record<CreateTripWizardStep, string> = {
-  destination: "Where are you going?",
-  dates: "When are you going?",
-  details: "Name your trip",
-  ready: "You're ready",
-};
 
 export function CreateTripWizard() {
   const [state, setState] = useState(createInitialWizardState);
@@ -33,16 +30,10 @@ export function CreateTripWizard() {
   const [isPending, startTransition] = useTransition();
   const [popularLoadingId, setPopularLoadingId] = useState<string | null>(null);
   const [popularError, setPopularError] = useState<string | null>(null);
+  const [selectedPopularId, setSelectedPopularId] = useState<string | null>(null);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
 
   const stepIndex = getWizardStepIndex(state.step);
-  const previewVisualSrc = useMemo(() => {
-    if (!state.destination) {
-      return getRepresentativeVisualSrcForGroup("fallback");
-    }
-    const group = classifyDestinationVisualGroup(state.destination.countryCode);
-    return getRepresentativeVisualSrcForGroup(group);
-  }, [state.destination]);
 
   function focusStepHeading() {
     queueMicrotask(() => stepHeadingRef.current?.focus());
@@ -78,12 +69,15 @@ export function CreateTripWizard() {
     focusStepHeading();
   }
 
-  async function selectPopularDestination(preset: (typeof POPULAR_DESTINATIONS)[number]) {
+  async function selectPopularDestination(
+    preset: (typeof POPULAR_DESTINATIONS)[number],
+  ) {
     setPopularLoadingId(preset.id);
     setPopularError(null);
     try {
       const { snapshot, error } = await resolveDestinationFromQuery(preset.label);
       if (snapshot) {
+        setSelectedPopularId(preset.id);
         setState((current) => ({
           ...current,
           destination: snapshot,
@@ -108,6 +102,7 @@ export function CreateTripWizard() {
       const result = await createTripWizardAction({
         googlePlaceId: state.destination!.googlePlaceId,
         name: state.name,
+        description: state.description.trim() || undefined,
         startDate: state.startDate,
         endDate: state.endDate,
       });
@@ -116,257 +111,232 @@ export function CreateTripWizard() {
   }
 
   const canContinueDestination = Boolean(state.destination);
-  const canContinueDates = Boolean(state.startDate && state.endDate);
-  const canContinueDetails = state.name.trim().length >= 2;
+  const canContinueDates = isValidWizardDateRange(state.startDate, state.endDate);
+  const canCreateTrip = state.name.trim().length >= 2 && Boolean(state.destination);
 
-  const dateRangeLabel =
-    state.startDate && state.endDate
-      ? formatCalendarDateRangeDisplay(state.startDate, state.endDate, "en-US")
+  const durationLabel =
+    canContinueDates && state.startDate && state.endDate
+      ? (() => {
+          const dayCount = getTripDayCount(state.startDate, state.endDate);
+          return dayCount === 1 ? "1 day" : `${dayCount} days`;
+        })()
+      : "";
+
+  const weekdayRangeLabel =
+    canContinueDates && state.startDate && state.endDate
+      ? formatCalendarDateRangeWithWeekdayDisplay(state.startDate, state.endDate, "en-US")
       : "";
 
   return (
     <div className={styles.wizard} dir="ltr" lang="en">
-      <header className={styles.header}>
-        <div className={styles.headerBrand}>
-          <TabiBrandMark className={styles.headerMark} />
-          <span className={styles.headerName}>Tabi</span>
-        </div>
-        <Link href="/app" className={styles.closeLink}>
-          My Trips
-        </Link>
-      </header>
+      <WizardHero
+        step={state.step}
+        canGoBack={stepIndex > 0}
+        onBack={goBack}
+      />
 
-      <div className={styles.progress} aria-label="Create trip progress">
-        {CREATE_TRIP_WIZARD_STEPS.map((step, index) => (
-          <span
-            key={step}
-            className={styles.progressSegment}
-            data-active={index <= stepIndex ? "true" : undefined}
-            aria-hidden="true"
-          />
-        ))}
-      </div>
+      <main className={styles.workspace}>
+        <div className={styles.stepContent}>
+          {state.step === "destination" ? (
+            <>
+              <div className={styles.stepIntro}>
+                <h1 ref={stepHeadingRef} className={styles.stepTitle} tabIndex={-1}>
+                  Where are you going?
+                </h1>
+                <p className={styles.stepSubtitle}>
+                  Choose your destination for this trip.
+                </p>
+              </div>
 
-      <div className={styles.layout}>
-        <aside className={styles.visualPanel} aria-hidden={state.step === "destination" ? undefined : true}>
-          <div className={styles.visualFrame}>
-            <Image
-              src={previewVisualSrc}
-              alt=""
-              fill
-              sizes="(min-width: 1024px) 42vw, 0px"
-              className={styles.visualImage}
-              priority
-            />
-            <div className={styles.visualOverlay} />
-          </div>
-        </aside>
+              <DestinationSearchField
+                selection={state.destination}
+                onSelectionChange={(destination) => {
+                  setSelectedPopularId(null);
+                  setState((current) => ({ ...current, destination }));
+                }}
+              />
 
-        <main className={styles.main}>
-          {stepIndex > 0 ? (
-            <button type="button" className={styles.backButton} onClick={goBack}>
-              Back
-            </button>
-          ) : (
-            <div className={styles.backSpacer} />
-          )}
+              <PopularDestinationRows
+                loadingId={popularLoadingId}
+                selectedDestinationId={selectedPopularId}
+                onSelect={(preset) => void selectPopularDestination(preset)}
+              />
 
-          <div className={styles.stepContent}>
-            <h1 ref={stepHeadingRef} className={styles.stepTitle} tabIndex={-1}>
-              {STEP_TITLES[state.step]}
-            </h1>
+              {popularError ? (
+                <p className={styles.fieldError} role="alert">
+                  {popularError}
+                </p>
+              ) : null}
 
-            {state.step === "destination" ? (
-              <>
-                <div className={styles.mobileVisual} aria-hidden="true">
-                  <div className={styles.mobileVisualFrame}>
-                    <Image
-                      src={previewVisualSrc}
-                      alt=""
-                      fill
-                      sizes="100vw"
-                      className={styles.visualImage}
-                      priority
-                    />
-                    <div className={styles.visualOverlay} />
+              <button
+                type="button"
+                className={styles.primaryButton}
+                disabled={!canContinueDestination}
+                onClick={goNext}
+              >
+                Continue →
+              </button>
+            </>
+          ) : null}
+
+          {state.step === "dates" ? (
+            <>
+              <div className={styles.stepIntro}>
+                <h1 ref={stepHeadingRef} className={styles.stepTitle} tabIndex={-1}>
+                  When are you traveling?
+                </h1>
+                <p className={styles.stepSubtitle}>Select your travel dates.</p>
+              </div>
+
+              <div className={styles.dateSummaryGrid}>
+                <div className={styles.dateSummaryCard}>
+                  <span className={styles.dateSummaryLabel}>Start Date</span>
+                  <span className={styles.dateSummaryValue}>
+                    {state.startDate
+                      ? formatCalendarDateDisplay(state.startDate, "en-US")
+                      : "Select date"}
+                  </span>
+                </div>
+                <div className={styles.dateSummaryCard}>
+                  <span className={styles.dateSummaryLabel}>End Date</span>
+                  <span className={styles.dateSummaryValue}>
+                    {state.endDate
+                      ? formatCalendarDateDisplay(state.endDate, "en-US")
+                      : "Select date"}
+                  </span>
+                </div>
+              </div>
+
+              {canContinueDates ? (
+                <div className={styles.durationSummary} aria-live="polite">
+                  <span className={styles.durationIcon} aria-hidden="true">
+                    📅
+                  </span>
+                  <div className={styles.durationCopy}>
+                    <strong>{durationLabel}</strong>
+                    <span>{weekdayRangeLabel}</span>
                   </div>
                 </div>
-                <DestinationSearchField
-                  selection={state.destination}
-                  onSelectionChange={(destination) =>
-                    setState((current) => ({ ...current, destination }))
-                  }
-                />
-                <div className={styles.popularSection}>
-                  <p className={styles.popularLabel}>Popular destinations</p>
-                  <div className={styles.popularGrid}>
-                    {POPULAR_DESTINATIONS.map((preset) => (
-                      <button
-                        key={preset.id}
-                        type="button"
-                        className={styles.popularCard}
-                        disabled={Boolean(popularLoadingId)}
-                        onClick={() => void selectPopularDestination(preset)}
-                      >
-                        <span className={styles.popularCardImageWrap}>
-                          <Image
-                            src={preset.imageSrc}
-                            alt=""
-                            fill
-                            sizes="120px"
-                            className={styles.popularCardImage}
-                          />
-                        </span>
-                        <span className={styles.popularCardLabel}>{preset.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                {popularError ? (
-                  <p className={styles.fieldError} role="alert">
-                    {popularError}
-                  </p>
-                ) : null}
-                <button
-                  type="button"
-                  className={styles.primaryButton}
-                  disabled={!canContinueDestination}
-                  onClick={goNext}
-                >
-                  Continue
-                </button>
-              </>
-            ) : null}
+              ) : null}
 
-            {state.step === "dates" ? (
-              <>
-                <div className={styles.dateFields}>
-                  <label className={styles.fieldLabel} htmlFor="startDate">
-                    Start date
-                  </label>
-                  <input
-                    id="startDate"
-                    className={styles.textInput}
-                    type="date"
-                    value={state.startDate}
-                    onChange={(event) =>
-                      setState((current) => ({
-                        ...current,
-                        startDate: event.target.value,
-                      }))
-                    }
-                    required
-                  />
-                  <label className={styles.fieldLabel} htmlFor="endDate">
-                    End date
-                  </label>
-                  <input
-                    id="endDate"
-                    className={styles.textInput}
-                    type="date"
-                    value={state.endDate}
-                    min={state.startDate || undefined}
-                    onChange={(event) =>
-                      setState((current) => ({
-                        ...current,
-                        endDate: event.target.value,
-                      }))
-                    }
-                    required
-                  />
-                </div>
-                <button
-                  type="button"
-                  className={styles.primaryButton}
-                  disabled={!canContinueDates}
-                  onClick={goNext}
-                >
-                  Continue
-                </button>
-              </>
-            ) : null}
+              <TripDateRangeCalendar
+                startDate={state.startDate}
+                endDate={state.endDate}
+                onRangeChange={({ startDate, endDate }) =>
+                  setState((current) => ({ ...current, startDate, endDate }))
+                }
+              />
 
-            {state.step === "details" ? (
-              <>
-                <label className={styles.fieldLabel} htmlFor="tripName">
-                  Trip name
-                </label>
-                <input
-                  id="tripName"
-                  className={styles.textInput}
-                  type="text"
-                  value={state.name}
-                  minLength={2}
-                  maxLength={80}
-                  onChange={(event) =>
-                    setState((current) => ({
-                      ...current,
-                      name: event.target.value,
-                      nameTouched: true,
-                    }))
-                  }
-                  required
-                />
-                <button
-                  type="button"
-                  className={styles.primaryButton}
-                  disabled={!canContinueDetails}
-                  onClick={goNext}
-                >
-                  Continue
-                </button>
-              </>
-            ) : null}
+              <button
+                type="button"
+                className={styles.primaryButton}
+                disabled={!canContinueDates}
+                onClick={goNext}
+              >
+                Continue →
+              </button>
+              <button type="button" className={styles.secondaryButton} onClick={goBack}>
+                Back
+              </button>
+            </>
+          ) : null}
 
-            {state.step === "ready" ? (
-              <>
-                <div className={styles.readyCard}>
-                  <div className={styles.readyVisual}>
-                    <Image
-                      src={previewVisualSrc}
-                      alt=""
-                      fill
-                      sizes="(min-width: 768px) 320px, 100vw"
-                      className={styles.visualImage}
-                    />
-                    <div className={styles.visualOverlay} />
-                  </div>
-                  <div className={styles.readyBody}>
-                    <p className={styles.readyName}>{state.name}</p>
-                    <p className={styles.readyMeta}>{state.destination?.displayName}</p>
-                    {state.destination?.secondaryLabel ? (
-                      <p className={styles.readyMeta}>{state.destination.secondaryLabel}</p>
+          {state.step === "details" ? (
+            <>
+              <div className={styles.stepIntro}>
+                <h1 ref={stepHeadingRef} className={styles.stepTitle} tabIndex={-1}>
+                  Name your trip
+                </h1>
+                <p className={styles.stepSubtitle}>
+                  Give this journey a name you&apos;ll recognize later.
+                </p>
+              </div>
+
+              <label className={styles.fieldLabel} htmlFor="tripName">
+                Trip Name
+              </label>
+              <input
+                id="tripName"
+                className={styles.textInput}
+                type="text"
+                value={state.name}
+                minLength={2}
+                maxLength={80}
+                onChange={(event) =>
+                  setState((current) => ({
+                    ...current,
+                    name: event.target.value,
+                    nameTouched: true,
+                  }))
+                }
+                required
+              />
+
+              <label className={styles.fieldLabel} htmlFor="tripDescription">
+                Trip Description <span className={styles.optionalLabel}>(optional)</span>
+              </label>
+              <textarea
+                id="tripDescription"
+                className={styles.textArea}
+                value={state.description}
+                maxLength={TRIP_DESCRIPTION_MAX_LENGTH}
+                rows={4}
+                placeholder="Our honeymoon in Japan"
+                onChange={(event) =>
+                  setState((current) => ({
+                    ...current,
+                    description: event.target.value,
+                  }))
+                }
+              />
+
+              {state.destination ? (
+                <div className={styles.tripSummary}>
+                  <p className={styles.tripSummaryTitle}>Trip summary</p>
+                  <dl className={styles.tripSummaryList}>
+                    <div>
+                      <dt>Destination</dt>
+                      <dd>{state.destination.displayName}</dd>
+                    </div>
+                    {canContinueDates ? (
+                      <div>
+                        <dt>Dates</dt>
+                        <dd>
+                          {weekdayRangeLabel}
+                          {durationLabel ? ` · ${durationLabel}` : ""}
+                        </dd>
+                      </div>
                     ) : null}
-                    <p className={styles.readyMeta}>{dateRangeLabel}</p>
-                    <p className={styles.readyNote}>
-                      Cover image is representative — your trip&apos;s visual is chosen when
-                      you create it.
-                    </p>
-                  </div>
+                  </dl>
                 </div>
-                {actionState.error ? (
-                  <p className={styles.fieldError} role="alert">
-                    {actionState.error}
-                  </p>
-                ) : null}
-                {actionState.fieldErrors ? (
-                  <p className={styles.fieldError} role="alert">
-                    {Object.values(actionState.fieldErrors).find(Boolean)}
-                  </p>
-                ) : null}
-                <button
-                  type="button"
-                  className={styles.primaryButton}
-                  disabled={isPending}
-                  onClick={handleCreateTrip}
-                >
-                  {isPending ? "Creating trip..." : "Create trip"}
-                </button>
-              </>
-            ) : null}
-          </div>
-        </main>
-      </div>
+              ) : null}
+
+              {actionState.error ? (
+                <p className={styles.fieldError} role="alert">
+                  {actionState.error}
+                </p>
+              ) : null}
+              {actionState.fieldErrors ? (
+                <p className={styles.fieldError} role="alert">
+                  {Object.values(actionState.fieldErrors).find(Boolean)}
+                </p>
+              ) : null}
+
+              <button
+                type="button"
+                className={styles.primaryButton}
+                disabled={!canCreateTrip || isPending}
+                onClick={handleCreateTrip}
+              >
+                {isPending ? "Creating trip..." : "Create Trip →"}
+              </button>
+              <button type="button" className={styles.secondaryButton} onClick={goBack}>
+                Back
+              </button>
+            </>
+          ) : null}
+        </div>
+      </main>
     </div>
   );
 }

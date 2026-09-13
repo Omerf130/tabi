@@ -71,6 +71,12 @@ const tripSchema = new mongoose.Schema(
       minlength: 2,
       maxlength: 80,
     },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: 300,
+      default: "",
+    },
     startDate: {
       type: String,
       required: true,

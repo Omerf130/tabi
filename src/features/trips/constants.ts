@@ -1,5 +1,6 @@
 export const TRIP_NAME_MIN_LENGTH = 2;
 export const TRIP_NAME_MAX_LENGTH = 80;
+export const TRIP_DESCRIPTION_MAX_LENGTH = 300;
 
 export const TRIP_CALENDAR_TIMEZONE = "Asia/Tokyo";
 

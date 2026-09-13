@@ -2,9 +2,7 @@
 
 import { useCallback, useId, useState } from "react";
 import { GooglePlacesAttribution } from "@/features/places/GooglePlacesAttribution";
-import {
-  PLACES_AUTOCOMPLETE_MIN_INPUT_LENGTH,
-} from "@/features/places/constants";
+import { PLACES_AUTOCOMPLETE_MIN_INPUT_LENGTH } from "@/features/places/constants";
 import { isValidPlaceSessionToken } from "@/features/places/placeSession";
 import type { PlaceSuggestion } from "@/features/places/types";
 import type { TripDestinationSnapshot } from "@/features/places/resolve-destination-snapshot";
@@ -121,13 +119,16 @@ export function DestinationSearchField({
 
   return (
     <div className={styles.searchField}>
-      <label className={styles.fieldLabel} htmlFor={fieldId}>
+      <label className={styles.srOnly} htmlFor={fieldId}>
         Search destination
       </label>
-      <div className={styles.inputWrap}>
+      <div className={styles.searchInputWrap}>
+        <span className={styles.searchIcon} aria-hidden="true">
+          ⌕
+        </span>
         <input
           id={fieldId}
-          className={styles.textInput}
+          className={styles.searchInput}
           type="search"
           value={query}
           onChange={(event) => {
@@ -162,7 +163,7 @@ export function DestinationSearchField({
               }
             }
           }}
-          placeholder="Country, city, or region"
+          placeholder="Search country, city, or place..."
           autoComplete="off"
           disabled={disabled}
           role="combobox"

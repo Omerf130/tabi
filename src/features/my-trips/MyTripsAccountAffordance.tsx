@@ -5,6 +5,7 @@ import styles from "./MyTripsScreen.module.scss";
 
 type MyTripsAccountAffordanceProps = {
   userName: string;
+  variant?: "hero" | "default";
 };
 
 function getInitial(name: string): string {
@@ -14,16 +15,25 @@ function getInitial(name: string): string {
 
 export function MyTripsAccountAffordance({
   userName,
+  variant = "default",
 }: MyTripsAccountAffordanceProps) {
   const initial = getInitial(userName);
 
   return (
-    <details className={styles.accountMenu}>
-      <summary
-        className={styles.accountTrigger}
-        aria-label="Account menu"
-      >
-        <span className={styles.accountAvatar} aria-hidden="true">
+    <details
+      className={
+        variant === "hero" ? `${styles.accountMenu} ${styles.accountMenuHero}` : styles.accountMenu
+      }
+    >
+      <summary className={styles.accountTrigger} aria-label="Account menu">
+        <span
+          className={
+            variant === "hero"
+              ? `${styles.accountAvatar} ${styles.accountAvatarHero}`
+              : styles.accountAvatar
+          }
+          aria-hidden="true"
+        >
           {initial}
         </span>
       </summary>

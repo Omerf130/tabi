@@ -38,6 +38,7 @@ export async function createTripWithOwnerMembership(
       [
         {
           name: input.name,
+          description: input.description,
           startDate: input.startDate,
           endDate: input.endDate,
           createdBy: userId,

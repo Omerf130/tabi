@@ -72,6 +72,7 @@ describe("createTripWithOwnerMembership", () => {
     const tripId = await createTripWithOwnerMembership("user-1", {
       googlePlaceId: "place-jp",
       name: "Japan 2026",
+      description: "Our honeymoon in Japan",
       startDate: "2026-04-01",
       endDate: "2026-04-14",
     });
@@ -82,6 +83,7 @@ describe("createTripWithOwnerMembership", () => {
       [
         expect.objectContaining({
           name: "Japan 2026",
+          description: "Our honeymoon in Japan",
           destination: expect.objectContaining({
             googlePlaceId: "place-jp",
             countryCode: "JP",

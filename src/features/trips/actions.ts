@@ -51,6 +51,7 @@ function zodFieldErrors(error: {
 export async function createTripWizardAction(input: {
   googlePlaceId: string;
   name: string;
+  description?: string;
   startDate: string;
   endDate: string;
 }): Promise<TripActionState> {

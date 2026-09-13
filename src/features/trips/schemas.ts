@@ -6,6 +6,7 @@ import {
   normalizeCalendarDateInput,
 } from "./calendar-date";
 import {
+  TRIP_DESCRIPTION_MAX_LENGTH,
   TRIP_MAX_DURATION_DAYS,
   TRIP_NAME_MAX_LENGTH,
   TRIP_NAME_MIN_LENGTH,
@@ -50,8 +51,16 @@ export const createTripSchema = z
 
 export type CreateTripInput = z.infer<typeof createTripSchema>;
 
+const tripDescriptionSchema = z
+  .string()
+  .trim()
+  .max(TRIP_DESCRIPTION_MAX_LENGTH)
+  .optional()
+  .transform((value) => value ?? "");
+
 const tripCoreFieldsSchema = z.object({
   name: z.string().trim().min(TRIP_NAME_MIN_LENGTH).max(TRIP_NAME_MAX_LENGTH),
+  description: tripDescriptionSchema,
   startDate: calendarDateSchema,
   endDate: calendarDateSchema,
 });
