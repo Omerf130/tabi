@@ -2,7 +2,6 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { LogoutButton } from "@/app/app/LogoutButton";
 import { getCurrentUser } from "@/features/auth/session";
-import { InterfaceLanguagePreference } from "@/features/i18n/components/InterfaceLanguagePreference";
 import styles from "./TripManagementShell.module.scss";
 
 export async function TripManagementAccountFooter() {
@@ -20,7 +19,6 @@ export async function TripManagementAccountFooter() {
             <p className={styles.accountName}>{user.name}</p>
             <p className={styles.accountEmail}>{user.email}</p>
           </div>
-          <InterfaceLanguagePreference currentLocale={user.locale} />
         </>
       ) : null}
       <LogoutButton />

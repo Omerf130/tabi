@@ -1,7 +1,9 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { AppPage } from "@/features/app-shell/AppPage";
-import { TripManagementAccountFooter } from "./TripManagementAccountFooter";
+import { IconBack } from "@/components/ui/icons";
+import { buildSettingsHubHref } from "@/features/settings/constants";
 import { TripManagementNavClient } from "./TripManagementNav.client";
 import styles from "./TripManagementShell.module.scss";
 
@@ -17,10 +19,15 @@ export async function TripManagementShell({
   children,
 }: TripManagementShellProps) {
   const t = await getTranslations("TripManagement");
+  const tSettings = await getTranslations("Settings");
 
   return (
     <AppPage width="wide">
       <div className={styles.shell}>
+        <Link href={buildSettingsHubHref(tripId)} className={styles.backToSettings}>
+          <IconBack className={styles.backToSettingsIcon} aria-hidden />
+          <span>{tSettings("backToHub")}</span>
+        </Link>
         <div className={styles.intro}>
           <h2 className={styles.introTitle}>{t("introTitle")}</h2>
           <p className={styles.introLead}>{t("introLead")}</p>
@@ -31,7 +38,6 @@ export async function TripManagementShell({
           <div className={styles.workspace}>{children}</div>
         </div>
 
-        <TripManagementAccountFooter />
       </div>
     </AppPage>
   );

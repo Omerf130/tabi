@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { requireTripMember } from "@/features/trips/authorization";
-import { SettingsHubContent } from "@/features/settings/SettingsHubContent";
+import { SettingsLanguageContent } from "@/features/settings/SettingsLanguageContent";
 
 export async function generateMetadata({
   params,
@@ -13,14 +13,15 @@ export async function generateMetadata({
     requireTripMember(tripId),
     getTranslations("Settings"),
   ]);
-  return { title: `${t("title")} · ${trip.name}` };
+  return { title: `${t("rows.language.title")} · ${trip.name}` };
 }
 
-export default async function TripManagePage({
+export default async function TripSettingsLanguagePage({
   params,
 }: {
   params: Promise<{ tripId: string }>;
 }) {
   const { tripId } = await params;
-  return <SettingsHubContent tripId={tripId} />;
+  await requireTripMember(tripId);
+  return <SettingsLanguageContent tripId={tripId} />;
 }

@@ -19,10 +19,13 @@ export async function generateMetadata({
 
 export default async function TripFinancePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ tripId: string }>;
+  searchParams: Promise<{ settings?: string }>;
 }) {
   const { tripId } = await params;
+  const { settings } = await searchParams;
   const trip = await requireTripMember(tripId);
   const pageData = await prepareFinancePage({
     trip: {
@@ -38,7 +41,10 @@ export default async function TripFinancePage({
 
   return (
     <AppPage width="wide">
-      <FinancePageContent {...pageData} />
+      <FinancePageContent
+        {...pageData}
+        initialSettingsOpen={settings === "1"}
+      />
     </AppPage>
   );
 }

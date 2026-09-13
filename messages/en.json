@@ -1272,6 +1272,74 @@
     }
   },
 
+  "Settings": {
+    "title": "Settings",
+    "comingSoon": "Coming Soon",
+    "backToHub": "Back to Settings",
+    "sections": {
+      "trip": "Trip",
+      "preferences": "Preferences",
+      "data": "Data & Management",
+      "account": "Account",
+      "content": "Trip Content Management"
+    },
+    "rows": {
+      "tripDetails": {
+        "title": "Trip details",
+        "subtitle": "Name, dates, and basic info"
+      },
+      "travelers": {
+        "title": "Travelers",
+        "subtitle": "Trip members and invitations"
+      },
+      "theme": {
+        "title": "Theme",
+        "subtitle": "App appearance and display"
+      },
+      "currency": {
+        "title": "Currency",
+        "subtitleOwner": "Trip base currency for finance · {currency}",
+        "subtitleMember": "Trip base currency · {currency}"
+      },
+      "language": {
+        "title": "Language",
+        "subtitle": "Interface language for the app"
+      },
+      "maps": {
+        "title": "Maps & navigation",
+        "subtitle": "Preferred maps app"
+      },
+      "notifications": {
+        "title": "Notifications",
+        "subtitle": "Reminders and app alerts"
+      },
+      "export": {
+        "title": "Export trip",
+        "subtitle": "PDF summary of your trip"
+      },
+      "deleteTrip": {
+        "title": "Delete trip",
+        "subtitle": "Permanently remove all trip data"
+      },
+      "profile": {
+        "title": "Profile",
+        "subtitle": "Personal details and account"
+      },
+      "security": {
+        "title": "Privacy & security",
+        "subtitle": "Password, sign-in, and privacy"
+      },
+      "help": {
+        "title": "Help & support",
+        "subtitle": "Questions, feedback, and contact"
+      }
+    },
+    "languagePage": {
+      "back": "Back to Settings",
+      "lead": "Choose your interface language. This preference is saved to your account and applies across all trips."
+    }
+  },
+
   "TripSettings": {
     "pageTitle": "Settings",
     "detailsTitle": "Trip details",

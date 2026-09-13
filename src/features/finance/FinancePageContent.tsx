@@ -18,11 +18,18 @@ import styles from "./FinancePage.module.scss";
 
 type FinanceView = "home" | "all";
 
-export function FinancePageContent(model: FinancePageViewModel) {
+type FinancePageContentProps = FinancePageViewModel & {
+  initialSettingsOpen?: boolean;
+};
+
+export function FinancePageContent({
+  initialSettingsOpen = false,
+  ...model
+}: FinancePageContentProps) {
   const t = useTranslations("Finance");
   const locale = resolveAppLocale(useLocale());
   const [view, setView] = useState<FinanceView>("home");
-  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(initialSettingsOpen);
   const [expenseSheet, setExpenseSheet] = useState<"create" | ExpenseRowViewModel | null>(
     null,
   );

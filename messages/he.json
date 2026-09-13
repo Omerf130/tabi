@@ -1272,6 +1272,74 @@
     }
   },
 
+  "Settings": {
+    "title": "הגדרות",
+    "comingSoon": "בקרוב",
+    "backToHub": "חזרה להגדרות",
+    "sections": {
+      "trip": "טיול",
+      "preferences": "העדפות",
+      "data": "נתונים וניהול",
+      "account": "חשבון",
+      "content": "ניהול תוכן הטיול"
+    },
+    "rows": {
+      "tripDetails": {
+        "title": "פרטי הטיול",
+        "subtitle": "שם, תאריכים ופרטים בסיסיים"
+      },
+      "travelers": {
+        "title": "מטיילים",
+        "subtitle": "חברי הטיול והזמנות"
+      },
+      "theme": {
+        "title": "ערכת נושא",
+        "subtitle": "מראה ותצוגה של האפליקציה"
+      },
+      "currency": {
+        "title": "מטבע",
+        "subtitleOwner": "מטבע בסיס לחשבונאות הטיול · {currency}",
+        "subtitleMember": "מטבע בסיס של הטיול · {currency}"
+      },
+      "language": {
+        "title": "שפה",
+        "subtitle": "שפת הממשק של האפליקציה"
+      },
+      "maps": {
+        "title": "מפות וניווט",
+        "subtitle": "אפליקציית מפות מועדפת"
+      },
+      "notifications": {
+        "title": "התראות",
+        "subtitle": "תזכורות והתראות מהאפליקציה"
+      },
+      "export": {
+        "title": "ייצוא הטיול",
+        "subtitle": "PDF עם סיכום הטיול"
+      },
+      "deleteTrip": {
+        "title": "מחיקת הטיול",
+        "subtitle": "מחיקה לצמיתות של כל נתוני הטיול"
+      },
+      "profile": {
+        "title": "פרופיל",
+        "subtitle": "פרטים אישיים וחשבון"
+      },
+      "security": {
+        "title": "פרטיות ואבטחה",
+        "subtitle": "סיסמה, התחברות ופרטיות"
+      },
+      "help": {
+        "title": "עזרה ותמיכה",
+        "subtitle": "שאלות, משוב ויצירת קשר"
+      }
+    },
+    "languagePage": {
+      "back": "חזרה להגדרות",
+      "lead": "בחרו את שפת הממשק. העדפה זו שמורה בחשבון שלכם וחלה על כל הטיולים."
+    }
+  },
+
   "TripSettings": {
     "pageTitle": "הגדרות",
     "detailsTitle": "פרטי הטיול",

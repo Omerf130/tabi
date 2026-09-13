@@ -6,6 +6,7 @@ export function revalidateTripManagement(
   section?: TripManagementSection,
 ): void {
   revalidatePath(`/app/trips/${tripId}/manage`);
+  revalidatePath(`/app/trips/${tripId}/manage/language`);
   revalidatePath(`/app/trips/${tripId}/manage/details`);
   if (section) {
     revalidatePath(`/app/trips/${tripId}/manage/${section}`);

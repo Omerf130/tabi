@@ -1,7 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { TripHeader } from "@/features/app-shell/TripHeader";
 import { requireTripMember } from "@/features/trips/authorization";
-import { TripManagementShell } from "@/features/trip-management/TripManagementShell";
+import { AppPage } from "@/features/app-shell/AppPage";
+import { TripManagementAccountFooter } from "@/features/trip-management/TripManagementAccountFooter";
 
 export default async function TripManageLayout({
   children,
@@ -12,7 +13,7 @@ export default async function TripManageLayout({
 }) {
   const { tripId } = await params;
   const trip = await requireTripMember(tripId);
-  const t = await getTranslations("TripManagement");
+  const t = await getTranslations("Settings");
 
   return (
     <>
@@ -22,9 +23,10 @@ export default async function TripManageLayout({
         showTripSwitch
         backHref={`/app/trips/${tripId}/more`}
       />
-      <TripManagementShell tripId={trip.id} isOwner={trip.role === "owner"}>
-        {children}
-      </TripManagementShell>
+      {children}
+      <AppPage width="wide">
+        <TripManagementAccountFooter />
+      </AppPage>
     </>
   );
 }
