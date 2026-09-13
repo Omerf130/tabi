@@ -1,4 +1,5 @@
 import type { EntityLinkedCostViewModel } from "@/features/finance/types";
+import type { PlacePhotoPresentation } from "@/features/place-images/types";
 
 export type AccommodationPlaceSource = "google" | "manual";
 
@@ -23,6 +24,15 @@ export type AccommodationViewModel = {
   nightCount: number;
   usesGoogleAttribution: boolean;
   linkedCost?: EntityLinkedCostViewModel;
+};
+
+export type AccommodationListItemViewModel = AccommodationViewModel & {
+  locationLabel?: string;
+  dateRangeCompactLabel: string;
+  nightCountLabel: string;
+  detailHref: string;
+  isCurrentStay: boolean;
+  placePhoto?: PlacePhotoPresentation;
 };
 
 export type AccommodationSettingsViewModel = AccommodationViewModel & {
