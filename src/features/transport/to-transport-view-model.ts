@@ -1,8 +1,10 @@
 import { formatCalendarDateDisplay } from "@/features/trips/calendar-date";
+import { buildTransportListTitle } from "./build-transport-list-title";
 import {
   buildTransportDetailHref,
   buildTransportHref,
 } from "./constants";
+import { resolveTransportVisualSrc } from "./resolve-transport-visual-src";
 import { formatTransportTimeRangeLabel } from "./transport-datetime";
 import { getTransportTimezoneLabel } from "./timezone-options";
 import {
@@ -119,6 +121,10 @@ export function toTransportCardViewModel(
     metaLabel: buildMetaLabel(record.type, record.details),
     dateLabel: formatCalendarDateDisplay(record.departure.date),
     timeRangeLabel: formatTransportTimeRangeLabel(record.departure, record.arrival),
+    departureDate: record.departure.date,
+    departureTime: record.departure.time,
+    listTitle: buildTransportListTitle(record.type, record.arrival.locationName),
+    visualSrc: resolveTransportVisualSrc(record.type),
     detailHref: buildTransportDetailHref(tripId, record.id),
     linkedCost: record.linkedCost,
   };

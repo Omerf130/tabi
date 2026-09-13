@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { TripHeader } from "@/features/app-shell/TripHeader";
 import { listTransportCardsForTrip } from "@/features/transport/queries";
+import { TransportAddMenu } from "@/features/transport/TransportAddMenu.client";
 import { TransportPageContent } from "@/features/transport/TransportPageContent";
 import { requireTripMember } from "@/features/trips/authorization";
 
@@ -30,6 +31,9 @@ export default async function TransportPage({
         tripName={trip.name}
         showTripSwitch
         backHref={`/app/trips/${tripId}/more`}
+        trailing={
+          trip.role === "owner" ? <TransportAddMenu tripId={trip.id} /> : undefined
+        }
       />
       <TransportPageContent
         tripId={trip.id}

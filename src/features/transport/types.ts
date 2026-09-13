@@ -63,6 +63,10 @@ export type TransportCardViewModel = {
   metaLabel?: string;
   dateLabel: string;
   timeRangeLabel: string;
+  departureDate: string;
+  departureTime: string;
+  listTitle: string;
+  visualSrc: string;
   detailHref: string;
   linkedCost?: EntityLinkedCostViewModel;
 };

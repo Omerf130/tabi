@@ -9,6 +9,7 @@ type TripHeaderProps = {
   tripName?: string;
   showTripSwitch?: boolean;
   backHref?: string;
+  trailing?: ReactNode;
 };
 
 export function TripHeader({
@@ -16,6 +17,7 @@ export function TripHeader({
   tripName,
   showTripSwitch = false,
   backHref,
+  trailing,
 }: TripHeaderProps) {
   const mode = showTripSwitch ? "section" : "trip";
 
@@ -36,6 +38,7 @@ export function TripHeader({
             </Link>
           ) : undefined
         }
+        trailing={trailing}
       />
       {showTripSwitch && tripName ? (
         <div className={styles.contextRow}>
