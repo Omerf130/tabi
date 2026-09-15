@@ -3,7 +3,7 @@ import { AppPage } from "@/features/app-shell/AppPage";
 import { resolveAppLocale } from "@/features/i18n/locale";
 import { requireTripMember } from "@/features/trips/authorization";
 import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
-import { buildTripManagementHref } from "@/features/trip-management/constants";
+import { buildTravelersSettingsHref } from "@/features/settings/constants";
 import { listTripMembers } from "@/features/trips/members/queries";
 import { TripDetailsSettingsClient } from "./TripDetailsSettings.client";
 
@@ -49,7 +49,7 @@ export async function TripDetailsSettingsContent({
     coverVisualKey: trip.coverVisualKey ?? null,
     isOwner: trip.role === "owner",
     memberCount: members.length,
-    travelersHref: buildTripManagementHref(tripId, "members"),
+    travelersHref: buildTravelersSettingsHref(tripId),
   };
 
   return (

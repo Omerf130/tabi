@@ -18,5 +18,10 @@ export const removeMemberSchema = z.object({
     .refine(isValidObjectId, { message: "Invalid membershipId" }),
 });
 
+export const leaveTripSchema = z.object({
+  tripId: z.string().refine(isValidObjectId, { message: "Invalid tripId" }),
+});
+
 export type ChangeMemberRoleInput = z.infer<typeof changeMemberRoleSchema>;
 export type RemoveMemberInput = z.infer<typeof removeMemberSchema>;
+export type LeaveTripInput = z.infer<typeof leaveTripSchema>;

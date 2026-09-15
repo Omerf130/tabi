@@ -1,14 +1,20 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { revalidateTripManagement } from "@/features/trip-management/revalidation";
 import { requireUser } from "@/features/auth/session";
 import { requireTripOwner } from "@/features/trips/authorization";
 import { changeTripMemberRole } from "./change-role";
 import { MEMBER_ERROR_CODES, MEMBER_SUCCESS_CODES } from "./constants";
 import { LastOwnerError, MemberNotFoundError } from "./errors";
+import { leaveTrip } from "./leave-trip";
 import { removeTripMember } from "./remove-member";
-import { changeMemberRoleSchema, removeMemberSchema } from "./schemas";
+import {
+  changeMemberRoleSchema,
+  leaveTripSchema,
+  removeMemberSchema,
+} from "./schemas";
 import type { MemberErrorCode, MemberSuccessCode } from "./constants";
 
 export type MemberActionState = {
@@ -83,4 +89,35 @@ export async function removeTripMemberAction(
     }
     return { errorCode: MEMBER_ERROR_CODES.generic };
   }
+}
+
+export async function leaveTripAction(
+  _prev: MemberActionState,
+  formData: FormData,
+): Promise<MemberActionState> {
+  const user = await requireUser();
+
+  const parsed = leaveTripSchema.safeParse({
+    tripId: formData.get("tripId"),
+  });
+
+  if (!parsed.success) {
+    return { errorCode: MEMBER_ERROR_CODES.generic };
+  }
+
+  try {
+    await leaveTrip(user.id, parsed.data.tripId);
+    revalidatePath("/app");
+    revalidateTripManagement(parsed.data.tripId, "members");
+  } catch (error) {
+    if (error instanceof LastOwnerError) {
+      return { errorCode: MEMBER_ERROR_CODES.lastOwner };
+    }
+    if (error instanceof MemberNotFoundError) {
+      return { errorCode: MEMBER_ERROR_CODES.generic };
+    }
+    return { errorCode: MEMBER_ERROR_CODES.generic };
+  }
+
+  redirect("/app");
 }

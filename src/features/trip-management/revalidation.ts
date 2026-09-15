@@ -8,6 +8,7 @@ export function revalidateTripManagement(
   revalidatePath(`/app/trips/${tripId}/manage`);
   revalidatePath(`/app/trips/${tripId}/manage/language`);
   revalidatePath(`/app/trips/${tripId}/manage/details`);
+  revalidatePath(`/app/trips/${tripId}/manage/members`);
   if (section) {
     revalidatePath(`/app/trips/${tripId}/manage/${section}`);
   }

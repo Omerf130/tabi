@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import heMessages from "../../../../../messages/he.json";
 import enMessages from "../../../../../messages/en.json";
-import { buildTripManagementHref } from "@/features/trip-management/constants";
+import { buildTravelersSettingsHref } from "@/features/settings/constants";
 
 const tripId = "507f1f77bcf86cd799439011";
 
@@ -35,8 +35,8 @@ describe("Trip Details presentation", () => {
       "src/features/trips/settings/trip-details/TripDetailsSettingsContent.tsx",
     );
     const contentSource = readFileSync(contentPath, "utf8");
-    expect(contentSource).toContain('buildTripManagementHref(tripId, "members")');
-    expect(buildTripManagementHref(tripId, "members")).toBe(
+    expect(contentSource).toContain("buildTravelersSettingsHref(tripId)");
+    expect(buildTravelersSettingsHref(tripId)).toBe(
       `/app/trips/${tripId}/manage/members`,
     );
   });

@@ -6,6 +6,7 @@ import type { TripWorkspace } from "@/features/trips/public-trip";
 import {
   buildFinanceSettingsHref,
   buildSettingsLanguageHref,
+  buildTravelersSettingsHref,
 } from "./constants";
 import type {
   SettingsHubRowViewModel,
@@ -78,7 +79,7 @@ export function buildSettingsHubViewModel({
       activeRow(
         "travelers",
         t("rows.travelers.title"),
-        buildTripManagementHref(trip.id, "members"),
+        buildTravelersSettingsHref(trip.id),
         "travelers",
         t("rows.travelers.subtitle"),
       ),

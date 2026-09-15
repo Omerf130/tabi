@@ -13,6 +13,35 @@ import {
   type PublicInviteState,
 } from "./public-invite";
 
+export async function listActiveTripInvitations(
+  tripId: string,
+): Promise<InvitationListItem[]> {
+  await connectDb();
+  const now = new Date();
+  const invitations = await TripInvitation.find({
+    tripId,
+    usedAt: null,
+    revokedAt: null,
+    expiresAt: { $gt: now },
+  })
+    .sort({ createdAt: -1 })
+    .lean();
+
+  return invitations.map((invitation) =>
+    toInvitationListItem(
+      {
+        _id: invitation._id,
+        role: invitation.role,
+        createdAt: invitation.createdAt,
+        expiresAt: invitation.expiresAt,
+        usedAt: null,
+        revokedAt: null,
+      },
+      now,
+    ),
+  );
+}
+
 export async function listTripInvitations(
   tripId: string,
 ): Promise<InvitationListItem[]> {

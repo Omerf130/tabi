@@ -15,8 +15,6 @@ import { requireUser } from "@/features/auth/session";
 import { listTransportCardsForTrip } from "@/features/transport/queries";
 import { TransportPageContent } from "@/features/transport/TransportPageContent";
 import { requireTripMember } from "@/features/trips/authorization";
-import { listTripInvitations } from "@/features/trips/invitations/queries";
-import { listTripMembers } from "@/features/trips/members/queries";
 import { listRemindersForUserTrip } from "@/features/trips/reminders/queries";
 import { TripReminderSettings } from "@/features/trips/reminders/TripReminderSettings";
 import { getJapanCalendarDate } from "@/features/trips/calendar-date";
@@ -25,8 +23,6 @@ import {
   parseTripManagementSection,
 } from "@/features/trip-management/constants";
 import { getTripManagementSectionLabel } from "@/features/trip-management/trip-management-labels";
-import { TripMembersManagementClient } from "@/features/trip-management/TripMembersManagement.client";
-
 export async function generateMetadata({
   params,
 }: {
@@ -126,22 +122,6 @@ export default async function TripManageSectionPage({
           endDate={trip.endDate}
           reminders={reminders}
           variant="workspace"
-        />
-      );
-    }
-
-    case "members": {
-      const [members, invitations] = await Promise.all([
-        listTripMembers(tripId),
-        trip.role === "owner" ? listTripInvitations(tripId) : Promise.resolve([]),
-      ]);
-      return (
-        <TripMembersManagementClient
-          tripId={tripId}
-          members={members}
-          invitations={invitations}
-          isOwnerView={trip.role === "owner"}
-          currentUserId={user.id}
         />
       );
     }

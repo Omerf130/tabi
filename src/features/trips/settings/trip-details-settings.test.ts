@@ -73,6 +73,13 @@ describe("Trip Details settings", () => {
     );
   });
 
+  it("routes Travelers header back to the settings hub", () => {
+    const travelersPath = `/app/trips/${tripId}/manage/members`;
+    expect(resolveManageBackHref(travelersPath, tripId)).toBe(
+      `/app/trips/${tripId}/manage`,
+    );
+  });
+
   it("does not render details through the legacy section page switch", () => {
     const sectionPagePath = join(
       process.cwd(),
