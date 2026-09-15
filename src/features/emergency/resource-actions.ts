@@ -1,4 +1,9 @@
-import { buildGoogleMapsSearchUrl, buildTelHref } from "@/lib/maps/google-maps-url";
+import { buildTelHref } from "@/lib/maps/google-maps-url";
+import { buildNavigationUrl } from "@/lib/maps/navigation-url";
+import {
+  resolvePreferredMapsApp,
+  type PreferredMapsApp,
+} from "@/lib/maps/maps-app";
 import type { EmergencyResourceAction } from "./types";
 
 export type EmergencyResourceActionLabels = {
@@ -15,7 +20,8 @@ export function buildEmergencyResourceActions(input: {
   address?: string;
   url?: string;
   reference?: string;
-}, labels: EmergencyResourceActionLabels): EmergencyResourceAction[] {
+}, labels: EmergencyResourceActionLabels, preferredMapsApp: PreferredMapsApp): EmergencyResourceAction[] {
+  const provider = resolvePreferredMapsApp(preferredMapsApp);
   const actions: EmergencyResourceAction[] = [];
 
   if (input.phone?.trim()) {
@@ -70,12 +76,18 @@ export function buildEmergencyResourceActions(input: {
 
   if (input.address?.trim()) {
     const value = input.address.trim();
-    actions.push({
-      type: "address",
-      label: labels.openInMap,
-      href: buildGoogleMapsSearchUrl(value),
-      value,
+    const href = buildNavigationUrl({
+      provider,
+      address: value,
     });
+    if (href) {
+      actions.push({
+        type: "address",
+        label: labels.openInMap,
+        href,
+        value,
+      });
+    }
   }
 
   if (input.reference?.trim()) {

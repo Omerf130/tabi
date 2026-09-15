@@ -101,7 +101,8 @@
 
   "Errors": {
 
-    "invalidLocale": "שפת הממשק שנבחרה אינה נתמכת."
+    "invalidLocale": "שפת הממשק שנבחרה אינה נתמכת.",
+    "invalidPreferredMapsApp": "אפליקציית הניווט שנבחרה אינה נתמכת."
 
   },
 
@@ -800,6 +801,7 @@
     "bookingReference": "מספר הזמנה",
     "notes": "הערות",
     "openInGoogleMaps": "פתח ב-Google Maps",
+    "openInMaps": "פתיחה במפות",
     "showDriver": "הצג לנהג",
     "errors": {
       "created": "מקום הלינה נוסף",
@@ -1365,6 +1367,17 @@
       "lead": "בחרו את שפת הממשק שבה משתמש Tabi.",
       "sectionTitle": "שפת ממשק",
       "sectionHint": "העדפה אישית שלכם. היא חלה על החשבון שלכם ועל כל הטיולים ב-Tabi."
+    },
+    "mapsPage": {
+      "back": "חזרה להגדרות",
+      "lead": "בחרו באיזו אפליקציה Tabi תשתמש כשאתם פותחים ניווט או מיקום.",
+      "sectionTitle": "אפליקציית ניווט מועדפת",
+      "sectionHint": "העדפה אישית שלכם. היא חלה כשאתם מנווטים מ-Tabi בכל טיול.",
+      "providers": {
+        "google": "Google Maps",
+        "waze": "Waze",
+        "apple": "Apple Maps"
+      }
     }
   },
 

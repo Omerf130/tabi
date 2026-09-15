@@ -12,6 +12,7 @@ import { buildDayWorkspaceViewModel } from "./build-day-workspace";
 import { buildItineraryDayStrip } from "./build-itinerary-day-strip";
 import { buildItineraryHero } from "./build-itinerary-hero";
 import { loadItineraryTripData } from "./load-itinerary-trip-data";
+import { withActivityNavigationHrefs } from "@/lib/maps/navigation-entities";
 import { listActivitiesForTripDay } from "./queries";
 import { parseItineraryDateParam } from "./routes";
 import { resolveDayHeaderContext } from "./resolve-day-header-context.server";
@@ -65,15 +66,20 @@ export async function DayPageContent({ trip, date }: DayPageContentProps) {
         : Promise.resolve(null),
     ]);
 
+  const activitiesWithNavigation = withActivityNavigationHrefs(
+    activities,
+    user.preferredMapsApp,
+  );
+
   const [photoPresentations, dayHeaderContext] = await Promise.all([
-    attachActivityPhotoPresentations(trip.id, activities),
+    attachActivityPhotoPresentations(trip.id, activitiesWithNavigation),
     resolveDayHeaderContext({
       date: validatedDate,
       dayNumber: 0,
       weekdayLabel: "",
       dateLabel: "",
       isToday: validatedDate === todayJapan,
-      activities,
+      activities: activitiesWithNavigation,
       transports,
       accommodations: tripData.accommodations,
       transportRecords: tripData.transportById,
@@ -87,7 +93,7 @@ export async function DayPageContent({ trip, date }: DayPageContentProps) {
     endDate: trip.endDate,
     date: validatedDate,
     isOwner: trip.role === "owner",
-    activities,
+    activities: activitiesWithNavigation,
     transports,
     accommodations: tripData.accommodations,
     documents: tripData.documents,

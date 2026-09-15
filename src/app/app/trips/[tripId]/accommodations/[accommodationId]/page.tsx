@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { TripHeader } from "@/features/app-shell/TripHeader";
 import { AccommodationDetailContent } from "@/features/accommodations/AccommodationDetailContent";
 import { getAccommodationForTrip } from "@/features/accommodations/queries";
+import { requireUser } from "@/features/auth/session";
+import { buildAccommodationNavigationHref } from "@/lib/maps/navigation-entities";
 import { requireTripMember } from "@/features/trips/authorization";
 
 export async function generateMetadata({
@@ -27,12 +29,19 @@ export default async function AccommodationDetailPage({
   params: Promise<{ tripId: string; accommodationId: string }>;
 }) {
   const { tripId, accommodationId } = await params;
-  const trip = await requireTripMember(tripId);
+  const [trip, user] = await Promise.all([
+    requireTripMember(tripId),
+    requireUser(),
+  ]);
   const accommodation = await getAccommodationForTrip(trip.id, accommodationId);
 
   if (!accommodation) {
     notFound();
   }
+
+  const mapsNavigationHref =
+    buildAccommodationNavigationHref(accommodation, user.preferredMapsApp) ??
+    undefined;
 
   return (
     <>
@@ -42,7 +51,11 @@ export default async function AccommodationDetailPage({
         showTripSwitch
         backHref={`/app/trips/${tripId}/accommodations`}
       />
-      <AccommodationDetailContent tripId={trip.id} accommodation={accommodation} />
+      <AccommodationDetailContent
+        tripId={trip.id}
+        accommodation={accommodation}
+        mapsNavigationHref={mapsNavigationHref}
+      />
     </>
   );
 }

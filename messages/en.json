@@ -101,7 +101,8 @@
 
   "Errors": {
 
-    "invalidLocale": "The selected interface language is not supported."
+    "invalidLocale": "The selected interface language is not supported.",
+    "invalidPreferredMapsApp": "The selected navigation app is not supported."
 
   },
 
@@ -800,6 +801,7 @@
     "bookingReference": "Booking reference",
     "notes": "Notes",
     "openInGoogleMaps": "Open in Google Maps",
+    "openInMaps": "Open in maps",
     "showDriver": "Show driver",
     "errors": {
       "created": "Stay added.",
@@ -1365,6 +1367,17 @@
       "lead": "Choose the interface language used by Tabi.",
       "sectionTitle": "Interface language",
       "sectionHint": "Your personal interface preference. It applies across your Tabi account and all trips."
+    },
+    "mapsPage": {
+      "back": "Back to Settings",
+      "lead": "Choose which app Tabi should use when you open directions or a location.",
+      "sectionTitle": "Preferred navigation app",
+      "sectionHint": "Your personal preference. It applies when you navigate from Tabi on any trip.",
+      "providers": {
+        "google": "Google Maps",
+        "waze": "Waze",
+        "apple": "Apple Maps"
+      }
     }
   },
 

@@ -1,6 +1,7 @@
 import "server-only";
 
 import mongoose, { type InferSchemaType, type Model } from "mongoose";
+import { MAPS_APPS } from "@/lib/maps/maps-app";
 
 const userSchema = new mongoose.Schema(
   {
@@ -33,6 +34,11 @@ const userSchema = new mongoose.Schema(
       uppercase: true,
       minlength: 3,
       maxlength: 3,
+    },
+    preferredMapsApp: {
+      type: String,
+      enum: MAPS_APPS,
+      default: null,
     },
   },
   { timestamps: true },

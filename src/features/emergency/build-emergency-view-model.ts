@@ -30,6 +30,8 @@ import type {
   TripEmergencyResourceViewModel,
 } from "./types";
 import type { TripEmergencyResourceDocument } from "@/models/TripEmergencyResource";
+import { buildAccommodationNavigationHref } from "@/lib/maps/navigation-entities";
+import type { PreferredMapsApp } from "@/lib/maps/maps-app";
 
 function buildCategoryLabels(
   t: AppTranslator<"Emergency">,
@@ -43,6 +45,7 @@ function buildCategoryLabels(
 function toBuiltInViewModel(
   resource: ReturnType<typeof getDefaultEmergencyPack>["resources"][number],
   actionLabels: EmergencyResourceActionLabels,
+  preferredMapsApp: PreferredMapsApp,
 ): BuiltInEmergencyResourceViewModel {
   return {
     ...resource,
@@ -56,6 +59,7 @@ function toBuiltInViewModel(
         url: resource.url,
       },
       actionLabels,
+      preferredMapsApp,
     ),
   };
 }
@@ -64,6 +68,7 @@ function toCustomResourceViewModel(
   resource: TripEmergencyResourceDocument,
   resolveCategoryLabel: ReturnType<typeof createEmergencyCategoryLabelResolver>,
   actionLabels: EmergencyResourceActionLabels,
+  preferredMapsApp: PreferredMapsApp,
 ): TripEmergencyResourceViewModel {
   const tripId = resource.tripId.toString();
   return {
@@ -90,6 +95,7 @@ function toCustomResourceViewModel(
         reference: resource.reference ?? undefined,
       },
       actionLabels,
+      preferredMapsApp,
     ),
   };
 }
@@ -102,6 +108,7 @@ type BuildEmergencyViewModelInput = {
   customResources: readonly TripEmergencyResourceDocument[];
   emergencyDocuments: readonly EmergencyDocumentViewModel[];
   todayJapan?: string;
+  preferredMapsApp?: PreferredMapsApp;
   t: AppTranslator<"Emergency">;
 };
 
@@ -113,6 +120,7 @@ export function buildEmergencyViewModel({
   customResources,
   emergencyDocuments,
   todayJapan = getJapanCalendarDate(),
+  preferredMapsApp,
   t,
 }: BuildEmergencyViewModelInput): EmergencyPageViewModel {
   const pack = getDefaultEmergencyPack();
@@ -122,7 +130,7 @@ export function buildEmergencyViewModel({
     copyReference: t("copyReference"),
   };
   const builtIn = pack.resources.map((resource) =>
-    toBuiltInViewModel(resource, actionLabels),
+    toBuiltInViewModel(resource, actionLabels, preferredMapsApp),
   );
   const urgentResources = builtIn.filter((resource) =>
     ["police", "ambulance_fire"].includes(resource.kind),
@@ -144,7 +152,11 @@ export function buildEmergencyViewModel({
             contextual.accommodation.addressEnglish,
           detailHref: buildAccommodationDetailHref(tripId, contextual.accommodation.id),
           taxiHref: buildAccommodationTaxiHref(tripId, contextual.accommodation.id),
-          mapsHref: contextual.accommodation.googleMapsUrl,
+          mapsHref:
+            buildAccommodationNavigationHref(
+              contextual.accommodation,
+              preferredMapsApp,
+            ) ?? undefined,
         }
       : null;
 
@@ -172,7 +184,12 @@ export function buildEmergencyViewModel({
     currentAccommodation,
     documents: [...emergencyDocuments],
     customResources: customResources.map((resource) =>
-      toCustomResourceViewModel(resource, resolveCategoryLabel, actionLabels),
+      toCustomResourceViewModel(
+        resource,
+        resolveCategoryLabel,
+        actionLabels,
+        preferredMapsApp,
+      ),
     ),
     phraseLinks,
     allEmergencyPhrasesHref: buildLanguageCategoryHref(tripId, "emergency"),

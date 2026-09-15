@@ -3,7 +3,11 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button/Button";
-import { buildGoogleMapsCoordinatesUrl } from "@/lib/maps/google-maps-url";
+import { buildNavigationUrl } from "@/lib/maps/navigation-url";
+import {
+  resolvePreferredMapsApp,
+  type PreferredMapsApp,
+} from "@/lib/maps/maps-app";
 import styles from "./EmergencyPage.module.scss";
 
 type LocationState =
@@ -12,8 +16,15 @@ type LocationState =
   | { status: "ready"; latitude: number; longitude: number }
   | { status: "error"; message: string };
 
-export function CurrentLocationPanel() {
+type CurrentLocationPanelProps = {
+  storedPreferredMapsApp: PreferredMapsApp;
+};
+
+export function CurrentLocationPanel({
+  storedPreferredMapsApp,
+}: CurrentLocationPanelProps) {
   const t = useTranslations("Emergency");
+  const mapsProvider = resolvePreferredMapsApp(storedPreferredMapsApp);
   const [state, setState] = useState<LocationState>({ status: "idle" });
   const [copyMessage, setCopyMessage] = useState<string | undefined>();
 
@@ -91,14 +102,23 @@ export function CurrentLocationPanel() {
             >
               {t("copyCoordinates")}
             </button>
-            <a
-              href={buildGoogleMapsCoordinatesUrl(state.latitude, state.longitude)}
-              className={styles.actionButton}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t("openInMap")}
-            </a>
+            {(() => {
+              const mapHref = buildNavigationUrl({
+                provider: mapsProvider,
+                latitude: state.latitude,
+                longitude: state.longitude,
+              });
+              return mapHref ? (
+                <a
+                  href={mapHref}
+                  className={styles.actionButton}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t("openInMap")}
+                </a>
+              ) : null;
+            })()}
             <Button type="button" variant="ghost" size="compact" onClick={requestLocation}>
               {t("refresh")}
             </Button>

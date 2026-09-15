@@ -81,6 +81,7 @@ describe("toPublicUser", () => {
       role: "user",
       locale: "he",
       homeCurrency: null,
+      preferredMapsApp: null,
     });
     expect(publicUser).not.toHaveProperty("passwordHash");
   });

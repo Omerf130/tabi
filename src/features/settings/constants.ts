@@ -17,3 +17,7 @@ export function buildTravelersSettingsHref(tripId: string): string {
 export function buildCurrencySettingsHref(tripId: string): string {
   return `/app/trips/${tripId}/manage/currency`;
 }
+
+export function buildSettingsMapsHref(tripId: string): string {
+  return `/app/trips/${tripId}/manage/maps`;
+}

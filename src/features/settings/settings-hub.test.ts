@@ -100,6 +100,8 @@ describe("Settings hub", () => {
       buildSettingsLanguageHref(tripId),
     );
     expect(findRow(model, "language")?.comingSoon).toBe(false);
+    expect(findRow(model, "maps")?.comingSoon).toBe(false);
+    expect(findRow(model, "maps")?.href).toContain("/manage/maps");
   });
 
   it("marks future features as coming soon without hrefs", () => {
@@ -107,7 +109,6 @@ describe("Settings hub", () => {
 
     for (const rowId of [
       "theme",
-      "maps",
       "notifications",
       "export",
       "delete-trip",

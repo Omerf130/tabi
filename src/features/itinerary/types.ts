@@ -28,6 +28,8 @@ export type ActivityViewModel = {
   latitude?: number;
   longitude?: number;
   googleMapsUrl?: string;
+  /** Resolved at read time from user maps preference; not persisted. */
+  navigationHref?: string;
   notes?: string;
   linkedCost?: EntityLinkedCostViewModel;
 };

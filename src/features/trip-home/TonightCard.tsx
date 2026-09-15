@@ -48,9 +48,9 @@ export function TonightCard({ card }: TonightCardProps) {
           />
         </div>
 
-        {card.googleMapsUrl ? (
+        {card.navigationHref ? (
           <Link
-            href={card.googleMapsUrl}
+            href={card.navigationHref}
             className={styles.duringTonightCopyLink}
             target="_blank"
             rel="noopener noreferrer"

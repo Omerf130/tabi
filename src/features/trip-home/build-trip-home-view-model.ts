@@ -20,6 +20,11 @@ import {
 } from "@/features/trips/trip-days";
 import type { TransportItineraryItemViewModel } from "@/features/transport/types";
 import {
+  buildAccommodationNavigationHref,
+  buildActivityNavigationHref,
+} from "@/lib/maps/navigation-entities";
+import type { PreferredMapsApp } from "@/lib/maps/maps-app";
+import {
   buildAfterTripDurationLabel,
   resolveAfterTripIdentityLabel,
 } from "./build-after-trip-hero";
@@ -89,6 +94,7 @@ type BuildTripHomeViewModelInput = {
   accommodationCount?: number;
   usePreviewCountdownReference?: boolean;
   allReminders?: readonly TripReminderViewModel[];
+  preferredMapsApp?: PreferredMapsApp;
   translations: TripHomeTranslations;
 };
 
@@ -220,7 +226,13 @@ function buildTodaysPlanSection(
 function toActivityCard(
   activity: ActivityViewModel,
   photoPresentation: PlacePhotoPresentation,
+  preferredMapsApp: PreferredMapsApp,
 ): TripHomeActiveViewModel["now"] {
+  const navigationHref =
+    activity.navigationHref ??
+    buildActivityNavigationHref(activity, preferredMapsApp) ??
+    undefined;
+
   return {
     id: activity.id,
     title: activity.title,
@@ -230,7 +242,7 @@ function toActivityCard(
         : activity.startTime
       : undefined,
     locationName: activity.locationName,
-    googleMapsUrl: activity.googleMapsUrl,
+    navigationHref,
     photoPresentation,
   };
 }
@@ -253,6 +265,7 @@ export function buildTripHomeViewModel(
     todayJapan = getJapanCalendarDate(),
     nowJapanTime = getJapanWallClockTime(),
     translations,
+    preferredMapsApp,
   } = input;
 
   const phase = getTripPhase(trip.startDate, trip.endDate, todayJapan);
@@ -359,22 +372,27 @@ export function buildTripHomeViewModel(
 
   let now: TripHomeActiveViewModel["now"] = null;
   if (nowActivity) {
-    now = toActivityCard(nowActivity, nowPhotoPresentation);
+    now = toActivityCard(nowActivity, nowPhotoPresentation, preferredMapsApp);
   }
 
   let upNext: TripHomeActiveViewModel["upNext"] = null;
   if (nextActivity) {
-    upNext = toActivityCard(nextActivity, upNextPhotoPresentation);
+    upNext = toActivityCard(nextActivity, upNextPhotoPresentation, preferredMapsApp);
   }
 
   let tonight: TripHomeActiveViewModel["tonight"] = null;
   if (tonightAccommodation) {
+    const navigationHref =
+      buildAccommodationNavigationHref(
+        tonightAccommodation,
+        preferredMapsApp,
+      ) ?? undefined;
     tonight = {
       id: tonightAccommodation.id,
       name: tonightAccommodation.name,
       city: tonightAccommodation.city,
       stayContext: tonightAccommodation.dateRangeLabel,
-      googleMapsUrl: tonightAccommodation.googleMapsUrl,
+      navigationHref,
       photoPresentation: tonightPhotoPresentation,
     };
   }

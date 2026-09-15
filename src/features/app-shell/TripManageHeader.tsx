@@ -19,6 +19,7 @@ export function resolveManageBackHref(pathname: string, tripId: string): string 
   const travelersPath = `/app/trips/${tripId}/manage/members`;
   const currencyPath = `/app/trips/${tripId}/manage/currency`;
   const languagePath = `/app/trips/${tripId}/manage/language`;
+  const mapsPath = `/app/trips/${tripId}/manage/maps`;
   if (pathname === detailsPath || pathname.startsWith(`${detailsPath}/`)) {
     return buildSettingsHubHref(tripId);
   }
@@ -29,6 +30,9 @@ export function resolveManageBackHref(pathname: string, tripId: string): string 
     return buildSettingsHubHref(tripId);
   }
   if (pathname === languagePath || pathname.startsWith(`${languagePath}/`)) {
+    return buildSettingsHubHref(tripId);
+  }
+  if (pathname === mapsPath || pathname.startsWith(`${mapsPath}/`)) {
     return buildSettingsHubHref(tripId);
   }
   return `/app/trips/${tripId}/more`;

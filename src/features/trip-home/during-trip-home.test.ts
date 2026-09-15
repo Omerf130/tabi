@@ -143,6 +143,34 @@ describe("during trip home", () => {
     expect(model.upNext?.id).toBe("next");
   });
 
+  it("reflects user maps preference in navigationHref", () => {
+    const model = buildTripHomeViewModel({
+      trip,
+      translations,
+      todayJapan: "2026-11-01",
+      nowJapanTime: "13:00",
+      preferredMapsApp: "waze",
+      dayActivities: [
+        activity({
+          id: "now",
+          title: "TeamLab Planets",
+          order: 0,
+          startTime: "12:30",
+          endTime: "14:00",
+          latitude: 35.649,
+          longitude: 139.789,
+        }),
+      ],
+    });
+
+    expect(model.phase).toBe("active");
+    if (model.phase !== "active") {
+      return;
+    }
+
+    expect(model.now?.navigationHref).toContain("waze.com");
+  });
+
   it("keeps NOW semantics requiring start and end times", () => {
     const { nowActivity } = resolveNowAndNextUp(
       [

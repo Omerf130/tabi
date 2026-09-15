@@ -1,4 +1,8 @@
 import { resolveAppLocale, type AppLocale } from "@/features/i18n/locale";
+import {
+  parseStoredPreferredMapsApp,
+  type MapsApp,
+} from "@/lib/maps/maps-app";
 
 export type PlatformRole = "user" | "admin";
 
@@ -10,6 +14,8 @@ export type PublicUser = {
   locale: AppLocale;
   /** Explicit user-chosen reference currency; never inferred. */
   homeCurrency: string | null;
+  /** Explicit navigation app; null until user chooses (effective default: google). */
+  preferredMapsApp: MapsApp | null;
 };
 
 export function toPublicUser(user: {
@@ -19,6 +25,7 @@ export function toPublicUser(user: {
   role: PlatformRole;
   locale?: AppLocale | null;
   homeCurrency?: string | null;
+  preferredMapsApp?: MapsApp | null;
   passwordHash?: string | null;
   googleSubject?: string | null;
 }): PublicUser {
@@ -30,6 +37,7 @@ export function toPublicUser(user: {
     role: user.role,
     locale: resolveAppLocale(user.locale),
     homeCurrency: homeCurrency && homeCurrency.length === 3 ? homeCurrency : null,
+    preferredMapsApp: parseStoredPreferredMapsApp(user.preferredMapsApp),
   };
 }
 

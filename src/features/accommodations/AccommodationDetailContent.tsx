@@ -10,11 +10,13 @@ import styles from "./AccommodationDetail.module.scss";
 type AccommodationDetailContentProps = {
   tripId: string;
   accommodation: AccommodationViewModel;
+  mapsNavigationHref?: string;
 };
 
 export async function AccommodationDetailContent({
   tripId,
   accommodation,
+  mapsNavigationHref,
 }: AccommodationDetailContentProps) {
   const t = await getTranslations("Accommodation");
 
@@ -82,14 +84,14 @@ export async function AccommodationDetailContent({
       </Card>
 
       <div className={styles.actions}>
-        {accommodation.googleMapsUrl ? (
+        {mapsNavigationHref ? (
           <a
-            href={accommodation.googleMapsUrl}
+            href={mapsNavigationHref}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.actionLinkSecondary}
           >
-            {t("openInGoogleMaps")}
+            {t("openInMaps")}
           </a>
         ) : null}
         <Link

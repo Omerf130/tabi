@@ -38,6 +38,8 @@ import { formatTemperatureC } from "@/features/weather/format-weather";
 import { getWeatherSnapshot } from "@/features/weather/queries";
 import { WeatherApiRequestError } from "@/features/weather/weatherapi.server";
 import { prepareAfterTripFinanceRecap } from "@/features/finance/queries";
+import { withActivityNavigationHrefs } from "@/lib/maps/navigation-entities";
+import type { PreferredMapsApp } from "@/lib/maps/maps-app";
 import { buildTripHomeViewModel } from "./build-trip-home-view-model";
 import { buildDayOneHomePreview } from "./build-day-one-home-preview";
 import { resolveTripHomePreviewContext } from "./resolve-trip-home-preview-context";
@@ -69,6 +71,7 @@ function getTonightAccommodation(
 type PrepareTripHomePageOptions = {
   previewPhase?: string | null;
   previewTime?: string | null;
+  preferredMapsApp?: PreferredMapsApp;
 };
 
 async function resolveTripHomeTranslations() {
@@ -87,6 +90,7 @@ export async function prepareTripHomePage(
   options: PrepareTripHomePageOptions = {},
 ): Promise<TripHomeViewModel> {
   const translations = await resolveTripHomeTranslations();
+  const preferredMapsApp = options.preferredMapsApp;
   const previewContext = resolveTripHomePreviewContext({
     startDate: trip.startDate,
     endDate: trip.endDate,
@@ -175,6 +179,7 @@ export async function prepareTripHomePage(
       dayOnePhotoPresentation,
       usePreviewCountdownReference:
         "isPreview" in previewContext && previewContext.isPreview,
+      preferredMapsApp,
       translations,
     });
   }
@@ -193,6 +198,7 @@ export async function prepareTripHomePage(
       financeRecap,
       activityCount: activities.length,
       accommodationCount: accommodations.length,
+      preferredMapsApp,
       translations,
     });
   }
@@ -220,6 +226,11 @@ export async function prepareTripHomePage(
     listTransportsForTrip(trip.id),
   ]);
 
+  const dayActivitiesWithNavigation = withActivityNavigationHrefs(
+    dayActivities,
+    preferredMapsApp,
+  );
+
   const todayReminders = selectTodayHomeReminders(
     todayReminderRecords,
     phase,
@@ -227,7 +238,7 @@ export async function prepareTripHomePage(
   );
 
   const { nowActivity, nextActivity } = resolveNowAndNextUp(
-    dayActivities,
+    dayActivitiesWithNavigation,
     nowJapanTime,
   );
 
@@ -242,7 +253,7 @@ export async function prepareTripHomePage(
   const resolvedLocation = await resolveDayLocation({
     date: todayJapan,
     accommodations,
-    activities: dayActivities,
+    activities: dayActivitiesWithNavigation,
     dayTransports,
     transportRecords: transportRecordMap,
   });
@@ -297,7 +308,7 @@ export async function prepareTripHomePage(
     trip,
     todayJapan,
     nowJapanTime,
-    dayActivities,
+    dayActivities: dayActivitiesWithNavigation,
     dayTransports,
     todayReminders,
     accommodations,
@@ -307,6 +318,7 @@ export async function prepareTripHomePage(
     tonightPhotoPresentation,
     weather,
     allReminders,
+    preferredMapsApp,
     translations,
   });
 }

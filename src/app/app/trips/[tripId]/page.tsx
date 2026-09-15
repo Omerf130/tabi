@@ -34,6 +34,7 @@ export default async function TripHomePage({
   const model = await prepareTripHomePage(trip, user.id, {
     previewPhase,
     previewTime,
+    preferredMapsApp: user.preferredMapsApp,
   });
 
   return (

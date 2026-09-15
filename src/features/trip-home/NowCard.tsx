@@ -13,9 +13,9 @@ type NowCardProps = {
 
 export function NowCard({ card }: NowCardProps) {
   const tHome = useTranslations("Home");
-  const navAction = card.googleMapsUrl ? (
+  const navAction = card.navigationHref ? (
     <Link
-      href={card.googleMapsUrl}
+      href={card.navigationHref}
       className={styles.duringSemanticNavLink}
       data-tone="now"
       target="_blank"

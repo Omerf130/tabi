@@ -59,6 +59,20 @@ describe("buildEmergencyViewModel", () => {
     });
 
     expect(current.currentAccommodation?.name).toBe("Hotel Example");
+    expect(current.currentAccommodation?.mapsHref).toContain("google.com");
+
+    const wazeModel = buildEmergencyViewModel({
+      tripId,
+      startDate: "2026-10-25",
+      endDate: "2026-11-18",
+      accommodations: [makeAccommodation()],
+      customResources: [],
+      emergencyDocuments: [],
+      todayJapan: "2026-10-26",
+      preferredMapsApp: "waze",
+      t,
+    });
+    expect(wazeModel.currentAccommodation?.mapsHref).toContain("waze.com");
 
     const upcoming = buildEmergencyViewModel({
       tripId,

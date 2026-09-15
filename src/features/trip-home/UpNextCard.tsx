@@ -13,9 +13,9 @@ type UpNextCardProps = {
 
 export function UpNextCard({ card }: UpNextCardProps) {
   const tHome = useTranslations("Home");
-  const navAction = card.googleMapsUrl ? (
+  const navAction = card.navigationHref ? (
     <Link
-      href={card.googleMapsUrl}
+      href={card.navigationHref}
       className={styles.duringSemanticNavLink}
       data-tone="up-next"
       target="_blank"

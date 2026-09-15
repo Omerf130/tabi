@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { requireUser } from "@/features/auth/session";
 import { AppPage } from "@/features/app-shell/AppPage";
 import { Card } from "@/components/ui/Card/Card";
 import { CurrentLocationPanel } from "./CurrentLocationPanel.client";
@@ -9,7 +10,10 @@ import type { EmergencyPageViewModel } from "./types";
 import styles from "./EmergencyPage.module.scss";
 
 export async function EmergencyPageContent(model: EmergencyPageViewModel) {
-  const t = await getTranslations("Emergency");
+  const [t, user] = await Promise.all([
+    getTranslations("Emergency"),
+    requireUser(),
+  ]);
   const sourceMeta = model.assistanceResources[0]?.source;
 
   return (
@@ -56,7 +60,7 @@ export async function EmergencyPageContent(model: EmergencyPageViewModel) {
           <h2 id="location-heading" className={styles.sectionTitle}>
             {t("myLocation")}
           </h2>
-          <CurrentLocationPanel />
+          <CurrentLocationPanel storedPreferredMapsApp={user.preferredMapsApp} />
         </section>
 
         {model.currentAccommodation ? (

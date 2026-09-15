@@ -43,9 +43,9 @@ export async function ActivityCompactCard({
             {card.locationName}
           </p>
         ) : null}
-        {card.googleMapsUrl ? (
+        {card.navigationHref ? (
           <Link
-            href={card.googleMapsUrl}
+            href={card.navigationHref}
             className={styles.activityCompactAction}
             target="_blank"
             rel="noopener noreferrer"

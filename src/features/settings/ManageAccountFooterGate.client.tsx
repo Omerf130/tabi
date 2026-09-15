@@ -15,8 +15,12 @@ export function ManageAccountFooterGate({
 }: ManageAccountFooterGateProps) {
   const pathname = usePathname();
   const languagePath = `/app/trips/${tripId}/manage/language`;
+  const mapsPath = `/app/trips/${tripId}/manage/maps`;
 
   if (pathname === languagePath || pathname.startsWith(`${languagePath}/`)) {
+    return null;
+  }
+  if (pathname === mapsPath || pathname.startsWith(`${mapsPath}/`)) {
     return null;
   }
 

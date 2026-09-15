@@ -30,7 +30,7 @@ export function ActivityRow({
     .filter(Boolean)
     .join(" · ");
   const contextLine = [activity.city, activity.country].filter(Boolean).join(", ");
-  const canNavigate = Boolean(activity.googleMapsUrl?.trim());
+  const canNavigate = Boolean(activity.navigationHref?.trim());
   const canShowDriver =
     isGoogleBackedActivity(activity) &&
     Boolean(activity.locationName?.trim() || activity.address?.trim());
@@ -93,7 +93,7 @@ export function ActivityRow({
                     {canNavigate ? (
                       <a
                         className={styles.timelineLocationAction}
-                        href={activity.googleMapsUrl}
+                        href={activity.navigationHref}
                         target="_blank"
                         rel="noopener noreferrer"
                       >

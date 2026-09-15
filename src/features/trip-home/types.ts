@@ -91,7 +91,7 @@ export type TripHomeActivityCard = {
   title: string;
   timeLabel?: string;
   locationName?: string;
-  googleMapsUrl?: string;
+  navigationHref?: string;
   photoPresentation: PlacePhotoPresentation;
 };
 
@@ -100,7 +100,7 @@ export type TripHomeTonightCard = {
   name: string;
   city?: string;
   stayContext?: string;
-  googleMapsUrl?: string;
+  navigationHref?: string;
   photoPresentation: PlacePhotoPresentation;
 };
 
