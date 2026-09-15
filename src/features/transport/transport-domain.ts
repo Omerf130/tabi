@@ -1,5 +1,7 @@
 import "server-only";
 
+import type { ClientSession } from "mongoose";
+import { clearTravelDocumentEntityLinks } from "@/features/documents/clear-travel-document-entity-links";
 import type { EntityCostInput } from "@/features/finance/finance-linked-expense-domain";
 import {
   deleteLinkedTripExpenseForSource,
@@ -189,16 +191,30 @@ export async function updateTransport(
   });
 }
 
-export async function deleteTransport(tripId: string, transportId: string): Promise<void> {
-  await withTransaction(async (session) => {
-    await connectDb();
-    const deleted = await Transport.findOneAndDelete({ _id: transportId, tripId })
-      .session(session)
-      .lean();
-    if (!deleted) {
-      throw new TransportNotFoundError();
-    }
+export async function deleteTransportInSession(
+  session: ClientSession,
+  tripId: string,
+  transportId: string,
+): Promise<void> {
+  await connectDb();
+  const deleted = await Transport.findOneAndDelete({ _id: transportId, tripId })
+    .session(session)
+    .lean();
+  if (!deleted) {
+    throw new TransportNotFoundError();
+  }
 
-    await deleteLinkedTripExpenseForSource(tripId, "transport", transportId, session);
+  await clearTravelDocumentEntityLinks({
+    tripId,
+    transportId,
+    session,
   });
+
+  await deleteLinkedTripExpenseForSource(tripId, "transport", transportId, session);
+}
+
+export async function deleteTransport(tripId: string, transportId: string): Promise<void> {
+  await withTransaction(async (session) =>
+    deleteTransportInSession(session, tripId, transportId),
+  );
 }

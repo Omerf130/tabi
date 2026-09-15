@@ -1375,19 +1375,34 @@
 
   "TripDetailsSettings": {
     "pageTitle": "Trip details",
-    "lead": "Update your trip name, destination, and cover. Dates can be viewed here and edited in a future update.",
+    "lead": "Update your trip name, destination, dates, and cover.",
     "back": "Back to Settings",
     "memberReadOnly": "Only the trip owner can edit these details.",
     "sections": {
       "identity": "Trip identity",
       "destination": "Destination",
       "schedule": "Schedule",
-      "cover": "Trip cover"
+      "cover": "Trip cover",
+      "tripInformation": "Trip information"
+    },
+    "edit": {
+      "identityTitle": "Trip name & description",
+      "destinationTitle": "Destination"
+    },
+    "cover": {
+      "change": "Change cover",
+      "add": "Add cover"
+    },
+    "travelers": {
+      "section": "Travelers",
+      "title": "Travelers",
+      "subtitle": "{count, plural, one {# traveler} other {# travelers}}"
     },
     "fields": {
       "name": "Trip name",
       "description": "Description",
-      "descriptionEmpty": "No description",
+      "descriptionEmpty": "Add a description",
+      "descriptionPlaceholder": "Optional notes about this trip",
       "destination": "Destination",
       "destinationEmpty": "No destination set",
       "dates": "Trip dates",
@@ -1395,12 +1410,45 @@
       "endDate": "End date"
     },
     "destinationPreserveNotice": "Changing the destination updates the trip location only. Your activities, stays, transport, and other content stay on this trip.",
-    "scheduleReadOnly": "Date changes with impact preview are coming soon. For now, dates are shown for reference only.",
     "errors": {
       "generic": "Could not save changes. Please try again.",
       "name": "Enter a trip name between 2 and 80 characters.",
       "description": "Description must be 300 characters or fewer.",
-      "invalidDestination": "Select a valid destination from search results."
+      "invalidDestination": "Select a valid destination from search results.",
+      "startDate": "Enter a valid start date.",
+      "endDate": "Enter a valid end date range."
+    },
+    "dateChange": {
+      "editDates": "Edit trip dates",
+      "currentRangeLabel": "Current",
+      "continue": "Continue",
+      "zones": {
+        "destructive": "Permanent changes",
+        "adjusted": "Adjusted",
+        "kept": "Kept on trip"
+      },
+      "confirmTitle": "Review date changes",
+      "confirmLead": "These are the effects of updating your trip dates.",
+      "confirmApply": "Confirm date change",
+      "confirmDestructive": "Confirm and apply changes",
+      "success": "Trip dates updated.",
+      "activitiesDeleteTitle": "{count, plural, one {# activity will be permanently deleted} other {# activities will be permanently deleted}}",
+      "accommodationsClampTitle": "{count, plural, one {# accommodation will be adjusted} other {# accommodations will be adjusted}}",
+      "accommodationClampLine": "{label}: {fromCheckIn} – {fromCheckOut} → {toCheckIn} – {toCheckOut}",
+      "accommodationsDeleteTitle": "{count, plural, one {# accommodation will be permanently deleted} other {# accommodations will be permanently deleted}}",
+      "transportReviewTitle": "{count, plural, one {# transportation item falls outside the new trip dates} other {# transportation items fall outside the new trip dates}}",
+      "transportKept": "Transportation will be kept on the trip.",
+      "remindersReviewTitle": "{count, plural, one {# reminder falls outside the new trip dates} other {# reminders fall outside the new trip dates}}",
+      "remindersKept": "Reminders will be kept. Travelers may reschedule them if needed.",
+      "manualExpensesReviewTitle": "{count, plural, one {# manual expense falls outside the new trip dates} other {# manual expenses fall outside the new trip dates}}",
+      "manualExpensesKept": "Manual expenses will be kept.",
+      "documentsPreserved": "Linked uploaded documents will remain; links to deleted items will be cleared.",
+      "destructiveLead": "Deleted activities and accommodations cannot be restored.",
+      "errors": {
+        "generic": "Could not update trip dates. Please try again.",
+        "noChange": "Choose dates that differ from the current trip dates.",
+        "stalePreview": "The trip changed since this preview. Review the changes again."
+      }
     }
   },
 

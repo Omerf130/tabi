@@ -1,11 +1,14 @@
 import "server-only";
 
+import type { ClientSession } from "mongoose";
+import { clearTravelDocumentEntityLinks } from "@/features/documents/clear-travel-document-entity-links";
 import type { EntityCostInput } from "@/features/finance/finance-linked-expense-domain";
 import {
   deleteLinkedTripExpenseForSource,
   syncLinkedTripExpense,
 } from "@/features/finance/finance-linked-expense-domain";
 import { compareCalendarDates } from "@/features/trips/calendar-date";
+import { getMaxAccommodationCheckOutDate } from "./accommodation-date-semantics";
 import { getTripDayCount } from "@/features/trips/trip-days";
 import { connectDb } from "@/lib/db/connect";
 import { withTransaction } from "@/lib/db/transaction";
@@ -51,6 +54,8 @@ export function isAccommodationOccupiedOnDate(
   );
 }
 
+export { getMaxAccommodationCheckOutDate } from "./accommodation-date-semantics";
+
 export function assertAccommodationDateRange(
   checkInDate: string,
   checkOutDate: string,
@@ -65,7 +70,8 @@ export function assertAccommodationDateRange(
     throw new AccommodationValidationError(ACCOMMODATION_ERROR_CODES.dateOutOfRange);
   }
 
-  if (!isDateWithinTrip(startDate, endDate, checkOutDate)) {
+  const maxCheckOutDate = getMaxAccommodationCheckOutDate(endDate);
+  if (compareCalendarDates(checkOutDate, maxCheckOutDate) > 0) {
     throw new AccommodationValidationError(ACCOMMODATION_ERROR_CODES.dateOutOfRange);
   }
 }
@@ -211,30 +217,46 @@ export async function updateAccommodation(input: {
   });
 }
 
+export async function deleteAccommodationInSession(
+  session: ClientSession,
+  input: {
+    tripId: string;
+    accommodationId: string;
+  },
+): Promise<void> {
+  await connectDb();
+  const deleted = await Accommodation.findOneAndDelete({
+    _id: input.accommodationId,
+    tripId: input.tripId,
+  })
+    .session(session)
+    .lean();
+
+  if (!deleted) {
+    throw new AccommodationNotFoundError();
+  }
+
+  await clearTravelDocumentEntityLinks({
+    tripId: input.tripId,
+    accommodationId: input.accommodationId,
+    session,
+  });
+
+  await deleteLinkedTripExpenseForSource(
+    input.tripId,
+    "accommodation",
+    input.accommodationId,
+    session,
+  );
+}
+
 export async function deleteAccommodation(input: {
   tripId: string;
   accommodationId: string;
 }): Promise<void> {
-  await withTransaction(async (session) => {
-    await connectDb();
-    const deleted = await Accommodation.findOneAndDelete({
-      _id: input.accommodationId,
-      tripId: input.tripId,
-    })
-      .session(session)
-      .lean();
-
-    if (!deleted) {
-      throw new AccommodationNotFoundError();
-    }
-
-    await deleteLinkedTripExpenseForSource(
-      input.tripId,
-      "accommodation",
-      input.accommodationId,
-      session,
-    );
-  });
+  await withTransaction(async (session) =>
+    deleteAccommodationInSession(session, input),
+  );
 }
 
 export function compareAccommodations<

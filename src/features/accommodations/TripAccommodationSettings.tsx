@@ -33,6 +33,7 @@ import { EntityCostFields } from "@/features/finance/EntityCostFields.client";
 import overlayStyles from "@/features/itinerary/AddItemFlow.module.scss";
 import { PlaceModeSegment } from "@/features/itinerary/PlaceModeSegment.client";
 import sectionStyles from "@/features/trips/settings/TripSettingsSections.module.scss";
+import { getMaxAccommodationCheckOutDate } from "./accommodation-date-semantics";
 import styles from "./TripAccommodationSettings.module.scss";
 
 const initialState: AccommodationActionState = {};
@@ -99,6 +100,7 @@ function TripFields({
 }) {
   const t = useTranslations("Accommodation");
   const tCommon = useTranslations("Common");
+  const maxCheckOutDate = getMaxAccommodationCheckOutDate(endDate);
 
   return (
     <>
@@ -121,7 +123,7 @@ function TripFields({
             type="date"
             defaultValue={accommodation?.checkOutDate}
             min={startDate}
-            max={endDate}
+            max={maxCheckOutDate}
             required
           />
         </Field>

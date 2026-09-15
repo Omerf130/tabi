@@ -14,19 +14,23 @@ import {
   getCalendarDayVisualState,
   selectTripDateRange,
 } from "./trip-date-range-selection";
-import styles from "./CreateTripWizard.module.scss";
+import wizardStyles from "./CreateTripWizard.module.scss";
+import settingsStyles from "./TripDateRangeCalendar.module.scss";
 
 type TripDateRangeCalendarProps = {
   startDate: string;
   endDate: string;
   onRangeChange: (next: { startDate: string; endDate: string }) => void;
+  variant?: "wizard" | "settings";
 };
 
 export function TripDateRangeCalendar({
   startDate,
   endDate,
   onRangeChange,
+  variant = "wizard",
 }: TripDateRangeCalendarProps) {
+  const styles = variant === "settings" ? settingsStyles : wizardStyles;
   const locale = resolveAppLocale(useLocale());
   const intlLocale = localeToIntlLocale(locale);
   const t = useTranslations("CreateTrip.dates");

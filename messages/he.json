@@ -1375,19 +1375,34 @@
 
   "TripDetailsSettings": {
     "pageTitle": "פרטי הטיול",
-    "lead": "עדכנו שם, יעד ותמונת כיסוי. תאריכים מוצגים כאן; עריכת תאריכים תתווסף בהמשך.",
+    "lead": "עדכנו שם, יעד, תאריכים ותמונת כיסוי.",
     "back": "חזרה להגדרות",
     "memberReadOnly": "רק בעל/ת הטיול יכול/ה לערוך פרטים אלה.",
     "sections": {
       "identity": "זהות הטיול",
       "destination": "יעד",
       "schedule": "לוח זמנים",
-      "cover": "תמונת כיסוי"
+      "cover": "תמונת כיסוי",
+      "tripInformation": "פרטי הטיול"
+    },
+    "edit": {
+      "identityTitle": "שם ותיאור הטיול",
+      "destinationTitle": "יעד"
+    },
+    "cover": {
+      "change": "החלפת תמונה",
+      "add": "הוספת תמונה"
+    },
+    "travelers": {
+      "section": "מטיילים",
+      "title": "מטיילים",
+      "subtitle": "{count, plural, one {מטייל אחד} two {שני מטיילים} other {# מטיילים}}"
     },
     "fields": {
       "name": "שם הטיול",
       "description": "תיאור",
-      "descriptionEmpty": "אין תיאור",
+      "descriptionEmpty": "הוספת תיאור",
+      "descriptionPlaceholder": "הערות אופציונליות על הטיול",
       "destination": "יעד",
       "destinationEmpty": "לא נבחר יעד",
       "dates": "תאריכי הטיול",
@@ -1395,12 +1410,45 @@
       "endDate": "תאריך סיום"
     },
     "destinationPreserveNotice": "שינוי היעד מעדכן את מיקום הטיול בלבד. הפעילויות, לינות, תחבורה ושאר התוכן נשארים בטיול.",
-    "scheduleReadOnly": "עריכת תאריכים עם תצוגה מקדימה של ההשפעה תגיע בקרוב. בינתיים התאריכים מוצגים לעיון בלבד.",
     "errors": {
       "generic": "לא ניתן לשמור. נסו שוב.",
       "name": "הזינו שם טיול באורך 2–80 תווים.",
       "description": "התיאור יכול להכיל עד 300 תווים.",
-      "invalidDestination": "בחרו יעד תקין מתוצאות החיפוש."
+      "invalidDestination": "בחרו יעד תקין מתוצאות החיפוש.",
+      "startDate": "הזינו תאריך התחלה תקין.",
+      "endDate": "הזינו טווח תאריכים תקין."
+    },
+    "dateChange": {
+      "editDates": "עריכת תאריכי הטיול",
+      "currentRangeLabel": "נוכחי",
+      "continue": "המשך",
+      "zones": {
+        "destructive": "שינויים בלתי הפיכים",
+        "adjusted": "הותאמו",
+        "kept": "נשארים בטיול"
+      },
+      "confirmTitle": "סקירת שינוי התאריכים",
+      "confirmLead": "אלה ההשפעות של עדכון תאריכי הטיול.",
+      "confirmApply": "אישור שינוי התאריכים",
+      "confirmDestructive": "אישור והחלת השינויים",
+      "success": "תאריכי הטיול עודכנו.",
+      "activitiesDeleteTitle": "{count, plural, one {פעילות אחת תימחק לצמיתות} two {שתי פעילויות יימחקו לצמיתות} other {# פעילויות יימחקו לצמיתות}}",
+      "accommodationsClampTitle": "{count, plural, one {לינה אחת תותאם} two {שתי לינות יותאמו} other {# לינות יותאמו}}",
+      "accommodationClampLine": "{label}: {fromCheckIn} – {fromCheckOut} → {toCheckIn} – {toCheckOut}",
+      "accommodationsDeleteTitle": "{count, plural, one {לינה אחת תימחק לצמיתות} two {שתי לינות יימחקו לצמיתות} other {# לינות יימחקו לצמיתות}}",
+      "transportReviewTitle": "{count, plural, one {פריט תחבורה אחד מחוץ לתאריכי הטיול החדשים} two {שני פריטי תחבורה מחוץ לתאריכי הטיול החדשים} other {# פריטי תחבורה מחוץ לתאריכי הטיול החדשים}}",
+      "transportKept": "פריטי התחבורה יישמרו בטיול.",
+      "remindersReviewTitle": "{count, plural, one {תזכורת אחת מחוץ לתאריכי הטיול החדשים} two {שתי תזכורות מחוץ לתאריכי הטיול החדשים} other {# תזכורות מחוץ לתאריכי הטיול החדשים}}",
+      "remindersKept": "התזכורות יישמרו. המטיילים יוכלו לעדכן אותן במידת הצורך.",
+      "manualExpensesReviewTitle": "{count, plural, one {הוצאה ידנית אחת מחוץ לתאריכי הטיול החדשים} two {שתי הוצאות ידניות מחוץ לתאריכי הטיול החדשים} other {# הוצאות ידניות מחוץ לתאריכי הטיול החדשים}}",
+      "manualExpensesKept": "הוצאות ידניות יישמרו.",
+      "documentsPreserved": "מסמכים שהועלו יישארו; קישורים לפריטים שנמחקו יוסרו.",
+      "destructiveLead": "פעילויות ולינות שנמחקו לא ניתן לשחזר.",
+      "errors": {
+        "generic": "לא ניתן לעדכן את תאריכי הטיול. נסו שוב.",
+        "noChange": "בחרו תאריכים שונים מהתאריכים הנוכחיים.",
+        "stalePreview": "הטיול השתנה מאז התצוגה המקדימה. סקרו שוב את השינויים."
+      }
     }
   },
 

@@ -22,20 +22,41 @@ const calendarDateSchema = z
   })
   .transform((value) => normalizeCalendarDateInput(value)!);
 
-export const createTripSchema = z
+const tripDateRangeObjectSchema = z
   .object({
-    name: z.string().trim().min(TRIP_NAME_MIN_LENGTH).max(TRIP_NAME_MAX_LENGTH),
     startDate: calendarDateSchema,
     endDate: calendarDateSchema,
   })
-  .strict()
+  .strict();
+
+export const tripDateRangeSchema = tripDateRangeObjectSchema
+  .refine((data) => compareCalendarDates(data.startDate, data.endDate) <= 0, {
+    message: "startDate must be before or equal to endDate",
+    path: ["endDate"],
+  })
   .refine(
-    (data) => compareCalendarDates(data.startDate, data.endDate) <= 0,
+    (data) => {
+      try {
+        return getTripDayCount(data.startDate, data.endDate) <= TRIP_MAX_DURATION_DAYS;
+      } catch {
+        return false;
+      }
+    },
     {
-      message: "startDate must be before or equal to endDate",
+      message: "trip duration exceeds maximum",
       path: ["endDate"],
     },
-  )
+  );
+
+export const createTripSchema = tripDateRangeObjectSchema
+  .extend({
+    name: z.string().trim().min(TRIP_NAME_MIN_LENGTH).max(TRIP_NAME_MAX_LENGTH),
+  })
+  .strict()
+  .refine((data) => compareCalendarDates(data.startDate, data.endDate) <= 0, {
+    message: "startDate must be before or equal to endDate",
+    path: ["endDate"],
+  })
   .refine(
     (data) => {
       try {
@@ -135,3 +156,37 @@ export const updateTripDestinationSchema = z
   .strict();
 
 export type UpdateTripDestinationInput = z.infer<typeof updateTripDestinationSchema>;
+
+export const previewTripDateChangeSchema = z
+  .object({
+    tripId: tripIdSchema,
+    startDate: calendarDateSchema,
+    endDate: calendarDateSchema,
+  })
+  .strict()
+  .superRefine((data, ctx) => {
+    const rangeResult = tripDateRangeSchema.safeParse({
+      startDate: data.startDate,
+      endDate: data.endDate,
+    });
+    if (!rangeResult.success) {
+      for (const issue of rangeResult.error.issues) {
+        ctx.addIssue({
+          code: "custom",
+          message: issue.message,
+          path: issue.path,
+        });
+      }
+    }
+  });
+
+export type PreviewTripDateChangeInput = z.infer<typeof previewTripDateChangeSchema>;
+
+export const applyTripDateChangeSchema = z
+  .object({
+    tripId: tripIdSchema,
+    previewToken: z.string().trim().min(1),
+  })
+  .strict();
+
+export type ApplyTripDateChangeInput = z.infer<typeof applyTripDateChangeSchema>;

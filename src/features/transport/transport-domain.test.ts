@@ -28,6 +28,10 @@ vi.mock("@/features/finance/finance-linked-expense-domain", () => ({
   syncLinkedTripExpense: vi.fn(),
 }));
 
+vi.mock("@/features/documents/clear-travel-document-entity-links", () => ({
+  clearTravelDocumentEntityLinks: vi.fn(),
+}));
+
 vi.mock("@/models/Transport", () => ({
   Transport: {
     create: transportCreateMock,

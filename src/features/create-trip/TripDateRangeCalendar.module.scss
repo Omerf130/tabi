@@ -1,0 +1,135 @@
+.calendar {
+  --cal-text: #0f1728;
+  --cal-muted: #5c6678;
+  --cal-primary: #1a2740;
+  --cal-surface: #f0f2f6;
+  --cal-range: #dbeafe;
+  --cal-range-strong: #1a2740;
+  --cal-today-ring: rgb(26 39 64 / 22%);
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  background: var(--cal-surface);
+  border: 1px solid rgb(15 23 40 / 6%);
+}
+
+.calendarHeader {
+  display: grid;
+  grid-template-columns: 2.75rem 1fr 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.calendarTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-align: center;
+  color: var(--cal-text);
+}
+
+.calendarNavButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--cal-primary);
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgb(15 23 40 / 8%);
+}
+
+.calendarNavButton:focus-visible {
+  outline: 2px solid var(--cal-primary);
+  outline-offset: 2px;
+}
+
+.calendarWeekdays,
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.2rem;
+}
+
+.calendarWeekday {
+  padding-block: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--cal-muted);
+}
+
+.calendarEmptyCell {
+  min-height: 2.85rem;
+}
+
+.calendarDayButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.85rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cal-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.calendarDayButton:focus-visible {
+  outline: 2px solid var(--cal-primary);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+.calendarDayButton[data-state="today"] .calendarDayLabel {
+  box-shadow: inset 0 0 0 1.5px var(--cal-today-ring);
+  border-radius: 999px;
+}
+
+.calendarDayButton[data-state="range"] {
+  border-radius: 0.35rem;
+  background: var(--cal-range);
+}
+
+.calendarDayButton[data-state="range-start"],
+.calendarDayButton[data-state="range-end"] {
+  background: var(--cal-range-strong);
+  color: #ffffff;
+  border-radius: 999px;
+}
+
+.calendarDayLabel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.15rem;
+  height: 2.15rem;
+}
+
+@media (min-width: 768px) {
+  .calendar {
+    padding: 1rem 1.125rem;
+  }
+
+  .calendarDayButton {
+    min-height: 3rem;
+  }
+
+  .calendarEmptyCell {
+    min-height: 3rem;
+  }
+}

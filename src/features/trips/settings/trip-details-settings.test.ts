@@ -42,6 +42,13 @@ describe("Trip Details settings", () => {
     expect(enMessages.TripDetailsSettings.pageTitle).toBe("Trip details");
     expect(heMessages.TripDetailsSettings.pageTitle).toBe("פרטי הטיול");
     expect(heMessages.TripDetailsSettings.destinationPreserveNotice).toContain("יעד");
+    expect(enMessages.TripDetailsSettings.dateChange.editDates).toBe(
+      "Edit trip dates",
+    );
+    expect(heMessages.TripDetailsSettings.dateChange.editDates).toBe(
+      "עריכת תאריכי הטיול",
+    );
+    expect(enMessages.TripDetailsSettings.travelers.subtitle).toBeDefined();
   });
 
   it("uses the canonical /manage/details route", () => {

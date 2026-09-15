@@ -2,10 +2,9 @@ import { getLocale } from "next-intl/server";
 import { AppPage } from "@/features/app-shell/AppPage";
 import { resolveAppLocale } from "@/features/i18n/locale";
 import { requireTripMember } from "@/features/trips/authorization";
-import {
-  formatCalendarDateDisplay,
-  formatCalendarDateRangeDisplay,
-} from "@/features/trips/calendar-date";
+import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
+import { buildTripManagementHref } from "@/features/trip-management/constants";
+import { listTripMembers } from "@/features/trips/members/queries";
 import { TripDetailsSettingsClient } from "./TripDetailsSettings.client";
 
 type TripDetailsSettingsContentProps = {
@@ -27,9 +26,10 @@ function formatDestinationLabel(
 export async function TripDetailsSettingsContent({
   tripId,
 }: TripDetailsSettingsContentProps) {
-  const [trip, localeRaw] = await Promise.all([
+  const [trip, localeRaw, members] = await Promise.all([
     requireTripMember(tripId),
     getLocale(),
+    listTripMembers(tripId),
   ]);
   const locale = resolveAppLocale(localeRaw);
 
@@ -43,15 +43,17 @@ export async function TripDetailsSettingsContent({
       trip.endDate,
       locale,
     ),
-    startDateLabel: formatCalendarDateDisplay(trip.startDate, locale),
-    endDateLabel: formatCalendarDateDisplay(trip.endDate, locale),
+    startDate: trip.startDate,
+    endDate: trip.endDate,
     hasCover: Boolean(trip.coverImage),
     coverVisualKey: trip.coverVisualKey ?? null,
     isOwner: trip.role === "owner",
+    memberCount: members.length,
+    travelersHref: buildTripManagementHref(tripId, "members"),
   };
 
   return (
-    <AppPage width="wide">
+    <AppPage width="wide" density="compact">
       <TripDetailsSettingsClient model={model} />
     </AppPage>
   );

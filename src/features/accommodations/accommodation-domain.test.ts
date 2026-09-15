@@ -9,8 +9,9 @@ import {
   isAccommodationOccupiedOnDate,
 } from "./accommodation-domain";
 
-const { findOneAndDeleteMock } = vi.hoisted(() => ({
+const { findOneAndDeleteMock, accommodationCreateMock } = vi.hoisted(() => ({
   findOneAndDeleteMock: vi.fn(),
+  accommodationCreateMock: vi.fn(),
 }));
 
 vi.mock("@/lib/db/connect", () => ({
@@ -26,9 +27,13 @@ vi.mock("@/features/finance/finance-linked-expense-domain", () => ({
   syncLinkedTripExpense: vi.fn(),
 }));
 
+vi.mock("@/features/documents/clear-travel-document-entity-links", () => ({
+  clearTravelDocumentEntityLinks: vi.fn(),
+}));
+
 vi.mock("@/models/Accommodation", () => ({
   Accommodation: {
-    create: vi.fn(),
+    create: accommodationCreateMock,
     findOneAndDelete: findOneAndDeleteMock,
   },
 }));
@@ -85,11 +90,23 @@ describe("assertAccommodationDateRange", () => {
     ).toThrow(AccommodationValidationError);
   });
 
-  it("requires both dates within trip range", () => {
+  it("requires check-in within the inclusive trip range", () => {
     expect(() =>
       assertAccommodationDateRange("2026-10-20", "2026-10-26", startDate, endDate),
     ).toThrow(AccommodationValidationError);
+  });
 
+  it("allows checkout on the day after trip end (exclusive checkout)", () => {
+    expect(() =>
+      assertAccommodationDateRange("2026-11-01", "2026-11-19", startDate, endDate),
+    ).not.toThrow();
+
+    expect(() =>
+      assertAccommodationDateRange("2026-11-15", "2026-11-19", startDate, endDate),
+    ).not.toThrow();
+  });
+
+  it("rejects checkout after the day following trip end", () => {
     expect(() =>
       assertAccommodationDateRange("2026-11-15", "2026-11-20", startDate, endDate),
     ).toThrow(AccommodationValidationError);
@@ -102,7 +119,61 @@ describe("assertAccommodationDateRange", () => {
   });
 });
 
+describe("trip end occupancy with exclusive checkout", () => {
+  const tripStart = "2026-11-01";
+  const tripEnd = "2026-11-18";
+  const checkIn = "2026-11-15";
+  const checkOut = "2026-11-19";
+
+  it("occupies the trip's last inclusive day", () => {
+    expect(
+      isAccommodationOccupiedOnDate(checkIn, checkOut, tripEnd),
+    ).toBe(true);
+  });
+
+  it("does not occupy the exclusive checkout day", () => {
+    expect(
+      isAccommodationOccupiedOnDate(checkIn, checkOut, "2026-11-19"),
+    ).toBe(false);
+  });
+
+  it("does not require checkout to fall inside the trip range", () => {
+    expect(() =>
+      assertAccommodationDateRange(checkIn, checkOut, tripStart, tripEnd),
+    ).not.toThrow();
+  });
+});
+
 describe("createAccommodation validation", () => {
+  beforeEach(() => {
+    accommodationCreateMock.mockResolvedValue([
+      { _id: { toString: () => "acc-new" } },
+    ]);
+  });
+
+  it("accepts checkout on the day after trip end", async () => {
+    await expect(
+      createAccommodation({
+        tripId: "507f1f77bcf86cd799439011",
+        startDate: "2026-11-01",
+        endDate: "2026-11-18",
+        fields: {
+          placeSource: "manual",
+          manualName: "Hotel",
+          manualCity: "Tokyo",
+          checkInDate: "2026-11-15",
+          checkOutDate: "2026-11-19",
+          manualNameJapanese: undefined,
+          manualAddressEnglish: undefined,
+          manualAddressJapanese: undefined,
+          manualGoogleMapsUrl: undefined,
+          bookingReference: undefined,
+          notes: undefined,
+        },
+      }),
+    ).resolves.toBe("acc-new");
+  });
+
   it("rejects dates outside the trip range", async () => {
     await expect(
       createAccommodation({
