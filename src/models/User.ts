@@ -3,6 +3,27 @@ import "server-only";
 import mongoose, { type InferSchemaType, type Model } from "mongoose";
 import { MAPS_APPS } from "@/lib/maps/maps-app";
 
+const userProfileImageSchema = new mongoose.Schema(
+  {
+    pathname: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    url: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    contentType: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+  },
+  { _id: false },
+);
+
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true, minlength: 2, maxlength: 80 },
@@ -38,6 +59,10 @@ const userSchema = new mongoose.Schema(
     preferredMapsApp: {
       type: String,
       enum: MAPS_APPS,
+      default: null,
+    },
+    profileImage: {
+      type: userProfileImageSchema,
       default: null,
     },
   },

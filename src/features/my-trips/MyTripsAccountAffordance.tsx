@@ -1,25 +1,25 @@
 "use client";
 
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { logoutAction } from "@/features/auth/actions";
+import { buildProfileHrefWithReturnTo } from "@/features/account/profile-return-to";
+import { UserAvatar } from "@/features/account/UserAvatar";
 import styles from "./MyTripsScreen.module.scss";
 
 type MyTripsAccountAffordanceProps = {
   userName: string;
+  avatarHref?: string;
   variant?: "hero" | "default";
 };
 
-function getInitial(name: string): string {
-  const trimmed = name.trim();
-  return trimmed.charAt(0).toUpperCase() || "T";
-}
-
 export function MyTripsAccountAffordance({
   userName,
+  avatarHref,
   variant = "default",
 }: MyTripsAccountAffordanceProps) {
   const t = useTranslations("MyTrips.account");
-  const initial = getInitial(userName);
+  const profileHref = buildProfileHrefWithReturnTo("/app");
 
   return (
     <details
@@ -28,19 +28,21 @@ export function MyTripsAccountAffordance({
       }
     >
       <summary className={styles.accountTrigger} aria-label={t("menuAriaLabel")}>
-        <span
+        <UserAvatar
+          name={userName}
+          avatarHref={avatarHref}
           className={
             variant === "hero"
               ? `${styles.accountAvatar} ${styles.accountAvatarHero}`
               : styles.accountAvatar
           }
-          aria-hidden="true"
-        >
-          {initial}
-        </span>
+        />
       </summary>
       <div className={styles.accountPanel}>
         <p className={styles.accountName}>{userName}</p>
+        <Link href={profileHref} className={styles.accountProfileLink}>
+          {t("profile")}
+        </Link>
         <form action={logoutAction}>
           <button type="submit" className={styles.accountSignOut}>
             {t("signOut")}

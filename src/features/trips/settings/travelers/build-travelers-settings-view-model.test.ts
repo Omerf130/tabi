@@ -13,6 +13,7 @@ describe("buildTravelersSettingsViewModel", () => {
       email: "alex@example.com",
       role: "owner" as const,
       joinedAt: "2026-01-01",
+      hasProfileImage: true,
     },
     {
       membershipId: "m2",
@@ -21,8 +22,23 @@ describe("buildTravelersSettingsViewModel", () => {
       email: "blake@example.com",
       role: "member" as const,
       joinedAt: "2026-01-02",
+      hasProfileImage: false,
     },
   ];
+
+  it("exposes avatarHref only when the member has a profile image", () => {
+    const model = buildTravelersSettingsViewModel({
+      tripId: "trip1",
+      isOwner: true,
+      currentUserId: "u1",
+      members,
+      activeInvitations: [],
+    });
+    if (model.isOwner) {
+      expect(model.travelers[0].avatarHref).toBe("/app/users/u1/profile-image");
+      expect(model.travelers[1].avatarHref).toBeUndefined();
+    }
+  });
 
   it("includes email on owner-facing traveler rows", () => {
     const model = buildTravelersSettingsViewModel({

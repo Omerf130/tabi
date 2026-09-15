@@ -55,7 +55,8 @@ describe("Travelers settings", () => {
       "src/features/trips/settings/travelers/TravelersSettings.client.tsx",
     );
     const source = readFileSync(clientPath, "utf8");
-    expect(source).toContain("travelerInitials");
+    expect(source).toContain("UserAvatar");
+    expect(source).toContain("avatarHref");
     expect(source).toContain("inviteActionRow");
     expect(source).toContain("TravelersSettingsSheet");
     expect(source).not.toContain("TripDetailsEditSheet");

@@ -1,0 +1,141 @@
+.page {
+  --profile-muted: var(--color-text-muted);
+  --profile-border: rgb(15 23 40 / 8%);
+  --profile-radius: 0.75rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  width: 100%;
+  min-width: 0;
+}
+
+.sectionLabel {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--profile-muted);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--profile-radius);
+  border: 1px solid var(--profile-border);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-4);
+  text-align: center;
+}
+
+.identityName {
+  margin: 0;
+  font-size: var(--text-body-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+.identityEmail {
+  margin: 0;
+  font-size: var(--text-secondary);
+  color: var(--profile-muted);
+}
+
+.photoActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+}
+
+.photoAction {
+  min-height: var(--size-touch-min);
+  padding: 0 var(--space-2);
+  border: 0;
+  background: transparent;
+  color: var(--color-primary);
+  font: inherit;
+  font-size: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.photoAction:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.photoActionDanger {
+  composes: photoAction;
+  color: var(--color-danger, #b42318);
+}
+
+.hiddenFileInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.emailHint {
+  margin: var(--space-2) 0 0;
+  padding-inline: var(--space-1);
+  font-size: var(--text-caption);
+  color: var(--profile-muted);
+  line-height: var(--line-height-body);
+}
+
+.inlineError {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-secondary);
+  color: var(--color-danger, #b42318);
+}
+
+.logoutForm {
+  margin: 0;
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: var(--size-touch-min);
+  padding: var(--space-3) var(--space-4);
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-danger, #b42318);
+  text-align: start;
+  cursor: pointer;
+}
+
+.logoutButton:hover,
+.logoutButton:focus-visible {
+  background: rgb(180 35 24 / 6%);
+}
+
+.confirmLead {
+  margin: 0;
+  font-size: var(--text-secondary);
+  line-height: var(--line-height-body);
+  color: var(--profile-muted);
+}

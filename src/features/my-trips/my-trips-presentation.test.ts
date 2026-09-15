@@ -117,6 +117,7 @@ describe("my trips presentation contracts", () => {
 
     expect(hero).toContain("MyTripsAccountAffordance");
     expect(account).toContain("logoutAction");
+    expect(account).toContain("buildProfileHrefWithReturnTo");
     expect(account).toContain('useTranslations("MyTrips.account")');
   });
 });

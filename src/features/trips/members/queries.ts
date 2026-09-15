@@ -35,6 +35,7 @@ export async function listTripMembers(
         email: user.email,
         role: membership.role,
         joinedAt: membership.createdAt.toISOString(),
+        hasProfileImage: Boolean(user.profileImage?.pathname?.trim()),
       };
     })
     .filter((item): item is TripMemberListItem => item !== null);

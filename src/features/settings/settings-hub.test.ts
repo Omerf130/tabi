@@ -4,6 +4,7 @@ import enMessages from "../../../messages/en.json";
 import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import { getActiveNavSection } from "@/features/app-shell/navigation";
 import { buildTripManagementHref } from "@/features/trip-management/constants";
+import { buildSettingsProfileHref } from "@/features/account/profile-return-to";
 import {
   buildCurrencySettingsHref,
   buildSettingsHubHref,
@@ -104,6 +105,13 @@ describe("Settings hub", () => {
     expect(findRow(model, "maps")?.href).toContain("/manage/maps");
   });
 
+  it("links Profile to the global account route with returnTo", () => {
+    const model = buildModel();
+    const profile = findRow(model, "profile");
+    expect(profile?.comingSoon).toBe(false);
+    expect(profile?.href).toBe(buildSettingsProfileHref(tripId));
+  });
+
   it("marks future features as coming soon without hrefs", () => {
     const model = buildModel();
 
@@ -112,7 +120,6 @@ describe("Settings hub", () => {
       "notifications",
       "export",
       "delete-trip",
-      "profile",
       "security",
       "help",
     ]) {

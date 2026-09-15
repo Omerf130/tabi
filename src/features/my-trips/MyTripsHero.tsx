@@ -7,9 +7,10 @@ import styles from "./MyTripsScreen.module.scss";
 
 type MyTripsHeroProps = {
   userName: string;
+  avatarHref?: string;
 };
 
-export async function MyTripsHero({ userName }: MyTripsHeroProps) {
+export async function MyTripsHero({ userName, avatarHref }: MyTripsHeroProps) {
   const t = await getTranslations("MyTrips");
 
   return (
@@ -31,7 +32,11 @@ export async function MyTripsHero({ userName }: MyTripsHeroProps) {
           <TabiBrandMark className={styles.heroMark} />
           <span className={styles.heroBrandName}>{t("brandName")}</span>
         </div>
-        <MyTripsAccountAffordance userName={userName} variant="hero" />
+        <MyTripsAccountAffordance
+          userName={userName}
+          avatarHref={avatarHref}
+          variant="hero"
+        />
       </div>
 
       <div className={styles.heroCopy}>

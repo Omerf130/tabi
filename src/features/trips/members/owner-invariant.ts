@@ -7,6 +7,7 @@ export type TripMemberListItem = {
   email: string;
   role: TripMemberRole;
   joinedAt: string;
+  hasProfileImage: boolean;
 };
 
 export function canRemoveOrDemoteOwner(

@@ -3,6 +3,7 @@ import { localeToIntlLocale, type AppLocale } from "@/features/i18n/locale";
 import { buildTripManagementHref } from "@/features/trip-management/constants";
 import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
 import type { TripWorkspace } from "@/features/trips/public-trip";
+import { buildSettingsProfileHref } from "@/features/account/profile-return-to";
 import {
   buildCurrencySettingsHref,
   buildSettingsLanguageHref,
@@ -153,9 +154,10 @@ export function buildSettingsHubViewModel({
     id: "account",
     title: t("sections.account"),
     rows: [
-      comingSoonRow(
+      activeRow(
         "profile",
         t("rows.profile.title"),
+        buildSettingsProfileHref(trip.id),
         "profile",
         t("rows.profile.subtitle"),
       ),

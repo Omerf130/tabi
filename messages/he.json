@@ -65,6 +65,35 @@
 
   },
 
+  "Profile": {
+    "title": "פרופיל",
+    "identitySection": "זהות",
+    "personalDetails": "פרטים אישיים",
+    "preferences": "העדפות",
+    "accountSection": "חשבון",
+    "uploadPhoto": "העלאת תמונה",
+    "changePhoto": "שינוי תמונה",
+    "removePhoto": "הסרת תמונה",
+    "removePhotoConfirmTitle": "להסיר את תמונת הפרופיל?",
+    "removePhotoConfirmBody": "תמונת הפרופיל תוסר. במקומה יוצגו ראשי התיבות שלך.",
+    "removePhotoConfirmAction": "הסרת תמונה",
+    "name": "שם",
+    "email": "אימייל",
+    "emailReadOnlyHint": "האימייל משמש להתחברות ולא ניתן לשנות אותו כאן.",
+    "language": "שפה",
+    "myCurrency": "המטבע שלי",
+    "navigation": "ניווט",
+    "logout": "יציאה",
+    "notSelected": "לא נבחר",
+    "errors": {
+      "missingFile": "יש לבחור תמונה להעלאה.",
+      "tooLarge": "גודל התמונה חייב להיות עד 5 מ״ב.",
+      "invalidType": "יש להשתמש בתמונת JPEG, PNG או WebP.",
+      "generic": "משהו השתבש. נסו שוב.",
+      "invalidName": "יש להזין שם באורך 2–80 תווים."
+    }
+  },
+
   "TripManagement": {
 
     "title": "ניהול הטיול",
@@ -1152,6 +1181,7 @@
     },
     "account": {
       "menuAriaLabel": "תפריט חשבון",
+      "profile": "פרופיל",
       "signOut": "יציאה"
     },
     "duration": {

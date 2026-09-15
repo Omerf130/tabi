@@ -1,3 +1,4 @@
+import { buildUserProfileImageHref } from "@/features/account/profile-image/constants";
 import type { InvitationListItem } from "@/features/trips/invitations/public-invite";
 import type { TripMemberListItem } from "@/features/trips/members/owner-invariant";
 import type { TripMemberRole } from "@/models/TripMember";
@@ -9,9 +10,17 @@ export type TravelerSettingsRow = {
   role: TripMemberRole;
   joinedAt: string;
   isCurrentUser: boolean;
+  avatarHref?: string;
   /** Present only in owner-facing payloads. */
   email?: string;
 };
+
+function avatarHrefForMember(member: TripMemberListItem): string | undefined {
+  if (!member.hasProfileImage) {
+    return undefined;
+  }
+  return buildUserProfileImageHref(member.userId);
+}
 
 export type TravelersSettingsOwnerViewModel = {
   tripId: string;
@@ -56,6 +65,7 @@ export function buildTravelersSettingsViewModel(input: {
         role: member.role,
         joinedAt: member.joinedAt,
         isCurrentUser: member.userId === input.currentUserId,
+        avatarHref: avatarHrefForMember(member),
         email: member.email,
       })),
     };
@@ -72,6 +82,7 @@ export function buildTravelersSettingsViewModel(input: {
       role: member.role,
       joinedAt: member.joinedAt,
       isCurrentUser: member.userId === input.currentUserId,
+      avatarHref: avatarHrefForMember(member),
     })),
   };
 }

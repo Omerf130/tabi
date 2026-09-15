@@ -60,7 +60,7 @@ import { TravelersConfirmDialog } from "./TravelersConfirmDialog.client";
 
 import { TravelersSettingsSheet } from "./TravelersSettingsSheet.client";
 
-import { travelerInitials } from "./traveler-initials";
+import { UserAvatar } from "@/features/account/UserAvatar";
 
 import type {
 
@@ -396,11 +396,11 @@ export function TravelersSettingsClient({
 
             <div key={traveler.membershipId} className={styles.travelerRow} role="listitem">
 
-              <span className={styles.avatar} aria-hidden>
-
-                {travelerInitials(traveler.name)}
-
-              </span>
+              <UserAvatar
+                name={traveler.name}
+                avatarHref={traveler.avatarHref}
+                className={styles.avatar}
+              />
 
               <div className={styles.travelerCopy}>
 

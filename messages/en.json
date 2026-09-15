@@ -65,6 +65,35 @@
 
   },
 
+  "Profile": {
+    "title": "Profile",
+    "identitySection": "Identity",
+    "personalDetails": "Personal details",
+    "preferences": "Preferences",
+    "accountSection": "Account",
+    "uploadPhoto": "Upload photo",
+    "changePhoto": "Change photo",
+    "removePhoto": "Remove photo",
+    "removePhotoConfirmTitle": "Remove profile photo?",
+    "removePhotoConfirmBody": "Your profile photo will be removed. Your initials will be shown instead.",
+    "removePhotoConfirmAction": "Remove photo",
+    "name": "Name",
+    "email": "Email",
+    "emailReadOnlyHint": "Email is tied to sign-in and cannot be changed here.",
+    "language": "Language",
+    "myCurrency": "My currency",
+    "navigation": "Navigation",
+    "logout": "Log out",
+    "notSelected": "Not selected",
+    "errors": {
+      "missingFile": "Choose a photo to upload.",
+      "tooLarge": "Photo must be 5 MB or smaller.",
+      "invalidType": "Use a JPEG, PNG, or WebP image.",
+      "generic": "Something went wrong. Try again.",
+      "invalidName": "Enter a name between 2 and 80 characters."
+    }
+  },
+
   "TripManagement": {
 
     "title": "Trip management",
@@ -1152,6 +1181,7 @@
     },
     "account": {
       "menuAriaLabel": "Account menu",
+      "profile": "Profile",
       "signOut": "Sign out"
     },
     "duration": {
