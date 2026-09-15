@@ -64,6 +64,7 @@ const trip = {
   endDate: "2026-11-18",
   coverVisualKey: "japan-01",
   role: "owner" as const,
+  themeKey: "default" as const,
 };
 
 describe("prepareTripHomePage finance loading", () => {

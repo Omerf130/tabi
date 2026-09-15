@@ -2,6 +2,7 @@ import "server-only";
 
 import mongoose, { type InferSchemaType, type Model } from "mongoose";
 import { isValidCalendarDateString } from "@/features/trips/calendar-date";
+import { DEFAULT_TRIP_THEME_KEY, TRIP_THEME_KEYS } from "@/features/trips/theme";
 
 const tripDestinationSchema = new mongoose.Schema(
   {
@@ -110,6 +111,11 @@ const tripSchema = new mongoose.Schema(
     coverVisualKey: {
       type: String,
       trim: true,
+    },
+    themeKey: {
+      type: String,
+      enum: TRIP_THEME_KEYS,
+      default: DEFAULT_TRIP_THEME_KEY,
     },
     initializations: {
       type: {

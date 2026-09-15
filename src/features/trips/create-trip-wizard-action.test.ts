@@ -53,6 +53,19 @@ describe("createTripWizardAction", () => {
     });
   });
 
+  it("rejects client attempts to submit themeKey via strict schema", async () => {
+    const result = await createTripWizardAction({
+      googlePlaceId: "ChIJ1worBWrCCDARq60jfE0JAJ8",
+      name: "Japan 2026",
+      startDate: "2026-04-01",
+      endDate: "2026-04-14",
+      themeKey: "ocean",
+    } as never);
+
+    expect(result.fieldErrors ?? result.error).toBeTruthy();
+    expect(createTripWithOwnerMembershipMock).not.toHaveBeenCalled();
+  });
+
   it("rejects client attempts to submit coverVisualKey via strict schema", async () => {
     const result = await createTripWizardAction({
       googlePlaceId: "ChIJ1worBWrCCDARq60jfE0JAJ8",

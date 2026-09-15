@@ -28,7 +28,19 @@ describe("public trip DTOs", () => {
       role: "owner",
       coverImage: undefined,
       coverVisualKey: null,
+      themeKey: "default",
       destination: undefined,
     });
+  });
+
+  it("resolves invalid persisted themeKey to default in workspace DTO", () => {
+    const workspace = toTripWorkspace(
+      {
+        ...trip,
+        themeKey: "unknown-theme",
+      },
+      "owner",
+    );
+    expect(workspace.themeKey).toBe("default");
   });
 });

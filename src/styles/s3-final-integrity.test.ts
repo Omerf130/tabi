@@ -126,8 +126,8 @@ describe("S3 final repository integrity", () => {
     expect(appLayout).not.toContain("TripShellLayout");
   });
 
-  it("does not implement S4 trip theme hooks anywhere in src", () => {
-    const tsFiles: string[] = [];
+  it("does not implement S4B visual theme hooks (data-trip-theme) in production src", () => {
+    const files: string[] = [];
     function walk(dir: string) {
       for (const entry of readdirSync(dir, { withFileTypes: true })) {
         const full = join(dir, entry.name);
@@ -137,16 +137,16 @@ describe("S3 final repository integrity", () => {
           }
           walk(full);
         } else if (/\.(tsx|ts|scss)$/.test(entry.name) && !entry.name.endsWith(".test.ts")) {
-          tsFiles.push(full);
+          files.push(full);
         }
       }
     }
     walk(root);
 
-    for (const file of tsFiles) {
+    for (const file of files) {
       const source = readFileSync(file, "utf8");
       expect(source).not.toContain("data-trip-theme");
-      expect(source).not.toContain("themeKey");
+      expect(source).not.toContain("[data-trip-theme");
     }
   });
 });

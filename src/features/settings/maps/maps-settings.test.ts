@@ -45,6 +45,7 @@ describe("Maps settings", () => {
         startDate: "2026-01-01",
         endDate: "2026-01-07",
         role: "owner",
+        themeKey: "default",
       },
       isOwner: true,
       baseCurrency: "ILS",

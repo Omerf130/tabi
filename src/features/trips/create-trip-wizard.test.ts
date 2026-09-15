@@ -89,6 +89,7 @@ describe("createTripWithOwnerMembership", () => {
             countryCode: "JP",
           }),
           coverVisualKey: "japan-01",
+          themeKey: "default",
         }),
       ],
       { session: sessionMock },

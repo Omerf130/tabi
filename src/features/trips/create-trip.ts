@@ -6,6 +6,7 @@ import { resolveCoverVisualKeyForDestination } from "./resolve-cover-visual-key"
 import { connectDb } from "@/lib/db/connect";
 import { Trip } from "@/models/Trip";
 import { TripMember } from "@/models/TripMember";
+import { DEFAULT_TRIP_THEME_KEY } from "./theme";
 import type { CreateTripWizardInput } from "./schemas";
 
 export async function createTripWithOwnerMembership(
@@ -31,6 +32,7 @@ export async function createTripWithOwnerMembership(
           createdBy: userId,
           destination,
           coverVisualKey,
+          themeKey: DEFAULT_TRIP_THEME_KEY,
         },
       ],
       { session },

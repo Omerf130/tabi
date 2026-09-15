@@ -20,6 +20,7 @@ const baseTrip = {
   startDate: "2026-10-20",
   endDate: "2026-11-02",
   role: "owner" as const,
+  themeKey: "default" as const,
   destination: {
     displayName: "Tokyo",
     country: "Japan",

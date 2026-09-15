@@ -1,4 +1,5 @@
 import type { TripMemberRole } from "@/models/TripMember";
+import { resolveTripThemeKey, type TripThemeKey } from "./theme";
 import { getTripPhase, type TripPhase } from "./trip-phase";
 
 export type TripListItem = {
@@ -24,6 +25,7 @@ export type TripWorkspace = {
   role: TripMemberRole;
   coverImage?: TripCoverImage;
   coverVisualKey?: string | null;
+  themeKey: TripThemeKey;
   destination?: TripWorkspaceDestination;
 };
 
@@ -43,6 +45,7 @@ type TripRecord = {
     contentType: string;
   } | null;
   coverVisualKey?: string | null;
+  themeKey?: string | null;
   destination?: {
     displayName: string;
     country?: string | null;
@@ -82,6 +85,7 @@ export function toTripWorkspace(
         }
       : undefined,
     coverVisualKey: trip.coverVisualKey ?? null,
+    themeKey: resolveTripThemeKey(trip.themeKey),
     destination: trip.destination
       ? {
           displayName: trip.destination.displayName,
