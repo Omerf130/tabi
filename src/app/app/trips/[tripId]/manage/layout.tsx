@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { TripManageHeader } from "@/features/app-shell/TripManageHeader";
 import { requireTripMember } from "@/features/trips/authorization";
 import { AppPage } from "@/features/app-shell/AppPage";
+import { ManageAccountFooterGate } from "@/features/settings/ManageAccountFooterGate.client";
 import { TripManagementAccountFooter } from "@/features/trip-management/TripManagementAccountFooter";
 
 export default async function TripManageLayout({
@@ -23,9 +24,11 @@ export default async function TripManageLayout({
         tripId={tripId}
       />
       {children}
-      <AppPage width="wide">
-        <TripManagementAccountFooter />
-      </AppPage>
+      <ManageAccountFooterGate tripId={tripId}>
+        <AppPage width="wide">
+          <TripManagementAccountFooter />
+        </AppPage>
+      </ManageAccountFooterGate>
     </>
   );
 }

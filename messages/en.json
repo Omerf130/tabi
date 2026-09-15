@@ -1362,7 +1362,9 @@
     },
     "languagePage": {
       "back": "Back to Settings",
-      "lead": "Choose your interface language. This preference is saved to your account and applies across all trips."
+      "lead": "Choose the interface language used by Tabi.",
+      "sectionTitle": "Interface language",
+      "sectionHint": "Your personal interface preference. It applies across your Tabi account and all trips."
     }
   },
 

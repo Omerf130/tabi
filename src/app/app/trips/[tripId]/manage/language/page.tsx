@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { requireTripMember } from "@/features/trips/authorization";
-import { SettingsLanguageContent } from "@/features/settings/SettingsLanguageContent";
+import { LanguageSettingsContent } from "@/features/settings/language/LanguageSettingsContent";
 
 export async function generateMetadata({
   params,
@@ -23,5 +23,5 @@ export default async function TripSettingsLanguagePage({
 }) {
   const { tripId } = await params;
   await requireTripMember(tripId);
-  return <SettingsLanguageContent tripId={tripId} />;
+  return <LanguageSettingsContent tripId={tripId} />;
 }
