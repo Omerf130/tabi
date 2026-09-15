@@ -18,6 +18,7 @@ export type TripWorkspaceDestination = {
 export type TripWorkspace = {
   id: string;
   name: string;
+  description?: string;
   startDate: string;
   endDate: string;
   role: TripMemberRole;
@@ -34,6 +35,7 @@ export type TripCoverImage = {
 type TripRecord = {
   _id: { toString(): string };
   name: string;
+  description?: string | null;
   startDate: string;
   endDate: string;
   coverImage?: {
@@ -69,6 +71,7 @@ export function toTripWorkspace(
   return {
     id: trip._id.toString(),
     name: trip.name,
+    description: trip.description?.trim() ? trip.description.trim() : "",
     startDate: trip.startDate,
     endDate: trip.endDate,
     role,

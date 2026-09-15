@@ -15,12 +15,10 @@ import { requireUser } from "@/features/auth/session";
 import { listTransportCardsForTrip } from "@/features/transport/queries";
 import { TransportPageContent } from "@/features/transport/TransportPageContent";
 import { requireTripMember } from "@/features/trips/authorization";
-import { TripCoverSettings } from "@/features/trips/cover/TripCoverSettings";
 import { listTripInvitations } from "@/features/trips/invitations/queries";
 import { listTripMembers } from "@/features/trips/members/queries";
 import { listRemindersForUserTrip } from "@/features/trips/reminders/queries";
 import { TripReminderSettings } from "@/features/trips/reminders/TripReminderSettings";
-import { TripDetailsSection } from "@/features/trips/settings/TripDetailsSection";
 import { getJapanCalendarDate } from "@/features/trips/calendar-date";
 import {
   isOwnerOnlyManagementSection,
@@ -69,19 +67,6 @@ export default async function TripManageSectionPage({
   const todayJapan = getJapanCalendarDate();
 
   switch (section) {
-    case "details":
-      return (
-        <>
-          <TripDetailsSection trip={trip} variant="workspace" />
-          <TripCoverSettings
-            tripId={trip.id}
-            hasCover={Boolean(trip.coverImage)}
-            isOwner={trip.role === "owner"}
-            variant="workspace"
-          />
-        </>
-      );
-
     case "accommodations": {
       const [accommodations, financeContext] = await Promise.all([
         listAccommodationsForTripSettings(trip.id),

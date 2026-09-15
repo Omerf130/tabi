@@ -3,6 +3,7 @@ import heMessages from "../../../messages/he.json";
 import enMessages from "../../../messages/en.json";
 import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import { getActiveNavSection } from "@/features/app-shell/navigation";
+import { buildTripManagementHref } from "@/features/trip-management/constants";
 import {
   buildFinanceSettingsHref,
   buildSettingsHubHref,
@@ -37,6 +38,20 @@ function findRow(
   return undefined;
 }
 
+function buildModel(
+  overrides: Partial<Parameters<typeof buildSettingsHubViewModel>[0]> = {},
+) {
+  const tHe = createAppTranslator("Settings", "he");
+  return buildSettingsHubViewModel({
+    trip: baseTrip,
+    isOwner: true,
+    baseCurrency: "ILS",
+    locale: "he",
+    t: tHe,
+    ...overrides,
+  });
+}
+
 describe("Settings hub", () => {
   it("includes Hebrew and English Settings messages", () => {
     expect(heMessages.Settings.title).toBe("הגדרות");
@@ -59,16 +74,7 @@ describe("Settings hub", () => {
   });
 
   it("links active trip rows to existing management routes", () => {
-    const tHe = createAppTranslator("Settings", "he");
-    const tTripManagement = createAppTranslator("TripManagement", "he");
-    const model = buildSettingsHubViewModel({
-      trip: baseTrip,
-      isOwner: true,
-      baseCurrency: "ILS",
-      locale: "he",
-      t: tHe,
-      tTripManagement,
-    });
+    const model = buildModel();
 
     expect(findRow(model, "trip-details")?.href).toBe(
       `/app/trips/${tripId}/manage/details`,
@@ -81,32 +87,14 @@ describe("Settings hub", () => {
   });
 
   it("connects currency to existing finance settings", () => {
-    const tHe = createAppTranslator("Settings", "he");
-    const tTripManagement = createAppTranslator("TripManagement", "he");
-    const model = buildSettingsHubViewModel({
-      trip: baseTrip,
-      isOwner: true,
-      baseCurrency: "ILS",
-      locale: "he",
-      t: tHe,
-      tTripManagement,
-    });
+    const model = buildModel();
 
     expect(findRow(model, "currency")?.href).toBe(buildFinanceSettingsHref(tripId));
     expect(findRow(model, "currency")?.comingSoon).toBe(false);
   });
 
   it("connects language to the dedicated settings language route", () => {
-    const tHe = createAppTranslator("Settings", "he");
-    const tTripManagement = createAppTranslator("TripManagement", "he");
-    const model = buildSettingsHubViewModel({
-      trip: baseTrip,
-      isOwner: true,
-      baseCurrency: "ILS",
-      locale: "he",
-      t: tHe,
-      tTripManagement,
-    });
+    const model = buildModel();
 
     expect(findRow(model, "language")?.href).toBe(
       buildSettingsLanguageHref(tripId),
@@ -115,16 +103,7 @@ describe("Settings hub", () => {
   });
 
   it("marks future features as coming soon without hrefs", () => {
-    const tHe = createAppTranslator("Settings", "he");
-    const tTripManagement = createAppTranslator("TripManagement", "he");
-    const model = buildSettingsHubViewModel({
-      trip: baseTrip,
-      isOwner: true,
-      baseCurrency: "ILS",
-      locale: "he",
-      t: tHe,
-      tTripManagement,
-    });
+    const model = buildModel();
 
     for (const rowId of [
       "theme",
@@ -142,63 +121,51 @@ describe("Settings hub", () => {
     }
   });
 
-  it("preserves active management content routes for owners", () => {
-    const tHe = createAppTranslator("Settings", "he");
-    const tTripManagement = createAppTranslator("TripManagement", "he");
-    const model = buildSettingsHubViewModel({
-      trip: baseTrip,
-      isOwner: true,
-      baseCurrency: "ILS",
-      locale: "he",
-      t: tHe,
-      tTripManagement,
-    });
-
-    const contentSection = model.sections.find((section) => section.id === "content");
-    expect(contentSection?.rows.map((row) => row.id)).toEqual([
-      "accommodations",
-      "transport",
-      "documents",
-      "reminders",
-    ]);
-    expect(contentSection?.rows.every((row) => row.href && !row.comingSoon)).toBe(
-      true,
-    );
-  });
-
-  it("hides owner-only content management rows from members", () => {
-    const tHe = createAppTranslator("Settings", "he");
-    const tTripManagement = createAppTranslator("TripManagement", "he");
-    const model = buildSettingsHubViewModel({
+  it("does not expose trip content management in the settings hub", () => {
+    const ownerModel = buildModel();
+    const memberModel = buildModel({
       trip: { ...baseTrip, role: "member" },
       isOwner: false,
-      baseCurrency: "ILS",
-      locale: "he",
-      t: tHe,
-      tTripManagement,
     });
 
-    const contentSection = model.sections.find((section) => section.id === "content");
-    expect(contentSection?.rows.map((row) => row.id)).toEqual([
-      "transport",
-      "reminders",
-    ]);
+    for (const model of [ownerModel, memberModel]) {
+      expect(model.sections.find((section) => section.id === "content")).toBeUndefined();
+      for (const rowId of ["accommodations", "transport", "documents", "reminders"]) {
+        expect(findRow(model, rowId)).toBeUndefined();
+      }
+    }
+  });
+
+  it("keeps underlying management routes available outside the hub", () => {
+    expect(buildTripManagementHref(tripId, "accommodations")).toBe(
+      `/app/trips/${tripId}/manage/accommodations`,
+    );
+    expect(buildTripManagementHref(tripId, "transport")).toBe(
+      `/app/trips/${tripId}/manage/transport`,
+    );
+    expect(buildTripManagementHref(tripId, "documents")).toBe(
+      `/app/trips/${tripId}/manage/documents`,
+    );
+    expect(buildTripManagementHref(tripId, "reminders")).toBe(
+      `/app/trips/${tripId}/manage/reminders`,
+    );
   });
 
   it("localizes section titles in English", () => {
     const tEn = createAppTranslator("Settings", "en");
-    const tTripManagement = createAppTranslator("TripManagement", "en");
     const model = buildSettingsHubViewModel({
       trip: baseTrip,
       isOwner: true,
       baseCurrency: "USD",
       locale: "en",
       t: tEn,
-      tTripManagement,
     });
 
-    expect(model.sections[0]?.title).toBe("Trip");
-    expect(model.sections[1]?.title).toBe("Preferences");
-    expect(model.sections.at(-1)?.title).toBe("Trip Content Management");
+    expect(model.sections.map((section) => section.title)).toEqual([
+      "Trip",
+      "Preferences",
+      "Data & Management",
+      "Account",
+    ]);
   });
 });

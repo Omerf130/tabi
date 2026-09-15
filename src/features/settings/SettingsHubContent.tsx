@@ -12,14 +12,12 @@ type SettingsHubContentProps = {
 };
 
 export async function SettingsHubContent({ tripId }: SettingsHubContentProps) {
-  const [trip, t, tTripManagement, financeSettings, localeRaw] =
-    await Promise.all([
-      requireTripMember(tripId),
-      getTranslations("Settings"),
-      getTranslations("TripManagement"),
-      getOrCreateTripFinanceSettings(tripId),
-      getLocale(),
-    ]);
+  const [trip, t, financeSettings, localeRaw] = await Promise.all([
+    requireTripMember(tripId),
+    getTranslations("Settings"),
+    getOrCreateTripFinanceSettings(tripId),
+    getLocale(),
+  ]);
 
   const model = buildSettingsHubViewModel({
     trip,
@@ -27,7 +25,6 @@ export async function SettingsHubContent({ tripId }: SettingsHubContentProps) {
     baseCurrency: financeSettings.baseCurrency,
     locale: resolveAppLocale(localeRaw),
     t,
-    tTripManagement,
   });
 
   const comingSoonLabel = t("comingSoon");

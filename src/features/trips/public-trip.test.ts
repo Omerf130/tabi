@@ -22,11 +22,13 @@ describe("public trip DTOs", () => {
     expect(workspace).toEqual({
       id: "trip-1",
       name: "ירח דבש",
+      description: "",
       startDate: "2026-10-25",
       endDate: "2026-11-18",
       role: "owner",
       coverImage: undefined,
       coverVisualKey: null,
+      destination: undefined,
     });
   });
 });

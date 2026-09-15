@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { isValidGooglePlaceId } from "@/features/places/placeSession";
+import { isValidObjectId } from "./object-id";
 import {
   compareCalendarDates,
   isValidCalendarDateString,
@@ -51,15 +52,25 @@ export const createTripSchema = z
 
 export type CreateTripInput = z.infer<typeof createTripSchema>;
 
-const tripDescriptionSchema = z
+export const tripNameSchema = z
+  .string()
+  .trim()
+  .min(TRIP_NAME_MIN_LENGTH)
+  .max(TRIP_NAME_MAX_LENGTH);
+
+export const tripDescriptionSchema = z
   .string()
   .trim()
   .max(TRIP_DESCRIPTION_MAX_LENGTH)
   .optional()
   .transform((value) => value ?? "");
 
+const tripIdSchema = z.string().refine(isValidObjectId, {
+  message: "invalid trip id",
+});
+
 const tripCoreFieldsSchema = z.object({
-  name: z.string().trim().min(TRIP_NAME_MIN_LENGTH).max(TRIP_NAME_MAX_LENGTH),
+  name: tripNameSchema,
   description: tripDescriptionSchema,
   startDate: calendarDateSchema,
   endDate: calendarDateSchema,
@@ -102,3 +113,25 @@ export const createTripWizardSchema = tripDateRules(
 );
 
 export type CreateTripWizardInput = z.infer<typeof createTripWizardSchema>;
+
+export const updateTripIdentitySchema = z
+  .object({
+    tripId: tripIdSchema,
+    name: tripNameSchema,
+    description: tripDescriptionSchema,
+  })
+  .strict();
+
+export type UpdateTripIdentityInput = z.infer<typeof updateTripIdentitySchema>;
+
+export const updateTripDestinationSchema = z
+  .object({
+    tripId: tripIdSchema,
+    googlePlaceId: z
+      .string()
+      .trim()
+      .refine(isValidGooglePlaceId, { message: "invalid place id" }),
+  })
+  .strict();
+
+export type UpdateTripDestinationInput = z.infer<typeof updateTripDestinationSchema>;

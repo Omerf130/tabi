@@ -15,6 +15,7 @@ import {
   translateCoverError,
   translateCoverSuccess,
 } from "@/features/trips/cover/translate-cover-error";
+import { resolveTripVisualSrc } from "@/features/destination-visuals/resolve-trip-visual-src";
 import {
   getTripSettingsSectionClassName,
   type TripSettingsVariant,
@@ -27,6 +28,7 @@ const initialState: TripCoverActionState = {};
 type TripCoverSettingsProps = {
   tripId: string;
   hasCover: boolean;
+  coverVisualKey?: string | null;
   isOwner: boolean;
   variant?: TripSettingsVariant;
 };
@@ -34,6 +36,7 @@ type TripCoverSettingsProps = {
 export function TripCoverSettings({
   tripId,
   hasCover,
+  coverVisualKey = null,
   isOwner,
   variant = "stack",
 }: TripCoverSettingsProps) {
@@ -55,6 +58,12 @@ export function TripCoverSettings({
   const removeError = translateCoverError(t, removeState.errorCode);
   const removeSuccess = translateCoverSuccess(t, removeState.successCode);
 
+  const fallbackVisual = resolveTripVisualSrc({
+    hasCoverImage: hasCover,
+    tripId,
+    coverVisualKey,
+  });
+
   const openUpload = () => {
     setShowUpload(true);
     requestAnimationFrame(() => {
@@ -69,18 +78,14 @@ export function TripCoverSettings({
         <p className={sectionStyles.hint}>{t("hint")}</p>
       </div>
 
-      {hasCover ? (
-        <div className={styles.previewWrap}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={getTripCoverPath(tripId)}
-            alt=""
-            className={styles.preview}
-          />
-        </div>
-      ) : (
-        <p className={styles.empty}>{t("empty")}</p>
-      )}
+      <div className={styles.previewWrap}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={hasCover ? getTripCoverPath(tripId) : fallbackVisual.imageSrc}
+          alt=""
+          className={styles.preview}
+        />
+      </div>
 
       {isOwner ? (
         <div className={styles.actions}>

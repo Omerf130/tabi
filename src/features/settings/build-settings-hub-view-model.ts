@@ -1,7 +1,6 @@
 import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import { localeToIntlLocale, type AppLocale } from "@/features/i18n/locale";
 import { buildTripManagementHref } from "@/features/trip-management/constants";
-import { getVisibleManagementSections } from "@/features/trip-management/trip-management-labels";
 import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
 import type { TripWorkspace } from "@/features/trips/public-trip";
 import {
@@ -13,20 +12,6 @@ import type {
   SettingsHubSectionViewModel,
   SettingsHubViewModel,
 } from "./types";
-
-const CONTENT_SECTION_ICONS = {
-  accommodations: "accommodations",
-  transport: "transport",
-  documents: "documents",
-  reminders: "reminders",
-} as const;
-
-const CONTENT_SECTION_IDS = [
-  "accommodations",
-  "transport",
-  "documents",
-  "reminders",
-] as const;
 
 function comingSoonRow(
   id: string,
@@ -68,7 +53,6 @@ type BuildSettingsHubViewModelInput = {
   baseCurrency: string;
   locale: AppLocale;
   t: AppTranslator<"Settings">;
-  tTripManagement: AppTranslator<"TripManagement">;
 };
 
 export function buildSettingsHubViewModel({
@@ -77,7 +61,6 @@ export function buildSettingsHubViewModel({
   baseCurrency,
   locale,
   t,
-  tTripManagement,
 }: BuildSettingsHubViewModelInput): SettingsHubViewModel {
   const destinationLabel = trip.destination?.displayName;
 
@@ -188,28 +171,6 @@ export function buildSettingsHubViewModel({
     ],
   };
 
-  const contentRows = getVisibleManagementSections(isOwner, tTripManagement)
-    .filter((section) =>
-      CONTENT_SECTION_IDS.includes(
-        section.id as (typeof CONTENT_SECTION_IDS)[number],
-      ),
-    )
-    .map((section) => {
-      const icon = CONTENT_SECTION_ICONS[section.id as keyof typeof CONTENT_SECTION_ICONS];
-      return activeRow(
-        section.id,
-        section.label,
-        buildTripManagementHref(trip.id, section.id),
-        icon,
-      );
-    });
-
-  const contentSection: SettingsHubSectionViewModel = {
-    id: "content",
-    title: t("sections.content"),
-    rows: contentRows,
-  };
-
   return {
     tripId: trip.id,
     tripName: trip.name,
@@ -219,12 +180,6 @@ export function buildSettingsHubViewModel({
       trip.endDate,
       localeToIntlLocale(locale),
     ),
-    sections: [
-      tripSection,
-      preferencesSection,
-      dataSection,
-      accountSection,
-      contentSection,
-    ],
+    sections: [tripSection, preferencesSection, dataSection, accountSection],
   };
 }

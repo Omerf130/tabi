@@ -1373,6 +1373,37 @@
     "dates": "Dates"
   },
 
+  "TripDetailsSettings": {
+    "pageTitle": "Trip details",
+    "lead": "Update your trip name, destination, and cover. Dates can be viewed here and edited in a future update.",
+    "back": "Back to Settings",
+    "memberReadOnly": "Only the trip owner can edit these details.",
+    "sections": {
+      "identity": "Trip identity",
+      "destination": "Destination",
+      "schedule": "Schedule",
+      "cover": "Trip cover"
+    },
+    "fields": {
+      "name": "Trip name",
+      "description": "Description",
+      "descriptionEmpty": "No description",
+      "destination": "Destination",
+      "destinationEmpty": "No destination set",
+      "dates": "Trip dates",
+      "startDate": "Start date",
+      "endDate": "End date"
+    },
+    "destinationPreserveNotice": "Changing the destination updates the trip location only. Your activities, stays, transport, and other content stay on this trip.",
+    "scheduleReadOnly": "Date changes with impact preview are coming soon. For now, dates are shown for reference only.",
+    "errors": {
+      "generic": "Could not save changes. Please try again.",
+      "name": "Enter a trip name between 2 and 80 characters.",
+      "description": "Description must be 300 characters or fewer.",
+      "invalidDestination": "Select a valid destination from search results."
+    }
+  },
+
   "More": {
     "pageTitle": "More"
   },

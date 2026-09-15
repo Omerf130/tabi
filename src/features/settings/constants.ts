@@ -6,6 +6,10 @@ export function buildSettingsLanguageHref(tripId: string): string {
   return `/app/trips/${tripId}/manage/language`;
 }
 
+export function buildTripDetailsSettingsHref(tripId: string): string {
+  return `/app/trips/${tripId}/manage/details`;
+}
+
 export function buildFinanceSettingsHref(tripId: string): string {
   return `/app/trips/${tripId}/finance?settings=1`;
 }

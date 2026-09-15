@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { TripHeader } from "@/features/app-shell/TripHeader";
+import { TripManageHeader } from "@/features/app-shell/TripManageHeader";
 import { requireTripMember } from "@/features/trips/authorization";
 import { AppPage } from "@/features/app-shell/AppPage";
 import { TripManagementAccountFooter } from "@/features/trip-management/TripManagementAccountFooter";
@@ -17,11 +17,10 @@ export default async function TripManageLayout({
 
   return (
     <>
-      <TripHeader
+      <TripManageHeader
         title={t("title")}
         tripName={trip.name}
-        showTripSwitch
-        backHref={`/app/trips/${tripId}/more`}
+        tripId={tripId}
       />
       {children}
       <AppPage width="wide">
