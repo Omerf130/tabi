@@ -42,6 +42,14 @@ export function IconDocuments({ className }: IconProps) {
   );
 }
 
+export function IconPlus({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M12 5.5v13M5.5 12h13" />
+    </svg>
+  );
+}
+
 export function IconMore({ className }: IconProps) {
   return (
     <svg {...stroke} className={className}>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { Textarea } from "@/components/ui/Textarea/Textarea";
+import { TripReminderCreateFields } from "./TripReminderCreateFields.client";
 import { AuthSubmitButton } from "@/features/auth/AuthSubmitButton";
 import {
   completeTripReminderAction,
@@ -222,26 +223,13 @@ export function TripReminderSettings({
       ) : (
         <div ref={createRef}>
           <form action={createAction} className={styles.createForm}>
-            <input type="hidden" name="tripId" value={tripId} />
             <p className={styles.createLabel}>{t("newReminderLabel")}</p>
-            <div className={styles.formRow}>
-              <Field label={tCommon("date")} htmlFor="reminder-date">
-                <Input
-                  id="reminder-date"
-                  name="date"
-                  type="date"
-                  min={startDate}
-                  max={endDate}
-                  required
-                />
-              </Field>
-              <Field label={tCommon("time")} htmlFor="reminder-time">
-                <Input id="reminder-time" name="time" type="time" required />
-              </Field>
-            </div>
-            <Field label={t("content")} htmlFor="reminder-text">
-              <Textarea id="reminder-text" name="text" rows={2} required />
-            </Field>
+            <TripReminderCreateFields
+              tripId={tripId}
+              startDate={startDate}
+              endDate={endDate}
+              idPrefix="settings-reminder"
+            />
             {createError ? (
               <p className={styles.error} role="alert">
                 {createError}

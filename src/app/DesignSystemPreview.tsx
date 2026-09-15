@@ -59,6 +59,7 @@ export function DesignSystemPreview({ children }: DesignSystemPreviewProps) {
           ariaLabel="ניווט ראשי"
           items={[
             {
+              kind: "link",
               id: "home",
               label: "בית",
               href: "#home",
@@ -66,24 +67,28 @@ export function DesignSystemPreview({ children }: DesignSystemPreviewProps) {
               active: true,
             },
             {
+              kind: "link",
               id: "trip",
               label: "מסלול",
               href: "#trip",
               icon: <IconItinerary />,
             },
             {
+              kind: "link",
               id: "documents",
               label: "מסמכים",
               href: "#documents",
               icon: <IconDocuments />,
             },
             {
+              kind: "link",
               id: "settings",
               label: "הגדרות",
               href: "#settings",
               icon: <IconGear />,
             },
             {
+              kind: "link",
               id: "more",
               label: "עוד",
               href: "#more",

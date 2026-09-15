@@ -3,6 +3,7 @@ import {
   buildTripNavHref,
   getActiveNavSection,
   isSecondaryTripRoute,
+  MOBILE_BOTTOM_NAV_SLOTS,
   NAV_SECTIONS,
 } from "./navigation";
 
@@ -10,16 +11,16 @@ const TRIP_A = "507f1f77bcf86cd799439011";
 const TRIP_B = "507f1f77bcf86cd799439012";
 
 describe("navigation", () => {
-  it("defines exactly five primary nav items in order", () => {
-    expect(NAV_SECTIONS).toEqual([
+  it("defines four primary rail sections without documents", () => {
+    expect(NAV_SECTIONS).toEqual(["home", "itinerary", "more", "settings"]);
+    expect(NAV_SECTIONS).not.toContain("documents");
+    expect(MOBILE_BOTTOM_NAV_SLOTS).toEqual([
       "home",
       "itinerary",
-      "documents",
-      "settings",
+      "quick-add",
       "more",
+      "settings",
     ]);
-    expect(NAV_SECTIONS).not.toContain("memories");
-    expect(NAV_SECTIONS[3]).toBe("settings");
   });
 
   it("builds trip nav hrefs", () => {
@@ -39,7 +40,7 @@ describe("navigation", () => {
       "itinerary",
     );
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/documents`, TRIP_A)).toBe(
-      "documents",
+      "more",
     );
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/more`, TRIP_A)).toBe(
       "more",

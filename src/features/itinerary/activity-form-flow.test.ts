@@ -142,12 +142,13 @@ describe("activity form flow", () => {
     expect(locationSource.toLowerCase()).not.toMatch(/placeimage|upload/);
   });
 
-  it("preserves mobile sheet and desktop dialog architecture hooks", () => {
+  it("preserves mobile sheet architecture and unified activity form", () => {
     const root = join(dirname(fileURLToPath(import.meta.url)), ".");
     const surfaceSource = readFileSync(join(root, "DayActionSurface.client.tsx"), "utf8");
-    const overlaySource = readFileSync(join(root, "ActivityAddOverlay.client.tsx"), "utf8");
+    const formSource = readFileSync(join(root, "ActivityForm.tsx"), "utf8");
     expect(surfaceSource).toContain("sheetPanelForm");
     expect(surfaceSource).toContain("formatActivityFormDayContext");
-    expect(overlaySource).toContain("ActivityAddOverlay");
+    expect(formSource).toContain("overlayNavigation");
+    expect(formSource).not.toContain("ActivityAddOverlay");
   });
 });

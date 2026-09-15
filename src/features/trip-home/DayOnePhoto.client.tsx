@@ -1,6 +1,5 @@
 "use client";
 
-import { IconActivityOther } from "@/components/ui/icons";
 import { PlaceImage } from "@/features/place-images/PlaceImage";
 import type { PlacePhotoPresentation } from "@/features/place-images/types";
 import styles from "./TripHomeContent.module.scss";
@@ -20,7 +19,7 @@ export function DayOnePhoto({ photoPresentation }: DayOnePhotoProps) {
       authorAttributions={photoPresentation.authorAttributions}
       showPoweredByGoogle
       presentation="compact"
-      fallbackIcon={IconActivityOther}
+      fallbackIcon="activity-other"
       frameClassName={styles.dayOnePhotoFrame}
       imageClassName={styles.dayOnePhoto}
       alt=""

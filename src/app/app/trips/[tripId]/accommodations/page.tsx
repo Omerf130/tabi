@@ -45,7 +45,7 @@ export default async function AccommodationsPage({
         backHref={`/app/trips/${tripId}/more`}
         trailing={
           trip.role === "owner" ? (
-            <AccommodationAddButton tripId={trip.id} />
+            <AccommodationAddButton />
           ) : undefined
         }
       />

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { IconActivityOther, IconActivityRestaurant } from "@/components/ui/icons";
+import { IconActivityRestaurant } from "@/components/ui/icons";
 import { PlaceImage } from "@/features/place-images/PlaceImage";
 import type { TripHomeActivityCard } from "./types";
 import styles from "./TripHomeContent.module.scss";
@@ -52,7 +52,7 @@ export function UpNextCard({ card }: UpNextCardProps) {
           authorAttributions={card.photoPresentation.authorAttributions}
           showPoweredByGoogle={card.photoPresentation.hasPhoto}
           presentation="compact"
-          fallbackIcon={IconActivityOther}
+          fallbackIcon="activity-other"
           frameClassName={styles.duringCompactThumbFrame}
           imageClassName={styles.duringCompactThumbImage}
           fallbackClassName={styles.duringCompactThumbFallback}

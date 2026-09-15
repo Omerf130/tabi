@@ -16,6 +16,31 @@
 
   },
 
+  "QuickAdd": {
+    "navLabel": "הוספה",
+    "openAria": "הוספה לטיול",
+    "desktopAdd": "הוספה",
+    "menuTitle": "הוספה לטיול",
+    "menuSubtitle": "מה תרצו להוסיף?",
+    "backAria": "חזרה",
+    "closeAria": "סגירה",
+    "expenseTitle": "הוספת הוצאה",
+    "actions": {
+      "activity": "פעילות",
+      "activityDesc": "אטרקציות, מסעדות ותוכניות",
+      "accommodation": "מקום לינה",
+      "accommodationDesc": "הוספת מקום לינה",
+      "transport": "תחבורה",
+      "transportDesc": "טיסות, רכבות, אוטובוסים ועוד",
+      "reminder": "תזכורת",
+      "reminderDesc": "תזכורות אישיות",
+      "expense": "הוצאה",
+      "expenseDesc": "מעקב הוצאות בטיול",
+      "document": "מסמך",
+      "documentDesc": "כרטיסים, הזמנות וקבצים"
+    }
+  },
+
   "TripHeader": {
 
     "back": "חזרה",

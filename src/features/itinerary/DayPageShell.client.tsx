@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
 import { getAccommodationsSettingsHref } from "@/features/accommodations/constants";
+import { useQuickAdd } from "@/features/quick-add/QuickAddProvider.client";
 import type { DayDocumentLinkOptions } from "./build-day-document-link-options";
 import { DayActionSurface } from "./DayActionSurface.client";
 import type { DayActionState } from "./day-action-surface.types";
@@ -34,6 +36,8 @@ export function DayPageShell({
   activityPhotos,
 }: DayPageShellProps) {
   const t = useTranslations("Itinerary");
+  const pathname = usePathname();
+  const { open: openQuickAdd } = useQuickAdd();
   const [actionState, setActionState] = useState<DayActionState>({ kind: "closed" });
 
   const closeAction = useCallback(() => {
@@ -41,12 +45,17 @@ export function DayPageShell({
   }, []);
 
   const openMenu = useCallback(() => {
-    setActionState({ kind: "menu" });
-  }, []);
+    openQuickAdd({
+      context: { date: day.date, originPath: pathname },
+    });
+  }, [day.date, openQuickAdd, pathname]);
 
   const openReminderCreate = useCallback(() => {
-    setActionState({ kind: "reminder-create" });
-  }, []);
+    openQuickAdd({
+      context: { date: day.date, originPath: pathname },
+      initialStep: { kind: "form", action: "reminder" },
+    });
+  }, [day.date, openQuickAdd, pathname]);
 
   const allReminders = [...day.incompleteReminders, ...day.completedReminders];
   const hasSideAccommodations = day.accommodations.length > 0;

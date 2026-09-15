@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { NAV_SECTIONS } from "./navigation";
+import { MOBILE_BOTTOM_NAV_SLOTS, NAV_SECTIONS } from "./navigation";
 
 describe("TripPrimaryNav", () => {
   it("uses the shared five-section navigation for bottom and rail variants", () => {
@@ -14,13 +14,10 @@ describe("TripPrimaryNav", () => {
     expect(source).toContain("NAV_SECTIONS");
     expect(source).toContain('useTranslations("Navigation")');
     expect(source).toContain("IconGear");
+    expect(source).toContain("IconPlus");
+    expect(source).toContain("useQuickAdd");
     expect(source).not.toContain("IconMemories");
-    expect(NAV_SECTIONS).toEqual([
-      "home",
-      "itinerary",
-      "documents",
-      "settings",
-      "more",
-    ]);
+    expect(NAV_SECTIONS).toEqual(["home", "itinerary", "more", "settings"]);
+    expect(MOBILE_BOTTOM_NAV_SLOTS).toContain("quick-add");
   });
 });

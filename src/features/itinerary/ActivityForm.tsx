@@ -14,7 +14,6 @@ import {
 import type { CurrencyOption } from "@/features/currency/types";
 import { EntityCostFields } from "@/features/finance/EntityCostFields.client";
 import type { EntityLinkedCostViewModel } from "@/features/finance/types";
-import { ActivityAddOverlay } from "./ActivityAddOverlay.client";
 import { PlaceModeSegment } from "./PlaceModeSegment.client";
 import { ActivityDeleteControl } from "./ActivityDeleteControl.client";
 import {
@@ -126,21 +125,6 @@ export function ActivityForm({
       titleRef.current.value = input.locationName;
       handleChange();
     }
-  }
-
-  if (overlayNavigation && mode === "create") {
-    return (
-      <ActivityAddOverlay
-        tripId={tripId}
-        defaultValues={defaultValues}
-        lockDate={lockDate}
-        onSuccess={onSuccess}
-        onDirtyChange={onDirtyChange}
-        showCostFields={showCostFields}
-        financeBaseCurrency={financeBaseCurrency}
-        currencies={currencies}
-      />
-    );
   }
 
   return (

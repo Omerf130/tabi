@@ -1,24 +1,28 @@
 "use client";
 
-import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { getAccommodationsSettingsHref } from "./constants";
+import { useQuickAdd } from "@/features/quick-add/QuickAddProvider.client";
 import styles from "./AccommodationAddButton.module.scss";
 
-type AccommodationAddButtonProps = {
-  tripId: string;
-};
-
-export function AccommodationAddButton({ tripId }: AccommodationAddButtonProps) {
+export function AccommodationAddButton() {
   const t = useTranslations("Accommodation");
+  const pathname = usePathname();
+  const { open } = useQuickAdd();
 
   return (
-    <Link
-      href={getAccommodationsSettingsHref(tripId)}
+    <button
+      type="button"
       className={styles.button}
       aria-label={t("addButtonAria")}
+      onClick={() =>
+        open({
+          context: { originPath: pathname },
+          initialStep: { kind: "form", action: "accommodation" },
+        })
+      }
     >
       +
-    </Link>
+    </button>
   );
 }

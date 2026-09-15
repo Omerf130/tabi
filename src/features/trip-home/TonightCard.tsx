@@ -40,7 +40,7 @@ export function TonightCard({ card }: TonightCardProps) {
             authorAttributions={card.photoPresentation.authorAttributions}
             showPoweredByGoogle={card.photoPresentation.hasPhoto}
             presentation="compact"
-            fallbackIcon={IconActivityHotel}
+            fallbackIcon="activity-hotel"
             frameClassName={styles.duringCompactThumbFrame}
             imageClassName={styles.duringCompactThumbImage}
             fallbackClassName={styles.duringCompactThumbFallback}

@@ -1,6 +1,5 @@
 "use client";
 
-import { IconAccommodation } from "@/components/ui/icons";
 import { PlaceImage } from "@/features/place-images/PlaceImage";
 import type { PlacePhotoPresentation } from "@/features/place-images/types";
 import styles from "./TravelHub.module.scss";
@@ -25,7 +24,7 @@ export function AccommodationPhoto({
       showPoweredByGoogle={showGoogleAttribution}
       hideAttribution={hideAttribution}
       presentation="compact"
-      fallbackIcon={IconAccommodation}
+      fallbackIcon="accommodation"
       frameClassName={styles.accommodationPhotoFrame}
       imageClassName={styles.accommodationPhoto}
       fallbackClassName={styles.accommodationPhotoFallback}

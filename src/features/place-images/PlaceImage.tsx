@@ -1,18 +1,32 @@
 "use client";
 
-import type { ComponentType } from "react";
 import { useState } from "react";
+import {
+  IconAccommodation,
+  IconActivityHotel,
+  IconActivityOther,
+} from "@/components/ui/icons";
 import { PlaceImageAttribution } from "./PlaceImageAttribution";
 import type { PlaceImagePresentationMode } from "./place-image-presentation";
+import type { PlaceImageFallbackIcon } from "./place-image-fallback-icon";
 import type { PlacePhotoAuthorAttribution } from "./types";
 import styles from "./PlaceImage.module.scss";
+
+const FALLBACK_ICON_COMPONENTS = {
+  "activity-other": IconActivityOther,
+  "activity-hotel": IconActivityHotel,
+  accommodation: IconAccommodation,
+} as const satisfies Record<
+  PlaceImageFallbackIcon,
+  typeof IconActivityOther
+>;
 
 type PlaceImageProps = {
   photoHref?: string;
   authorAttributions?: readonly PlacePhotoAuthorAttribution[];
   showPoweredByGoogle?: boolean;
   presentation?: PlaceImagePresentationMode;
-  fallbackIcon: ComponentType<{ className?: string }>;
+  fallbackIcon: PlaceImageFallbackIcon;
   frameClassName?: string;
   imageClassName?: string;
   fallbackClassName?: string;
@@ -26,7 +40,7 @@ export function PlaceImage({
   authorAttributions = [],
   showPoweredByGoogle = false,
   presentation = "default",
-  fallbackIcon: FallbackIcon,
+  fallbackIcon,
   frameClassName,
   imageClassName,
   fallbackClassName,
@@ -37,6 +51,7 @@ export function PlaceImage({
   const [hasError, setHasError] = useState(false);
   const showPhoto = Boolean(photoHref) && !hasError;
   const isCompact = presentation === "compact";
+  const FallbackIcon = FALLBACK_ICON_COMPONENTS[fallbackIcon];
 
   return (
     <div

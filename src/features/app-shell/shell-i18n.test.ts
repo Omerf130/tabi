@@ -33,13 +33,14 @@ describe("shell i18n messages", () => {
     );
   });
 
-  it("keeps Settings as the fourth primary nav destination", () => {
-    expect(NAV_SECTIONS).toEqual([
-      "home",
-      "itinerary",
-      "documents",
-      "settings",
-      "more",
-    ]);
+  it("keeps Settings in primary rail nav without documents tab", () => {
+    expect(NAV_SECTIONS).toEqual(["home", "itinerary", "more", "settings"]);
+  });
+
+  it("defines QuickAdd labels in Hebrew and English", () => {
+    expect(heMessages.QuickAdd.actions.activity).toBe("פעילות");
+    expect(enMessages.QuickAdd.actions.activity).toBe("Activity");
+    expect(heMessages.QuickAdd.openAria).toBeTruthy();
+    expect(enMessages.QuickAdd.openAria).toBeTruthy();
   });
 });

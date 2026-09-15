@@ -1,16 +1,22 @@
-export type NavSection =
-  | "home"
-  | "itinerary"
-  | "documents"
-  | "settings"
-  | "more";
+export type NavSection = "home" | "itinerary" | "settings" | "more";
 
 export const NAV_SECTIONS: NavSection[] = [
   "home",
   "itinerary",
-  "documents",
-  "settings",
   "more",
+  "settings",
+];
+
+export type MobileNavSlot =
+  | NavSection
+  | "quick-add";
+
+export const MOBILE_BOTTOM_NAV_SLOTS: MobileNavSlot[] = [
+  "home",
+  "itinerary",
+  "quick-add",
+  "more",
+  "settings",
 ];
 
 export function buildTripNavHref(
@@ -48,7 +54,7 @@ export function getActiveNavSection(
     return "itinerary";
   }
   if (segment === "documents") {
-    return "documents";
+    return "more";
   }
   if (segment === "manage" || segment === "members" || segment === "settings") {
     return "settings";

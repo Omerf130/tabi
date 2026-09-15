@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { IconActivityOther, IconNavigation } from "@/components/ui/icons";
+import { IconNavigation } from "@/components/ui/icons";
 import { PlaceImage } from "@/features/place-images/PlaceImage";
 import type { TripHomeActivityCard } from "./types";
 import styles from "./TripHomeContent.module.scss";
@@ -63,7 +63,7 @@ export async function ActivityCompactCard({
             authorAttributions={card.photoPresentation.authorAttributions}
             showPoweredByGoogle
             presentation="compact"
-            fallbackIcon={IconActivityOther}
+            fallbackIcon="activity-other"
             frameClassName={styles.activityCompactThumbFrame}
             imageClassName={styles.activityCompactThumbImage}
             alt={card.title}

@@ -41,14 +41,14 @@ describe("add item mobile presentation contracts", () => {
     expect(TRANSPORT_TYPE_ICON_NAMES.ferry).toBe("IconFerry");
   });
 
-  it("uses a dedicated activity overlay with full-width segmented control and search", () => {
-    const overlay = readSource("features/itinerary/ActivityAddOverlay.client.tsx");
+  it("uses unified activity form with full-width segmented control and search", () => {
+    const form = readSource("features/itinerary/ActivityForm.tsx");
     const flowScss = readSource("features/itinerary/AddItemFlow.module.scss");
     const placeScss = readSource("features/places/placeSearch.module.scss");
 
-    expect(overlay).toContain("PlaceModeSegment");
-    expect(overlay).toContain("plannerPresentation");
-    expect(overlay).toContain('className={styles.activityOverlayForm}');
+    expect(form).toContain("PlaceModeSegment");
+    expect(form).toContain("plannerPresentation");
+    expect(form).toContain("overlayNavigation");
     expect(flowScss).toMatch(/\.segmentedControl[\s\S]*grid-template-columns:\s*1fr 1fr/);
     expect(placeScss).toContain(".plannerSearchInput");
     expect(placeScss).toMatch(/\.plannerSearchInput[\s\S]*width:\s*100%/);
@@ -67,9 +67,9 @@ describe("add item mobile presentation contracts", () => {
 
   it("does not introduce map UI in add item flows", () => {
     const transportForm = readSource("features/transport/TransportForm.client.tsx");
-    const activityOverlay = readSource("features/itinerary/ActivityAddOverlay.client.tsx");
+    const activityForm = readSource("features/itinerary/ActivityForm.tsx");
 
     expect(transportForm).not.toMatch(/google.*maps|MapEmbed|mapbox|leaflet/i);
-    expect(activityOverlay).not.toMatch(/google.*maps|MapEmbed|mapbox|leaflet/i);
+    expect(activityForm).not.toMatch(/google.*maps|MapEmbed|mapbox|leaflet/i);
   });
 });

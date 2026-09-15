@@ -16,6 +16,31 @@
 
   },
 
+  "QuickAdd": {
+    "navLabel": "Add",
+    "openAria": "Add to trip",
+    "desktopAdd": "Add",
+    "menuTitle": "Add to your trip",
+    "menuSubtitle": "What would you like to add?",
+    "backAria": "Back",
+    "closeAria": "Close",
+    "expenseTitle": "Add expense",
+    "actions": {
+      "activity": "Activity",
+      "activityDesc": "Tours, attractions, and plans",
+      "accommodation": "Accommodation",
+      "accommodationDesc": "Add a place to stay",
+      "transport": "Transportation",
+      "transportDesc": "Flights, trains, buses, and more",
+      "reminder": "Reminder",
+      "reminderDesc": "Personal notes and alerts",
+      "expense": "Expense",
+      "expenseDesc": "Track spending on the trip",
+      "document": "Document",
+      "documentDesc": "Tickets, bookings, and files"
+    }
+  },
+
   "TripHeader": {
 
     "back": "Back",

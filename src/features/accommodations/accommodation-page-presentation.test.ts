@@ -6,7 +6,6 @@ import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import { buildAccommodationListItem } from "./build-accommodation-list-item";
 
 const t = createAppTranslator("Accommodation", "he");
-import { getAccommodationsSettingsHref } from "./constants";
 import type { AccommodationViewModel } from "./types";
 
 const featureRoot = dirname(fileURLToPath(import.meta.url));
@@ -91,16 +90,15 @@ describe("accommodation page presentation", () => {
     expect(contentSource).not.toContain("ניהול, עריכה ומחיקה");
   });
 
-  it("uses canonical settings href for owner add button", () => {
+  it("opens global quick add for owner add button", () => {
     const addSource = readFileSync(
       join(featureRoot, "AccommodationAddButton.client.tsx"),
       "utf8",
     );
 
-    expect(addSource).toContain("getAccommodationsSettingsHref");
-    expect(getAccommodationsSettingsHref(tripId)).toBe(
-      `/app/trips/${tripId}/manage/accommodations`,
-    );
+    expect(addSource).toContain("useQuickAdd");
+    expect(addSource).toContain('action: "accommodation"');
+    expect(addSource).not.toContain("getAccommodationsSettingsHref");
   });
 
   it("uses bidi-safe title rendering", () => {

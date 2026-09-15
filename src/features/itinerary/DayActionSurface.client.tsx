@@ -19,7 +19,6 @@ import {
 } from "@/features/transport/transport-form-defaults";
 import type { TransportRecord } from "@/features/transport/types";
 import {
-  createTripReminderAction,
   updateTripReminderAction,
   type TripReminderActionState,
 } from "@/features/trips/reminders/actions";
@@ -68,58 +67,6 @@ type DayActionSurfaceProps = {
   financeBaseCurrency?: string;
   currencies?: readonly import("@/features/currency/types").CurrencyOption[];
 };
-
-function ReminderCreateForm({
-  tripId,
-  date,
-  onSuccess,
-  onDirtyChange,
-}: {
-  tripId: string;
-  date: string;
-  onSuccess: () => void;
-  onDirtyChange: (dirty: boolean) => void;
-}) {
-  const t = useTranslations("Itinerary");
-  const tReminders = useTranslations("TripReminders");
-  const [createState, createAction] = useActionState(
-    createTripReminderAction,
-    reminderInitialState,
-  );
-  const createError = translateReminderError(tReminders, createState.errorCode);
-
-  useEffect(() => {
-    if (createState.ok) {
-      onSuccess();
-    }
-  }, [createState.ok, onSuccess]);
-
-  return (
-    <form
-      action={createAction}
-      className={overlayStyles.plannerForm}
-      onChange={() => onDirtyChange(true)}
-      onInput={() => onDirtyChange(true)}
-    >
-      <input type="hidden" name="tripId" value={tripId} />
-      <input type="hidden" name="date" value={date} />
-      <Field label={t("dayActionReminderTime")} htmlFor="day-action-reminder-time">
-        <Input id="day-action-reminder-time" name="time" type="time" required />
-      </Field>
-      <Field label={t("dayActionReminderPrompt")} htmlFor="day-action-reminder-text">
-        <Textarea id="day-action-reminder-text" name="text" rows={3} required />
-      </Field>
-      {createError ? (
-        <p className={reminderStyles.error} role="alert">
-          {createError}
-        </p>
-      ) : null}
-      <div className={overlayStyles.plannerFooter}>
-        <AuthSubmitButton>{t("dayActionReminderAdd")}</AuthSubmitButton>
-      </div>
-    </form>
-  );
-}
 
 function ReminderEditForm({
   tripId,
@@ -538,15 +485,6 @@ export function DayActionSurface({
                 onSuccess={handleMutationSuccess}
               />
             </div>
-          ) : null}
-
-          {state.kind === "reminder-create" ? (
-            <ReminderCreateForm
-              tripId={tripId}
-              date={date}
-              onSuccess={handleMutationSuccess}
-              onDirtyChange={setDirty}
-            />
           ) : null}
 
           {state.kind === "reminder-edit" && reminder ? (
