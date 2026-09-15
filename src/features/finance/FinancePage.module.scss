@@ -1,11 +1,11 @@
 .finance {
-  --finance-ink: #1a2740;
-  --finance-muted: #6b7c93;
-  --finance-blue: #1d4ed8;
+  --finance-ink: var(--color-text);
+  --finance-muted: var(--color-text-muted);
+  --finance-blue: var(--color-link);
   --finance-green: #16a34a;
-  --finance-surface: #f3f6fa;
+  --finance-surface: var(--color-surface-subtle);
   --finance-card-radius: 1rem;
-  --finance-card-shadow: 0 1px 3px rgb(15 23 40 / 6%);
+  --finance-card-shadow: var(--shadow-sm);
 
   display: flex;
   flex-direction: column;
@@ -145,8 +145,8 @@
 .expensesSection {
   padding: 0.875rem;
   border-radius: var(--finance-card-radius);
-  background: #ffffff;
-  border: 1px solid rgb(15 23 40 / 6%);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
   box-shadow: var(--finance-card-shadow);
 }
 
@@ -326,7 +326,7 @@
   justify-content: center;
   gap: 0.125rem;
   border-radius: 999px;
-  background: #ffffff;
+  background: var(--color-surface);
   text-align: center;
   padding: 0.375rem;
 }
@@ -415,8 +415,8 @@
   width: 100%;
   padding: 0.5625rem 0.625rem;
   border-radius: 0.875rem;
-  border: 1px solid rgb(15 23 40 / 6%);
-  background: rgb(243 246 250 / 55%);
+  border: 1px solid var(--color-border-subtle);
+  background: color-mix(in srgb, var(--color-surface-subtle) 55%, transparent);
 }
 
 .expenseRowButton {
@@ -515,13 +515,13 @@
   padding: 0;
   border: 0;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-lg);
+  background: var(--color-surface-elevated);
+  box-shadow: var(--shadow-sheet);
 }
 
 .settingsDialog::backdrop,
 .expenseDialog::backdrop {
-  background: rgb(15 23 42 / 45%);
+  background: var(--color-scrim);
 }
 
 .settingsForm,
@@ -617,7 +617,7 @@
 .formError,
 .conversionPreviewError {
   margin: 0;
-  color: var(--color-danger, #b91c1c);
+  color: var(--color-danger);
   font-size: var(--text-secondary);
 }
 

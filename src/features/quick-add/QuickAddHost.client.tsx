@@ -7,7 +7,6 @@ import { IconBack } from "@/components/ui/icons";
 import { confirmDayActionDiscard } from "@/features/itinerary/confirm-day-action-discard";
 import { TransportTypeChooser } from "@/features/itinerary/TransportTypeChooser.client";
 import type { TransportType } from "@/features/transport/transport-types";
-import sheetStyles from "@/features/itinerary/DayPage.module.scss";
 import { QuickAddForms } from "./QuickAddForms.client";
 import { QuickAddMenu } from "./QuickAddMenu.client";
 import {
@@ -210,10 +209,10 @@ export function QuickAddHost() {
   }
 
   return (
-    <div className={sheetStyles.sheetRoot}>
+    <div className={styles.mobileSheetRoot}>
       <button
         type="button"
-        className={sheetStyles.sheetBackdrop}
+        className={styles.mobileSheetBackdrop}
         aria-label={t("closeAria")}
         onClick={requestClose}
       />
@@ -221,8 +220,8 @@ export function QuickAddHost() {
         ref={panelRef}
         className={
           step.kind === "menu" || isFormStep
-            ? sheetStyles.sheetPanelForm
-            : sheetStyles.sheetPanel
+            ? `${styles.mobileSheetPanel} ${styles.mobileSheetPanelForm}`
+            : styles.mobileSheetPanel
         }
         role="dialog"
         aria-modal="true"

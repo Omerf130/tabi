@@ -11,13 +11,13 @@
 }
 
 .experience {
-  --itinerary-ink: #1a2740;
-  --itinerary-muted: #6b7c93;
+  --itinerary-ink: var(--color-text);
+  --itinerary-muted: var(--color-text-muted);
   --itinerary-primary: #5b4fd6;
   --itinerary-primary-soft: rgb(91 79 214 / 12%);
-  --itinerary-surface: #f3f6fa;
+  --itinerary-surface: var(--color-surface-subtle);
   --itinerary-card-radius: 1rem;
-  --itinerary-card-shadow: 0 1px 3px rgb(15 23 40 / 6%);
+  --itinerary-card-shadow: var(--shadow-sm);
 
   display: flex;
   flex-direction: column;
@@ -117,7 +117,7 @@
   height: 2.25rem;
   border: none;
   border-radius: 999px;
-  background: #ffffff;
+  background: var(--color-surface);
   color: var(--itinerary-muted);
   box-shadow: var(--itinerary-card-shadow);
   cursor: pointer;
@@ -180,8 +180,8 @@
   min-height: 2.75rem;
   padding: 0.5rem 0.625rem;
   border-radius: 0.875rem;
-  border: 1px solid rgb(15 23 40 / 8%);
-  background: #ffffff;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
   color: inherit;
   text-decoration: none;
   box-shadow: var(--itinerary-card-shadow);
@@ -344,8 +344,8 @@
   gap: 0.5rem;
   padding: 0.75rem;
   border-radius: var(--itinerary-card-radius);
-  border: 1px solid rgb(15 23 40 / 6%);
-  background: #ffffff;
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-surface);
   box-shadow: var(--itinerary-card-shadow);
 }
 
@@ -375,7 +375,7 @@
   height: 4.25rem;
   border-radius: 0.75rem;
   overflow: hidden;
-  background: rgb(15 23 40 / 4%);
+  background: var(--color-surface-subtle);
 }
 
 .timelineCardThumbImage {
@@ -505,8 +505,8 @@
 .sideSection {
   padding: 0.875rem;
   border-radius: var(--itinerary-card-radius);
-  border: 1px solid rgb(15 23 40 / 6%);
-  background: #ffffff;
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-surface);
   box-shadow: var(--itinerary-card-shadow);
 }
 

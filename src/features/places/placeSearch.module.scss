@@ -13,7 +13,7 @@
   margin: 0;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #1a2740;
+  color: var(--color-text);
 }
 
 .inputWrap {
@@ -56,7 +56,7 @@
 }
 
 .input:focus-visible {
-  outline: 2px solid var(--color-focus-ring);
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 
@@ -295,7 +295,7 @@
 .plannerResultName {
   font-size: 0.9375rem;
   font-weight: 600;
-  color: #1a2740;
+  color: var(--color-text);
 }
 
 .plannerResultAddress {
@@ -341,7 +341,7 @@
   margin: 0;
   font-size: 0.9375rem;
   font-weight: 700;
-  color: #1a2740;
+  color: var(--color-text);
 }
 
 .plannerSelectedAddress {

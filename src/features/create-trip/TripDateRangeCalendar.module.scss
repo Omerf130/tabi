@@ -1,10 +1,10 @@
 .calendar {
-  --cal-text: #0f1728;
-  --cal-muted: #5c6678;
-  --cal-primary: #1a2740;
-  --cal-surface: #f0f2f6;
+  --cal-text: var(--color-text);
+  --cal-muted: var(--color-text-muted);
+  --cal-primary: var(--color-primary);
+  --cal-surface: var(--color-surface-subtle);
   --cal-range: #dbeafe;
-  --cal-range-strong: #1a2740;
+  --cal-range-strong: var(--color-primary);
   --cal-today-ring: rgb(26 39 64 / 22%);
 
   display: flex;
@@ -13,7 +13,7 @@
   padding: 0.75rem;
   border-radius: 0.75rem;
   background: var(--cal-surface);
-  border: 1px solid rgb(15 23 40 / 6%);
+  border: 1px solid var(--color-border-subtle);
 }
 
 .calendarHeader {
@@ -40,12 +40,12 @@
   height: 2.75rem;
   border: 0;
   border-radius: 999px;
-  background: #ffffff;
+  background: var(--color-surface);
   color: var(--cal-primary);
   font-size: 1.35rem;
   line-height: 1;
   cursor: pointer;
-  box-shadow: 0 1px 2px rgb(15 23 40 / 8%);
+  box-shadow: var(--shadow-sm);
 }
 
 .calendarNavButton:focus-visible {
@@ -108,7 +108,7 @@
 .calendarDayButton[data-state="range-start"],
 .calendarDayButton[data-state="range-end"] {
   background: var(--cal-range-strong);
-  color: #ffffff;
+  color: var(--color-on-primary);
   border-radius: 999px;
 }
 

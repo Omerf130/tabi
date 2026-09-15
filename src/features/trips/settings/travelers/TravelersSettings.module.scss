@@ -1,9 +1,9 @@
 .page {
   --travelers-muted: var(--color-text-muted);
-  --travelers-border: rgb(15 23 40 / 8%);
-  --travelers-surface: #ffffff;
+  --travelers-border: var(--color-border);
+  --travelers-surface: var(--color-surface);
   --travelers-radius: 0.75rem;
-  --travelers-primary: #1a2740;
+  --travelers-primary: var(--color-primary);
 
   display: flex;
   flex-direction: column;
@@ -76,7 +76,7 @@
   border-radius: var(--travelers-radius);
   background: var(--travelers-surface);
   border: 1px solid var(--travelers-border);
-  box-shadow: 0 1px 2px rgb(15 23 40 / 4%);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 
@@ -164,18 +164,18 @@
 
 .menuButton:hover {
   color: var(--color-text);
-  background: rgb(15 23 40 / 4%);
+  background: var(--color-border-subtle);
 }
 
 .menuButton:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
-  background: rgb(15 23 40 / 4%);
+  background: var(--color-border-subtle);
   color: var(--color-text);
 }
 
 .menuButton:active {
-  background: rgb(15 23 40 / 8%);
+  background: var(--color-border);
 }
 
 .inviteActionRow {
@@ -316,7 +316,7 @@
   line-height: var(--line-height-body);
   color: var(--travelers-muted);
   border-radius: var(--travelers-radius);
-  background: rgb(26 39 64 / 4%);
+  background: color-mix(in srgb, var(--color-primary) 4%, transparent);
   border: 1px solid var(--travelers-border);
 }
 
@@ -329,7 +329,7 @@
 .inlineSuccess {
   margin: 0;
   font-size: var(--text-secondary);
-  color: var(--color-success, #067647);
+  color: var(--color-success);
 }
 
 /* ——— Modal / bottom sheet ——— */
@@ -350,7 +350,7 @@
 }
 
 .overlay::backdrop {
-  background: rgb(15 23 40 / 45%);
+  background: var(--color-scrim);
 }
 
 .sheetPanel {
@@ -364,8 +364,8 @@
   border: 1px solid var(--travelers-border);
   border-bottom: 0;
   border-radius: 1rem 1rem 0 0;
-  background: var(--travelers-surface);
-  box-shadow: 0 -8px 40px rgb(15 23 40 / 12%);
+  background: var(--color-surface-elevated);
+  box-shadow: var(--shadow-sheet);
   padding-bottom: max(var(--safe-bottom), env(safe-area-inset-bottom, 0px));
   overflow: hidden;
   isolation: isolate;
@@ -377,7 +377,7 @@
   height: 0.25rem;
   margin: var(--space-2) auto var(--space-1);
   border-radius: 999px;
-  background: rgb(15 23 40 / 16%);
+  background: var(--color-border);
 }
 
 .sheetHead {
@@ -452,7 +452,7 @@
 
 .sheetCancel:hover,
 .sheetCancel:focus-visible {
-  background: rgb(15 23 40 / 4%);
+  background: var(--color-border-subtle);
 }
 
 .sheetCancel:focus-visible {
@@ -585,7 +585,7 @@
   border: 0;
   border-radius: var(--radius-md);
   background: var(--color-primary);
-  color: var(--color-on-primary, #fff);
+  color: var(--color-on-primary);
   font: inherit;
   font-size: var(--text-body);
   font-weight: var(--font-weight-semibold);
@@ -683,11 +683,12 @@
   padding: 0;
   border: 1px solid var(--travelers-border);
   border-radius: 1rem;
-  box-shadow: 0 16px 48px rgb(15 23 40 / 18%);
+  box-shadow: var(--shadow-sheet);
+  background: var(--color-surface-elevated);
 }
 
 .confirmDialog::backdrop {
-  background: rgb(15 23 40 / 45%);
+  background: var(--color-scrim);
 }
 
 .confirmInner {
@@ -755,11 +756,11 @@
   );
   margin: 0;
   padding-bottom: max(var(--space-3), env(safe-area-inset-bottom, 0px));
-  background-color: #fff;
+  background-color: var(--color-surface-elevated);
 }
 
 .overlay[data-variant="picker"] .sheetHead {
-  background-color: #fff;
+  background-color: var(--color-surface-elevated);
 }
 
 .overlay[data-variant="picker"] .sheetContent {
@@ -768,7 +769,7 @@
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  background-color: #fff;
+  background-color: var(--color-surface-elevated);
 }
 
 .overlay[data-variant="picker"] .sheetHeadTitle {
@@ -777,12 +778,12 @@
 }
 
 .overlay[data-variant="picker"] .sheetFoot {
-  background-color: #fff;
+  background-color: var(--color-surface-elevated);
 }
 
 .overlay[data-variant="picker"] .sheetFootActions .sheetCancel {
   width: auto;
-  background: rgb(15 23 40 / 6%);
+  background: var(--color-border-subtle);
 }
 
 .sheetFootActions {
@@ -805,7 +806,7 @@
   border: 0;
   border-radius: var(--radius-md);
   background: var(--color-primary);
-  color: var(--color-on-primary, #fff);
+  color: var(--color-on-primary);
   font: inherit;
   font-size: var(--text-body);
   font-weight: var(--font-weight-semibold);
@@ -842,7 +843,7 @@
     max-height: min(85dvh, 36rem);
     border-radius: 1rem;
     border-bottom: 1px solid var(--travelers-border);
-    box-shadow: 0 16px 48px rgb(15 23 40 / 18%);
+    box-shadow: var(--shadow-sheet);
     padding-bottom: var(--space-2);
   }
 

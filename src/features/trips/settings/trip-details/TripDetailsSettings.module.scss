@@ -1,9 +1,9 @@
 .page {
   --details-muted: var(--color-text-muted);
-  --details-border: rgb(15 23 40 / 8%);
-  --details-surface: #ffffff;
+  --details-border: var(--color-border);
+  --details-surface: var(--color-surface);
   --details-radius: 0.75rem;
-  --details-primary: #1a2740;
+  --details-primary: var(--color-primary);
 
   display: flex;
   flex-direction: column;
@@ -68,7 +68,7 @@
   line-height: var(--line-height-body);
   color: var(--details-muted);
   border-radius: var(--details-radius);
-  background: rgb(26 39 64 / 4%);
+  background: color-mix(in srgb, var(--color-primary) 4%, transparent);
   border: 1px solid var(--details-border);
 }
 
@@ -81,7 +81,7 @@
   max-height: 11.5rem;
   background: var(--color-surface-subtle);
   border: 1px solid var(--details-border);
-  box-shadow: 0 1px 2px rgb(15 23 40 / 5%);
+  box-shadow: var(--shadow-sm);
 }
 
 .coverImage {
@@ -175,7 +175,7 @@
   border-radius: var(--details-radius);
   background: var(--details-surface);
   border: 1px solid var(--details-border);
-  box-shadow: 0 1px 2px rgb(15 23 40 / 4%);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 
@@ -273,7 +273,7 @@
   margin: 0;
   padding: var(--space-3) var(--space-4);
   font-size: var(--text-secondary);
-  color: var(--color-success, #067647);
+  color: var(--color-success);
   border-radius: var(--details-radius);
   background: rgb(6 118 71 / 6%);
   border: 1px solid rgb(6 118 71 / 12%);
@@ -288,7 +288,7 @@
 .inlineSuccess {
   margin: 0;
   font-size: var(--text-secondary);
-  color: var(--color-success, #067647);
+  color: var(--color-success);
 }
 
 .sheet {
@@ -301,8 +301,8 @@
   padding: 0;
   border: 1px solid var(--details-border);
   border-radius: 1rem;
-  box-shadow: 0 16px 48px rgb(15 23 40 / 18%);
-  background: var(--details-surface);
+  box-shadow: var(--shadow-sheet);
+  background: var(--color-surface-elevated);
 }
 
 .sheet[data-bottom-nav="true"] {
@@ -312,7 +312,7 @@
 }
 
 .sheet::backdrop {
-  background: rgb(15 23 40 / 42%);
+  background: var(--color-scrim);
 }
 
 .sheetInner {
@@ -399,7 +399,7 @@
   line-height: var(--line-height-body);
   color: var(--details-muted);
   border-radius: var(--radius-md);
-  background: rgb(26 39 64 / 4%);
+  background: color-mix(in srgb, var(--color-primary) 4%, transparent);
 }
 
 .dateSheetCurrent {

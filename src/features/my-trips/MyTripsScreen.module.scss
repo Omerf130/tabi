@@ -1,10 +1,10 @@
 .screen {
-  --my-trips-text: #0f1728;
-  --my-trips-text-muted: #5c6678;
-  --my-trips-surface: #f4f5f8;
-  --my-trips-primary: #1a2740;
-  --my-trips-primary-hover: #243352;
-  --my-trips-focus: #1a2740;
+  --my-trips-text: var(--color-text);
+  --my-trips-text-muted: var(--color-text-muted);
+  --my-trips-surface: var(--color-background);
+  --my-trips-primary: var(--color-primary);
+  --my-trips-primary-hover: var(--color-primary-hover);
+  --my-trips-focus: var(--color-focus);
   --my-trips-max: 76rem;
   --my-trips-hero-height: clamp(10.625rem, 28vw, 13.125rem);
   --my-trips-overlap: 1.375rem;
@@ -112,8 +112,8 @@
     clamp(1.125rem, 4vw, 2rem)
     calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
   border-radius: 1.375rem 1.375rem 0 0;
-  background: #ffffff;
-  box-shadow: 0 -8px 28px rgb(15 23 40 / 8%);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
 }
 
 .filterBar {
@@ -154,17 +154,17 @@
 }
 
 .filterPill {
-  background: #eef0f4;
+  background: var(--color-surface-subtle);
   color: var(--my-trips-text-muted);
 }
 
 .filterPill:hover {
-  background: #e4e8ef;
+  background: var(--color-border-subtle);
 }
 
 .filterPillActive {
   background: var(--my-trips-primary);
-  color: #ffffff;
+  color: var(--color-on-primary);
 }
 
 .filterPill:focus-visible,
@@ -183,7 +183,7 @@
   height: 2.75rem;
   border-radius: 999px;
   background: var(--my-trips-primary);
-  color: #ffffff;
+  color: var(--color-on-primary);
   text-decoration: none;
   transition: background-color 140ms ease;
 }
@@ -213,7 +213,7 @@
   overflow: hidden;
   border-radius: 1rem;
   background: var(--my-trips-primary);
-  box-shadow: 0 8px 24px rgb(15 23 40 / 10%);
+  box-shadow: var(--shadow-md);
   transition:
     transform 160ms ease,
     box-shadow 160ms ease;
@@ -222,7 +222,7 @@
 .tripCardLink:hover .tripCard,
 .tripCardLink:focus-visible .tripCard {
   transform: translateY(-1px);
-  box-shadow: 0 14px 32px rgb(15 23 40 / 14%);
+  box-shadow: var(--shadow-lg);
 }
 
 .tripCardLink:focus-visible .tripCard {
@@ -372,7 +372,7 @@
   padding-inline: 1.375rem;
   border-radius: 999px;
   background: var(--my-trips-primary);
-  color: #ffffff;
+  color: var(--color-on-primary);
   font-size: 0.9375rem;
   font-weight: 600;
   text-decoration: none;
@@ -415,7 +415,7 @@
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 999px;
-  background: rgb(26 39 64 / 8%);
+  background: var(--color-primary-soft);
   color: var(--my-trips-primary);
   font-size: 0.9375rem;
   font-weight: 600;
@@ -440,9 +440,9 @@
   min-width: 11rem;
   padding: 0.875rem;
   border-radius: 1rem;
-  background: #ffffff;
-  border: 1px solid rgb(15 23 40 / 8%);
-  box-shadow: 0 16px 40px rgb(15 23 40 / 10%);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-lg);
 }
 
 .accountName {
@@ -469,7 +469,7 @@
 }
 
 .accountProfileLink:hover {
-  background: rgb(15 23 40 / 4%);
+  background: var(--color-border-subtle);
 }
 
 .accountProfileLink:focus-visible {
@@ -484,7 +484,7 @@
   min-height: 2.75rem;
   width: 100%;
   padding-inline: 0.875rem;
-  border: 1px solid rgb(15 23 40 / 10%);
+  border: 1px solid var(--color-border);
   border-radius: 999px;
   background: transparent;
   color: var(--my-trips-text);
@@ -494,7 +494,7 @@
 }
 
 .accountSignOut:hover {
-  background: rgb(15 23 40 / 4%);
+  background: var(--color-border-subtle);
 }
 
 .accountSignOut:focus-visible {

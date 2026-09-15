@@ -2,8 +2,8 @@
   --auth-text: #ffffff;
   --auth-text-muted: rgb(255 255 255 / 78%);
   --auth-text-subtle: rgb(255 255 255 / 62%);
-  --auth-primary: #1a3f7a;
-  --auth-primary-hover: #214c92;
+  --auth-primary: var(--color-primary);
+  --auth-primary-hover: var(--color-primary-hover);
   --auth-max-form: 26rem;
   --auth-page-inline: clamp(1.5rem, 6vw, 1.75rem);
 
@@ -11,7 +11,7 @@
   isolation: isolate;
   min-height: 100dvh;
   color: var(--auth-text);
-  background: #1a2740;
+  background: var(--color-primary);
 }
 
 .backdrop {

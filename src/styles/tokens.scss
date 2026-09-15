@@ -1,27 +1,49 @@
+/*
+  Global design tokens (light default on html data-color-scheme="light").
+
+  Token categories:
+  - Themeable in future S4 (Trip workspace on TripShellLayout): background,
+    surfaces, primary, accent, text, borders, focus, trip navigation chrome.
+  - Fixed global semantic: success, warning, danger, scrim (not trip-themed).
+  - Domain-specific: finance, weather, itinerary categories, trip-phase colors
+    (defined in feature modules / TS, not here).
+
+  Trip themes (S4): scoped to TripShellLayout — not html. Account/global
+  surfaces stay on these global tokens.
+
+  Dark: dormant [data-color-scheme="dark"] block; no OS auto-switch.
+*/
+
 :root,
 [data-color-scheme="light"] {
   color-scheme: light;
 
-  --color-background: #f3eee6;
-  --color-surface: #fbf7f1;
-  --color-surface-subtle: #ebe4da;
-  --color-primary: #7a2e38;
-  --color-primary-hover: #64262e;
-  --color-primary-pressed: #521f26;
-  --color-on-primary: #fbf7f1;
+  --color-background: #f4f5f8;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-subtle: #f3f6fa;
+  --color-primary: #1a2740;
+  --color-primary-hover: #243352;
+  --color-primary-pressed: #152030;
+  --color-primary-soft: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
+  --color-on-primary: #ffffff;
   --color-accent: #c48b90;
-  --color-accent-soft: #f3e6e7;
-  --color-text: #2a2422;
-  --color-text-muted: #5e5650;
-  --color-border: #ddd4c8;
-  --color-focus: #7a2e38;
-  --color-success: #3f6b4f;
+  --color-accent-soft: #eef2f8;
+  --color-text: #1a2740;
+  --color-text-muted: #6b7c93;
+  --color-border: rgb(15 23 40 / 8%);
+  --color-border-subtle: rgb(15 23 40 / 6%);
+  --color-border-strong: rgb(15 23 40 / 12%);
+  --color-link: #1d4ed8;
+  --color-focus: #1a2740;
+  --color-scrim: rgb(15 23 40 / 40%);
+  --color-success: #067647;
   --color-warning: #a86b2d;
-  --color-danger: #9b3535;
-  --color-on-danger: #fbf7f1;
-  --color-success-soft: #e4eee7;
+  --color-danger: #b42318;
+  --color-on-danger: #ffffff;
+  --color-success-soft: #ecfdf3;
   --color-warning-soft: #f4eadb;
-  --color-danger-soft: #f4e4e4;
+  --color-danger-soft: #fef3f2;
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -44,8 +66,10 @@
   --radius-lg: 0.875rem;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 1px 3px rgb(42 36 34 / 8%);
-  --shadow-md: 0 8px 24px rgb(42 36 34 / 10%);
+  --shadow-sm: 0 1px 3px rgb(15 23 40 / 6%);
+  --shadow-md: 0 8px 24px rgb(15 23 40 / 8%);
+  --shadow-lg: 0 16px 48px rgb(15 23 40 / 18%);
+  --shadow-sheet: 0 12px 40px rgb(15 23 40 / 12%);
 
   --text-display: 2rem;
   --text-title: 1.5rem;
@@ -75,8 +99,8 @@
   --text-header-trip: 1.375rem;
   --text-header-section: 1.0625rem;
 
-  --color-shell-border: rgb(42 36 34 / 10%);
-  --color-nav-muted: rgb(94 86 80 / 72%);
+  --color-shell-border: rgb(15 23 40 / 10%);
+  --color-nav-muted: rgb(107 124 147 / 72%);
 
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -103,17 +127,23 @@
 
   --color-background: #1c1816;
   --color-surface: #27211e;
+  --color-surface-elevated: #27211e;
   --color-surface-subtle: #322b27;
   --color-primary: #c45b66;
   --color-primary-hover: #d46a75;
   --color-primary-pressed: #b04e58;
+  --color-primary-soft: color-mix(in srgb, var(--color-primary) 14%, var(--color-surface));
   --color-on-primary: #1c1816;
   --color-accent: #d4a3a8;
   --color-accent-soft: #3a2c2e;
   --color-text: #f2ebe4;
   --color-text-muted: #a89b93;
   --color-border: #3d3530;
+  --color-border-subtle: rgb(242 235 228 / 8%);
+  --color-border-strong: #4a423c;
+  --color-link: #7eb0ff;
   --color-focus: #d4a3a8;
+  --color-scrim: rgb(0 0 0 / 55%);
   --color-success: #7aaf8b;
   --color-warning: #d4a05a;
   --color-danger: #d16a6a;
@@ -124,17 +154,9 @@
 
   --shadow-sm: 0 1px 3px rgb(0 0 0 / 35%);
   --shadow-md: 0 8px 24px rgb(0 0 0 / 40%);
+  --shadow-lg: 0 16px 48px rgb(0 0 0 / 45%);
+  --shadow-sheet: 0 12px 40px rgb(0 0 0 / 50%);
 
   --color-shell-border: rgb(242 235 228 / 12%);
   --color-nav-muted: rgb(168 155 147 / 72%);
 }
-
-/*
-  Tabi Japan V1 visual identity.
-  Light/dark via data-color-scheme only (no OS auto-switch).
-  No destination overlay in V1.
-
-  Layout tokens:
-  --layout-content-max  readable / compact content
-  --layout-wide-max     future itinerary, documents, planner
-*/

@@ -5,7 +5,7 @@
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
-  background: var(--color-surface-muted, rgb(15 23 40 / 6%));
+  background: color-mix(in srgb, var(--color-primary) 6%, var(--color-surface-subtle));
   color: var(--color-text);
   font-weight: var(--font-weight-semibold);
   line-height: 1;

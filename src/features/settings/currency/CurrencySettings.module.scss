@@ -1,7 +1,7 @@
 .page {
   --currency-muted: var(--color-text-muted);
-  --currency-border: rgb(15 23 40 / 8%);
-  --currency-surface: #ffffff;
+  --currency-border: var(--color-border);
+  --currency-surface: var(--color-surface);
   --currency-radius: 0.75rem;
 
   display: flex;
@@ -83,7 +83,7 @@
   border-radius: var(--currency-radius);
   background: var(--currency-surface);
   border: 1px solid var(--currency-border);
-  box-shadow: 0 1px 2px rgb(15 23 40 / 4%);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 
@@ -94,7 +94,7 @@
   line-height: var(--line-height-body);
   color: var(--currency-muted);
   border-radius: var(--radius-md);
-  background: rgb(26 39 64 / 4%);
+  background: color-mix(in srgb, var(--color-primary) 4%, transparent);
   border: 1px solid var(--currency-border);
 }
 
@@ -107,7 +107,7 @@
 .inlineSuccess {
   margin: 0;
   font-size: var(--text-secondary);
-  color: var(--color-success, #067647);
+  color: var(--color-success);
 }
 
 .sheetForm {
@@ -124,7 +124,7 @@
   border: 0;
   border-radius: var(--radius-md);
   background: var(--color-primary);
-  color: var(--color-on-primary, #fff);
+  color: var(--color-on-primary);
   font: inherit;
   font-size: var(--text-body);
   font-weight: var(--font-weight-semibold);

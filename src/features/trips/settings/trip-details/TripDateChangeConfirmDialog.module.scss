@@ -6,13 +6,14 @@
     var(--size-bottom-nav) + var(--safe-bottom) + var(--space-2)
   );
   padding: 0;
-  border: 1px solid rgb(15 23 40 / 10%);
+  border: 1px solid var(--color-border);
   border-radius: 1rem;
-  box-shadow: 0 16px 48px rgb(15 23 40 / 18%);
+  box-shadow: var(--shadow-sheet);
+  background: var(--color-surface-elevated);
 }
 
 .dialog::backdrop {
-  background: rgb(15 23 40 / 45%);
+  background: var(--color-scrim);
 }
 
 .form {
@@ -27,7 +28,7 @@
   justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-4);
-  border-bottom: 1px solid rgb(15 23 40 / 8%);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .title {
@@ -77,7 +78,7 @@
 }
 
 .zoneDestructive .zoneTitle {
-  color: color-mix(in srgb, var(--color-danger, #b42318) 85%, var(--color-text));
+  color: color-mix(in srgb, var(--color-danger) 85%, var(--color-text));
 }
 
 .zoneAdjusted {
@@ -95,7 +96,7 @@
   padding: var(--space-3);
   border-radius: var(--radius-md);
   background: var(--color-surface-subtle);
-  border: 1px solid rgb(15 23 40 / 8%);
+  border: 1px solid var(--color-border);
 }
 
 .zoneKept .zoneTitle {
@@ -151,7 +152,7 @@
   flex-wrap: wrap;
   gap: var(--space-2);
   padding: var(--space-4);
-  border-top: 1px solid rgb(15 23 40 / 8%);
+  border-top: 1px solid var(--color-border);
   background: var(--color-surface-subtle);
 }
 

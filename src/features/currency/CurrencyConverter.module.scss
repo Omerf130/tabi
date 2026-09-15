@@ -246,7 +246,7 @@
 }
 
 .picker::backdrop {
-  background: rgb(42 36 34 / 42%);
+  background: var(--color-scrim);
 }
 
 .pickerInner {
@@ -258,8 +258,8 @@
   border: 1px solid var(--color-border);
   border-bottom: none;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-md);
+  background: var(--color-surface-elevated);
+  box-shadow: var(--shadow-sheet);
 }
 
 .pickerHeader {
@@ -327,7 +327,7 @@
   flex: 1;
   min-height: 0;
   width: 100%;
-  background-color: #fff;
+  background-color: var(--color-surface);
 }
 
 .pickerListRootInSheet .searchInput {
@@ -341,7 +341,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-  background-color: #fff;
+  background-color: var(--color-surface);
 }
 
 .pickerListRootInSheet .pickerList {
@@ -353,7 +353,7 @@
   padding: var(--space-2) var(--space-1);
   border-radius: 0;
   border-block-end: 1px solid var(--color-border);
-  background-color: #fff;
+  background-color: var(--color-surface);
 }
 
 .pickerListRootInSheet .pickerOption:last-child {
@@ -362,7 +362,7 @@
 
 .pickerListRootInSheet .pickerOption:hover,
 .pickerListRootInSheet .pickerOption[data-selected="true"] {
-  background: color-mix(in srgb, var(--color-primary) 10%, #fff);
+  background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
 }
 
 @media (min-width: 900px) {

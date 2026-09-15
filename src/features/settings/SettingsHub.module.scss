@@ -1,9 +1,9 @@
 .hub {
-  --settings-surface: #ffffff;
+  --settings-surface: var(--color-surface);
   --settings-muted: var(--color-text-muted);
-  --settings-border: rgb(15 23 40 / 8%);
+  --settings-border: var(--color-border);
   --settings-radius: 0.75rem;
-  --settings-shadow: 0 1px 3px rgb(15 23 40 / 6%);
+  --settings-shadow: var(--shadow-sm);
 
   display: flex;
   flex-direction: column;
@@ -117,7 +117,7 @@
 }
 
 .row[data-tone="muted-danger"] .rowTitle {
-  color: color-mix(in srgb, var(--color-danger, #b42318) 78%, var(--color-text));
+  color: color-mix(in srgb, var(--color-danger) 78%, var(--color-text));
 }
 
 .rowIconWrap {

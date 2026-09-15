@@ -2,7 +2,7 @@
   --welcome-text: #ffffff;
   --welcome-text-muted: rgb(255 255 255 / 82%);
   --welcome-cta-bg: #ffffff;
-  --welcome-cta-text: #0f1728;
+  --welcome-cta-text: var(--color-text);
   --welcome-focus: rgb(255 255 255 / 92%);
   --welcome-max-content: 26rem;
 
@@ -13,7 +13,7 @@
   min-height: 100dvh;
   overflow: hidden;
   color: var(--welcome-text);
-  background: #1a2740;
+  background: var(--color-primary);
 }
 
 .backdrop {

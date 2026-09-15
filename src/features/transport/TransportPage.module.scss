@@ -1,10 +1,10 @@
 .page {
-  --transport-ink: #1a2740;
-  --transport-muted: #6b7c93;
-  --transport-blue: #1d4ed8;
-  --transport-surface: #ffffff;
-  --transport-border: rgb(15 23 40 / 6%);
-  --transport-shadow: 0 1px 3px rgb(15 23 40 / 6%);
+  --transport-ink: var(--color-text);
+  --transport-muted: var(--color-text-muted);
+  --transport-blue: var(--color-link);
+  --transport-surface: var(--color-surface);
+  --transport-border: var(--color-border-subtle);
+  --transport-shadow: var(--shadow-sm);
 
   display: flex;
   flex-direction: column;
@@ -50,7 +50,7 @@
   padding: 0.375rem 0.75rem;
   border: none;
   border-radius: 999px;
-  background: rgb(29 78 216 / 8%);
+  background: color-mix(in srgb, var(--color-link) 8%, transparent);
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--transport-muted);
@@ -60,7 +60,7 @@
 
 .tabButton[data-active="true"] {
   background: var(--transport-blue);
-  color: #ffffff;
+  color: var(--color-on-primary);
 }
 
 .tabButton:focus-visible {

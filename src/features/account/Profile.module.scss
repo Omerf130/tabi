@@ -1,6 +1,6 @@
 .page {
   --profile-muted: var(--color-text-muted);
-  --profile-border: rgb(15 23 40 / 8%);
+  --profile-border: var(--color-border);
   --profile-radius: 0.75rem;
 
   display: flex;
@@ -79,7 +79,7 @@
 
 .photoActionDanger {
   composes: photoAction;
-  color: var(--color-danger, #b42318);
+  color: var(--color-danger);
 }
 
 .hiddenFileInput {
@@ -105,7 +105,7 @@
 .inlineError {
   margin: var(--space-2) 0 0;
   font-size: var(--text-secondary);
-  color: var(--color-danger, #b42318);
+  color: var(--color-danger);
 }
 
 .logoutForm {
@@ -123,14 +123,14 @@
   font: inherit;
   font-size: var(--text-body);
   font-weight: var(--font-weight-medium);
-  color: var(--color-danger, #b42318);
+  color: var(--color-danger);
   text-align: start;
   cursor: pointer;
 }
 
 .logoutButton:hover,
 .logoutButton:focus-visible {
-  background: rgb(180 35 24 / 6%);
+  background: color-mix(in srgb, var(--color-danger) 6%, transparent);
 }
 
 .confirmLead {

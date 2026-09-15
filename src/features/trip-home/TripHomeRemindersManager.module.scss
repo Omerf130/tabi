@@ -8,12 +8,12 @@
   padding: 0;
   border: 0;
   border-radius: 1rem;
-  background: #ffffff;
-  box-shadow: 0 24px 48px rgb(15 23 40 / 18%);
+  background: var(--color-surface-elevated);
+  box-shadow: var(--shadow-sheet);
 }
 
 .managerDialog::backdrop {
-  background: rgb(15 23 40 / 45%);
+  background: var(--color-scrim);
 }
 
 @media (min-width: 768px) {
@@ -46,7 +46,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 0.875rem 0.625rem;
-  border-block-end: 1px solid rgb(15 23 40 / 8%);
+  border-block-end: 1px solid var(--color-border);
 }
 
 .managerHeaderForm {
@@ -58,7 +58,7 @@
   font-size: 1rem;
   font-weight: 700;
   text-align: center;
-  color: #1a2740;
+  color: var(--color-text);
 }
 
 .managerIconButton {
@@ -70,12 +70,12 @@
   border: none;
   border-radius: 0.625rem;
   background: transparent;
-  color: #1a2740;
+  color: var(--color-text);
   cursor: pointer;
 }
 
 .managerIconButton:focus-visible {
-  outline: 2px solid #1d4ed8;
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 
@@ -87,12 +87,12 @@
   background: transparent;
   font-size: 0.875rem;
   font-weight: 700;
-  color: #1d4ed8;
+  color: var(--color-link);
   cursor: pointer;
 }
 
 .managerSaveButton:focus-visible {
-  outline: 2px solid #1d4ed8;
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 
@@ -101,7 +101,7 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.25rem;
   padding: 0.625rem 0.875rem;
-  border-block-end: 1px solid rgb(15 23 40 / 8%);
+  border-block-end: 1px solid var(--color-border);
 }
 
 .tabButton {
@@ -112,17 +112,17 @@
   background: transparent;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #5c6678;
+  color: var(--color-text-muted);
   cursor: pointer;
 }
 
 .tabButton[data-active="true"] {
-  background: #1d4ed8;
-  color: #ffffff;
+  background: var(--color-link);
+  color: var(--color-on-primary);
 }
 
 .tabButton:focus-visible {
-  outline: 2px solid #1d4ed8;
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 
@@ -140,7 +140,7 @@
   margin: 0 0 0.375rem;
   font-size: 0.8125rem;
   font-weight: 700;
-  color: #1a2740;
+  color: var(--color-text);
 }
 
 .reminderList {
@@ -157,7 +157,7 @@
   gap: 0.625rem;
   min-height: 2.75rem;
   padding-block: 0.5rem;
-  border-block-end: 1px solid rgb(15 23 40 / 8%);
+  border-block-end: 1px solid var(--color-border);
 }
 
 .reminderMainButton {
@@ -175,7 +175,7 @@
 }
 
 .reminderMainButton:focus-visible {
-  outline: 2px solid #1d4ed8;
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
   border-radius: 0.375rem;
 }
@@ -190,7 +190,7 @@
   width: 1.375rem;
   height: 1.375rem;
   padding: 0;
-  border: 1.5px solid #1d4ed8;
+  border: 1.5px solid var(--color-link);
   border-radius: 999px;
   background: transparent;
   cursor: pointer;
@@ -198,7 +198,7 @@
 }
 
 .completeButton:focus-visible {
-  outline: 2px solid #1d4ed8;
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 
@@ -212,7 +212,7 @@
   font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.35;
-  color: #0f1728;
+  color: var(--color-text);
   text-align: start;
 }
 
@@ -220,14 +220,14 @@
   font-size: 0.75rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: #5c6678;
+  color: var(--color-text-muted);
   white-space: nowrap;
 }
 
 .reminderChevron {
   width: 0.875rem;
   height: 0.875rem;
-  color: #5c6678;
+  color: var(--color-text-muted);
   transform: rotate(180deg);
 }
 
@@ -242,7 +242,7 @@
   margin: 0;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #0f1728;
+  color: var(--color-text);
 }
 
 .emptyAction {
@@ -252,12 +252,12 @@
   background: transparent;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #1d4ed8;
+  color: var(--color-link);
   cursor: pointer;
 }
 
 .emptyAction:focus-visible {
-  outline: 2px solid #1d4ed8;
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 
@@ -276,7 +276,7 @@
 .formError {
   margin: 0;
   font-size: 0.8125rem;
-  color: #b42318;
+  color: var(--color-danger);
 }
 
 .deleteButton {
@@ -287,11 +287,11 @@
   background: transparent;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #b42318;
+  color: var(--color-danger);
   cursor: pointer;
 }
 
 .deleteButton:focus-visible {
-  outline: 2px solid #b42318;
+  outline: 2px solid var(--color-danger);
   outline-offset: 2px;
 }

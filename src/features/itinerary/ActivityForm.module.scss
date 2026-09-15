@@ -33,16 +33,16 @@
   margin: 0;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #1a2740;
+  color: var(--color-text);
 }
 
 .primaryInput {
   width: 100%;
   min-height: 3rem;
   padding: 0.75rem 0.875rem;
-  border: 1px solid rgb(15 23 40 / 10%);
+  border: 1px solid var(--color-border);
   border-radius: 0.875rem;
-  background: #ffffff;
+  background: var(--color-surface);
   color: inherit;
   font: inherit;
   font-size: 1.0625rem;
@@ -66,7 +66,7 @@
   margin: 0;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #1a2740;
+  color: var(--color-text);
 }
 
 .timeRow {
@@ -87,16 +87,16 @@
   margin: 0;
   font-size: 0.75rem;
   font-weight: 500;
-  color: #6b7c93;
+  color: var(--color-text-muted);
 }
 
 .timeInput {
   width: 100%;
   min-height: 2.75rem;
   padding: 0.5rem 0.625rem;
-  border: 1px solid rgb(15 23 40 / 10%);
+  border: 1px solid var(--color-border);
   border-radius: 0.75rem;
-  background: #ffffff;
+  background: var(--color-surface);
   font: inherit;
   font-size: 0.9375rem;
   font-variant-numeric: tabular-nums;
@@ -128,7 +128,7 @@
 }
 
 .detailsSection {
-  border: 1px solid rgb(15 23 40 / 8%);
+  border: 1px solid var(--color-border);
   border-radius: 0.875rem;
   background: rgb(255 255 255 / 72%);
   overflow: hidden;
@@ -141,7 +141,7 @@
   padding: 0.625rem 0.875rem;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #6b7c93;
+  color: var(--color-text-muted);
   cursor: pointer;
   list-style: none;
 }
@@ -155,7 +155,7 @@
   flex-direction: column;
   gap: 0.875rem;
   padding: 0 0.875rem 0.875rem;
-  border-top: 1px solid rgb(15 23 40 / 6%);
+  border-top: 1px solid var(--color-border-subtle);
 }
 
 .typeField,
@@ -169,7 +169,7 @@
   margin: 0;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #6b7c93;
+  color: var(--color-text-muted);
 }
 
 .fieldSelect,
@@ -177,9 +177,9 @@
   width: 100%;
   min-height: 2.75rem;
   padding: 0.5rem 0.625rem;
-  border: 1px solid rgb(15 23 40 / 10%);
+  border: 1px solid var(--color-border);
   border-radius: 0.75rem;
-  background: #ffffff;
+  background: var(--color-surface);
   font: inherit;
   font-size: 0.9375rem;
 }
@@ -213,9 +213,9 @@
     180deg,
     rgb(255 255 255 / 0%) 0%,
     rgb(255 255 255 / 92%) 24%,
-    #ffffff 100%
+    var(--color-surface) 100%
   );
-  border-top: 1px solid rgb(15 23 40 / 8%);
+  border-top: 1px solid var(--color-border);
 }
 
 .footerActions {

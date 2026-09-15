@@ -1,7 +1,7 @@
 .page {
   --maps-muted: var(--color-text-muted);
-  --maps-border: rgb(15 23 40 / 8%);
-  --maps-surface: #ffffff;
+  --maps-border: var(--color-border);
+  --maps-surface: var(--color-surface);
   --maps-radius: 0.75rem;
 
   display: flex;
@@ -83,7 +83,7 @@
   border-radius: var(--maps-radius);
   background: var(--maps-surface);
   border: 1px solid var(--maps-border);
-  box-shadow: 0 1px 2px rgb(15 23 40 / 4%);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 
