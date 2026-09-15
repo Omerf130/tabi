@@ -26,6 +26,14 @@ const userSchema = new mongoose.Schema(
       default: "he",
       required: true,
     },
+    homeCurrency: {
+      type: String,
+      default: null,
+      trim: true,
+      uppercase: true,
+      minlength: 3,
+      maxlength: 3,
+    },
   },
   { timestamps: true },
 );

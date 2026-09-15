@@ -4,7 +4,7 @@ import { buildTripManagementHref } from "@/features/trip-management/constants";
 import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
 import type { TripWorkspace } from "@/features/trips/public-trip";
 import {
-  buildFinanceSettingsHref,
+  buildCurrencySettingsHref,
   buildSettingsLanguageHref,
   buildTravelersSettingsHref,
 } from "./constants";
@@ -92,7 +92,7 @@ export function buildSettingsHubViewModel({
       activeRow(
         "currency",
         t("rows.currency.title"),
-        buildFinanceSettingsHref(trip.id),
+        buildCurrencySettingsHref(trip.id),
         "currency",
         isOwner
           ? t("rows.currency.subtitleOwner", { currency: baseCurrency })

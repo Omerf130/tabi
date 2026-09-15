@@ -5,7 +5,7 @@ import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import { getActiveNavSection } from "@/features/app-shell/navigation";
 import { buildTripManagementHref } from "@/features/trip-management/constants";
 import {
-  buildFinanceSettingsHref,
+  buildCurrencySettingsHref,
   buildSettingsHubHref,
   buildSettingsLanguageHref,
 } from "./constants";
@@ -86,10 +86,10 @@ describe("Settings hub", () => {
     expect(findRow(model, "travelers")?.comingSoon).toBe(false);
   });
 
-  it("connects currency to existing finance settings", () => {
+  it("connects currency to dedicated currency settings", () => {
     const model = buildModel();
 
-    expect(findRow(model, "currency")?.href).toBe(buildFinanceSettingsHref(tripId));
+    expect(findRow(model, "currency")?.href).toBe(buildCurrencySettingsHref(tripId));
     expect(findRow(model, "currency")?.comingSoon).toBe(false);
   });
 

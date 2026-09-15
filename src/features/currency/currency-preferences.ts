@@ -10,6 +10,7 @@ export function resolveInitialCurrencyPair(
   currencies: readonly { code: string }[],
   fallbackFrom: string,
   fallbackTo: string,
+  homeCurrency?: string | null,
 ): CurrencyPairPreference {
   const preference = readCurrencyPairPreference();
   if (
@@ -21,7 +22,17 @@ export function resolveInitialCurrencyPair(
     return preference;
   }
 
-  return { from: fallbackFrom, to: fallbackTo };
+  let to = fallbackTo;
+  const normalizedHome = homeCurrency?.trim().toUpperCase();
+  if (
+    normalizedHome &&
+    isSupportedCurrencyCode(currencies, normalizedHome) &&
+    normalizedHome !== fallbackFrom
+  ) {
+    to = normalizedHome;
+  }
+
+  return { from: fallbackFrom, to };
 }
 
 export function readCurrencyPairPreference(): CurrencyPairPreference | null {

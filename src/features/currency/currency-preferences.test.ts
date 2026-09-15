@@ -44,6 +44,31 @@ describe("currency preferences", () => {
     });
   });
 
+  it("uses home currency as TO fallback when no localStorage preference", () => {
+    const currencies = [{ code: "JPY" }, { code: "ILS" }, { code: "USD" }];
+    expect(resolveInitialCurrencyPair(currencies, "JPY", "ILS", "USD")).toEqual({
+      from: "JPY",
+      to: "USD",
+    });
+  });
+
+  it("keeps null home currency on JPY → ILS fallback", () => {
+    const currencies = [{ code: "JPY" }, { code: "ILS" }];
+    expect(resolveInitialCurrencyPair(currencies, "JPY", "ILS", null)).toEqual({
+      from: "JPY",
+      to: "ILS",
+    });
+  });
+
+  it("prefers stored pair over home currency", () => {
+    const currencies = [{ code: "EUR" }, { code: "GBP" }, { code: "USD" }];
+    writeCurrencyPairPreference({ from: "EUR", to: "GBP" });
+    expect(resolveInitialCurrencyPair(currencies, "JPY", "ILS", "USD")).toEqual({
+      from: "EUR",
+      to: "GBP",
+    });
+  });
+
   it("restores a valid stored pair", () => {
     const currencies = [{ code: "USD" }, { code: "EUR" }, { code: "JPY" }];
     writeCurrencyPairPreference({ from: "USD", to: "EUR" });

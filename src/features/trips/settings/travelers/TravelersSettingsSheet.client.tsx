@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useId, useRef, type ReactNode } from "react";
+import { useCallback, useEffect, useId, useRef, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
+import { closeDialogIfOpen } from "./travelers-settings-request-close";
 import styles from "./TravelersSettings.module.scss";
 
 type TravelersSettingsSheetProps = {
@@ -11,9 +12,12 @@ type TravelersSettingsSheetProps = {
   subtitle?: string;
   /** Optional tertiary line (e.g. current role). */
   meta?: string;
+  /** Optional short lead under the title (e.g. currency picker hint). */
+  lead?: string;
   onClose: () => void;
   children: ReactNode;
-  footer?: ReactNode;
+  footer?: ReactNode | ((onRequestClose: () => void) => ReactNode);
+  variant?: "default" | "picker";
 };
 
 export function TravelersSettingsSheet({
@@ -24,45 +28,73 @@ export function TravelersSettingsSheet({
   onClose,
   children,
   footer,
+  lead,
+  variant = "default",
 }: TravelersSettingsSheetProps) {
   const tCommon = useTranslations("Common");
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const descId = useId();
 
+  const requestClose = useCallback(() => {
+    closeDialogIfOpen(dialogRef.current);
+    onClose();
+  }, [onClose]);
+
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) {
       return;
     }
-    if (open && !dialog.open) {
-      dialog.showModal();
+    if (open) {
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+    } else {
+      closeDialogIfOpen(dialog);
     }
-    if (!open && dialog.open) {
-      dialog.close();
-    }
+
+    return () => {
+      closeDialogIfOpen(dialog);
+    };
   }, [open]);
 
-  const hasDescription = Boolean(subtitle || meta);
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
+
+  const hasDescription = Boolean(subtitle || meta || lead);
 
   return (
     <dialog
       ref={dialogRef}
       className={styles.overlay}
+      data-variant={variant === "picker" ? "picker" : undefined}
       aria-labelledby={titleId}
       aria-describedby={hasDescription ? descId : undefined}
       onCancel={(event) => {
         event.preventDefault();
-        onClose();
+        requestClose();
       }}
       onClick={(event) => {
         if (event.target === dialogRef.current) {
-          onClose();
+          requestClose();
         }
       }}
     >
       <div
-        className={styles.sheetPanel}
+        className={
+          variant === "picker"
+            ? `${styles.sheetPanel} ${styles.sheetPanelPicker}`
+            : styles.sheetPanel
+        }
         onClick={(event) => event.stopPropagation()}
       >
         <div className={styles.sheetHandle} aria-hidden />
@@ -78,18 +110,21 @@ export function TravelersSettingsSheet({
                 </p>
               ) : null}
               {meta ? <p className={styles.sheetHeadRole}>{meta}</p> : null}
+              {lead ? <p className={styles.sheetHeadLead}>{lead}</p> : null}
             </div>
           ) : null}
         </header>
         <div className={styles.sheetContent}>{children}</div>
-        {footer ? (
-          <footer className={styles.sheetFoot}>{footer}</footer>
+        {footer !== undefined ? (
+          <footer className={styles.sheetFoot}>
+            {typeof footer === "function" ? footer(onClose) : footer}
+          </footer>
         ) : (
           <footer className={styles.sheetFoot}>
             <button
               type="button"
               className={styles.sheetCancel}
-              onClick={onClose}
+              onClick={requestClose}
             >
               {tCommon("cancel")}
             </button>

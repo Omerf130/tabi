@@ -66,14 +66,21 @@ export function CurrencyConverter({
   initialTo,
   initialAmount,
   initialRate,
+  homeCurrency,
 }: CurrencyConverterProps) {
   const t = useTranslations("Currency");
   const locale = resolveAppLocale(useLocale());
   const intlLocale = localeToIntlLocale(locale);
 
   const initialPair = useMemo(
-    () => resolveInitialCurrencyPair(currencies, initialFrom, initialTo),
-    [currencies, initialFrom, initialTo],
+    () =>
+      resolveInitialCurrencyPair(
+        currencies,
+        initialFrom,
+        initialTo,
+        homeCurrency,
+      ),
+    [currencies, initialFrom, initialTo, homeCurrency],
   );
   const initialRateState = useMemo(
     () => createInitialRateState(initialPair, initialRate),

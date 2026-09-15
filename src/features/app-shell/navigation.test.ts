@@ -58,6 +58,9 @@ describe("navigation", () => {
       getActiveNavSection(`/app/trips/${TRIP_A}/manage/members`, TRIP_A),
     ).toBe("settings");
     expect(
+      getActiveNavSection(`/app/trips/${TRIP_A}/manage/currency`, TRIP_A),
+    ).toBe("settings");
+    expect(
       getActiveNavSection(`/app/trips/${TRIP_A}/manage/accommodations`, TRIP_A),
     ).toBe("settings");
     expect(getActiveNavSection(`/app/trips/${TRIP_A}/members`, TRIP_A)).toBe(

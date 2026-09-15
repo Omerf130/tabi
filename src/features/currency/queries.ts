@@ -1,5 +1,6 @@
 import "server-only";
 
+import { getCurrentUser } from "@/features/auth/session";
 import { buildCurrencyCatalog } from "./currency-metadata";
 import {
   DEFAULT_AMOUNT,
@@ -28,7 +29,10 @@ export async function getExchangeRate(
 export async function prepareCurrencyConverterPage(
   tripId: string,
 ): Promise<CurrencyConverterInitialData> {
-  const currencies = await getSupportedCurrencies();
+  const [currencies, user] = await Promise.all([
+    getSupportedCurrencies(),
+    getCurrentUser(),
+  ]);
 
   let initialRate: ExchangeRate | null = null;
   try {
@@ -46,5 +50,6 @@ export async function prepareCurrencyConverterPage(
     initialTo: DEFAULT_TO_CURRENCY,
     initialAmount: DEFAULT_AMOUNT,
     initialRate,
+    homeCurrency: user?.homeCurrency ?? null,
   };
 }

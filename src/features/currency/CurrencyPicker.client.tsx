@@ -1,12 +1,8 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
-import {
-  filterCurrencyOptions,
-  getPriorityCurrencies,
-} from "./currency-metadata";
-import { resolveAppLocale } from "@/features/i18n/locale";
+import { useEffect, useId, useRef } from "react";
+import { useTranslations } from "next-intl";
+import { CurrencyPickerList } from "./CurrencyPickerList.client";
 import type { CurrencyOption } from "./types";
 import styles from "./CurrencyConverter.module.scss";
 
@@ -17,10 +13,6 @@ type CurrencyPickerProps = {
   onClose: () => void;
 };
 
-function getCurrencyDisplayName(currency: CurrencyOption, locale: "he" | "en"): string {
-  return locale === "he" ? currency.hebrewName : currency.englishName;
-}
-
 export function CurrencyPicker({
   currencies,
   selectedCode,
@@ -28,10 +20,8 @@ export function CurrencyPicker({
   onClose,
 }: CurrencyPickerProps) {
   const t = useTranslations("Currency");
-  const locale = resolveAppLocale(useLocale());
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
-  const [query, setQuery] = useState("");
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -48,28 +38,11 @@ export function CurrencyPicker({
     };
   }, []);
 
-  const filtered = useMemo(
-    () => filterCurrencyOptions(currencies, query),
-    [currencies, query],
-  );
-  const priorityCodes = useMemo(
-    () => new Set(getPriorityCurrencies(currencies).map((currency) => currency.code)),
-    [currencies],
-  );
-  const priorityFiltered = filtered.filter((currency) =>
-    priorityCodes.has(currency.code),
-  );
-  const otherFiltered = filtered.filter(
-    (currency) => !priorityCodes.has(currency.code),
-  );
-
   function handleClose() {
-    setQuery("");
     onClose();
   }
 
   function handleSelect(code: string) {
-    setQuery("");
     onSelect(code);
     onClose();
   }
@@ -104,87 +77,11 @@ export function CurrencyPicker({
           </button>
         </div>
 
-        <input
-          type="search"
-          className={styles.searchInput}
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder={t("searchPlaceholder")}
-          autoComplete="off"
-          enterKeyHint="search"
+        <CurrencyPickerList
+          currencies={currencies}
+          selectedCode={selectedCode}
+          onSelect={handleSelect}
         />
-
-        <div className={styles.pickerSections}>
-          {filtered.length === 0 ? (
-            <p className={styles.emptyResults}>{t("noResults")}</p>
-          ) : (
-            <>
-              {priorityFiltered.length > 0 ? (
-                <section>
-                  <h3 className={styles.pickerSectionTitle}>
-                    {t("popularSection")}
-                  </h3>
-                  <ul className={styles.pickerList}>
-                    {priorityFiltered.map((currency) => (
-                      <li key={currency.code}>
-                        <button
-                          type="button"
-                          className={styles.pickerOption}
-                          data-selected={currency.code === selectedCode}
-                          onClick={() => handleSelect(currency.code)}
-                        >
-                          <span className={styles.pickerOptionLeading}>
-                            <span className={styles.pickerOptionCode}>
-                              {currency.code}
-                            </span>
-                            <span className={styles.pickerOptionSymbol}>
-                              {currency.symbol}
-                            </span>
-                          </span>
-                          <span className={styles.pickerOptionName}>
-                            {getCurrencyDisplayName(currency, locale)}
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              ) : null}
-
-              {otherFiltered.length > 0 ? (
-                <section>
-                  <h3 className={styles.pickerSectionTitle}>
-                    {t("allSection")}
-                  </h3>
-                  <ul className={styles.pickerList}>
-                    {otherFiltered.map((currency) => (
-                      <li key={currency.code}>
-                        <button
-                          type="button"
-                          className={styles.pickerOption}
-                          data-selected={currency.code === selectedCode}
-                          onClick={() => handleSelect(currency.code)}
-                        >
-                          <span className={styles.pickerOptionLeading}>
-                            <span className={styles.pickerOptionCode}>
-                              {currency.code}
-                            </span>
-                            <span className={styles.pickerOptionSymbol}>
-                              {currency.symbol}
-                            </span>
-                          </span>
-                          <span className={styles.pickerOptionName}>
-                            {getCurrencyDisplayName(currency, locale)}
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              ) : null}
-            </>
-          )}
-        </div>
       </div>
     </dialog>
   );

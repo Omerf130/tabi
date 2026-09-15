@@ -367,6 +367,8 @@
   background: var(--travelers-surface);
   box-shadow: 0 -8px 40px rgb(15 23 40 / 12%);
   padding-bottom: max(var(--safe-bottom), env(safe-area-inset-bottom, 0px));
+  overflow: hidden;
+  isolation: isolate;
 }
 
 .sheetHandle {
@@ -410,6 +412,13 @@
 .sheetHeadRole {
   margin: 0;
   font-size: var(--text-secondary);
+  color: var(--travelers-muted);
+}
+
+.sheetHeadLead {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-secondary);
+  line-height: var(--line-height-body);
   color: var(--travelers-muted);
 }
 
@@ -721,6 +730,98 @@
   background: var(--color-surface-subtle);
 }
 
+/* Picker sheet: flex-anchored panel inside modal (not fixed) for correct top-layer stacking */
+.overlay[data-variant="picker"] {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  padding-bottom: calc(var(--size-bottom-nav, 4.5rem) + var(--safe-bottom, 0px));
+  overflow: hidden;
+}
+
+.overlay[data-variant="picker"] .sheetPanelPicker {
+  position: relative;
+  inset: unset;
+  flex: 0 1 auto;
+  width: 100%;
+  min-height: 0;
+  max-height: min(
+    85dvh,
+    calc(
+      100dvh - var(--size-bottom-nav, 4.5rem) - var(--safe-bottom, 0px) -
+        env(safe-area-inset-top, 0px) - var(--space-4)
+    )
+  );
+  margin: 0;
+  padding-bottom: max(var(--space-3), env(safe-area-inset-bottom, 0px));
+  background-color: #fff;
+}
+
+.overlay[data-variant="picker"] .sheetHead {
+  background-color: #fff;
+}
+
+.overlay[data-variant="picker"] .sheetContent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.overlay[data-variant="picker"] .sheetHeadTitle {
+  font-size: 1.0625rem;
+  color: var(--color-text);
+}
+
+.overlay[data-variant="picker"] .sheetFoot {
+  background-color: #fff;
+}
+
+.overlay[data-variant="picker"] .sheetFootActions .sheetCancel {
+  width: auto;
+  background: rgb(15 23 40 / 6%);
+}
+
+.sheetFootActions {
+  display: flex;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.sheetFootActions .sheetCancel,
+.sheetFootActions .sheetSaveSecondary {
+  flex: 1;
+  min-height: var(--size-touch-min, 2.75rem);
+}
+
+.sheetSaveSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary, #fff);
+  font: inherit;
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.sheetSaveSecondary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.sheetSaveSecondary:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
 @media (min-width: 900px) {
   .page {
     max-width: 48rem;
@@ -742,6 +843,22 @@
     border-radius: 1rem;
     border-bottom: 1px solid var(--travelers-border);
     box-shadow: 0 16px 48px rgb(15 23 40 / 18%);
+    padding-bottom: var(--space-2);
+  }
+
+  .overlay[data-variant="picker"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    padding-bottom: var(--space-4);
+  }
+
+  .overlay[data-variant="picker"] .sheetPanelPicker {
+    position: relative;
+    width: min(100%, 28rem);
+    max-height: min(88dvh, 40rem);
+    flex: unset;
     padding-bottom: var(--space-2);
   }
 

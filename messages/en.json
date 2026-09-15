@@ -409,6 +409,7 @@
     "conversionPreviewFailed": "Could not load exchange rate right now",
 
     "settingsTitle": "Finance settings",
+    "budgetSettingsTitle": "Trip budget",
 
     "baseCurrencyLabel": "Base currency",
 
@@ -1410,6 +1411,29 @@
     "leaveConfirm": "Leave this trip? You will lose access to its itinerary and shared content.",
     "demoteOwnerConfirm": "Remove owner permissions for this traveler? They will no longer manage members or invites.",
     "revokeConfirm": "Revoke this invitation? The link will stop working."
+  },
+
+  "CurrencySettings": {
+    "pageTitle": "Currency",
+    "lead": "Choose how this trip tracks money and which currency you personally use.",
+    "back": "Back to Settings",
+    "tripCurrencySection": "Trip currency",
+    "tripCurrencyHint": "Shared by everyone on this trip. Used for budgets, totals, and stored finance conversions.",
+    "myCurrencySection": "My currency",
+    "myCurrencyHint": "Personal to you. Used as your reference currency in the app.",
+    "notSelected": "Not selected",
+    "chooseMyCurrency": "Choose currency",
+    "changeMyCurrency": "Change currency",
+    "changeTripCurrency": "Change trip currency",
+    "pickerHint": "Search or browse supported currencies, then save.",
+    "save": "Save",
+    "tripCurrencyLocked": "Trip currency is locked because expenses already exist. Changing it would invalidate stored conversion amounts for this trip.",
+    "converterSection": "Currency converter",
+    "openConverter": "Open currency converter",
+    "openConverterHint": "Quick exchange rates while you travel",
+    "errors": {
+      "invalidCurrency": "Choose a supported currency."
+    }
   },
 
   "TripDetailsSettings": {

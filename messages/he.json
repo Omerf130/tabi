@@ -409,6 +409,7 @@
     "conversionPreviewFailed": "לא ניתן לטעון שער המרה כרגע",
 
     "settingsTitle": "הגדרות כספים",
+    "budgetSettingsTitle": "תקציב הטיול",
 
     "baseCurrencyLabel": "מטבע בסיס",
 
@@ -1410,6 +1411,29 @@
     "leaveConfirm": "לעזוב את הטיול? תאבדו גישה ללוח הזמנים ולתוכן המשותף.",
     "demoteOwnerConfirm": "להסיר הרשאות בעל/ת טיול? לא יוכל/תהי לנהל מטיילים והזמנות.",
     "revokeConfirm": "לבטל את ההזמנה? הקישור יפסיק לעבוד."
+  },
+
+  "CurrencySettings": {
+    "pageTitle": "מטבע",
+    "lead": "בחרו איך הטיול עוקב אחרי כסף ואיזה מטבע משמש אתכם באופן אישי.",
+    "back": "חזרה להגדרות",
+    "tripCurrencySection": "מטבע הטיול",
+    "tripCurrencyHint": "משותף לכל מי שבטיול. משמש לתקציב, סיכומים והמרות שנשמרות בכספים.",
+    "myCurrencySection": "המטבע שלי",
+    "myCurrencyHint": "אישי אליכם. משמש כמטבע ייחוס באפליקציה.",
+    "notSelected": "לא נבחר",
+    "chooseMyCurrency": "בחירת מטבע",
+    "changeMyCurrency": "שינוי מטבע",
+    "changeTripCurrency": "שינוי מטבע הטיול",
+    "pickerHint": "חפשו או בחרו מטבע נתמך, ואז שמרו.",
+    "save": "שמירה",
+    "tripCurrencyLocked": "מטבע הטיול נעול כי כבר קיימות הוצאות. שינוי המטבע יבטל את תקפות סכומי ההמרה השמורים לטיול.",
+    "converterSection": "ממיר מטבע",
+    "openConverter": "פתיחת ממיר מטבע",
+    "openConverterHint": "שערי המרה מהירים בזמן הטיול",
+    "errors": {
+      "invalidCurrency": "יש לבחור מטבע נתמך."
+    }
   },
 
   "TripDetailsSettings": {

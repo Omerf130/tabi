@@ -14,6 +14,6 @@ export function buildTravelersSettingsHref(tripId: string): string {
   return `/app/trips/${tripId}/manage/members`;
 }
 
-export function buildFinanceSettingsHref(tripId: string): string {
-  return `/app/trips/${tripId}/finance?settings=1`;
+export function buildCurrencySettingsHref(tripId: string): string {
+  return `/app/trips/${tripId}/manage/currency`;
 }

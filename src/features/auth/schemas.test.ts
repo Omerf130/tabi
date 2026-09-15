@@ -80,6 +80,7 @@ describe("toPublicUser", () => {
       email: "a@b.com",
       role: "user",
       locale: "he",
+      homeCurrency: null,
     });
     expect(publicUser).not.toHaveProperty("passwordHash");
   });

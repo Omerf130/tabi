@@ -19,4 +19,5 @@ export type CurrencyConverterInitialData = {
   initialTo: string;
   initialAmount: string;
   initialRate: ExchangeRate | null;
+  homeCurrency: string | null;
 };

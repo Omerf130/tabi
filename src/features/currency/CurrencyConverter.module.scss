@@ -301,12 +301,74 @@
   color: var(--color-text);
 }
 
-.pickerSections {
+.pickerSections,
+.pickerSectionsScroll {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
   overflow: auto;
   min-height: 0;
+}
+
+.pickerListRoot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 0;
+  flex: 1;
+}
+
+.pickerListRoot .pickerSectionsScroll {
+  flex: 1;
+  max-height: min(50dvh, 22rem);
+}
+
+.pickerListRootInSheet {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  background-color: #fff;
+}
+
+.pickerListRootInSheet .searchInput {
+  flex-shrink: 0;
+  background: var(--color-surface-subtle);
+}
+
+.pickerListRootInSheet .pickerSectionsScroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  background-color: #fff;
+}
+
+.pickerListRootInSheet .pickerList {
+  gap: 0;
+}
+
+.pickerListRootInSheet .pickerOption {
+  min-height: 2.625rem;
+  padding: var(--space-2) var(--space-1);
+  border-radius: 0;
+  border-block-end: 1px solid var(--color-border);
+  background-color: #fff;
+}
+
+.pickerListRootInSheet .pickerOption:last-child {
+  border-block-end: 0;
+}
+
+.pickerListRootInSheet .pickerOption:hover,
+.pickerListRootInSheet .pickerOption[data-selected="true"] {
+  background: color-mix(in srgb, var(--color-primary) 10%, #fff);
+}
+
+@media (min-width: 900px) {
+  .pickerListRootInSheet .pickerSectionsScroll {
+    max-height: min(45dvh, 20rem);
+  }
 }
 
 .pickerSectionTitle {

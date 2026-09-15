@@ -219,8 +219,6 @@ export function FinancePageContent({
         <FinanceSettingsSheet
           tripId={model.tripId}
           settings={settings}
-          currencies={model.currencies}
-          baseCurrencyLocked={model.baseCurrencyLocked}
           onClose={() => setSettingsOpen(false)}
         />
       ) : null}

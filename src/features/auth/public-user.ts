@@ -8,6 +8,8 @@ export type PublicUser = {
   email: string;
   role: PlatformRole;
   locale: AppLocale;
+  /** Explicit user-chosen reference currency; never inferred. */
+  homeCurrency: string | null;
 };
 
 export function toPublicUser(user: {
@@ -16,15 +18,18 @@ export function toPublicUser(user: {
   email: string;
   role: PlatformRole;
   locale?: AppLocale | null;
+  homeCurrency?: string | null;
   passwordHash?: string | null;
   googleSubject?: string | null;
 }): PublicUser {
+  const homeCurrency = user.homeCurrency?.trim().toUpperCase();
   return {
     id: user._id.toString(),
     name: user.name,
     email: user.email,
     role: user.role,
     locale: resolveAppLocale(user.locale),
+    homeCurrency: homeCurrency && homeCurrency.length === 3 ? homeCurrency : null,
   };
 }
 

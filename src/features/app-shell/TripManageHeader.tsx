@@ -17,10 +17,14 @@ type TripManageHeaderProps = {
 export function resolveManageBackHref(pathname: string, tripId: string): string {
   const detailsPath = `/app/trips/${tripId}/manage/details`;
   const travelersPath = `/app/trips/${tripId}/manage/members`;
+  const currencyPath = `/app/trips/${tripId}/manage/currency`;
   if (pathname === detailsPath || pathname.startsWith(`${detailsPath}/`)) {
     return buildSettingsHubHref(tripId);
   }
   if (pathname === travelersPath || pathname.startsWith(`${travelersPath}/`)) {
+    return buildSettingsHubHref(tripId);
+  }
+  if (pathname === currencyPath || pathname.startsWith(`${currencyPath}/`)) {
     return buildSettingsHubHref(tripId);
   }
   return `/app/trips/${tripId}/more`;
