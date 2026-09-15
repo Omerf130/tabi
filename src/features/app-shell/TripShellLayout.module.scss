@@ -1,4 +1,8 @@
-/* Future trip themes (S4): semantic token overrides attach here, not on html. */
+/* Trip theme token scope root (.themeScope); see trip-themes.scss. */
+.themeScope {
+  min-height: 100dvh;
+}
+
 .shell {
   min-height: 100dvh;
   display: grid;
@@ -44,7 +48,7 @@
     top: 0;
     align-self: start;
     min-height: 100dvh;
-    background-color: var(--color-surface);
+    background-color: var(--color-shell-surface);
     border-inline-start: 1px solid var(--color-shell-border);
   }
 

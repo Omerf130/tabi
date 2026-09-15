@@ -18,6 +18,7 @@ export default async function TripLayout({
       tripId={trip.id}
       tripName={trip.name}
       role={trip.role}
+      themeKey={trip.themeKey}
       quickAddBootstrap={quickAddBootstrap}
     >
       {children}

@@ -6,6 +6,7 @@ import { getActiveNavSection } from "@/features/app-shell/navigation";
 import { buildTripManagementHref } from "@/features/trip-management/constants";
 import { buildSettingsProfileHref } from "@/features/account/profile-return-to";
 import {
+  buildAppearanceSettingsHref,
   buildCurrencySettingsHref,
   buildSettingsHubHref,
   buildSettingsLanguageHref,
@@ -113,11 +114,16 @@ describe("Settings hub", () => {
     expect(profile?.href).toBe(buildSettingsProfileHref(tripId));
   });
 
+  it("connects appearance to dedicated theme settings", () => {
+    const model = buildModel();
+    expect(findRow(model, "theme")?.href).toBe(buildAppearanceSettingsHref(tripId));
+    expect(findRow(model, "theme")?.comingSoon).toBe(false);
+  });
+
   it("marks future features as coming soon without hrefs", () => {
     const model = buildModel();
 
     for (const rowId of [
-      "theme",
       "notifications",
       "export",
       "delete-trip",

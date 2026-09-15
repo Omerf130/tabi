@@ -5,6 +5,7 @@ import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
 import type { TripWorkspace } from "@/features/trips/public-trip";
 import { buildSettingsProfileHref } from "@/features/account/profile-return-to";
 import {
+  buildAppearanceSettingsHref,
   buildCurrencySettingsHref,
   buildSettingsLanguageHref,
   buildSettingsMapsHref,
@@ -85,9 +86,10 @@ export function buildSettingsHubViewModel({
         "travelers",
         t("rows.travelers.subtitle"),
       ),
-      comingSoonRow(
+      activeRow(
         "theme",
         t("rows.theme.title"),
+        buildAppearanceSettingsHref(trip.id),
         "theme",
         t("rows.theme.subtitle"),
       ),

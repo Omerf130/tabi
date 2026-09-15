@@ -59,7 +59,7 @@ describe("S3D Travel Tools token migration", () => {
   it("maps Travel Hub generic aliases to semantic tokens", () => {
     const hub = read("features/travel-hub/TravelHub.module.scss");
     expect(hub).toContain("--hub-ink: var(--color-text)");
-    expect(hub).toContain("--hub-surface-cool: var(--color-surface-subtle)");
+    expect(hub).toContain("--hub-surface-cool: var(--color-surface-themed)");
     expect(hub).toContain("--hub-blue: var(--color-link)");
   });
 

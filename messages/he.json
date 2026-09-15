@@ -1351,8 +1351,8 @@
         "subtitle": "חברי הטיול והזמנות"
       },
       "theme": {
-        "title": "ערכת נושא",
-        "subtitle": "מראה ותצוגה של האפליקציה"
+        "title": "מראה וערכת נושא",
+        "subtitle": "צבעים וסגנון ויזואלי של הטיול"
       },
       "currency": {
         "title": "מטבע",
@@ -1408,6 +1408,48 @@
         "waze": "Waze",
         "apple": "Apple Maps"
       }
+    }
+  },
+
+  "TripTheme": {
+    "pageTitle": "מראה וערכת נושא",
+    "pageDescription": "בחרו איך הטיול נראה בתוך Tabi. כל המטיילים בטיול רואים את אותה ערכת נושא.",
+    "currentThemeLabel": "ערכת נושא נוכחית",
+    "storedThemeUnavailableVisual": "ערכת הנושא השמורה עדיין לא זמינה. הטיול משתמש בצבעי ברירת המחדל של Tabi עד שהיא תושק.",
+    "choicesSectionTitle": "בחירת ערכת נושא",
+    "choicesSectionHint": "בחרו ערכת נושא ולחצו שמירה. השינוי חל על כל המטיילים בטיול.",
+    "memberSectionTitle": "מראה הטיול",
+    "memberReadOnlyHint": "בעלי הטיול בוחרים את ערכת הנושא עבור כולם.",
+    "save": "שמירת ערכת נושא",
+    "saving": "שומר…",
+    "savedSuccess": "ערכת הנושא נשמרה.",
+    "themes": {
+      "default": {
+        "name": "ברירת המחדל של Tabi",
+        "description": "כחול-ים, לבן ואפור-קריר קלאסיים."
+      },
+      "ocean": {
+        "name": "אוקיינוס",
+        "description": "משטחים כחול-אפור רגועים עם הדגשות אוקיינוס עמוק."
+      },
+      "sakura": {
+        "name": "סאקורה",
+        "description": "יתווסף בעדכון עתידי."
+      },
+      "forest": {
+        "name": "יער",
+        "description": "יתווסף בעדכון עתידי."
+      },
+      "sunset": {
+        "name": "שקיעה",
+        "description": "יתווסף בעדכון עתידי."
+      }
+    },
+    "errors": {
+      "validationFailed": "לא ניתן לשמור את ערכת הנושא. בדקו את הבחירה ונסו שוב.",
+      "themeUnavailable": "ערכת הנושא הזו עדיין לא זמינה.",
+      "notFound": "הטיול לא נמצא.",
+      "generic": "משהו השתבש. נסו שוב."
     }
   },
 

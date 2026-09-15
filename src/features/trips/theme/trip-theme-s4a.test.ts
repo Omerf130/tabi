@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { toTripWorkspace } from "../public-trip";
@@ -6,7 +6,7 @@ import {
   DEFAULT_TRIP_THEME_KEY,
   TRIP_THEME_KEYS,
   TRIP_THEME_REGISTRY,
-  listEnabledTripThemes,
+  listSelectableTripThemes,
   resolveTripThemeKey,
   tripThemeKeySchema,
 } from "./index";
@@ -28,7 +28,10 @@ describe("S4A Trip theme domain foundation", () => {
     ]);
     expect(DEFAULT_TRIP_THEME_KEY).toBe("default");
     expect(TRIP_THEME_REGISTRY).toHaveLength(TRIP_THEME_KEYS.length);
-    expect(listEnabledTripThemes().every((theme) => theme.enabled)).toBe(true);
+    expect(listSelectableTripThemes().map((theme) => theme.key)).toEqual([
+      "default",
+      "ocean",
+    ]);
   });
 
   it("registry carries domain metadata only (no CSS or visual values)", () => {
@@ -90,30 +93,4 @@ describe("S4A Trip theme domain foundation", () => {
     expect(userModel.toLowerCase()).not.toContain("trippheme");
   });
 
-  it("does not add visual theme hooks or theme CSS", () => {
-    const tripShell = read("features/app-shell/TripShellLayout.tsx");
-    expect(tripShell).not.toContain("data-trip-theme");
-
-    const scssFiles: string[] = [];
-    function walk(dir: string) {
-      for (const entry of readdirSync(dir, { withFileTypes: true })) {
-        const full = join(dir, entry.name);
-        if (entry.isDirectory()) {
-          if (entry.name === "node_modules") {
-            continue;
-          }
-          walk(full);
-        } else if (entry.name.endsWith(".scss")) {
-          scssFiles.push(full);
-        }
-      }
-    }
-    walk(root);
-
-    for (const file of scssFiles) {
-      const source = readFileSync(file, "utf8");
-      expect(source).not.toContain("[data-trip-theme");
-      expect(source).not.toContain("data-trip-theme");
-    }
-  });
 });

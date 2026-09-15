@@ -1,0 +1,45 @@
+/*
+  Trip theme semantic overrides (S4B+).
+
+  Scoped to TripShellLayout via data-trip-theme. Global :root tokens remain
+  the canonical default; only defined themes override presentation inside a Trip.
+
+  Status tokens (danger/success/warning) and domain-specific colors stay global.
+*/
+
+[data-trip-theme="ocean"] {
+  --color-primary: #155e75;
+  --color-primary-hover: #1a708c;
+  --color-primary-pressed: #0f4a5e;
+  --color-primary-soft: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface));
+  --color-on-primary: #ffffff;
+
+  --color-background: #edf4f8;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-subtle: #e3eef5;
+  --color-surface-themed: #d4e6f0;
+  --color-surface-themed-strong: #c8dfec;
+  --color-surface-card: #f8fcfe;
+  --color-accent-soft: #dbeaf2;
+  --color-accent-well: color-mix(in srgb, var(--color-primary) 18%, var(--color-surface));
+  --color-shell-surface: #f2f8fb;
+
+  --color-text: #0f2d3d;
+  --color-text-muted: #5a7184;
+
+  --color-border: rgb(15 77 102 / 9%);
+  --color-border-subtle: rgb(15 77 102 / 6%);
+  --color-border-strong: rgb(15 77 102 / 14%);
+
+  --color-link: #0369a1;
+  --color-focus: #155e75;
+
+  --color-shell-border: rgb(15 77 102 / 12%);
+  --color-nav-muted: rgb(90 113 132 / 72%);
+
+  --shadow-sm: 0 1px 3px rgb(15 77 102 / 7%);
+  --shadow-md: 0 8px 24px rgb(15 77 102 / 10%);
+  --shadow-lg: 0 16px 48px rgb(15 77 102 / 14%);
+  --shadow-sheet: 0 12px 40px rgb(15 77 102 / 12%);
+}

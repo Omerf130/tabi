@@ -29,19 +29,19 @@ export const TRIP_THEME_REGISTRY: ReadonlyArray<TripThemeDefinition> = [
     key: "sakura",
     nameMessageKey: "themes.sakura.name",
     descriptionMessageKey: "themes.sakura.description",
-    enabled: true,
+    enabled: false,
   },
   {
     key: "forest",
     nameMessageKey: "themes.forest.name",
     descriptionMessageKey: "themes.forest.description",
-    enabled: true,
+    enabled: false,
   },
   {
     key: "sunset",
     nameMessageKey: "themes.sunset.name",
     descriptionMessageKey: "themes.sunset.description",
-    enabled: true,
+    enabled: false,
   },
 ];
 
@@ -57,8 +57,13 @@ export function getTripThemeDefinition(key: TripThemeKey): TripThemeDefinition {
   return definition;
 }
 
-export function listEnabledTripThemes(): ReadonlyArray<TripThemeDefinition> {
+/** Themes owners can choose in Settings (requires a runtime CSS palette). */
+export function listSelectableTripThemes(): ReadonlyArray<TripThemeDefinition> {
   return TRIP_THEME_REGISTRY.filter((definition) => definition.enabled);
+}
+
+export function isTripThemeSelectable(key: TripThemeKey): boolean {
+  return getTripThemeDefinition(key).enabled;
 }
 
 /** Registry keys must match the canonical finite key list. */

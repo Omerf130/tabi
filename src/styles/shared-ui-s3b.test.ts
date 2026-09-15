@@ -52,9 +52,10 @@ describe("S3B shared UI + trip shell token alignment", () => {
     expect(nav).toContain("var(--color-primary-soft)");
   });
 
-  it("does not introduce trip theme hooks", () => {
-    const shell = read("features/app-shell/TripShellLayout.module.scss");
-    expect(shell).not.toContain("data-trip-theme");
-    expect(shell).not.toContain("themeKey");
+  it("keeps trip theme attribute on shell TSX, not module SCSS", () => {
+    const shellModule = read("features/app-shell/TripShellLayout.module.scss");
+    expect(shellModule).not.toContain("data-trip-theme");
+    const shell = read("features/app-shell/TripShellLayout.tsx");
+    expect(shell).toContain("data-trip-theme");
   });
 });

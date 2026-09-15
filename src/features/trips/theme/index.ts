@@ -7,7 +7,8 @@ export {
 export {
   TRIP_THEME_REGISTRY,
   getTripThemeDefinition,
-  listEnabledTripThemes,
+  listSelectableTripThemes,
+  isTripThemeSelectable,
   type TripThemeDefinition,
 } from "./trip-theme-registry";
 export { resolveTripThemeKey } from "./resolve-trip-theme-key";

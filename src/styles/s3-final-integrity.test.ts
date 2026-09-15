@@ -126,8 +126,8 @@ describe("S3 final repository integrity", () => {
     expect(appLayout).not.toContain("TripShellLayout");
   });
 
-  it("does not implement S4B visual theme hooks (data-trip-theme) in production src", () => {
-    const files: string[] = [];
+  it("limits data-trip-theme to TripShellLayout (S4B trip workspace boundary)", () => {
+    const tsxFiles: string[] = [];
     function walk(dir: string) {
       for (const entry of readdirSync(dir, { withFileTypes: true })) {
         const full = join(dir, entry.name);
@@ -136,17 +136,24 @@ describe("S3 final repository integrity", () => {
             continue;
           }
           walk(full);
-        } else if (/\.(tsx|ts|scss)$/.test(entry.name) && !entry.name.endsWith(".test.ts")) {
-          files.push(full);
+        } else if (entry.name.endsWith(".tsx") && !entry.name.endsWith(".test.tsx")) {
+          tsxFiles.push(full);
         }
       }
     }
     walk(root);
 
-    for (const file of files) {
+    const offenders: string[] = [];
+    for (const file of tsxFiles) {
+      const relative = file.replace(/\\/g, "/").replace(/^.*\/src\//, "");
+      if (relative === "features/app-shell/TripShellLayout.tsx") {
+        continue;
+      }
       const source = readFileSync(file, "utf8");
-      expect(source).not.toContain("data-trip-theme");
-      expect(source).not.toContain("[data-trip-theme");
+      if (source.includes("data-trip-theme")) {
+        offenders.push(relative);
+      }
     }
+    expect(offenders).toEqual([]);
   });
 });

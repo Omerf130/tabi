@@ -1,5 +1,5 @@
 .hub {
-  --settings-surface: var(--color-surface);
+  --settings-surface: var(--color-surface-card);
   --settings-muted: var(--color-text-muted);
   --settings-border: var(--color-border);
   --settings-radius: 0.75rem;
@@ -103,7 +103,7 @@
 
 .row[data-state="active"]:hover,
 .row[data-state="active"]:focus-visible {
-  background: var(--color-surface-subtle);
+  background: var(--color-surface-themed-strong);
 }
 
 .row[data-state="active"]:focus-visible {
@@ -127,7 +127,7 @@
   width: 1.75rem;
   height: 1.75rem;
   border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--color-primary) 8%, var(--color-surface));
+  background: var(--color-accent-well);
   color: var(--color-primary);
   flex-shrink: 0;
 }

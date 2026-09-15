@@ -36,7 +36,7 @@ describe("S3E Trip Settings + Profile token migration", () => {
 
   it("maps Settings Hub and sub-settings aliases to semantic tokens", () => {
     const hub = read("features/settings/SettingsHub.module.scss");
-    expect(hub).toContain("--settings-surface: var(--color-surface)");
+    expect(hub).toContain("--settings-surface: var(--color-surface-card)");
     expect(hub).toContain("--settings-border: var(--color-border)");
 
     const currency = read("features/settings/currency/CurrencySettings.module.scss");

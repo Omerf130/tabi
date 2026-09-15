@@ -1351,8 +1351,8 @@
         "subtitle": "Trip members and invitations"
       },
       "theme": {
-        "title": "Theme",
-        "subtitle": "App appearance and display"
+        "title": "Appearance & Theme",
+        "subtitle": "Trip colors and visual style"
       },
       "currency": {
         "title": "Currency",
@@ -1408,6 +1408,48 @@
         "waze": "Waze",
         "apple": "Apple Maps"
       }
+    }
+  },
+
+  "TripTheme": {
+    "pageTitle": "Appearance & Theme",
+    "pageDescription": "Choose how this trip looks inside Tabi. Everyone on the trip sees the same theme.",
+    "currentThemeLabel": "Current theme",
+    "storedThemeUnavailableVisual": "This saved theme is not available yet. The trip uses Tabi default colors until it launches.",
+    "choicesSectionTitle": "Choose a theme",
+    "choicesSectionHint": "Select a theme, then save. Changes apply to this trip for all travelers.",
+    "memberSectionTitle": "Trip appearance",
+    "memberReadOnlyHint": "Trip owners choose the theme for everyone on this trip.",
+    "save": "Save theme",
+    "saving": "Saving…",
+    "savedSuccess": "Theme saved.",
+    "themes": {
+      "default": {
+        "name": "Tabi Default",
+        "description": "Classic navy, white, and cool gray."
+      },
+      "ocean": {
+        "name": "Ocean",
+        "description": "Calm blue-gray surfaces with deep ocean accents."
+      },
+      "sakura": {
+        "name": "Sakura",
+        "description": "Coming in a future update."
+      },
+      "forest": {
+        "name": "Forest",
+        "description": "Coming in a future update."
+      },
+      "sunset": {
+        "name": "Sunset",
+        "description": "Coming in a future update."
+      }
+    },
+    "errors": {
+      "validationFailed": "Could not save this theme. Check your selection and try again.",
+      "themeUnavailable": "That theme is not available yet.",
+      "notFound": "Trip not found.",
+      "generic": "Something went wrong. Try again."
     }
   },
 
