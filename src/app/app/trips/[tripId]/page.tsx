@@ -38,7 +38,7 @@ export default async function TripHomePage({
   });
 
   return (
-    <AppPage width="wide">
+    <AppPage width="wide" flushTop>
       <TripHomeContent model={model} />
     </AppPage>
   );

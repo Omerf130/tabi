@@ -13,7 +13,7 @@ type TripHomeContentProps = {
 
 function TripHomePhaseContent({ model }: TripHomeContentProps) {
   return (
-    <div className={styles.home} data-phase={model.phase}>
+    <div className={styles.home} data-phase={model.phase} data-trip-workspace="home">
       <TripHomeHero hero={model.hero} phase={model.phase} />
 
       {model.phase === "upcoming" ? (

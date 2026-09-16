@@ -45,7 +45,7 @@ describe("S3C Trip Core token migration", () => {
     const home = read("features/trip-home/TripHomeContent.module.scss");
     expect(home).toContain("--trip-home-text: var(--color-text)");
     expect(home).toContain("--trip-home-surface: var(--color-surface)");
-    expect(home).toContain("background: var(--color-background)");
+    expect(home).toContain("background: transparent");
   });
 
   it("retains itinerary domain purple without promoting to global primary", () => {

@@ -7,7 +7,16 @@
   Status tokens (danger/success/warning) and domain-specific colors stay global.
 */
 
+[data-trip-theme="default"] {
+  --theme-atmosphere-primary: rgb(26 39 64 / 6%);
+  --theme-atmosphere-secondary: rgb(26 39 64 / 4%);
+  --theme-atmosphere-soft: rgb(26 39 64 / 3%);
+}
+
 [data-trip-theme="ocean"] {
+  --theme-atmosphere-primary: rgb(21 94 117 / 14%);
+  --theme-atmosphere-secondary: rgb(21 94 117 / 8%);
+  --theme-atmosphere-soft: rgb(21 94 117 / 6%);
   --color-primary: #155e75;
   --color-primary-hover: #1a708c;
   --color-primary-pressed: #0f4a5e;
@@ -45,6 +54,10 @@
 }
 
 [data-trip-theme="sakura"] {
+  --theme-atmosphere-primary: rgb(107 68 88 / 12%);
+  --theme-atmosphere-secondary: rgb(196 139 154 / 10%);
+  --theme-atmosphere-soft: rgb(237 224 228 / 35%);
+
   --color-primary: #6b4458;
   --color-primary-hover: #7d5168;
   --color-primary-pressed: #573648;
@@ -82,6 +95,10 @@
 }
 
 [data-trip-theme="forest"] {
+  --theme-atmosphere-primary: rgb(45 90 74 / 10%);
+  --theme-atmosphere-secondary: rgb(61 107 88 / 8%);
+  --theme-atmosphere-soft: rgb(220 232 224 / 40%);
+
   --color-primary: #2d5a4a;
   --color-primary-hover: #356657;
   --color-primary-pressed: #234539;
@@ -119,6 +136,10 @@
 }
 
 [data-trip-theme="sunset"] {
+  --theme-atmosphere-primary: rgb(212 132 90 / 18%);
+  --theme-atmosphere-secondary: rgb(164 79 61 / 10%);
+  --theme-atmosphere-soft: rgb(236 226 214 / 45%);
+
   --color-primary: #a44f3d;
   --color-primary-hover: #b85a45;
   --color-primary-pressed: #8a4032;

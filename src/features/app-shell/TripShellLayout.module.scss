@@ -1,14 +1,19 @@
 /* Trip theme token scope root (.themeScope); see trip-themes.scss. */
 .themeScope {
+  position: relative;
   min-height: 100dvh;
+  isolation: isolate;
+  background-color: var(--color-background);
 }
 
 .shell {
+  position: relative;
+  z-index: 1;
   min-height: 100dvh;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr auto;
-  background-color: var(--color-background);
+  background-color: transparent;
 }
 
 .mainColumn {

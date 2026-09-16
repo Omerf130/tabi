@@ -108,6 +108,11 @@
   --color-shell-border: rgb(15 23 40 / 10%);
   --color-nav-muted: rgb(107 124 147 / 72%);
 
+  /* Trip decorative atmosphere (TripShellLayout; themes override). */
+  --theme-atmosphere-primary: transparent;
+  --theme-atmosphere-secondary: transparent;
+  --theme-atmosphere-soft: transparent;
+
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }

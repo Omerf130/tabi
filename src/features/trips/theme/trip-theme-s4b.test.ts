@@ -55,7 +55,12 @@ describe("S4B Trip theme runtime + Ocean reference theme", () => {
   it("defines Ocean semantic overrides without status or default redefinition", () => {
     const themes = read("features/trips/theme/trip-themes.scss");
     expect(themes).toContain('[data-trip-theme="ocean"]');
-    expect(themes).not.toContain('[data-trip-theme="default"]');
+    const defaultBlock = themes.slice(
+      themes.indexOf('[data-trip-theme="default"]'),
+      themes.indexOf('[data-trip-theme="ocean"]'),
+    );
+    expect(defaultBlock).toContain("--theme-atmosphere-primary:");
+    expect(defaultBlock).not.toContain("--color-primary:");
     expect(themes).toContain("--color-primary:");
     expect(themes).toContain("--color-background:");
     expect(themes).toContain("--color-surface-themed:");

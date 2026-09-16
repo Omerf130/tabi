@@ -1,0 +1,189 @@
+.root {
+  position: absolute;
+  inset: 0;
+  min-height: 100%;
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.layer {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  height: auto;
+  object-fit: cover;
+  /* Black matte in source PNGs; keeps painted artwork on theme background. */
+  mix-blend-mode: screen;
+}
+
+/* —— Ocean: shallow wave fragments (no full sailboat scene) —— */
+.root[data-atmosphere-theme="ocean"] .layer[data-layer="top"] {
+  top: -2.5rem;
+  inset-inline-end: -38%;
+  width: min(72vw, 16.5rem);
+  max-height: 5.5rem;
+  object-position: 88% 0%;
+  opacity: 0.52;
+}
+
+.root[data-atmosphere-theme="ocean"] .layer[data-layer="mid"] {
+  top: 46%;
+  inset-inline-start: -42%;
+  width: min(78vw, 17rem);
+  max-height: 4.25rem;
+  object-position: 12% 55%;
+  opacity: 0.22;
+}
+
+.root[data-atmosphere-theme="ocean"] .layer[data-layer="bottom"] {
+  bottom: calc(var(--size-bottom-nav) + var(--safe-bottom) - 2.5rem);
+  inset-inline: -14%;
+  width: 128%;
+  max-width: none;
+  max-height: 5rem;
+  object-position: 50% 100%;
+  opacity: 0.34;
+}
+
+/* —— Sakura —— */
+.root[data-atmosphere-theme="sakura"] .layer[data-layer="top"] {
+  top: -3.5rem;
+  inset-inline-start: -42%;
+  width: min(76vw, 18rem);
+  max-height: 9rem;
+  object-position: 18% 0%;
+  opacity: 0.66;
+}
+
+.root[data-atmosphere-theme="sakura"] .layer[data-layer="mid"] {
+  top: 52%;
+  inset-inline-end: -36%;
+  width: min(48vw, 11rem);
+  max-height: 6.5rem;
+  object-position: 70% 40%;
+  opacity: 0.32;
+}
+
+.root[data-atmosphere-theme="sakura"] .layer[data-layer="bottom"] {
+  bottom: calc(var(--size-bottom-nav) + var(--safe-bottom) - 1.5rem);
+  inset-inline-end: -34%;
+  width: min(58vw, 13.5rem);
+  max-height: 7rem;
+  object-position: 85% 100%;
+  opacity: 0.4;
+}
+
+/* —— Forest —— */
+.root[data-atmosphere-theme="forest"] .layer[data-layer="top"] {
+  top: -2rem;
+  inset-inline-end: -40%;
+  width: min(62vw, 14.5rem);
+  max-height: 7.5rem;
+  object-position: 92% 8%;
+  opacity: 0.58;
+}
+
+.root[data-atmosphere-theme="forest"] .layer[data-layer="bottom"] {
+  bottom: calc(var(--size-bottom-nav) + var(--safe-bottom) - 2rem);
+  inset-inline-start: -38%;
+  width: min(66vw, 15rem);
+  max-height: 7rem;
+  object-position: 8% 100%;
+  opacity: 0.48;
+}
+
+/* —— Sunset: celestial corner fragment only —— */
+.root[data-atmosphere-theme="sunset"] .layer[data-layer="top"] {
+  top: -1.75rem;
+  inset-inline-end: -32%;
+  width: min(46vw, 10.5rem);
+  max-height: 8rem;
+  object-position: 78% 12%;
+  opacity: 0.62;
+}
+
+/* Trip Home: large hero — keep top edge clean; decoration starts below hero */
+:global(.themeScope:has([data-trip-workspace="home"])) {
+  .root[data-atmosphere-theme="ocean"] .layer[data-layer="top"] {
+    top: clamp(10.5rem, 36vw, 13rem);
+    inset-inline-end: -36%;
+    width: min(64vw, 15rem);
+    max-height: 4.5rem;
+    opacity: 0.46;
+  }
+
+  .root[data-atmosphere-theme="sakura"] .layer[data-layer="top"] {
+    top: clamp(10rem, 35vw, 12.5rem);
+    inset-inline-start: -38%;
+    width: min(70vw, 16rem);
+    max-height: 7.5rem;
+    opacity: 0.58;
+  }
+
+  .root[data-atmosphere-theme="forest"] .layer[data-layer="top"] {
+    top: clamp(10.25rem, 35vw, 12.75rem);
+    inset-inline-end: -34%;
+    width: min(58vw, 13rem);
+    max-height: 6.5rem;
+    opacity: 0.5;
+  }
+
+  .root[data-atmosphere-theme="sunset"] .layer[data-layer="top"] {
+    top: clamp(9.5rem, 33vw, 12rem);
+    inset-inline-end: -28%;
+    width: min(40vw, 9rem);
+    max-height: 6.5rem;
+    opacity: 0.55;
+  }
+}
+
+@media (min-width: 1024px) {
+  .root {
+    inset-inline-start: var(--size-nav-rail);
+  }
+
+  .root[data-atmosphere-theme="ocean"] .layer[data-layer="bottom"],
+  .root[data-atmosphere-theme="sakura"] .layer[data-layer="bottom"],
+  .root[data-atmosphere-theme="forest"] .layer[data-layer="bottom"] {
+    bottom: -1.5rem;
+  }
+
+  .root[data-atmosphere-theme="ocean"] .layer[data-layer="top"] {
+    inset-inline-end: -22%;
+    width: min(20rem, 26vw);
+  }
+
+  .root[data-atmosphere-theme="sakura"] .layer[data-layer="top"] {
+    inset-inline-start: -24%;
+    width: min(19rem, 24vw);
+  }
+
+  .root[data-atmosphere-theme="forest"] .layer[data-layer="top"] {
+    inset-inline-end: -18%;
+    width: min(17rem, 22vw);
+  }
+
+  .root[data-atmosphere-theme="sunset"] .layer[data-layer="top"] {
+    inset-inline-end: -14%;
+    width: min(12rem, 16vw);
+  }
+
+  :global(.themeScope:has([data-trip-workspace="home"])) {
+    .root[data-atmosphere-theme="sakura"] .layer[data-layer="top"] {
+      top: clamp(12rem, 28vw, 16rem);
+    }
+
+    .root[data-atmosphere-theme="ocean"] .layer[data-layer="top"] {
+      top: clamp(12rem, 28vw, 16rem);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layer {
+    animation: none !important;
+  }
+}

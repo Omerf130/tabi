@@ -191,6 +191,7 @@ function ThemePreviewCard({ themeKey }: { themeKey: TripThemeKey }) {
       aria-hidden
     >
       <div className={styles.previewBackground}>
+        <div className={styles.previewAtmosphere} aria-hidden="true" />
         <div className={styles.previewSurface}>
           <span className={styles.previewLineStrong} />
           <span className={styles.previewLineMuted} />

@@ -168,11 +168,22 @@
 }
 
 .previewBackground {
+  position: relative;
   padding: 0.625rem;
   background: var(--preview-bg);
+  overflow: hidden;
+}
+
+.previewAtmosphere {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .previewSurface {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
@@ -180,6 +191,30 @@
   border-radius: 0.5rem;
   background: var(--preview-surface);
   border: 1px solid var(--preview-border);
+}
+
+.themePreview[data-preview-theme="ocean"] .previewAtmosphere {
+  background: url("/themes/ocean/top-wave.png") no-repeat top right / 4.25rem auto;
+  mix-blend-mode: screen;
+  opacity: 0.85;
+}
+
+.themePreview[data-preview-theme="sakura"] .previewAtmosphere {
+  background: url("/themes/Sakura/sakura-top.png") no-repeat top left / 4.5rem auto;
+  mix-blend-mode: screen;
+  opacity: 0.9;
+}
+
+.themePreview[data-preview-theme="forest"] .previewAtmosphere {
+  background: url("/themes/forest/forest-top.png") no-repeat top right / 4rem auto;
+  mix-blend-mode: screen;
+  opacity: 0.88;
+}
+
+.themePreview[data-preview-theme="sunset"] .previewAtmosphere {
+  background: url("/themes/Sunset/sunset.png") no-repeat top right / 3.5rem auto;
+  mix-blend-mode: screen;
+  opacity: 0.88;
 }
 
 .previewLineStrong {
