@@ -7,9 +7,9 @@ const root = process.cwd();
 
 describe("PWA Phase 2 architecture", () => {
   it("uses a single Service Worker source", () => {
-    expect(
-      readFileSync(join(root, "src/app/sw.ts"), "utf8"),
-    ).toContain("createTabiRuntimeCaching");
+    const swSource = readFileSync(join(root, "src/app/sw.ts"), "utf8");
+    expect(swSource).toContain("createTabiRuntimeCaching");
+    expect(swSource).toContain("fallbacks:");
   });
 
   it("does not use Serwist defaultCache", () => {

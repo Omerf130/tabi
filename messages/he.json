@@ -1129,6 +1129,15 @@
     "iosStep3": "אשרו \"הוספה\""
   },
 
+  "Offline": {
+    "metadataTitle": "Offline · Tabi",
+    "bannerTitle": "אין חיבור לאינטרנט",
+    "bannerSubtitle": "ייתכן שחלק מהמידע לא יהיה זמין.",
+    "pageTitle": "אין כרגע חיבור לאינטרנט",
+    "pageBody": "כדי לטעון את המידע הזה צריך להתחבר לרשת.",
+    "tryAgain": "נסה שוב"
+  },
+
   "Auth": {
     "brandName": "Tabi",
     "login": {

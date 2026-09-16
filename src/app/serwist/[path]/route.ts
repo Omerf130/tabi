@@ -14,5 +14,6 @@ export const { dynamic, dynamicParams, revalidate, generateStaticParams, GET } =
     additionalPrecacheEntries: [
       { url: "/icons/icon-192.png", revision },
       { url: "/icons/icon-512.png", revision },
+      { url: "/offline", revision },
     ],
   });

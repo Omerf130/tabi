@@ -4,6 +4,7 @@ import {
   isPublicCacheEligiblePath,
   isPrivateAppPath,
   PwaCachePolicy,
+  shouldServeOfflineDocumentFallback,
   type PwaRequestInput,
 } from "./pwa-request-policy";
 
@@ -150,5 +151,27 @@ describe("classifyPwaRequest — public cache eligible", () => {
         }),
       ),
     ).toBe(PwaCachePolicy.PublicStaleWhileRevalidate);
+  });
+});
+
+describe("shouldServeOfflineDocumentFallback", () => {
+  it("does not change Phase 2 NetworkOnly classification for /app GET", () => {
+    expect(
+      classifyPwaRequest(
+        req({ url: "https://tabi.example/app/trips/x", destination: "document" }),
+      ),
+    ).toBe(PwaCachePolicy.NetworkOnly);
+  });
+
+  it("allows navigate mode for deep links while only serving generic offline HTML", () => {
+    expect(
+      shouldServeOfflineDocumentFallback({
+        url: "https://tabi.example/app/trips/123/itinerary",
+        method: "GET",
+        headers: {},
+        mode: "navigate",
+        destination: "document",
+      }),
+    ).toBe(true);
   });
 });

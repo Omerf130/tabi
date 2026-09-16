@@ -17,7 +17,25 @@ export type PwaRequestInput = {
   method: string;
   headers: Record<string, string | undefined>;
   destination?: RequestDestination;
+  mode?: RequestMode;
 };
+
+const NON_DOCUMENT_FALLBACK_DESTINATIONS: ReadonlySet<RequestDestination> =
+  new Set([
+    "audio",
+    "audioworklet",
+    "font",
+    "image",
+    "manifest",
+    "object",
+    "paintworklet",
+    "script",
+    "style",
+    "track",
+    "video",
+    "worker",
+    "xslt",
+  ]);
 
 export function parsePwaRequestUrl(url: string): URL {
   return new URL(url, "https://tabi.local");
@@ -127,5 +145,57 @@ export function toPwaRequestInput(request: Request): PwaRequestInput {
     method: request.method,
     headers,
     destination: request.destination,
+    mode: request.mode,
   };
+}
+
+export function isOfflineFallbackPath(pathname: string): boolean {
+  return pathname === "/offline" || pathname.startsWith("/offline/");
+}
+
+export function shouldServeOfflineDocumentFallback(
+  input: PwaRequestInput,
+): boolean {
+  if (input.method.toUpperCase() !== "GET") {
+    return false;
+  }
+
+  if (isServerActionRequest(input)) {
+    return false;
+  }
+
+  if (isRscRequest(input)) {
+    return false;
+  }
+
+  const pathname = getPwaPathname(input.url);
+
+  if (isOfflineFallbackPath(pathname)) {
+    return false;
+  }
+
+  if (isExplicitNetworkOnlyPath(pathname)) {
+    return false;
+  }
+
+  if (pathname.startsWith("/app/api/")) {
+    return false;
+  }
+
+  if (
+    input.destination &&
+    NON_DOCUMENT_FALLBACK_DESTINATIONS.has(input.destination)
+  ) {
+    return false;
+  }
+
+  if (input.mode === "navigate") {
+    return true;
+  }
+
+  if (input.destination === "document") {
+    return true;
+  }
+
+  return false;
 }

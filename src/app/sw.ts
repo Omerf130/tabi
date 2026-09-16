@@ -3,6 +3,10 @@
 
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
 import { Serwist } from "serwist";
+import {
+  shouldServeOfflineDocumentFallback,
+  toPwaRequestInput,
+} from "../features/pwa/pwa-request-policy";
 import { createTabiRuntimeCaching } from "../features/pwa/sw-runtime-caching";
 
 declare global {
@@ -19,6 +23,16 @@ const serwist = new Serwist({
   clientsClaim: false,
   navigationPreload: false,
   runtimeCaching: createTabiRuntimeCaching(),
+  fallbacks: {
+    entries: [
+      {
+        url: "/offline",
+        matcher({ request }) {
+          return shouldServeOfflineDocumentFallback(toPwaRequestInput(request));
+        },
+      },
+    ],
+  },
 });
 
 serwist.addEventListeners();

@@ -1129,6 +1129,15 @@
     "iosStep3": "Confirm \"Add\""
   },
 
+  "Offline": {
+    "metadataTitle": "Offline · Tabi",
+    "bannerTitle": "No internet connection",
+    "bannerSubtitle": "Some information may be unavailable.",
+    "pageTitle": "You're offline",
+    "pageBody": "An internet connection is required to load this information.",
+    "tryAgain": "Try again"
+  },
+
   "Auth": {
     "brandName": "Tabi",
     "login": {
