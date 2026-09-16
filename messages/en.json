@@ -1120,6 +1120,15 @@
     "metadataDescription": "Plan and travel with everything in one place — itinerary, stays, transport, and documents."
   },
 
+  "PwaInstall": {
+    "cta": "Install Tabi",
+    "iosTitle": "Install Tabi on your iPhone",
+    "iosIntro": "Add Tabi to your Home Screen for quick access.",
+    "iosStep1": "Tap the Share button in Safari",
+    "iosStep2": "Choose \"Add to Home Screen\"",
+    "iosStep3": "Confirm \"Add\""
+  },
+
   "Auth": {
     "brandName": "Tabi",
     "login": {

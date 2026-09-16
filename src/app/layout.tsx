@@ -25,6 +25,11 @@ export async function generateMetadata(): Promise<Metadata> {
       template: "%s · Tabi",
     },
     description: t("metadataDescription"),
+    appleWebApp: {
+      capable: true,
+      title: "Tabi",
+      statusBarStyle: "black-translucent",
+    },
   };
 }
 
@@ -32,6 +37,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  themeColor: "#1a2740",
 };
 
 export default async function RootLayout({

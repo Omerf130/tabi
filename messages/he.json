@@ -1120,6 +1120,15 @@
     "metadataDescription": "תכנון ונסיעה עם הכול במקום אחד — מסלול, לינה, תחבורה ומסמכים."
   },
 
+  "PwaInstall": {
+    "cta": "התקנת Tabi",
+    "iosTitle": "התקנת Tabi באייפון",
+    "iosIntro": "הוסיפו את Tabi למסך הבית לגישה מהירה.",
+    "iosStep1": "לחצו על כפתור השיתוף ב-Safari",
+    "iosStep2": "בחרו \"הוספה למסך הבית\"",
+    "iosStep3": "אשרו \"הוספה\""
+  },
+
   "Auth": {
     "brandName": "Tabi",
     "login": {

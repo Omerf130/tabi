@@ -1,0 +1,188 @@
+.installButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--size-touch-min);
+  padding-inline: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.installButton:hover:not(:disabled) {
+  background: var(--color-surface-subtle);
+}
+
+.installButton:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.installButton:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.welcomeInstallButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.75rem;
+  margin-top: 0.25rem;
+  padding-inline: 1.25rem;
+  border: 1px solid rgb(255 255 255 / 32%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 8%);
+  color: rgb(255 255 255 / 92%);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease;
+}
+
+.welcomeInstallButton:hover:not(:disabled) {
+  background: rgb(255 255 255 / 14%);
+  border-color: rgb(255 255 255 / 42%);
+}
+
+.welcomeInstallButton:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 92%);
+  outline-offset: 3px;
+}
+
+.welcomeInstallButton:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.iosSheet {
+  width: min(100% - var(--space-4), 26rem);
+  max-width: 26rem;
+  margin: auto;
+  margin-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-4));
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-sheet);
+  background: var(--color-surface-elevated);
+  color: var(--color-text);
+}
+
+.iosSheet::backdrop {
+  background: var(--color-scrim);
+}
+
+.iosSheetInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.iosSheetHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.iosSheetTitle {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.iosSheetClose {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin: -0.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.iosSheetClose:hover {
+  background: var(--color-surface-subtle);
+  color: var(--color-text);
+}
+
+.iosSheetClose:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.iosSheetIntro {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.iosSteps {
+  margin: 0;
+  padding-inline-start: 1.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.iosSteps li + li {
+  margin-top: var(--space-2);
+}
+
+.iosSheetFooter {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--space-1);
+}
+
+.iosDismiss {
+  min-height: var(--size-touch-min);
+  padding-inline: var(--space-4);
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.iosDismiss:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+@media (min-width: 640px) {
+  .iosSheet {
+    margin-bottom: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .installButton,
+  .welcomeInstallButton {
+    transition: none;
+  }
+}

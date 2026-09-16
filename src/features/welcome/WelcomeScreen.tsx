@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { PwaInstallAction } from "@/features/pwa-install/PwaInstallAction.client";
 import { TabiBrandMark } from "./TabiBrandMark";
 import styles from "./WelcomeScreen.module.scss";
 
@@ -45,6 +46,7 @@ export async function WelcomeScreen() {
               {t("signInLink")}
             </Link>
           </p>
+          <PwaInstallAction appearance="welcome" />
         </div>
       </div>
     </section>
