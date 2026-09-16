@@ -238,6 +238,36 @@
   --preview-primary-soft: #c8dfec;
 }
 
+.themePreview[data-preview-theme="sakura"] {
+  --preview-bg: #ede0e4;
+  --preview-surface: #fffbfc;
+  --preview-border: rgb(107 68 88 / 12%);
+  --preview-text: #352830;
+  --preview-muted: #7a6d72;
+  --preview-primary: #6b4458;
+  --preview-primary-soft: #e4d4da;
+}
+
+.themePreview[data-preview-theme="forest"] {
+  --preview-bg: #dce8e0;
+  --preview-surface: #fbfdfc;
+  --preview-border: rgb(45 90 74 / 12%);
+  --preview-text: #1f2e28;
+  --preview-muted: #62756c;
+  --preview-primary: #2d5a4a;
+  --preview-primary-soft: #d0dfd4;
+}
+
+.themePreview[data-preview-theme="sunset"] {
+  --preview-bg: #ece2d6;
+  --preview-surface: #fffdfa;
+  --preview-border: rgb(120 70 55 / 12%);
+  --preview-text: #3a2f29;
+  --preview-muted: #85776d;
+  --preview-primary: #a44f3d;
+  --preview-primary-soft: #e2d6c8;
+}
+
 .actions {
   display: flex;
   flex-direction: column;

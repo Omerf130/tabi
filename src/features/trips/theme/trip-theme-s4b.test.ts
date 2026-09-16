@@ -74,11 +74,14 @@ describe("S4B Trip theme runtime + Ocean reference theme", () => {
     expect(themes).not.toMatch(/\[data-trip-theme="ocean"\]\s+\[/);
   });
 
-  it("leaves sakura, forest, and sunset without visual selectors", () => {
+  it("defines Sakura, Forest, and Sunset semantic overrides like Ocean", () => {
     const themes = read("features/trips/theme/trip-themes.scss");
-    expect(themes).not.toContain('[data-trip-theme="sakura"]');
-    expect(themes).not.toContain('[data-trip-theme="forest"]');
-    expect(themes).not.toContain('[data-trip-theme="sunset"]');
+    for (const key of ["sakura", "forest", "sunset"] as const) {
+      expect(themes).toContain(`[data-trip-theme="${key}"]`);
+      expect(themes).not.toMatch(
+        new RegExp(`\\[data-trip-theme="${key}"\\]\\s+\\.`),
+      );
+    }
   });
 
   it("keeps theme palette out of TypeScript registry", () => {

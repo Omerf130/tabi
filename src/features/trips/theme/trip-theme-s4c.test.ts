@@ -92,9 +92,15 @@ describe("S4C Trip theme settings + owner selection", () => {
 
   it("uses registry enabled flag as the single selectable source of truth", () => {
     const selectable = listSelectableTripThemes().map((theme) => theme.key);
-    expect(selectable).toEqual(["default", "ocean"]);
-    expect(isTripThemeSelectable("sakura")).toBe(false);
-    expect(TRIP_THEME_REGISTRY.filter((t) => t.enabled)).toHaveLength(2);
+    expect(selectable).toEqual([
+      "default",
+      "ocean",
+      "sakura",
+      "forest",
+      "sunset",
+    ]);
+    expect(isTripThemeSelectable("sakura")).toBe(true);
+    expect(TRIP_THEME_REGISTRY.filter((t) => t.enabled)).toHaveLength(5);
   });
 
   it("includes HE/EN TripTheme messages without palette hex in registry", () => {
@@ -148,14 +154,18 @@ describe("S4C Trip theme settings + owner selection", () => {
     expect(tripFindByIdAndUpdateMock).not.toHaveBeenCalled();
   });
 
-  it("rejects unavailable themes and invalid keys", async () => {
-    const sakura = new FormData();
-    sakura.set("tripId", tripId);
-    sakura.set("themeKey", "sakura");
-    expect(await updateTripThemeAction({}, sakura)).toEqual({
-      errorCode: "themeUnavailable",
-    });
-    expect(tripFindByIdAndUpdateMock).not.toHaveBeenCalled();
+  it("accepts all five selectable themes and rejects invalid keys", async () => {
+    for (const themeKey of [
+      "sakura",
+      "forest",
+      "sunset",
+    ] as const) {
+      const formData = new FormData();
+      formData.set("tripId", tripId);
+      formData.set("themeKey", themeKey);
+      const result = await updateTripThemeAction({}, formData);
+      expect(result.ok).toBe(true);
+    }
 
     const invalid = updateTripThemeSchema.safeParse({
       tripId,
@@ -179,7 +189,15 @@ describe("S4C Trip theme settings + owner selection", () => {
     const appearanceStyles = read(
       "features/settings/appearance/AppearanceSettings.module.scss",
     );
-    expect(appearanceStyles).toContain('[data-preview-theme="ocean"]');
+    for (const key of [
+      "default",
+      "ocean",
+      "sakura",
+      "forest",
+      "sunset",
+    ] as const) {
+      expect(appearanceStyles).toContain(`[data-preview-theme="${key}"]`);
+    }
     expect(appearanceStyles).not.toContain("[data-trip-theme");
   });
 });

@@ -31,6 +31,9 @@ describe("S4A Trip theme domain foundation", () => {
     expect(listSelectableTripThemes().map((theme) => theme.key)).toEqual([
       "default",
       "ocean",
+      "sakura",
+      "forest",
+      "sunset",
     ]);
   });
 

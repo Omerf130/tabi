@@ -1434,15 +1434,15 @@
       },
       "sakura": {
         "name": "Sakura",
-        "description": "Coming in a future update."
+        "description": "Soft blush tones with a calm, elegant rose accent."
       },
       "forest": {
         "name": "Forest",
-        "description": "Coming in a future update."
+        "description": "Fresh sage surfaces with grounded evergreen accents."
       },
       "sunset": {
         "name": "Sunset",
-        "description": "Coming in a future update."
+        "description": "Warm sand and peach with terracotta golden-hour accents."
       }
     },
     "errors": {

@@ -29,19 +29,19 @@ export const TRIP_THEME_REGISTRY: ReadonlyArray<TripThemeDefinition> = [
     key: "sakura",
     nameMessageKey: "themes.sakura.name",
     descriptionMessageKey: "themes.sakura.description",
-    enabled: false,
+    enabled: true,
   },
   {
     key: "forest",
     nameMessageKey: "themes.forest.name",
     descriptionMessageKey: "themes.forest.description",
-    enabled: false,
+    enabled: true,
   },
   {
     key: "sunset",
     nameMessageKey: "themes.sunset.name",
     descriptionMessageKey: "themes.sunset.description",
-    enabled: false,
+    enabled: true,
   },
 ];
 

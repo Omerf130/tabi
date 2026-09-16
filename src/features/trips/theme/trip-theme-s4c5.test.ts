@@ -68,9 +68,21 @@ describe("S4C.5 Ocean visual depth", () => {
     expect(settingsHub).toContain("var(--color-accent-well)");
   });
 
-  it("does not add Sakura/Forest/Sunset palettes yet", () => {
-    expect(themesSource).not.toContain('[data-trip-theme="sakura"]');
-    expect(themesSource).not.toContain('[data-trip-theme="forest"]');
-    expect(themesSource).not.toContain('[data-trip-theme="sunset"]');
+  it("defines depth tokens for Sakura, Forest, and Sunset without status overrides", () => {
+    for (const key of ["sakura", "forest", "sunset"] as const) {
+      const start = themesSource.indexOf(`[data-trip-theme="${key}"]`);
+      expect(start).toBeGreaterThan(-1);
+      const nextTheme = themesSource.indexOf("[data-trip-theme=", start + 1);
+      const block =
+        nextTheme === -1
+          ? themesSource.slice(start)
+          : themesSource.slice(start, nextTheme);
+      for (const token of DEPTH_TOKENS) {
+        expect(block).toContain(`${token}:`);
+      }
+      for (const token of STATUS_TOKENS) {
+        expect(block).not.toContain(token);
+      }
+    }
   });
 });
