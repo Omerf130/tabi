@@ -1138,6 +1138,13 @@
     "tryAgain": "נסה שוב"
   },
 
+  "SwUpdate": {
+    "title": "גרסה חדשה של Tabi זמינה",
+    "body": "עדכון קצר ויש לך את הגרסה החדשה.",
+    "primary": "עדכן עכשיו",
+    "secondary": "אחר כך"
+  },
+
   "Auth": {
     "brandName": "Tabi",
     "login": {

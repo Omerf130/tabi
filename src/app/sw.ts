@@ -19,8 +19,11 @@ declare const self: ServiceWorkerGlobalScope;
 
 const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,
+  // Wait for explicit SKIP_WAITING from the in-app update prompt (skipWaiting: false).
+  // After approval, clientsClaim lets the new worker control open clients so
+  // controllerchange / Serwist "controlling" can drive a single reload.
   skipWaiting: false,
-  clientsClaim: false,
+  clientsClaim: true,
   navigationPreload: false,
   runtimeCaching: createTabiRuntimeCaching(),
   fallbacks: {

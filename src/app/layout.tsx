@@ -8,6 +8,7 @@ import {
 } from "@/features/i18n/locale";
 import { resolveRequestLocale } from "@/features/i18n/resolve-request-locale";
 import { ConnectivityBanner } from "@/features/pwa/ConnectivityBanner.client";
+import { SwUpdatePrompt } from "@/features/pwa/SwUpdatePrompt.client";
 import { TabiSerwistProvider } from "@/features/pwa/TabiSerwistProvider.client";
 import "@/styles/globals.scss";
 
@@ -62,6 +63,7 @@ export default async function RootLayout({
         <TabiSerwistProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
             <ConnectivityBanner />
+            <SwUpdatePrompt />
             {children}
           </NextIntlClientProvider>
         </TabiSerwistProvider>

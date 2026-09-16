@@ -39,7 +39,7 @@ describe("PWA Phase 2 architecture", () => {
   it("configures conservative lifecycle flags", () => {
     const swSource = readFileSync(join(root, "src/app/sw.ts"), "utf8");
     expect(swSource).toContain("skipWaiting: false");
-    expect(swSource).toContain("clientsClaim: false");
+    expect(swSource).toContain("clientsClaim: true");
     expect(swSource).not.toContain("skipWaiting: true");
   });
 

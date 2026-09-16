@@ -1138,6 +1138,13 @@
     "tryAgain": "Try again"
   },
 
+  "SwUpdate": {
+    "title": "A new version of Tabi is available",
+    "body": "A quick update will load the latest version.",
+    "primary": "Update now",
+    "secondary": "Later"
+  },
+
   "Auth": {
     "brandName": "Tabi",
     "login": {
