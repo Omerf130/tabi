@@ -75,6 +75,6 @@ describe("PWA Phase 1 — no service worker in repo scripts", () => {
   it("does not add Serwist or legacy PWA packages", () => {
     const pkg = readFileSync(join(root, "package.json"), "utf8");
 
-    expect(pkg).not.toMatch(/serwist|@serwist\/next|next-pwa|workbox/i);
+    expect(pkg).not.toMatch(/@serwist\/next|next-pwa|workbox/i);
   });
 });

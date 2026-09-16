@@ -7,6 +7,7 @@ import {
   localeToHtmlLang,
 } from "@/features/i18n/locale";
 import { resolveRequestLocale } from "@/features/i18n/resolve-request-locale";
+import { TabiSerwistProvider } from "@/features/pwa/TabiSerwistProvider.client";
 import "@/styles/globals.scss";
 
 const notoSansHebrew = Noto_Sans_Hebrew({
@@ -57,9 +58,11 @@ export default async function RootLayout({
       className={notoSansHebrew.variable}
     >
       <body>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        <TabiSerwistProvider>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </TabiSerwistProvider>
       </body>
     </html>
   );

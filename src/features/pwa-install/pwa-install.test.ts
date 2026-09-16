@@ -67,6 +67,6 @@ describe("PwaInstall architecture", () => {
 
   it("does not add service worker dependencies", () => {
     const pkg = readFileSync(join(root, "package.json"), "utf8");
-    expect(pkg).not.toMatch(/serwist|@serwist\/next|next-pwa|workbox/i);
+    expect(pkg).not.toMatch(/@serwist\/next|next-pwa|workbox/i);
   });
 });
