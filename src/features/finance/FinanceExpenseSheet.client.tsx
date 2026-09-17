@@ -28,6 +28,7 @@ import {
 import { getExpenseCategoryPresentation } from "./category-presentation";
 import { EXPENSE_CATEGORIES } from "./constants";
 import type { ExpenseCategory, ExpenseRowViewModel } from "./types";
+import overlayStyles from "@/features/itinerary/AddItemFlow.module.scss";
 import styles from "./FinancePage.module.scss";
 
 const initialState: ManualExpenseActionState = {};
@@ -367,7 +368,13 @@ export function FinanceExpenseSheet({
         <p className={styles.formError}>{tErrors(state.errorCode)}</p>
       ) : null}
 
-      <div className={styles.expenseFormActions}>
+      <div
+        className={
+          presentation === "embedded"
+            ? overlayStyles.overlayFooter
+            : styles.expenseFormActions
+        }
+      >
         {isEdit ? (
           <DeleteExpenseButton
             tripId={tripId}

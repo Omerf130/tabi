@@ -162,11 +162,7 @@ export function QuickAddHost() {
         </button>
       </div>
 
-      <div
-        className={
-          isFormStep ? `${styles.hostBody} ${styles.hostBodyForm}` : styles.hostBody
-        }
-      >
+      <div className={styles.hostBody}>
         {step.kind === "menu" ? (
           <QuickAddMenu role={bootstrap.role} onSelect={handleMenuSelect} />
         ) : null}
@@ -218,11 +214,7 @@ export function QuickAddHost() {
       />
       <div
         ref={panelRef}
-        className={
-          step.kind === "menu" || isFormStep
-            ? `${styles.mobileSheetPanel} ${styles.mobileSheetPanelForm}`
-            : styles.mobileSheetPanel
-        }
+        className={styles.mobileSheetPanel}
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}

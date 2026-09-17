@@ -241,6 +241,7 @@ export function QuickAddForms({
               "initialTransportId" in documentLink ? documentLink.initialTransportId : undefined
             }
             onSuccess={onSuccess}
+            overlayActionFooter
           />
         </div>
       );

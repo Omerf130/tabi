@@ -8,6 +8,7 @@ import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { Textarea } from "@/components/ui/Textarea/Textarea";
 import { AuthSubmitButton } from "@/features/auth/AuthSubmitButton";
+import overlayStyles from "@/features/itinerary/AddItemFlow.module.scss";
 import { TRAVEL_DOCUMENT_CATEGORIES } from "@/features/documents/constants";
 import { createTravelDocumentCategoryLabelResolver } from "@/features/documents/document-labels";
 import {
@@ -63,6 +64,8 @@ type DocumentFormProps = {
   initialTransportId?: string;
   onCancel?: () => void;
   onSuccess?: () => void;
+  /** Sticky overlay footer for Quick Add / sheet embeds only. */
+  overlayActionFooter?: boolean;
 };
 
 type DocumentRowProps = {
@@ -212,6 +215,7 @@ export function TripDocumentForm({
   initialTransportId,
   onCancel,
   onSuccess,
+  overlayActionFooter = false,
 }: DocumentFormProps) {
   const t = useTranslations("Documents");
   const tCommon = useTranslations("Common");
@@ -321,7 +325,11 @@ export function TripDocumentForm({
       ) : null}
       {successMessage ? <p className={styles.success}>{successMessage}</p> : null}
 
-      <div className={styles.rowActions}>
+      <div
+        className={
+          overlayActionFooter ? overlayStyles.plannerFooter : styles.rowActions
+        }
+      >
         <AuthSubmitButton>{submitLabel}</AuthSubmitButton>
         {onCancel ? (
           <Button type="button" variant="ghost" size="compact" onClick={onCancel}>
