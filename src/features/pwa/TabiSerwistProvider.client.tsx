@@ -15,7 +15,7 @@ export function TabiSerwistProvider({ children }: TabiSerwistProviderProps) {
       register
       cacheOnNavigation={false}
       reloadOnOnline={false}
-      options={{ scope: "/" }}
+      options={{ scope: "/", updateViaCache: "none" }}
     >
       {children}
     </SerwistProvider>

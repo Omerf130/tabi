@@ -137,14 +137,34 @@ describe("PWA Phase 4 update lifecycle wiring", () => {
     expect(flowSource).toContain("reload()");
   });
 
-  it("calls update on visibilitychange only", () => {
+  it("checks for updates on startup and on visibilitychange visible", () => {
     const hookSource = readFileSync(
       join(root, "src/features/pwa/useSerwistUpdate.ts"),
       "utf8",
     );
+    expect(hookSource).toContain("shouldRunStartupSerwistUpdate");
+    expect(hookSource).toContain("runSerwistUpdateCheck");
     expect(hookSource).toContain('document.addEventListener("visibilitychange"');
-    expect(hookSource).toContain("serwist.update()");
+    expect(hookSource).not.toContain("messageSkipWaiting");
     expect(hookSource).not.toMatch(/setInterval|setTimeout\([^)]*update/);
+  });
+
+  it("does not auto-apply updates on mount check", () => {
+    const hookSource = readFileSync(
+      join(root, "src/features/pwa/useSerwistUpdate.ts"),
+      "utf8",
+    );
+    expect(hookSource).not.toContain("reload(");
+    expect(hookSource).not.toContain("messageSkipWaiting");
+  });
+
+  it("swallows update check failures via runSerwistUpdateCheck", () => {
+    const checkSource = readFileSync(
+      join(root, "src/features/pwa/sw-update-check.ts"),
+      "utf8",
+    );
+    expect(checkSource).toContain("runSerwistUpdateCheck");
+    expect(checkSource).toMatch(/catch\s*\{/);
   });
 
   it("does not persist Later dismissal in storage", () => {
@@ -304,5 +324,14 @@ describe("PWA Phase 4 regression", () => {
     expect(provider).toContain("reloadOnOnline={false}");
     expect(provider).toContain("SerwistProvider");
     expect(provider).not.toContain("new Serwist");
+  });
+
+  it("registers the service worker with updateViaCache none", () => {
+    const provider = readFileSync(
+      join(root, "src/features/pwa/TabiSerwistProvider.client.tsx"),
+      "utf8",
+    );
+    expect(provider).toContain('updateViaCache: "none"');
+    expect(provider).toContain('scope: "/"');
   });
 });

@@ -3,6 +3,10 @@
 import { useSerwist } from "@serwist/turbopack/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { applySwUpdate } from "./sw-update-apply-flow";
+import {
+  runSerwistUpdateCheck,
+  shouldRunStartupSerwistUpdate,
+} from "./sw-update-check";
 import { isWaitingWorkerUpdate } from "./sw-update-state";
 
 const SW_SCOPE = "/";
@@ -31,6 +35,15 @@ async function syncWaitingState(
 
   setHasWaitingWorker(true);
   setIsFirstInstallWaiting(!isWaitingWorkerUpdate(hasController));
+}
+
+async function checkForWaitingWorkerUpdate(
+  serwist: { update: () => Promise<void> },
+  setHasWaitingWorker: (value: boolean) => void,
+  setIsFirstInstallWaiting: (value: boolean) => void,
+) {
+  await runSerwistUpdateCheck(serwist);
+  await syncWaitingState(setHasWaitingWorker, setIsFirstInstallWaiting);
 }
 
 export function useSerwistUpdate() {
@@ -70,6 +83,18 @@ export function useSerwistUpdate() {
   }, [serwist]);
 
   useEffect(() => {
+    if (!serwist || !shouldRunStartupSerwistUpdate()) {
+      return;
+    }
+
+    void checkForWaitingWorkerUpdate(
+      serwist,
+      setHasWaitingWorker,
+      setIsFirstInstallWaiting,
+    );
+  }, [serwist]);
+
+  useEffect(() => {
     if (!serwist) {
       return;
     }
@@ -80,9 +105,11 @@ export function useSerwistUpdate() {
       }
 
       setDismissedForSession(false);
-      void serwist.update().then(() => {
-        void syncWaitingState(setHasWaitingWorker, setIsFirstInstallWaiting);
-      });
+      void checkForWaitingWorkerUpdate(
+        serwist,
+        setHasWaitingWorker,
+        setIsFirstInstallWaiting,
+      );
     };
 
     document.addEventListener("visibilitychange", onVisibilityChange);
