@@ -5,7 +5,13 @@ import { useSyncExternalStore, useId } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button/Button";
 import {
+  getQuickAddOverlayOpenServerSnapshot,
+  getQuickAddOverlayOpenSnapshot,
+  subscribeQuickAddOverlayOpen,
+} from "@/features/quick-add/quick-add-overlay-open";
+import {
   shouldEnableUpdateNow,
+  shouldRenderSwUpdatePrompt,
   shouldShowSwUpdatePrompt,
 } from "./sw-update-state";
 import { useSerwistUpdate } from "./useSerwistUpdate";
@@ -55,11 +61,22 @@ export function SwUpdatePrompt() {
     applyUpdate,
   } = useSerwistUpdate();
 
-  const visible = shouldShowSwUpdatePrompt({
+  const showPrompt = shouldShowSwUpdatePrompt({
     hasWaitingWorker,
     isFirstInstallWaiting,
     dismissedForSession,
     isApplyingUpdate,
+  });
+
+  const quickAddOverlayOpen = useSyncExternalStore(
+    subscribeQuickAddOverlayOpen,
+    getQuickAddOverlayOpenSnapshot,
+    getQuickAddOverlayOpenServerSnapshot,
+  );
+
+  const visible = shouldRenderSwUpdatePrompt({
+    showPrompt,
+    quickAddOverlayOpen,
   });
 
   const updateEnabled = shouldEnableUpdateNow(isOnline, isApplyingUpdate);

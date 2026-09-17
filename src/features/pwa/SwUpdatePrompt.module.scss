@@ -2,7 +2,7 @@
   position: fixed;
   inset-inline: var(--space-4);
   bottom: calc(var(--safe-bottom) + var(--space-4));
-  z-index: 30;
+  z-index: var(--layer-system);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);

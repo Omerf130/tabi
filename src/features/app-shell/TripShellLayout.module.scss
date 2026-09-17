@@ -1,4 +1,7 @@
-/* Trip theme token scope root (.themeScope); see trip-themes.scss. */
+/* Trip theme token scope root (.themeScope); see trip-themes.scss.
+   isolation: isolate keeps atmosphere/content themed; trip overlays use
+   --layer-trip-overlay inside this scope. Root --layer-system UI (PWA
+   banner/prompt) stacks above the isolated scope on the document. */
 .themeScope {
   position: relative;
   min-height: 100dvh;
@@ -37,7 +40,7 @@
   position: fixed;
   inset-inline: 0;
   bottom: 0;
-  z-index: 10;
+  z-index: var(--layer-nav);
 }
 
 @media (min-width: 1024px) {

@@ -115,6 +115,19 @@
 
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /*
+    Overlay stacking (fixed UI inside the document; ascending priority).
+    Native <dialog> + showModal() uses the browser Top Layer and is not
+    part of this numeric scale. Trip mobile sheets under .themeScope
+    (isolation: isolate) compete below root-level --layer-system UI.
+  */
+  --layer-base: 0;
+  --layer-sticky: 1;
+  --layer-nav: 10;
+  --layer-popover: 20;
+  --layer-trip-overlay: 40;
+  --layer-system: 50;
 }
 
 @media (min-width: 768px) {

@@ -29,6 +29,17 @@ export function shouldShowSwUpdatePrompt(state: SwUpdatePromptState): boolean {
   return true;
 }
 
+/** Presentation only: defer interactive prompt while Global Quick Add sheet is open. */
+export function shouldRenderSwUpdatePrompt(input: {
+  showPrompt: boolean;
+  quickAddOverlayOpen: boolean;
+}): boolean {
+  if (!input.showPrompt) {
+    return false;
+  }
+  return !input.quickAddOverlayOpen;
+}
+
 export function shouldEnableUpdateNow(isOnline: boolean, isApplying: boolean): boolean {
   return isOnline && !isApplying;
 }

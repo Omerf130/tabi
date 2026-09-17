@@ -4,11 +4,13 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
   type ReactNode,
 } from "react";
+import { setQuickAddOverlayOpen } from "./quick-add-overlay-open";
 import { usePathname } from "next/navigation";
 import type { QuickAddBootstrap, QuickAddContext, QuickAddOpenOptions, QuickAddStep } from "./types";
 import { isAllowedQuickAddOriginPath } from "./validate-origin-path";
@@ -78,6 +80,13 @@ export function QuickAddProvider({
     setIsOpen(false);
     setStep({ kind: "menu" });
   }, []);
+
+  useEffect(() => {
+    setQuickAddOverlayOpen(isOpen);
+    return () => {
+      setQuickAddOverlayOpen(false);
+    };
+  }, [isOpen]);
 
   const value = useMemo(
     () => ({
