@@ -31,6 +31,11 @@ import {
 import type { CurrencyOption } from "@/features/currency/types";
 import { EntityCostFields } from "@/features/finance/EntityCostFields.client";
 import overlayStyles from "@/features/itinerary/AddItemFlow.module.scss";
+import { QuickAddPinnedFields } from "@/features/quick-add/QuickAddPinnedFields.client";
+import {
+  mergePlannerPinnedFormClass,
+  resolvePinnedPlannerFooterClass,
+} from "@/features/quick-add/quick-add-pinned-form";
 import { PlaceModeSegment } from "@/features/itinerary/PlaceModeSegment.client";
 import sectionStyles from "@/features/trips/settings/TripSettingsSections.module.scss";
 import { getMaxAccommodationCheckOutDate } from "./accommodation-date-semantics";
@@ -236,6 +241,7 @@ export function TripAccommodationForm({
   currencies = [],
   plannerPresentation = false,
   overlayNavigation = false,
+  pinnedActionFooter = false,
 }: {
   tripId: string;
   accommodation?: AccommodationSettingsViewModel;
@@ -253,6 +259,7 @@ export function TripAccommodationForm({
   currencies?: readonly CurrencyOption[];
   plannerPresentation?: boolean;
   overlayNavigation?: boolean;
+  pinnedActionFooter?: boolean;
 }) {
   const t = useTranslations("Accommodation");
   const tActivity = useTranslations("Activity");
@@ -276,11 +283,21 @@ export function TripAccommodationForm({
   const errorMessage = translateAccommodationError(t, state.errorCode);
   const successMessage = translateAccommodationSuccess(t, state.successCode);
 
+  const plannerFooterClass = resolvePinnedPlannerFooterClass(
+    pinnedActionFooter,
+    overlayStyles.plannerFooter,
+  );
+
   return (
     <form
       action={formAction}
-      className={plannerPresentation ? overlayStyles.plannerForm : styles.editForm}
+      className={
+        plannerPresentation
+          ? mergePlannerPinnedFormClass(overlayStyles.plannerForm, pinnedActionFooter)
+          : styles.editForm
+      }
     >
+      <QuickAddPinnedFields pinnedActionFooter={pinnedActionFooter && plannerPresentation}>
       <input type="hidden" name="tripId" value={tripId} />
       {accommodation ? (
         <input type="hidden" name="accommodationId" value={accommodation.id} />
@@ -379,9 +396,10 @@ export function TripAccommodationForm({
         </p>
       ) : null}
       {successMessage ? <p className={styles.success}>{successMessage}</p> : null}
+      </QuickAddPinnedFields>
 
       {plannerPresentation ? (
-        <div className={overlayStyles.plannerFooter}>
+        <div className={plannerFooterClass}>
           {canSubmitGoogle ? (
             <AuthSubmitButton>{submitLabel}</AuthSubmitButton>
           ) : (

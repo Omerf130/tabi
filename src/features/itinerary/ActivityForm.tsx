@@ -22,6 +22,11 @@ import {
 } from "./ActivityLocationSection";
 import { shouldExpandActivityDetails } from "./should-expand-activity-details";
 import type { ActivityFormValues } from "./types";
+import { QuickAddPinnedFields } from "@/features/quick-add/QuickAddPinnedFields.client";
+import {
+  mergePlannerPinnedFormClass,
+  resolvePinnedPlannerFooterClass,
+} from "@/features/quick-add/quick-add-pinned-form";
 import overlayStyles from "./AddItemFlow.module.scss";
 import styles from "./ActivityForm.module.scss";
 
@@ -54,6 +59,7 @@ type ActivityFormProps = {
   financeBaseCurrency?: string;
   currencies?: readonly CurrencyOption[];
   linkedCost?: EntityLinkedCostViewModel | null;
+  pinnedActionFooter?: boolean;
 };
 
 export function ActivityForm({
@@ -71,6 +77,7 @@ export function ActivityForm({
   financeBaseCurrency = "ILS",
   currencies = [],
   linkedCost,
+  pinnedActionFooter = false,
 }: ActivityFormProps) {
   const t = useTranslations("Activity");
   const tCommon = useTranslations("Common");
@@ -127,10 +134,15 @@ export function ActivityForm({
     }
   }
 
+  const footerClass = resolvePinnedPlannerFooterClass(
+    pinnedActionFooter,
+    styles.formFooter,
+  );
+
   return (
     <form
       action={formAction}
-      className={styles.form}
+      className={mergePlannerPinnedFormClass(styles.form, pinnedActionFooter)}
       onChange={handleChange}
       onInput={handleChange}
     >
@@ -142,6 +154,7 @@ export function ActivityForm({
         <input type="hidden" name="activityId" value={activityId} />
       ) : null}
 
+      <QuickAddPinnedFields pinnedActionFooter={pinnedActionFooter}>
       <div
         className={
           overlayNavigation ? `${styles.formBody} ${styles.formBodyPlanner}` : styles.formBody
@@ -358,9 +371,10 @@ export function ActivityForm({
           </>
         ) : null}
       </div>
+      </QuickAddPinnedFields>
 
       {showDetails ? (
-        <div className={styles.formFooter}>
+        <div className={footerClass}>
           <div className={styles.footerActions}>
             <AuthSubmitButton>
               {mode === "create" ? t("createSubmit") : t("updateSubmit")}

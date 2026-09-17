@@ -287,15 +287,47 @@
 
 @media (max-width: 1023px) {
   .mobileSheetPanel {
+    height: min(100dvh, 48rem);
     max-height: min(100dvh, 48rem);
   }
 
   .mobileSheetPanel .hostBody {
     flex: 1 1 auto;
+    min-height: 0;
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
   }
+
+  .mobileSheetPanel .hostBodyQuickAddForm {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding-bottom: 0;
+  }
+
+  .mobileSheetPanel .hostBodyQuickAddForm .quickAddFormMount {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+.quickAddFormMount {
+  width: 100%;
+  min-width: 0;
+}
+
+.quickAddFormInner {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

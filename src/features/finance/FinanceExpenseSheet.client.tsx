@@ -29,6 +29,11 @@ import { getExpenseCategoryPresentation } from "./category-presentation";
 import { EXPENSE_CATEGORIES } from "./constants";
 import type { ExpenseCategory, ExpenseRowViewModel } from "./types";
 import overlayStyles from "@/features/itinerary/AddItemFlow.module.scss";
+import { QuickAddPinnedFields } from "@/features/quick-add/QuickAddPinnedFields.client";
+import {
+  mergePlannerPinnedFormClass,
+  resolvePinnedPlannerFooterClass,
+} from "@/features/quick-add/quick-add-pinned-form";
 import styles from "./FinancePage.module.scss";
 
 const initialState: ManualExpenseActionState = {};
@@ -43,6 +48,7 @@ type FinanceExpenseSheetProps = {
   defaultExpenseDate?: string;
   onCreateSuccess?: () => void;
   onDirtyChange?: (dirty: boolean) => void;
+  pinnedActionFooter?: boolean;
 };
 
 export function FinanceExpenseSheet({
@@ -55,6 +61,7 @@ export function FinanceExpenseSheet({
   defaultExpenseDate,
   onCreateSuccess,
   onDirtyChange,
+  pinnedActionFooter = false,
 }: FinanceExpenseSheetProps) {
   const t = useTranslations("Finance");
   const tCategories = useTranslations("Finance.categories");
@@ -279,15 +286,24 @@ export function FinanceExpenseSheet({
       </div>
     );
 
+  const embeddedPinned = presentation === "embedded" && pinnedActionFooter;
+  const embeddedFooterClass = resolvePinnedPlannerFooterClass(
+    embeddedPinned,
+    overlayStyles.overlayFooter,
+  );
+
   const formContent = (
     <form
       action={formAction}
       className={
-        presentation === "embedded" ? styles.expenseFormEmbedded : styles.expenseForm
+        presentation === "embedded"
+          ? mergePlannerPinnedFormClass(styles.expenseFormEmbedded, pinnedActionFooter)
+          : styles.expenseForm
       }
       onChange={() => onDirtyChange?.(true)}
       onInput={() => onDirtyChange?.(true)}
     >
+      <QuickAddPinnedFields pinnedActionFooter={embeddedPinned}>
       <input type="hidden" name="tripId" value={tripId} />
       {expense ? <input type="hidden" name="expenseId" value={expense.id} /> : null}
       {(isManual || expense?.categoryEditable) && category ? (
@@ -367,12 +383,11 @@ export function FinanceExpenseSheet({
       {state.errorCode ? (
         <p className={styles.formError}>{tErrors(state.errorCode)}</p>
       ) : null}
+      </QuickAddPinnedFields>
 
       <div
         className={
-          presentation === "embedded"
-            ? overlayStyles.overlayFooter
-            : styles.expenseFormActions
+          presentation === "embedded" ? embeddedFooterClass : styles.expenseFormActions
         }
       >
         {isEdit ? (

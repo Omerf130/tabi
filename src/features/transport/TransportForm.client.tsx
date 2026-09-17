@@ -29,6 +29,11 @@ import {
 } from "./transport-labels";
 import { TRAIN_CATEGORIES, type TransportType } from "./transport-types";
 import type { TransportFormValues } from "./types";
+import { QuickAddPinnedFields } from "@/features/quick-add/QuickAddPinnedFields.client";
+import {
+  mergePlannerPinnedFormClass,
+  resolvePinnedPlannerFooterClass,
+} from "@/features/quick-add/quick-add-pinned-form";
 import styles from "./TransportForm.module.scss";
 
 const initialState: TransportActionState = {};
@@ -48,6 +53,7 @@ type TransportFormProps = {
   plannerPresentation?: boolean;
   transportType?: TransportType;
   onTransportTypeChange?: (transportType: TransportType) => void;
+  pinnedActionFooter?: boolean;
 };
 
 function TimezoneSelect({
@@ -239,6 +245,7 @@ export function TransportForm({
   plannerPresentation = false,
   transportType,
   onTransportTypeChange,
+  pinnedActionFooter = false,
 }: TransportFormProps) {
   const t = useTranslations("Transport");
   const tCommon = useTranslations("Common");
@@ -297,13 +304,22 @@ export function TransportForm({
     const departureLocationError = state.fieldErrors?.["departure.locationName"];
     const arrivalLocationError = state.fieldErrors?.["arrival.locationName"];
 
+    const footerClass = resolvePinnedPlannerFooterClass(
+      pinnedActionFooter,
+      overlayStyles.overlayFooter,
+    );
+
     return (
       <form
         action={formAction}
-        className={overlayStyles.transportOverlayForm}
+        className={mergePlannerPinnedFormClass(
+          overlayStyles.transportOverlayForm,
+          pinnedActionFooter,
+        )}
         onInput={(event) => syncJourneyPreview(event.currentTarget)}
         onChange={(event) => syncJourneyPreview(event.currentTarget)}
       >
+        <QuickAddPinnedFields pinnedActionFooter={pinnedActionFooter}>
         <input type="hidden" name="tripId" value={tripId} />
         <input type="hidden" name="type" value={type} />
         {mode === "edit" && transportId ? (
@@ -532,8 +548,9 @@ export function TransportForm({
             idPrefix={`transport-${transportId ?? "create"}`}
           />
         ) : null}
+        </QuickAddPinnedFields>
 
-        <div className={overlayStyles.overlayFooter}>
+        <div className={footerClass}>
           <AuthSubmitButton>
             {mode === "create" ? t("createPlannerSubmit") : t("updateSubmit")}
           </AuthSubmitButton>

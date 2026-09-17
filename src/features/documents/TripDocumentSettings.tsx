@@ -9,6 +9,11 @@ import { Input } from "@/components/ui/Input/Input";
 import { Textarea } from "@/components/ui/Textarea/Textarea";
 import { AuthSubmitButton } from "@/features/auth/AuthSubmitButton";
 import overlayStyles from "@/features/itinerary/AddItemFlow.module.scss";
+import { QuickAddPinnedFields } from "@/features/quick-add/QuickAddPinnedFields.client";
+import {
+  mergePlannerPinnedFormClass,
+  resolvePinnedPlannerFooterClass,
+} from "@/features/quick-add/quick-add-pinned-form";
 import { TRAVEL_DOCUMENT_CATEGORIES } from "@/features/documents/constants";
 import { createTravelDocumentCategoryLabelResolver } from "@/features/documents/document-labels";
 import {
@@ -66,6 +71,7 @@ type DocumentFormProps = {
   onSuccess?: () => void;
   /** Sticky overlay footer for Quick Add / sheet embeds only. */
   overlayActionFooter?: boolean;
+  pinnedActionFooter?: boolean;
 };
 
 type DocumentRowProps = {
@@ -216,6 +222,7 @@ export function TripDocumentForm({
   onCancel,
   onSuccess,
   overlayActionFooter = false,
+  pinnedActionFooter = false,
 }: DocumentFormProps) {
   const t = useTranslations("Documents");
   const tCommon = useTranslations("Common");
@@ -239,8 +246,17 @@ export function TripDocumentForm({
     }
   }, [onSuccess, router, state.ok]);
 
+  const overlayFooterClass = resolvePinnedPlannerFooterClass(
+    pinnedActionFooter,
+    overlayStyles.plannerFooter,
+  );
+
   return (
-    <form action={formAction} className={styles.editForm}>
+    <form
+      action={formAction}
+      className={mergePlannerPinnedFormClass(styles.editForm, pinnedActionFooter)}
+    >
+      <QuickAddPinnedFields pinnedActionFooter={pinnedActionFooter}>
       <input type="hidden" name="tripId" value={tripId} />
       {document ? <input type="hidden" name="documentId" value={document.id} /> : null}
 
@@ -324,10 +340,11 @@ export function TripDocumentForm({
         </p>
       ) : null}
       {successMessage ? <p className={styles.success}>{successMessage}</p> : null}
+      </QuickAddPinnedFields>
 
       <div
         className={
-          overlayActionFooter ? overlayStyles.plannerFooter : styles.rowActions
+          overlayActionFooter ? overlayFooterClass : styles.rowActions
         }
       >
         <AuthSubmitButton>{submitLabel}</AuthSubmitButton>

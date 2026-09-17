@@ -22,23 +22,24 @@ describe("Product Hardening 2 — Quick Add mobile layout contract", () => {
     expect(scss).toMatch(/\.desktopPanel \.hostBody[\s\S]*max-height: min\(70dvh, 36rem\)/);
   });
 
-  it("uses a single 100dvh mobile panel budget and flex scroll chain", () => {
+  it("uses a definite 100dvh mobile panel height and flex scroll chain", () => {
     const scss = read("features/quick-add/QuickAdd.module.scss");
     const mobileBlock = scss.split("@media (max-width: 1023px)")[1]?.split("@media")[0] ?? "";
+    expect(mobileBlock).toContain("height: min(100dvh, 48rem)");
     expect(mobileBlock).toContain("max-height: min(100dvh, 48rem)");
     expect(scss).toContain(".hostBody");
     expect(scss).toMatch(/\.hostBody[\s\S]*min-height:\s*0/);
     expect(scss).toMatch(/\.mobileSheetPanel[\s\S]*min-height:\s*0/);
-    expect(mobileBlock).toMatch(/\.mobileSheetPanel[\s\S]*\.hostBody[\s\S]*overflow-y:\s*auto/);
+    expect(mobileBlock).toContain("hostBodyQuickAddForm");
+    expect(mobileBlock).toMatch(/\.hostBodyQuickAddForm[\s\S]*overflow:\s*hidden/);
     expect(mobileBlock).toContain("flex: 1 1 auto");
   });
 
-  it("keeps one intentional mobile scroll region on hostBody", () => {
+  it("keeps form-step host body non-scrolling; field scroll lives in plannerFormScroll", () => {
     const scss = read("features/quick-add/QuickAdd.module.scss");
-    const mobileBlock = scss.split("@media (max-width: 1023px)")[1]?.split("@media")[0] ?? "";
-    const scrollMatches = mobileBlock.match(/overflow-y:\s*auto/g) ?? [];
-    expect(scrollMatches).toHaveLength(1);
+    const flow = read("features/itinerary/AddItemFlow.module.scss");
     expect(scss).toMatch(/\.mobileSheetPanel[\s\S]*overflow:\s*hidden/);
+    expect(flow).toMatch(/\.plannerFormScroll[\s\S]*overflow-y:\s*auto/);
   });
 
   it("scopes desktop dialog scroll caps separately from mobile sheet", () => {
@@ -54,17 +55,19 @@ describe("Product Hardening 2 — Quick Add mobile layout contract", () => {
     expect(flow).toContain("padding-bottom: calc(var(--space-2) + var(--safe-bottom))");
   });
 
-  it("uses embedded expense overlay footer and Quick Add document overlay footer", () => {
+  it("uses embedded expense and document Quick Add pinned footer wiring", () => {
     const expense = read("features/finance/FinanceExpenseSheet.client.tsx");
     expect(expense).toContain('presentation === "embedded"');
-    expect(expense).toContain("overlayStyles.overlayFooter");
+    expect(expense).toContain("pinnedActionFooter");
+    expect(expense).toContain("resolvePinnedPlannerFooterClass");
 
     const forms = read("features/quick-add/QuickAddForms.client.tsx");
     expect(forms).toContain("overlayActionFooter");
+    expect(forms).toContain("pinnedActionFooter");
 
     const docs = read("features/documents/TripDocumentSettings.tsx");
     expect(docs).toContain("overlayActionFooter");
-    expect(docs).toContain("overlayStyles.plannerFooter");
+    expect(docs).toContain("pinnedActionFooter");
   });
 
   it("keeps all six owner Quick Add actions and member reminder-only menu", () => {
@@ -83,6 +86,7 @@ describe("Product Hardening 2 — Quick Add mobile layout contract", () => {
     const host = read("features/quick-add/QuickAddHost.client.tsx");
     expect(host).not.toContain("visualViewport");
     expect(host).not.toContain("keyboard-inset");
+    expect(host).toContain("hostBodyQuickAddForm");
   });
 
   it("regression: BottomNav and Hardening 1 shell safe-top unchanged", () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { createAccommodationAction } from "@/features/accommodations/actions";
 import { TripAccommodationForm } from "@/features/accommodations/TripAccommodationSettings";
@@ -19,9 +19,18 @@ import { createTripReminderAction, type TripReminderActionState } from "@/featur
 import { translateReminderError } from "@/features/trips/reminders/translate-reminder-error";
 import { TripReminderCreateFields } from "@/features/trips/reminders/TripReminderCreateFields.client";
 import reminderStyles from "@/features/trips/reminders/TripReminderSettings.module.scss";
+import { QuickAddPinnedFields } from "./QuickAddPinnedFields.client";
+import {
+  mergePlannerPinnedFormClass,
+  resolvePinnedPlannerFooterClass,
+} from "./quick-add-pinned-form";
 import type { QuickAddBootstrap, QuickAddContext, QuickAddStep } from "./types";
+import styles from "./QuickAdd.module.scss";
 
 const reminderInitialState: TripReminderActionState = {};
+
+/** Global Quick Add mobile: pin primary actions outside field scroll. */
+const QUICK_ADD_PINNED_ACTION = true;
 
 type QuickAddFormsProps = {
   step: QuickAddStep;
@@ -31,6 +40,10 @@ type QuickAddFormsProps = {
   onDirtyChange: (dirty: boolean) => void;
   onTransportTypeChange: (transportType: TransportType) => void;
 };
+
+function QuickAddFormMount({ children }: { children: ReactNode }) {
+  return <div className={styles.quickAddFormMount}>{children}</div>;
+}
 
 function resolveDocumentLink(context: QuickAddContext) {
   const defaults = context.linkDefaults;
@@ -81,31 +94,43 @@ function QuickAddReminderForm({
     }
   }, [createState.ok, onSuccess]);
 
+  const footerClass = resolvePinnedPlannerFooterClass(
+    QUICK_ADD_PINNED_ACTION,
+    overlayStyles.plannerFooter,
+  );
+
   return (
-    <form
-      action={createAction}
-      className={overlayStyles.plannerForm}
-      onChange={() => onDirtyChange(true)}
-      onInput={() => onDirtyChange(true)}
-    >
-      <TripReminderCreateFields
-        tripId={context.tripId}
-        startDate={bootstrap.startDate}
-        endDate={bootstrap.endDate}
-        defaultDate={context.date}
-        lockDate={lockDate}
-        idPrefix="quick-add-reminder"
-        rows={3}
-      />
-      {createError ? (
-        <p className={reminderStyles.error} role="alert">
-          {createError}
-        </p>
-      ) : null}
-      <div className={overlayStyles.plannerFooter}>
-        <AuthSubmitButton>{t("dayActionReminderAdd")}</AuthSubmitButton>
-      </div>
-    </form>
+    <QuickAddFormMount>
+      <form
+        action={createAction}
+        className={mergePlannerPinnedFormClass(
+          overlayStyles.plannerForm,
+          QUICK_ADD_PINNED_ACTION,
+        )}
+        onChange={() => onDirtyChange(true)}
+        onInput={() => onDirtyChange(true)}
+      >
+        <QuickAddPinnedFields pinnedActionFooter={QUICK_ADD_PINNED_ACTION}>
+          <TripReminderCreateFields
+            tripId={context.tripId}
+            startDate={bootstrap.startDate}
+            endDate={bootstrap.endDate}
+            defaultDate={context.date}
+            lockDate={lockDate}
+            idPrefix="quick-add-reminder"
+            rows={3}
+          />
+          {createError ? (
+            <p className={reminderStyles.error} role="alert">
+              {createError}
+            </p>
+          ) : null}
+        </QuickAddPinnedFields>
+        <div className={footerClass}>
+          <AuthSubmitButton>{t("dayActionReminderAdd")}</AuthSubmitButton>
+        </div>
+      </form>
+    </QuickAddFormMount>
   );
 }
 
@@ -125,71 +150,85 @@ export function QuickAddForms({
 
   const date = context.date;
   const documentLink = resolveDocumentLink(context);
+  const pinnedActionFooter = QUICK_ADD_PINNED_ACTION;
 
   switch (step.action) {
     case "activity":
       return (
-        <ActivityForm
-          key={`qa-activity-${date ?? "open"}`}
-          tripId={context.tripId}
-          tripDates={bootstrap.tripDates}
-          mode="create"
-          lockDate={Boolean(date)}
-          overlayNavigation
-          defaultValues={emptyActivityFormValues({
-            date: date ?? bootstrap.startDate,
-            type: ACTIVITY_TYPES[0],
-          })}
-          onSuccess={onSuccess}
-          onDirtyChange={onDirtyChange}
-          showCostFields={bootstrap.showCostFields}
-          financeBaseCurrency={bootstrap.financeBaseCurrency}
-          currencies={bootstrap.currencies}
-        />
+        <QuickAddFormMount>
+          <ActivityForm
+            key={`qa-activity-${date ?? "open"}`}
+            tripId={context.tripId}
+            tripDates={bootstrap.tripDates}
+            mode="create"
+            lockDate={Boolean(date)}
+            overlayNavigation
+            pinnedActionFooter={pinnedActionFooter}
+            defaultValues={emptyActivityFormValues({
+              date: date ?? bootstrap.startDate,
+              type: ACTIVITY_TYPES[0],
+            })}
+            onSuccess={onSuccess}
+            onDirtyChange={onDirtyChange}
+            showCostFields={bootstrap.showCostFields}
+            financeBaseCurrency={bootstrap.financeBaseCurrency}
+            currencies={bootstrap.currencies}
+          />
+        </QuickAddFormMount>
       );
     case "accommodation":
       return (
-        <TripAccommodationForm
-          tripId={context.tripId}
-          startDate={bootstrap.startDate}
-          endDate={bootstrap.endDate}
-          idPrefix="quick-add-accommodation"
-          action={createAccommodationAction}
-          submitLabel={t("dayActionAddAccommodation")}
-          defaultCheckInDate={date}
-          overlayNavigation
-          plannerPresentation
-          onSuccess={onSuccess}
-          financeBaseCurrency={bootstrap.financeBaseCurrency}
-          currencies={bootstrap.showCostFields ? bootstrap.currencies : []}
-        />
+        <QuickAddFormMount>
+          <TripAccommodationForm
+            tripId={context.tripId}
+            startDate={bootstrap.startDate}
+            endDate={bootstrap.endDate}
+            idPrefix="quick-add-accommodation"
+            action={createAccommodationAction}
+            submitLabel={t("dayActionAddAccommodation")}
+            defaultCheckInDate={date}
+            overlayNavigation
+            plannerPresentation
+            pinnedActionFooter={pinnedActionFooter}
+            onSuccess={onSuccess}
+            financeBaseCurrency={bootstrap.financeBaseCurrency}
+            currencies={bootstrap.showCostFields ? bootstrap.currencies : []}
+          />
+        </QuickAddFormMount>
       );
     case "transport":
       if (!step.transportType) {
         return null;
       }
       return (
-        <div onChange={() => onDirtyChange(true)} onInput={() => onDirtyChange(true)}>
-          <TransportForm
-            key={`qa-transport-${step.transportType}-${date ?? ""}`}
-            tripId={context.tripId}
-            mode="create"
-            overlayNavigation
-            plannerPresentation
-            transportType={step.transportType as TransportType}
-            onTransportTypeChange={(transportType) => {
-              onDirtyChange(false);
-              onTransportTypeChange(transportType);
-            }}
-            defaultValues={{
-              ...createEmptyTransportFormValues(step.transportType as TransportType),
-              ...(date ? { departureDate: date } : {}),
-            }}
-            onSuccess={onSuccess}
-            financeBaseCurrency={bootstrap.financeBaseCurrency}
-            currencies={bootstrap.showCostFields ? bootstrap.currencies : []}
-          />
-        </div>
+        <QuickAddFormMount>
+          <div
+            className={styles.quickAddFormInner}
+            onChange={() => onDirtyChange(true)}
+            onInput={() => onDirtyChange(true)}
+          >
+            <TransportForm
+              key={`qa-transport-${step.transportType}-${date ?? ""}`}
+              tripId={context.tripId}
+              mode="create"
+              overlayNavigation
+              plannerPresentation
+              pinnedActionFooter={pinnedActionFooter}
+              transportType={step.transportType as TransportType}
+              onTransportTypeChange={(transportType) => {
+                onDirtyChange(false);
+                onTransportTypeChange(transportType);
+              }}
+              defaultValues={{
+                ...createEmptyTransportFormValues(step.transportType as TransportType),
+                ...(date ? { departureDate: date } : {}),
+              }}
+              onSuccess={onSuccess}
+              financeBaseCurrency={bootstrap.financeBaseCurrency}
+              currencies={bootstrap.showCostFields ? bootstrap.currencies : []}
+            />
+          </div>
+        </QuickAddFormMount>
       );
     case "reminder":
       return (
@@ -202,48 +241,54 @@ export function QuickAddForms({
       );
     case "expense":
       return (
-        <FinanceExpenseSheet
-          tripId={context.tripId}
-          baseCurrency={bootstrap.financeBaseCurrency}
-          currencies={bootstrap.currencies}
-          defaultExpenseDate={date}
-          presentation="embedded"
-          onClose={() => {}}
-          onDirtyChange={onDirtyChange}
-          onCreateSuccess={onSuccess}
-        />
+        <QuickAddFormMount>
+          <FinanceExpenseSheet
+            tripId={context.tripId}
+            baseCurrency={bootstrap.financeBaseCurrency}
+            currencies={bootstrap.currencies}
+            defaultExpenseDate={date}
+            presentation="embedded"
+            pinnedActionFooter={pinnedActionFooter}
+            onClose={() => {}}
+            onDirtyChange={onDirtyChange}
+            onCreateSuccess={onSuccess}
+          />
+        </QuickAddFormMount>
       );
     case "document":
       return (
-        <div
-          className={overlayStyles.plannerForm}
-          onChange={() => onDirtyChange(true)}
-          onInput={() => onDirtyChange(true)}
-        >
-          <TripDocumentForm
-            tripId={context.tripId}
-            activityOptions={bootstrap.documentLinkOptions.activityOptions}
-            accommodationOptions={bootstrap.documentLinkOptions.accommodationOptions}
-            transportOptions={bootstrap.documentLinkOptions.transportOptions}
-            action={createTravelDocumentAction}
-            submitLabel={t("dayActionAddDocument")}
-            includeFile
-            initialLinkType={documentLink.initialLinkType}
-            initialActivityId={
-              "initialActivityId" in documentLink ? documentLink.initialActivityId : undefined
-            }
-            initialAccommodationId={
-              "initialAccommodationId" in documentLink
-                ? documentLink.initialAccommodationId
-                : undefined
-            }
-            initialTransportId={
-              "initialTransportId" in documentLink ? documentLink.initialTransportId : undefined
-            }
-            onSuccess={onSuccess}
-            overlayActionFooter
-          />
-        </div>
+        <QuickAddFormMount>
+          <div
+            className={styles.quickAddFormInner}
+            onChange={() => onDirtyChange(true)}
+            onInput={() => onDirtyChange(true)}
+          >
+            <TripDocumentForm
+              tripId={context.tripId}
+              activityOptions={bootstrap.documentLinkOptions.activityOptions}
+              accommodationOptions={bootstrap.documentLinkOptions.accommodationOptions}
+              transportOptions={bootstrap.documentLinkOptions.transportOptions}
+              action={createTravelDocumentAction}
+              submitLabel={t("dayActionAddDocument")}
+              includeFile
+              initialLinkType={documentLink.initialLinkType}
+              initialActivityId={
+                "initialActivityId" in documentLink ? documentLink.initialActivityId : undefined
+              }
+              initialAccommodationId={
+                "initialAccommodationId" in documentLink
+                  ? documentLink.initialAccommodationId
+                  : undefined
+              }
+              initialTransportId={
+                "initialTransportId" in documentLink ? documentLink.initialTransportId : undefined
+              }
+              onSuccess={onSuccess}
+              overlayActionFooter
+              pinnedActionFooter={pinnedActionFooter}
+            />
+          </div>
+        </QuickAddFormMount>
       );
     default:
       return null;

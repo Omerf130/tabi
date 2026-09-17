@@ -162,7 +162,13 @@ export function QuickAddHost() {
         </button>
       </div>
 
-      <div className={styles.hostBody}>
+      <div
+        className={
+          isFormStep && !isDesktop
+            ? `${styles.hostBody} ${styles.hostBodyQuickAddForm}`
+            : styles.hostBody
+        }
+      >
         {step.kind === "menu" ? (
           <QuickAddMenu role={bootstrap.role} onSelect={handleMenuSelect} />
         ) : null}

@@ -90,6 +90,44 @@
   font-weight: 700;
 }
 
+/* Global Quick Add mobile: pinned action outside field scroll (not sticky). */
+.plannerFormPinned {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  min-width: 0;
+  gap: 0;
+}
+
+.plannerFormScroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.pinnedActionFooter {
+  composes: overlayFooter;
+  position: static;
+  flex-shrink: 0;
+  margin-top: 0;
+  z-index: auto;
+}
+
+.pinnedActionFooter :global(button[type="submit"]) {
+  width: 100%;
+  min-height: 3rem;
+  font-weight: 700;
+}
+
 /* ── Segmented control (full width) ── */
 
 .segmentedControl {
