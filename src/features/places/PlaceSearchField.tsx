@@ -14,6 +14,7 @@ import { isValidPlaceSessionToken } from "@/features/places/placeSession";
 import { usePlaceAutocompleteSearch } from "@/features/places/use-place-autocomplete-search";
 import { IconCheck, IconMapPin, IconSearch } from "@/components/ui/icons";
 import { GooglePlacesAttribution } from "./GooglePlacesAttribution";
+import { handlePlaceSearchEscapeKeyDown } from "./place-search-escape-keydown";
 import styles from "./placeSearch.module.scss";
 
 export type PlaceSearchSelection = ResolvedPlacePreview;
@@ -141,9 +142,17 @@ export function PlaceSearchField({
     }
   }
 
+  function dismissSuggestionsFromEscape() {
+    handleQueryChange("");
+  }
+
   function handleInputKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    handlePlaceSearchEscapeKeyDown(event, suggestions.length, {
+      dismissSuggestions: dismissSuggestionsFromEscape,
+      resetActiveIndex: () => setActiveIndex(-1),
+    });
+
     if (event.key === "Escape") {
-      setActiveIndex(-1);
       return;
     }
 
