@@ -66,3 +66,10 @@
 .header[data-align="center"] .side:empty:last-child {
   width: var(--size-touch-min);
 }
+
+/* Trip shell owns --safe-top on .contentArea (mobile); do not double-count here. */
+@media (max-width: 1023px) {
+  :global([data-trip-theme]) .header {
+    padding-top: var(--space-2);
+  }
+}

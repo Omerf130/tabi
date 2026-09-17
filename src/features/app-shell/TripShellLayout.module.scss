@@ -23,6 +23,7 @@
 }
 
 .contentArea {
+  padding-top: var(--safe-top);
   padding-bottom: calc(
     var(--size-bottom-nav) + var(--safe-bottom) + var(--space-2)
   );
@@ -64,6 +65,7 @@
   }
 
   .contentArea {
+    padding-top: 0;
     padding-bottom: var(--space-8);
     padding-inline-end: var(--space-6);
   }

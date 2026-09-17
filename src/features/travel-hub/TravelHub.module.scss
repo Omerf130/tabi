@@ -26,6 +26,8 @@
   justify-content: flex-end;
   overflow: hidden;
   min-height: clamp(6.875rem, 34vw, 9.375rem);
+  margin-top: calc(-1 * var(--safe-top));
+  padding-top: var(--safe-top);
   margin-inline: calc(-1 * var(--space-page-inline));
   width: calc(100% + (2 * var(--space-page-inline)));
   max-width: calc(100% + (2 * var(--space-page-inline)));
@@ -471,6 +473,7 @@
   .hub {
     width: 100%;
     max-width: none;
+    margin-top: 0;
     margin-inline: 0;
     padding-inline: 0;
     padding-bottom: var(--space-6);
@@ -478,6 +481,8 @@
 
   .hero {
     min-height: 9.5rem;
+    margin-top: 0;
+    padding-top: 0;
     margin-inline: 0;
     width: 100%;
     max-width: none;

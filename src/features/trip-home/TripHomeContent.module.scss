@@ -79,6 +79,8 @@
   justify-content: flex-end;
   overflow: hidden;
   min-height: var(--home-hero-min);
+  margin-top: calc(-1 * var(--safe-top));
+  padding-top: var(--safe-top);
   border-radius: 0;
   box-shadow: none;
   isolation: isolate;
@@ -2364,6 +2366,8 @@
 
   .hero {
     min-height: 22rem;
+    margin-top: 0;
+    padding-top: 0;
   }
 
   .hero[data-phase="active"] {
