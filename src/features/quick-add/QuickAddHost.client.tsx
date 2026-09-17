@@ -179,6 +179,7 @@ export function QuickAddHost() {
           step={step}
           context={context}
           bootstrap={bootstrap}
+          pinnedActionFooter={!isDesktop && isFormStep}
           onSuccess={handleMutationSuccess}
           onDirtyChange={setDirty}
           onTransportTypeChange={(transportType) => {

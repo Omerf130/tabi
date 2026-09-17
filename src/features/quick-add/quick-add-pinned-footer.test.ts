@@ -10,22 +10,52 @@ function read(relativePath: string): string {
 }
 
 describe("Global Quick Add — pinned primary action contract", () => {
-  it("passes pinnedActionFooter from QuickAddForms to every owner form", () => {
-    const forms = read("features/quick-add/QuickAddForms.client.tsx");
-    expect(forms).toContain("QUICK_ADD_PINNED_ACTION");
-    expect(forms).toContain("pinnedActionFooter={pinnedActionFooter}");
+  it("enables pinnedActionFooter only from mobile Quick Add host", () => {
     const host = read("features/quick-add/QuickAddHost.client.tsx");
+    expect(host).toContain("pinnedActionFooter={!isDesktop && isFormStep}");
     expect(host).toContain("hostBodyQuickAddForm");
+
+    const forms = read("features/quick-add/QuickAddForms.client.tsx");
+    expect(forms).not.toContain("QUICK_ADD_PINNED_ACTION");
+    expect(forms).toContain("pinnedActionFooter={pinnedActionFooter}");
+  });
+
+  it("AuthSubmitButton primary uses auth token with semantic fallback", () => {
+    const form = read("features/auth/AuthForm.module.scss");
+    expect(form).toContain("background: var(--auth-primary, var(--color-primary))");
+    expect(form).toContain(
+      "background: var(--auth-primary-hover, var(--color-primary-hover))",
+    );
+    const authShell = read("features/auth/AuthPageShell.module.scss");
+    expect(authShell).toContain("--auth-primary: var(--color-primary)");
   });
 
   it("defines scroll fields and pinned footer presentation classes", () => {
     const flow = read("features/itinerary/AddItemFlow.module.scss");
     expect(flow).toContain(".plannerFormPinned");
+    expect(flow).toMatch(/\.plannerFormPinned[\s\S]*flex:\s*1\s*1\s*0/);
     expect(flow).toContain(".plannerFormScroll");
     expect(flow).toContain(".pinnedActionFooter");
     expect(flow).toMatch(/\.pinnedActionFooter[\s\S]*flex-shrink:\s*0/);
     expect(flow).toMatch(/\.pinnedActionFooter[\s\S]*position:\s*static/);
     expect(flow).toMatch(/\.plannerFormScroll[\s\S]*overflow-y:\s*auto/);
+    expect(flow).toContain("padding-bottom: calc(var(--space-2) + var(--safe-bottom))");
+  });
+
+  it("constrains mobile Quick Add flex chain host to form", () => {
+    const scss = read("features/quick-add/QuickAdd.module.scss");
+    const mobileBlock = scss.split("@media (max-width: 1023px)")[1]?.split("@media")[0] ?? "";
+    expect(mobileBlock).toMatch(/\.hostBodyQuickAddForm[\s\S]*flex:\s*1\s*1\s*0/);
+    expect(mobileBlock).toMatch(/\.hostBodyQuickAddForm[\s\S]*height:\s*100%/);
+    expect(mobileBlock).toMatch(/\.quickAddFormMount[\s\S]*flex:\s*1\s*1\s*0/);
+    expect(mobileBlock).toMatch(/\.quickAddFormMount form[\s\S]*height:\s*100%/);
+  });
+
+  it("uses quickAddFormInner on accommodation and other pinned mounts", () => {
+    const forms = read("features/quick-add/QuickAddForms.client.tsx");
+    expect(forms).toContain("quickAddFormInner");
+    expect(forms).toMatch(/accommodation[\s\S]*quickAddFormInner/);
+    expect(forms).toMatch(/transport[\s\S]*quickAddFormInner/);
   });
 
   it("wires transport planner footer outside QuickAddPinnedFields scroll", () => {

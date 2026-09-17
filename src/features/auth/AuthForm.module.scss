@@ -29,7 +29,7 @@
   padding-inline: 1rem;
   border: 0;
   border-radius: 999px;
-  background: var(--auth-primary);
+  background: var(--auth-primary, var(--color-primary));
   color: var(--color-on-primary);
   font-size: 1rem;
   font-weight: 600;
@@ -39,7 +39,7 @@
 }
 
 .primaryButton:hover:not(:disabled) {
-  background: var(--auth-primary-hover);
+  background: var(--auth-primary-hover, var(--color-primary-hover));
 }
 
 .primaryButton:focus-visible {

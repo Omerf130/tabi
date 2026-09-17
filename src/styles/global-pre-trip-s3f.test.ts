@@ -94,7 +94,10 @@ describe("S3F global / pre-trip token migration", () => {
 
   it("Auth primary CTA uses global primary, not a separate auth brand hex", () => {
     const form = read("features/auth/AuthForm.module.scss");
-    expect(form).toContain("background: var(--auth-primary)");
+    expect(form).toContain("background: var(--auth-primary, var(--color-primary))");
+    expect(form).toContain(
+      "background: var(--auth-primary-hover, var(--color-primary-hover))",
+    );
     expect(form).toContain("color: var(--color-on-primary)");
   });
 });

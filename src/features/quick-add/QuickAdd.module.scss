@@ -292,7 +292,7 @@
   }
 
   .mobileSheetPanel .hostBody {
-    flex: 1 1 auto;
+    flex: 1 1 0;
     min-height: 0;
     overflow-x: hidden;
     overflow-y: auto;
@@ -302,17 +302,33 @@
   .mobileSheetPanel .hostBodyQuickAddForm {
     display: flex;
     flex-direction: column;
+    flex: 1 1 0;
+    min-height: 0;
+    height: 100%;
     overflow: hidden;
     padding-bottom: 0;
   }
 
   .mobileSheetPanel .hostBodyQuickAddForm .quickAddFormMount {
-    flex: 1 1 auto;
+    flex: 1 1 0;
     min-height: 0;
+    height: 100%;
     display: flex;
     flex-direction: column;
     width: 100%;
     min-width: 0;
+  }
+
+  .mobileSheetPanel .hostBodyQuickAddForm .quickAddFormInner {
+    flex: 1 1 0;
+    min-height: 0;
+    height: 100%;
+  }
+
+  .mobileSheetPanel .hostBodyQuickAddForm .quickAddFormMount form {
+    flex: 1 1 0;
+    min-height: 0;
+    height: 100%;
   }
 }
 

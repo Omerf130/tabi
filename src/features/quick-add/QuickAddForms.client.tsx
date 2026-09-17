@@ -29,13 +29,12 @@ import styles from "./QuickAdd.module.scss";
 
 const reminderInitialState: TripReminderActionState = {};
 
-/** Global Quick Add mobile: pin primary actions outside field scroll. */
-const QUICK_ADD_PINNED_ACTION = true;
-
 type QuickAddFormsProps = {
   step: QuickAddStep;
   context: QuickAddContext;
   bootstrap: QuickAddBootstrap;
+  /** Mobile bottom-sheet only: pin primary action outside field scroll. */
+  pinnedActionFooter?: boolean;
   onSuccess: () => void;
   onDirtyChange: (dirty: boolean) => void;
   onTransportTypeChange: (transportType: TransportType) => void;
@@ -71,11 +70,13 @@ function resolveDocumentLink(context: QuickAddContext) {
 function QuickAddReminderForm({
   context,
   bootstrap,
+  pinnedActionFooter,
   onSuccess,
   onDirtyChange,
 }: {
   context: QuickAddContext;
   bootstrap: QuickAddBootstrap;
+  pinnedActionFooter: boolean;
   onSuccess: () => void;
   onDirtyChange: (dirty: boolean) => void;
 }) {
@@ -95,7 +96,7 @@ function QuickAddReminderForm({
   }, [createState.ok, onSuccess]);
 
   const footerClass = resolvePinnedPlannerFooterClass(
-    QUICK_ADD_PINNED_ACTION,
+    pinnedActionFooter,
     overlayStyles.plannerFooter,
   );
 
@@ -105,12 +106,12 @@ function QuickAddReminderForm({
         action={createAction}
         className={mergePlannerPinnedFormClass(
           overlayStyles.plannerForm,
-          QUICK_ADD_PINNED_ACTION,
+          pinnedActionFooter,
         )}
         onChange={() => onDirtyChange(true)}
         onInput={() => onDirtyChange(true)}
       >
-        <QuickAddPinnedFields pinnedActionFooter={QUICK_ADD_PINNED_ACTION}>
+        <QuickAddPinnedFields pinnedActionFooter={pinnedActionFooter}>
           <TripReminderCreateFields
             tripId={context.tripId}
             startDate={bootstrap.startDate}
@@ -138,6 +139,7 @@ export function QuickAddForms({
   step,
   context,
   bootstrap,
+  pinnedActionFooter = false,
   onSuccess,
   onDirtyChange,
   onTransportTypeChange,
@@ -150,12 +152,12 @@ export function QuickAddForms({
 
   const date = context.date;
   const documentLink = resolveDocumentLink(context);
-  const pinnedActionFooter = QUICK_ADD_PINNED_ACTION;
 
   switch (step.action) {
     case "activity":
       return (
         <QuickAddFormMount>
+          <div className={styles.quickAddFormInner}>
           <ActivityForm
             key={`qa-activity-${date ?? "open"}`}
             tripId={context.tripId}
@@ -174,11 +176,13 @@ export function QuickAddForms({
             financeBaseCurrency={bootstrap.financeBaseCurrency}
             currencies={bootstrap.currencies}
           />
+          </div>
         </QuickAddFormMount>
       );
     case "accommodation":
       return (
         <QuickAddFormMount>
+          <div className={styles.quickAddFormInner}>
           <TripAccommodationForm
             tripId={context.tripId}
             startDate={bootstrap.startDate}
@@ -194,6 +198,7 @@ export function QuickAddForms({
             financeBaseCurrency={bootstrap.financeBaseCurrency}
             currencies={bootstrap.showCostFields ? bootstrap.currencies : []}
           />
+          </div>
         </QuickAddFormMount>
       );
     case "transport":
@@ -235,6 +240,7 @@ export function QuickAddForms({
         <QuickAddReminderForm
           context={context}
           bootstrap={bootstrap}
+          pinnedActionFooter={pinnedActionFooter}
           onSuccess={onSuccess}
           onDirtyChange={onDirtyChange}
         />
@@ -242,6 +248,7 @@ export function QuickAddForms({
     case "expense":
       return (
         <QuickAddFormMount>
+          <div className={styles.quickAddFormInner}>
           <FinanceExpenseSheet
             tripId={context.tripId}
             baseCurrency={bootstrap.financeBaseCurrency}
@@ -253,6 +260,7 @@ export function QuickAddForms({
             onDirtyChange={onDirtyChange}
             onCreateSuccess={onSuccess}
           />
+          </div>
         </QuickAddFormMount>
       );
     case "document":

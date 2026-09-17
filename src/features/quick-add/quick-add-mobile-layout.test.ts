@@ -32,7 +32,7 @@ describe("Product Hardening 2 — Quick Add mobile layout contract", () => {
     expect(scss).toMatch(/\.mobileSheetPanel[\s\S]*min-height:\s*0/);
     expect(mobileBlock).toContain("hostBodyQuickAddForm");
     expect(mobileBlock).toMatch(/\.hostBodyQuickAddForm[\s\S]*overflow:\s*hidden/);
-    expect(mobileBlock).toContain("flex: 1 1 auto");
+    expect(mobileBlock).toMatch(/\.hostBodyQuickAddForm[\s\S]*flex:\s*1\s*1\s*0/);
   });
 
   it("keeps form-step host body non-scrolling; field scroll lives in plannerFormScroll", () => {
