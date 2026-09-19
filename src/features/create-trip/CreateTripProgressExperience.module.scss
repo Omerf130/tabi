@@ -1,0 +1,599 @@
+@use "./create-trip-atmosphere";
+
+.screen {
+  --column-width: min(100%, 22.5rem);
+  --stack-gap: clamp(0.625rem, 1.6vh, 0.9375rem);
+
+  position: relative;
+  isolation: isolate;
+  min-height: 100dvh;
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition:
+    --ct-accent 650ms ease,
+    --ct-accent-soft 650ms ease,
+    --ct-glow 650ms ease,
+    --ct-warm 650ms ease,
+    --ct-center 650ms ease;
+}
+
+.screen[data-visual-step="1"] {
+  --ct-accent: #5b8ec9;
+  --ct-accent-soft: #b8d8f5;
+  --ct-glow: #6fa3d6;
+  --ct-center: #c8dff5;
+  --ct-warm: #e8d0cc;
+}
+
+.screen[data-visual-step="2"] {
+  --ct-accent: #6a9a8e;
+  --ct-accent-soft: #b8d9cf;
+  --ct-glow: #7eb3a8;
+  --ct-center: #c5e0d8;
+  --ct-warm: #e6d4c8;
+}
+
+.screen[data-visual-step="3"] {
+  --ct-accent: #7a8fd4;
+  --ct-accent-soft: #c5cef0;
+  --ct-glow: #8a9ee8;
+  --ct-center: #d0d8f2;
+  --ct-warm: #e8c8d4;
+}
+
+.screen[data-visual-step="4"] {
+  --ct-accent: #d49aa6;
+  --ct-accent-soft: #f0c8d0;
+  --ct-glow: #e0a8b4;
+  --ct-center: #ecd0d8;
+  --ct-warm: #f0b8a8;
+}
+
+.screen[data-visual-step="5"] {
+  --ct-accent: #d4a078;
+  --ct-accent-soft: #f0d0b0;
+  --ct-glow: #e8b890;
+  --ct-center: #f0dcc8;
+  --ct-warm: #f0c0a0;
+}
+
+.screen[data-visual-step="ready"] {
+  --ct-accent: #d49aa6;
+  --ct-accent-soft: #f5d0d8;
+  --ct-glow: #e8b0bc;
+  --ct-center: #c5d8f0;
+  --ct-warm: #f0c4b0;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 130% 90% at 18% -8%,
+      color-mix(in srgb, var(--ct-glow) 38%, transparent),
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 120% 85% at 82% 108%,
+      color-mix(in srgb, var(--ct-warm) 42%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 95% 70% at 50% 42%,
+      color-mix(in srgb, var(--ct-center) 34%, transparent),
+      transparent 68%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ct-accent-soft) 18%, var(--color-surface)) 0%,
+      var(--color-surface) 45%,
+      color-mix(in srgb, var(--ct-warm) 12%, var(--color-surface)) 100%
+    );
+}
+
+.backdropBloom {
+  position: absolute;
+  inset: -15% -20%;
+  background: radial-gradient(
+    circle at 50% 55%,
+    color-mix(in srgb, var(--ct-accent) 22%, transparent),
+    transparent 62%
+  );
+  opacity: 0.85;
+}
+
+.screen[data-visual-step="ready"] .backdropBloom {
+  inset: -25% -30%;
+  opacity: 1;
+  background:
+    radial-gradient(
+      circle at 50% 48%,
+      color-mix(in srgb, var(--ct-glow) 32%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      circle at 62% 62%,
+      color-mix(in srgb, var(--ct-warm) 28%, transparent),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 38% 40%,
+      color-mix(in srgb, var(--ct-center) 24%, transparent),
+      transparent 52%
+    );
+}
+
+.viewport {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding:
+    calc(env(safe-area-inset-top, 0px) + 0.625rem)
+    var(--space-page-inline)
+    calc(env(safe-area-inset-bottom, 0px) + 0.625rem);
+}
+
+.column {
+  width: var(--column-width);
+  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 1.25rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--stack-gap);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.column::-webkit-scrollbar {
+  display: none;
+}
+
+.brandHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.brandMark {
+  width: 2rem;
+  height: 1.65rem;
+  color: var(--color-primary);
+}
+
+.brandName {
+  font-size: var(--text-label);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.introBlock {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.introCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3125rem;
+  width: 100%;
+  max-width: 19.5rem;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-link) 48%, var(--color-text-muted));
+}
+
+.heroTitle {
+  margin: 0;
+  font-size: clamp(1.5rem, 5.6vw, 1.875rem);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+  color: var(--color-primary);
+  text-wrap: balance;
+}
+
+.heroSubtitle {
+  margin: 0;
+  font-size: var(--text-secondary);
+  line-height: 1.45;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.heroCopyEnter {
+  animation: createTripHeroEnter 280ms ease;
+}
+
+@keyframes createTripHeroEnter {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.successBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.4375rem 0.875rem;
+  border-radius: var(--radius-full);
+  background: var(--color-success-soft);
+  color: var(--color-success);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  flex-shrink: 0;
+  border: 1px solid color-mix(in srgb, var(--color-success) 18%, transparent);
+  box-shadow: 0 2px 12px color-mix(in srgb, var(--color-success) 12%, transparent);
+}
+
+.successBadgeIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.stepperShell {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stepper {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: min(100%, 17.25rem);
+}
+
+.stepperRow {
+  display: grid;
+  grid-template-columns: 2.375rem 1fr;
+  align-items: stretch;
+  column-gap: 0.625rem;
+  min-height: 2.5rem;
+}
+
+.stepperTrack {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.stepConnector {
+  position: absolute;
+  top: 2.125rem;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: color-mix(in srgb, var(--color-border-strong) 78%, transparent);
+  transition: background-color 280ms ease;
+}
+
+.stepConnector[data-complete="true"] {
+  background: var(--color-primary);
+}
+
+.stepMarker {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9375rem;
+  height: 1.9375rem;
+}
+
+.stepMarkerHalo {
+  position: absolute;
+  inset: -0.6875rem;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--ct-glow) 22%, transparent);
+}
+
+.stepMarkerRing {
+  position: absolute;
+  inset: -0.375rem;
+  border-radius: var(--radius-full);
+  border: 2.5px solid color-mix(in srgb, var(--ct-glow) 58%, transparent);
+  background: color-mix(in srgb, var(--ct-glow) 10%, transparent);
+  animation: createTripStepPulse 2.2s ease-in-out infinite;
+}
+
+.stepMarkerCore {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9375rem;
+  height: 1.9375rem;
+  border-radius: var(--radius-full);
+  border: 1.5px solid color-mix(in srgb, var(--color-border-strong) 85%, transparent);
+  background: var(--color-surface);
+  font-size: 0.6875rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  transition:
+    border-color 280ms ease,
+    background-color 280ms ease,
+    color 280ms ease;
+}
+
+.stepMarker[data-state="complete"] .stepMarkerCore,
+.stepMarker[data-state="active"] .stepMarkerCore {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.stepCheck {
+  font-size: 0.8125rem;
+  line-height: 1;
+}
+
+.stepLabel {
+  display: flex;
+  align-items: center;
+  min-height: 1.9375rem;
+  padding-block: 0.1875rem;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  text-align: start;
+  color: color-mix(in srgb, var(--color-text-muted) 76%, transparent);
+  transition: color 280ms ease, font-weight 280ms ease;
+}
+
+.stepLabel[data-state="active"] {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.stepLabel[data-state="complete"] {
+  color: var(--color-text);
+}
+
+@keyframes createTripStepPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+.readyBenefits {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.375rem;
+  width: 100%;
+  max-width: 20rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  flex-shrink: 0;
+}
+
+.readyBenefitItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.readyBenefitIconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-accent) 14%, var(--color-surface));
+  color: var(--color-primary);
+}
+
+.readyBenefitItem[data-benefit="planDays"] .readyBenefitIconWrap {
+  background: color-mix(in srgb, #b8d4f0 55%, var(--color-surface));
+}
+
+.readyBenefitItem[data-benefit="toolsReady"] .readyBenefitIconWrap {
+  background: color-mix(in srgb, #f0c8d0 50%, var(--color-surface));
+}
+
+.readyBenefitItem[data-benefit="share"] .readyBenefitIconWrap {
+  background: color-mix(in srgb, #f0dcc8 55%, var(--color-surface));
+}
+
+.readyBenefitIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.readyBenefitLabel {
+  font-size: 0.6875rem;
+  line-height: 1.25;
+  color: var(--color-text-muted);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.ctaBlock {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4375rem;
+  flex-shrink: 0;
+}
+
+.primaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 3.125rem;
+  padding: 0.875rem 1.25rem;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  box-shadow:
+    0 4px 16px rgb(26 39 64 / 18%),
+    0 1px 0 rgb(255 255 255 / 8%) inset;
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.primaryButtonChevron {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+[dir="rtl"] .primaryButtonChevron {
+  transform: scaleX(-1);
+}
+
+.primaryButton:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.primaryButton:active:not(:disabled) {
+  background: var(--color-primary-pressed);
+  transform: translateY(1px);
+}
+
+.footerNote {
+  margin: 0;
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  text-align: center;
+  color: color-mix(in srgb, var(--color-text-muted) 85%, transparent);
+  max-width: 17rem;
+}
+
+.errorPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  text-align: center;
+}
+
+.errorTitle {
+  margin: 0;
+  font-size: var(--text-section);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+}
+
+.errorMessage {
+  margin: 0;
+  font-size: var(--text-secondary);
+  color: var(--color-text-muted);
+}
+
+@media (max-height: 740px) {
+  .screen {
+    --stack-gap: 0.5rem;
+  }
+
+  .readyBenefits,
+  .footerNote {
+    display: none;
+  }
+}
+
+@media (max-height: 667px) {
+  .screen {
+    --stack-gap: 0.4375rem;
+  }
+
+  .stepperRow {
+    min-height: 2.25rem;
+  }
+
+  .heroTitle {
+    font-size: clamp(1.375rem, 5.2vw, 1.625rem);
+  }
+}
+
+@media (max-height: 580px) {
+  .column {
+    justify-content: flex-start;
+    padding-block: 0.25rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .screen {
+    --column-width: min(100%, 36rem);
+  }
+
+  .stepper {
+    width: min(100%, 19rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen {
+    transition: none;
+  }
+
+  .heroCopyEnter,
+  .stepMarkerCore,
+  .stepLabel,
+  .stepConnector,
+  .stepMarkerRing,
+  .primaryButton {
+    animation: none;
+    transition: none;
+  }
+
+  .heroCopyEnter {
+    transform: none;
+  }
+}

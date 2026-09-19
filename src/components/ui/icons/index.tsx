@@ -268,6 +268,15 @@ export function IconCheck({ className }: IconProps) {
   );
 }
 
+export function IconSparkles({ className }: IconProps) {
+  return (
+    <svg {...stroke} className={className}>
+      <path d="M12 4v2M12 18v2M20 12h2M4 12h2" />
+      <path d="m16.2 7.8 1.4-1.4M6.4 17.6 7.8 16.2M16.2 16.2 17.6 17.6M6.4 6.4 7.8 7.8" />
+    </svg>
+  );
+}
+
 export function IconTicket({ className }: IconProps) {
   return (
     <svg {...stroke} className={className}>

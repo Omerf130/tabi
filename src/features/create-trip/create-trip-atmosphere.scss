@@ -1,0 +1,31 @@
+/* Scoped atmosphere tokens for Create Trip progress / ready only. */
+
+@property --ct-accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #6fa3d6;
+}
+
+@property --ct-accent-soft {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #b8d4f0;
+}
+
+@property --ct-glow {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #7eb3e8;
+}
+
+@property --ct-warm {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #e8c4c0;
+}
+
+@property --ct-center {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #c5d8ef;
+}

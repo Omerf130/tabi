@@ -1709,6 +1709,57 @@
     "errors": {
       "destinationLoadFailed": "Could not load this destination",
       "suggestionsLoadFailed": "Could not load suggestions"
+    },
+    "progress": {
+      "eyebrow": "Creating trip",
+      "comfortNote": "You can adjust trip details anytime after you enter.",
+      "stepperAriaLabel": "Trip setup progress",
+      "steps": {
+        "1": {
+          "title": "Creating your trip",
+          "subtitle": "Saving your trip and destination.",
+          "label": "Creating your trip"
+        },
+        "2": {
+          "title": "Preparing your workspace",
+          "subtitle": "Aligning dates and destination for your journey.",
+          "label": "Preparing workspace"
+        },
+        "3": {
+          "title": "Setting things up",
+          "subtitle": "Getting your on-the-road tools ready.",
+          "label": "Setting up"
+        },
+        "4": {
+          "title": "Organizing your experience",
+          "subtitle": "Bringing your trip space together.",
+          "label": "Organizing"
+        },
+        "5": {
+          "title": "Finalizing",
+          "subtitle": "Almost ready — finishing touches.",
+          "label": "Finalizing"
+        }
+      }
+    },
+    "ready": {
+      "eyebrow": "Trip ready",
+      "badge": "Trip ready!",
+      "heading": "{tripLabel} is ready",
+      "supporting": "Your workspace is set. Head in when you're ready.",
+      "benefits": {
+        "planDays": "Plan your days",
+        "toolsReady": "Travel tools ready",
+        "share": "Share with travelers"
+      },
+      "footerNote": "You can invite travelers anytime from trip settings.",
+      "cta": "Go to My Trip"
+    },
+    "failed": {
+      "eyebrow": "Could not create trip",
+      "title": "Something went wrong",
+      "message": "We couldn't finish creating your trip. You can review your details and try again.",
+      "backToDetails": "Back to trip details"
     }
   }
 

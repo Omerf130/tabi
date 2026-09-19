@@ -1,0 +1,264 @@
+.stage {
+  --stage-size: clamp(11.25rem, 28vw, 14.375rem);
+
+  position: relative;
+  width: var(--stage-size);
+  height: var(--stage-size);
+  flex-shrink: 0;
+  margin-inline: auto;
+}
+
+.stage[data-variant="ready"] {
+  --stage-size: clamp(12.5rem, 34vw, 16.25rem);
+}
+
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: -55%;
+  z-index: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    color-mix(in srgb, var(--ct-glow, #7eb3e8) 38%, transparent),
+    transparent 62%
+  );
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+.stage[data-variant="ready"]::before {
+  inset: -75%;
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      color-mix(in srgb, var(--ct-glow, #e8b0bc) 42%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      circle at 55% 58%,
+      color-mix(in srgb, var(--ct-warm, #f0c4b0) 34%, transparent),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 42% 42%,
+      color-mix(in srgb, var(--ct-center, #c5d8f0) 28%, transparent),
+      transparent 52%
+    );
+}
+
+.glowOuter {
+  position: absolute;
+  inset: -28%;
+  z-index: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    color-mix(in srgb, var(--ct-glow, #7eb3e8) 45%, transparent),
+    transparent 68%
+  );
+  filter: blur(10px);
+  opacity: 0.95;
+}
+
+.glowInner {
+  position: absolute;
+  inset: 4%;
+  z-index: 2;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 38%,
+    color-mix(in srgb, var(--ct-accent-soft, #b8d4f0) 55%, rgb(255 255 255 / 72%)),
+    color-mix(in srgb, var(--color-surface) 88%, var(--ct-center, #c5d8ef)) 72%
+  );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 78%),
+    inset 0 -8px 24px color-mix(in srgb, var(--ct-accent) 8%, transparent),
+    0 10px 32px color-mix(in srgb, var(--ct-glow) 18%, transparent);
+}
+
+.glowWarm {
+  position: absolute;
+  inset: -12% -24%;
+  z-index: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse 72% 58% at 50% 92%,
+    color-mix(in srgb, var(--ct-warm, var(--color-accent)) 32%, transparent),
+    transparent 72%
+  );
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.atmosphere {
+  position: absolute;
+  z-index: 3;
+  width: 155%;
+  height: 130%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -44%);
+  object-fit: contain;
+  object-position: center;
+  opacity: 0.62;
+  pointer-events: none;
+  transition: opacity 320ms ease, transform 320ms ease;
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 46%,
+    rgb(0 0 0 / 98%) 42%,
+    rgb(0 0 0 / 55%) 68%,
+    transparent 88%
+  );
+  mask-image: radial-gradient(
+    circle at 50% 46%,
+    rgb(0 0 0 / 98%) 42%,
+    rgb(0 0 0 / 55%) 68%,
+    transparent 88%
+  );
+}
+
+.stage[data-visual-step="1"] .atmosphere {
+  width: 170%;
+  transform: translate(-50%, -40%) scale(1.02);
+  object-position: center bottom;
+}
+
+.stage[data-visual-step="2"] .atmosphere {
+  width: 145%;
+  transform: translate(-48%, -46%);
+  object-position: left top;
+  opacity: 0.58;
+}
+
+.stage[data-visual-step="3"] .atmosphere {
+  width: 175%;
+  transform: translate(-50%, -38%);
+  object-position: center bottom;
+  opacity: 0.64;
+}
+
+.stage[data-visual-step="4"] .atmosphere {
+  width: 160%;
+  transform: translate(-50%, -42%);
+  object-position: center;
+  opacity: 0.66;
+}
+
+.stage[data-visual-step="5"] .atmosphere {
+  width: 180%;
+  transform: translate(-50%, -36%);
+  object-position: center bottom;
+  opacity: 0.6;
+}
+
+.stage[data-variant="ready"] .atmosphere {
+  width: 195%;
+  height: 145%;
+  opacity: 0.72;
+  transform: translate(-50%, -40%) scale(1.04);
+  object-position: center;
+}
+
+.core {
+  position: absolute;
+  inset: 14%;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: color-mix(
+    in srgb,
+    rgb(255 255 255 / 82%) 70%,
+    var(--ct-accent-soft, #b8d4f0) 30%
+  );
+  border: 1px solid color-mix(in srgb, var(--ct-glow, #7eb3e8) 28%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 90%),
+    0 4px 16px color-mix(in srgb, var(--ct-accent) 12%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+.stepIcon {
+  width: 42%;
+  height: 42%;
+  color: var(--color-primary);
+  filter: drop-shadow(0 2px 6px color-mix(in srgb, var(--ct-glow) 25%, transparent));
+  animation: createTripStepIconEnter 300ms ease;
+}
+
+.readyIconStack {
+  position: relative;
+  width: 52%;
+  height: 52%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.readyPlaneIcon {
+  position: absolute;
+  width: 78%;
+  height: 78%;
+  color: color-mix(in srgb, var(--color-primary) 28%, var(--ct-glow));
+  transform: translate(-8%, 10%) rotate(-12deg);
+}
+
+.readyCheckIcon {
+  position: relative;
+  width: 58%;
+  height: 58%;
+  color: var(--color-primary);
+  filter: drop-shadow(0 2px 8px color-mix(in srgb, var(--ct-glow) 30%, transparent));
+  animation: createTripStepIconEnter 320ms ease;
+}
+
+@keyframes createTripStepIconEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-height: 667px) {
+  .stage {
+    --stage-size: clamp(9.5rem, 26vw, 11.5rem);
+  }
+
+  .stage[data-variant="ready"] {
+    --stage-size: clamp(10.5rem, 30vw, 12.75rem);
+  }
+
+  .stage::before {
+    inset: -45%;
+  }
+}
+
+@media (min-width: 768px) {
+  .stage {
+    --stage-size: clamp(12.5rem, 18vw, 15rem);
+  }
+
+  .stage[data-variant="ready"] {
+    --stage-size: clamp(14rem, 20vw, 17rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepIcon,
+  .readyCheckIcon,
+  .atmosphere {
+    animation: none;
+    transition: none;
+  }
+
+  .readyPlaneIcon {
+    transform: translate(-8%, 10%) rotate(-12deg);
+  }
+}

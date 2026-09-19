@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useCallback, useRef, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { formatAppDate, formatAppNumber } from "@/features/i18n/formatting";
 import { resolveAppLocale } from "@/features/i18n/locale";
@@ -13,6 +14,8 @@ import { PopularDestinationRows } from "./PopularDestinationRows";
 import { POPULAR_DESTINATIONS } from "./popular-destinations";
 import { resolveDestinationFromQuery } from "./resolve-destination-client";
 import { TripDateRangeCalendar } from "./TripDateRangeCalendar";
+import { CreateTripProgressExperience } from "./CreateTripProgressExperience";
+import { isCreateTripWizardSuccess } from "./create-trip-wizard-result";
 import { WizardHero } from "./WizardHero";
 import {
   CREATE_TRIP_WIZARD_STEPS,
@@ -23,6 +26,8 @@ import {
   type CreateTripWizardStep,
 } from "./wizard-state";
 import styles from "./CreateTripWizard.module.scss";
+
+export type CreateTripUiPhase = "wizard" | "progress" | "ready" | "failed";
 
 function calendarDateToUtcDate(value: string): Date {
   const parts = parseCalendarDateParts(value);
@@ -55,18 +60,25 @@ function formatCalendarDateWithWeekday(
 }
 
 export function CreateTripWizard() {
+  const router = useRouter();
   const locale = resolveAppLocale(useLocale());
   const tDestination = useTranslations("CreateTrip.destination");
   const tDates = useTranslations("CreateTrip.dates");
   const tDetails = useTranslations("CreateTrip.details");
   const tErrors = useTranslations("CreateTrip.errors");
+  const tFailed = useTranslations("CreateTrip.failed");
+  const tTripsErrors = useTranslations("Trips.errors");
   const [state, setState] = useState(createInitialWizardState);
   const [actionState, setActionState] = useState<TripActionState>({});
+  const [uiPhase, setUiPhase] = useState<CreateTripUiPhase>("wizard");
+  const [createdTripId, setCreatedTripId] = useState<string | null>(null);
+  const [progressStartedAtMs, setProgressStartedAtMs] = useState(0);
   const [isPending, startTransition] = useTransition();
   const [popularLoadingId, setPopularLoadingId] = useState<string | null>(null);
   const [popularError, setPopularError] = useState<string | null>(null);
   const [selectedPopularId, setSelectedPopularId] = useState<string | null>(null);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
+  const creationStartedRef = useRef(false);
 
   const stepIndex = getWizardStepIndex(state.step);
 
@@ -128,10 +140,35 @@ export function CreateTripWizard() {
     }
   }
 
+  const resolveActionErrorMessage = useCallback(
+    (result: TripActionState) => {
+      if (result.error === "generic") {
+        return tTripsErrors("generic");
+      }
+      if (result.fieldErrors) {
+        const first = Object.values(result.fieldErrors).find(Boolean);
+        if (first === "name") {
+          return tTripsErrors("name");
+        }
+        if (first === "startDate" || first === "endDate" || first === "dateOrder") {
+          return tTripsErrors("startDate");
+        }
+      }
+      return tFailed("message");
+    },
+    [tFailed, tTripsErrors],
+  );
+
   function handleCreateTrip() {
-    if (!state.destination) {
+    if (!state.destination || creationStartedRef.current) {
       return;
     }
+
+    creationStartedRef.current = true;
+    setCreatedTripId(null);
+    setProgressStartedAtMs(Date.now());
+    setUiPhase("progress");
+    setActionState({});
 
     startTransition(async () => {
       const result = await createTripWizardAction({
@@ -141,8 +178,68 @@ export function CreateTripWizard() {
         startDate: state.startDate,
         endDate: state.endDate,
       });
+
+      if (isCreateTripWizardSuccess(result)) {
+        setCreatedTripId(result.tripId);
+        return;
+      }
+
       setActionState(result);
+      creationStartedRef.current = false;
+      setUiPhase("failed");
     });
+  }
+
+  const handleEnterTrip = useCallback(() => {
+    if (!createdTripId) {
+      return;
+    }
+    router.push(`/app/trips/${createdTripId}`);
+  }, [createdTripId, router]);
+
+  const handleBackToDetailsFromFailure = useCallback(() => {
+    creationStartedRef.current = false;
+    setCreatedTripId(null);
+    setUiPhase("wizard");
+    setState((current) => ({ ...current, step: "details" }));
+    focusStepHeading();
+  }, []);
+
+  const handleBecomeReady = useCallback(() => {
+    setUiPhase("ready");
+  }, []);
+
+  if (uiPhase === "progress" || uiPhase === "ready") {
+    return (
+      <CreateTripProgressExperience
+        mode={uiPhase}
+        progressStartedAtMs={progressStartedAtMs}
+        tripId={createdTripId}
+        tripName={state.name}
+        tripNameTouched={state.nameTouched}
+        destinationDisplayName={state.destination?.displayName}
+        onBecomeReady={handleBecomeReady}
+        onEnterTrip={handleEnterTrip}
+        onBackToDetails={handleBackToDetailsFromFailure}
+      />
+    );
+  }
+
+  if (uiPhase === "failed") {
+    return (
+      <CreateTripProgressExperience
+        mode="failed"
+        progressStartedAtMs={progressStartedAtMs}
+        tripId={null}
+        tripName={state.name}
+        tripNameTouched={state.nameTouched}
+        destinationDisplayName={state.destination?.displayName}
+        errorMessage={resolveActionErrorMessage(actionState)}
+        onBecomeReady={handleBecomeReady}
+        onEnterTrip={handleEnterTrip}
+        onBackToDetails={handleBackToDetailsFromFailure}
+      />
+    );
   }
 
   const canContinueDestination = Boolean(state.destination);

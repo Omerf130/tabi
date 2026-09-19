@@ -1,16 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { isCreateTripWizardFailure } from "@/features/create-trip/create-trip-wizard-result";
 import { createTripWizardAction } from "./actions";
 
-const {
-  requireUserMock,
-  createTripWithOwnerMembershipMock,
-  redirectMock,
-} = vi.hoisted(() => ({
+const { requireUserMock, createTripWithOwnerMembershipMock } = vi.hoisted(() => ({
   requireUserMock: vi.fn(),
   createTripWithOwnerMembershipMock: vi.fn(),
-  redirectMock: vi.fn((url: string) => {
-    throw new Error(`REDIRECT:${url}`);
-  }),
 }));
 
 vi.mock("@/features/auth/session", () => ({
@@ -19,10 +13,6 @@ vi.mock("@/features/auth/session", () => ({
 
 vi.mock("./create-trip", () => ({
   createTripWithOwnerMembership: createTripWithOwnerMembershipMock,
-}));
-
-vi.mock("next/navigation", () => ({
-  redirect: redirectMock,
 }));
 
 describe("createTripWizardAction", () => {
@@ -34,15 +24,15 @@ describe("createTripWizardAction", () => {
     );
   });
 
-  it("accepts only identity fields and redirects after server-side create", async () => {
-    await expect(
-      createTripWizardAction({
-        googlePlaceId: "ChIJ1worBWrCCDARq60jfE0JAJ8",
-        name: "Japan 2026",
-        startDate: "2026-04-01",
-        endDate: "2026-04-14",
-      }),
-    ).rejects.toThrow("REDIRECT:/app/trips/507f1f77bcf86cd799439011");
+  it("accepts only identity fields and returns tripId after server-side create", async () => {
+    const result = await createTripWizardAction({
+      googlePlaceId: "ChIJ1worBWrCCDARq60jfE0JAJ8",
+      name: "Japan 2026",
+      startDate: "2026-04-01",
+      endDate: "2026-04-14",
+    });
+
+    expect(result).toEqual({ tripId: "507f1f77bcf86cd799439011" });
 
     expect(createTripWithOwnerMembershipMock).toHaveBeenCalledWith("user-1", {
       googlePlaceId: "ChIJ1worBWrCCDARq60jfE0JAJ8",
@@ -62,7 +52,10 @@ describe("createTripWizardAction", () => {
       themeKey: "ocean",
     } as never);
 
-    expect(result.fieldErrors ?? result.error).toBeTruthy();
+    expect(isCreateTripWizardFailure(result)).toBe(true);
+    if (isCreateTripWizardFailure(result)) {
+      expect(result.fieldErrors ?? result.error).toBeTruthy();
+    }
     expect(createTripWithOwnerMembershipMock).not.toHaveBeenCalled();
   });
 
@@ -75,20 +68,23 @@ describe("createTripWizardAction", () => {
       coverVisualKey: "europe-01",
     } as never);
 
-    expect(result.fieldErrors ?? result.error).toBeTruthy();
+    expect(isCreateTripWizardFailure(result)).toBe(true);
+    if (isCreateTripWizardFailure(result)) {
+      expect(result.fieldErrors ?? result.error).toBeTruthy();
+    }
     expect(createTripWithOwnerMembershipMock).not.toHaveBeenCalled();
   });
 
   it("accepts an optional trip description", async () => {
-    await expect(
-      createTripWizardAction({
-        googlePlaceId: "ChIJ1worBWrCCDARq60jfE0JAJ8",
-        name: "Japan 2026",
-        description: "Our honeymoon in Japan",
-        startDate: "2026-04-01",
-        endDate: "2026-04-14",
-      }),
-    ).rejects.toThrow("REDIRECT:/app/trips/507f1f77bcf86cd799439011");
+    const result = await createTripWizardAction({
+      googlePlaceId: "ChIJ1worBWrCCDARq60jfE0JAJ8",
+      name: "Japan 2026",
+      description: "Our honeymoon in Japan",
+      startDate: "2026-04-01",
+      endDate: "2026-04-14",
+    });
+
+    expect(result).toEqual({ tripId: "507f1f77bcf86cd799439011" });
 
     expect(createTripWithOwnerMembershipMock).toHaveBeenCalledWith("user-1", {
       googlePlaceId: "ChIJ1worBWrCCDARq60jfE0JAJ8",
@@ -108,7 +104,10 @@ describe("createTripWizardAction", () => {
       endDate: "2026-04-14",
     });
 
-    expect(result.fieldErrors ?? result.error).toBeTruthy();
+    expect(isCreateTripWizardFailure(result)).toBe(true);
+    if (isCreateTripWizardFailure(result)) {
+      expect(result.fieldErrors ?? result.error).toBeTruthy();
+    }
     expect(createTripWithOwnerMembershipMock).not.toHaveBeenCalled();
   });
 
@@ -121,7 +120,10 @@ describe("createTripWizardAction", () => {
       countryCode: "FR",
     } as never);
 
-    expect(result.fieldErrors ?? result.error).toBeTruthy();
+    expect(isCreateTripWizardFailure(result)).toBe(true);
+    if (isCreateTripWizardFailure(result)) {
+      expect(result.fieldErrors ?? result.error).toBeTruthy();
+    }
     expect(createTripWithOwnerMembershipMock).not.toHaveBeenCalled();
   });
 });

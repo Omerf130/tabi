@@ -18,10 +18,12 @@ describe("create trip wizard presentation contracts", () => {
     );
   });
 
-  it("shows exactly three visible steps with no Ready step", () => {
+  it("keeps three wizard steps and post-submit progress on the same route", () => {
     expect(CREATE_TRIP_WIZARD_STEPS).toEqual(["destination", "dates", "details"]);
     const wizard = readSource("features/create-trip/CreateTripWizard.tsx");
-    expect(wizard).not.toContain('"ready"');
+    expect(wizard).toContain('CreateTripUiPhase = "wizard" | "progress" | "ready" | "failed"');
+    expect(wizard).toContain("CreateTripProgressExperience");
+    expect(wizard).not.toContain("redirect(");
     expect(wizard).not.toContain("You're ready");
   });
 
@@ -45,7 +47,11 @@ describe("create trip wizard presentation contracts", () => {
 
   it("keeps final creation on the existing server action without draft writes", () => {
     const wizard = readSource("features/create-trip/CreateTripWizard.tsx");
+    const actions = readSource("features/trips/actions.ts");
     expect(wizard).toContain("createTripWizardAction");
+    expect(wizard).toContain("isCreateTripWizardSuccess");
+    expect(actions).toContain("return { tripId }");
+    expect(actions).not.toContain("redirect(");
     expect(wizard).not.toContain("Trip.create");
     expect(wizard).not.toContain("fetch(");
   });

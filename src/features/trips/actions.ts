@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { requireUser } from "@/features/auth/session";
 import { createTripWithOwnerMembership } from "./create-trip";
 import { TRIP_ERROR_CODES } from "./constants";
@@ -17,6 +16,8 @@ export type TripActionState = {
   error?: string;
   fieldErrors?: TripFieldErrors;
 };
+
+export type CreateTripWizardActionResult = TripActionState | { tripId: string };
 
 function zodFieldErrors(error: {
   issues: readonly { path: readonly PropertyKey[]; message: string }[];
@@ -54,7 +55,7 @@ export async function createTripWizardAction(input: {
   description?: string;
   startDate: string;
   endDate: string;
-}): Promise<TripActionState> {
+}): Promise<CreateTripWizardActionResult> {
   const user = await requireUser();
 
   const parsed = createTripWizardSchema.safeParse(input);
@@ -69,5 +70,5 @@ export async function createTripWizardAction(input: {
     return { error: TRIP_ERROR_CODES.generic };
   }
 
-  redirect(`/app/trips/${tripId}`);
+  return { tripId };
 }
