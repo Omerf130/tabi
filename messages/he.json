@@ -65,6 +65,36 @@
 
   },
 
+  "PushDelivery": {
+    "tripReminderBody": "יש לך תזכורת לטיול"
+  },
+
+  "AccountNotifications": {
+    "title": "התראות",
+    "lead": "Tabi יכולה להודיע למכשיר הזה על תזכורות שיצרתם לטיולים. ההתראות אופציונליות ומיועדות רק לתזכורות שלכם.",
+    "deviceSectionTitle": "המכשיר הזה",
+    "status": {
+      "loading": "בודקים תמיכה בהתראות…",
+      "unsupported": "הדפדפן הזה לא תומך בהתראות.",
+      "requiresInstall": "ב-iPhone, הוסיפו את Tabi למסך הבית ואז הפעילו התראות מתוך האפליקציה המותקנת.",
+      "permissionDenied": "ההתראות חסומות ל-Tabi בהגדרות הדפדפן או המכשיר.",
+      "permissionDefault": "ההתראות כבויות במכשיר הזה.",
+      "subscribed": "ההתראות פעילות במכשיר הזה.",
+      "notSubscribed": "ההרשאה ניתנה, אבל המכשיר עדיין לא רשום ב-Tabi.",
+      "error": "לא ניתן לקרוא את מצב ההתראות. נסו שוב."
+    },
+    "actions": {
+      "enable": "הפעלת התראות",
+      "disableDevice": "כיבוי התראות במכשיר הזה"
+    },
+    "errors": {
+      "generic": "לא ניתן לעדכן התראות. נסו שוב.",
+      "invalidInput": "נתוני הרשמה לא תקינים.",
+      "vapidNotConfigured": "ההתראות עדיין לא מוגדרות בשרת.",
+      "forbidden": "לא ניתן לעדכן את הרשמת המכשיר."
+    }
+  },
+
   "Profile": {
     "title": "פרופיל",
     "identitySection": "זהות",

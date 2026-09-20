@@ -7,6 +7,7 @@ import {
   shouldServeOfflineDocumentFallback,
   toPwaRequestInput,
 } from "../features/pwa/pwa-request-policy";
+import { registerTabiPushNotificationListeners } from "../features/push/register-tab-push-notification-listeners";
 import { createTabiRuntimeCaching } from "../features/pwa/sw-runtime-caching";
 
 declare global {
@@ -39,3 +40,5 @@ const serwist = new Serwist({
 });
 
 serwist.addEventListeners();
+
+registerTabiPushNotificationListeners(self);

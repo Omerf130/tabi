@@ -16,14 +16,20 @@ export type ReminderDueForNotification = {
  */
 export async function listRemindersDueForNotification(
   asOf: Date,
+  limit = 50,
 ): Promise<ReminderDueForNotification[]> {
   await connectDb();
   const reminders = await TripReminder.find({
     isCompleted: false,
     scheduledAtUtc: { $ne: null, $lte: asOf },
+    $or: [
+      { notificationSentAt: { $exists: false } },
+      { notificationSentAt: null },
+    ],
   })
     .select("_id tripId userId scheduledAtUtc")
     .sort({ scheduledAtUtc: 1, _id: 1 })
+    .limit(limit)
     .lean();
 
   return reminders.map((reminder) => ({

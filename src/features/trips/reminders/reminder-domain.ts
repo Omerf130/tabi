@@ -129,15 +129,35 @@ export async function updateTripReminder(input: {
     scheduledAtUtc = schedule.scheduledAtUtc;
   }
 
-  const updated = await TripReminder.findOneAndUpdate(
-    { _id: input.reminderId, tripId: input.tripId, userId: input.userId },
-    {
+  const update: {
+    $set: {
+      date: string;
+      time: string;
+      text: string;
+      timeZone?: string;
+      scheduledAtUtc?: Date;
+    };
+    $unset?: { notificationClaimedAt: ""; notificationSentAt: "" };
+  } = {
+    $set: {
       date: input.date,
       time: input.time,
       text: input.text,
-      timeZone,
-      scheduledAtUtc,
+      timeZone: timeZone ?? undefined,
+      scheduledAtUtc: scheduledAtUtc ?? undefined,
     },
+  };
+
+  if (!dateTimeUnchanged) {
+    update.$unset = {
+      notificationClaimedAt: "",
+      notificationSentAt: "",
+    };
+  }
+
+  const updated = await TripReminder.findOneAndUpdate(
+    { _id: input.reminderId, tripId: input.tripId, userId: input.userId },
+    update,
     { new: true },
   ).lean();
 

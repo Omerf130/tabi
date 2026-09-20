@@ -11,6 +11,7 @@ import {
   buildSettingsHubHref,
   buildSettingsLanguageHref,
 } from "./constants";
+import { buildTripSettingsNotificationsHref } from "@/features/push/account-notifications-routes";
 import { buildSettingsHubViewModel } from "./build-settings-hub-view-model";
 
 const tripId = "507f1f77bcf86cd799439011";
@@ -121,11 +122,17 @@ describe("Settings hub", () => {
     expect(findRow(model, "theme")?.comingSoon).toBe(false);
   });
 
+  it("links notifications to the global account notifications page", () => {
+    const model = buildModel();
+    const notifications = findRow(model, "notifications");
+    expect(notifications?.comingSoon).toBe(false);
+    expect(notifications?.href).toBe(buildTripSettingsNotificationsHref(tripId));
+  });
+
   it("marks future features as coming soon without hrefs", () => {
     const model = buildModel();
 
     for (const rowId of [
-      "notifications",
       "export",
       "delete-trip",
       "security",

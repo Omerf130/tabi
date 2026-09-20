@@ -4,6 +4,7 @@ import { buildTripManagementHref } from "@/features/trip-management/constants";
 import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
 import type { TripWorkspace } from "@/features/trips/public-trip";
 import { buildSettingsProfileHref } from "@/features/account/profile-return-to";
+import { buildTripSettingsNotificationsHref } from "@/features/push/account-notifications-routes";
 import {
   buildAppearanceSettingsHref,
   buildCurrencySettingsHref,
@@ -123,9 +124,10 @@ export function buildSettingsHubViewModel({
         "maps",
         t("rows.maps.subtitle"),
       ),
-      comingSoonRow(
+      activeRow(
         "notifications",
         t("rows.notifications.title"),
+        buildTripSettingsNotificationsHref(trip.id),
         "notifications",
         t("rows.notifications.subtitle"),
       ),

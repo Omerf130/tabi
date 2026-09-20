@@ -32,7 +32,7 @@ describe("Profile V1 route and shell", () => {
 describe("Profile UI integration", () => {
   it("reuses logoutAction and preference actions", () => {
     const profile = readSource("features/account/Profile.client.tsx");
-    expect(profile).toContain("logoutAction");
+    expect(profile).toContain("LogoutWithPushCleanup");
     expect(profile).toContain("updateUserHomeCurrencyAction");
     expect(profile).toContain("InterfaceLanguagePreference");
     expect(profile).toContain("PreferredMapsAppPreference");

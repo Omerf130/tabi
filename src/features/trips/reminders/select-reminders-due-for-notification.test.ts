@@ -1,7 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { findMock } = vi.hoisted(() => ({
+const { findMock, limitMock } = vi.hoisted(() => ({
   findMock: vi.fn(),
+  limitMock: vi.fn(),
 }));
 
 vi.mock("@/lib/db/connect", () => ({
@@ -19,9 +20,11 @@ import { listRemindersDueForNotification } from "./select-reminders-due-for-noti
 describe("listRemindersDueForNotification", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    limitMock.mockReturnThis();
     findMock.mockReturnValue({
       select: vi.fn().mockReturnThis(),
       sort: vi.fn().mockReturnThis(),
+      limit: limitMock,
       lean: vi.fn().mockResolvedValue([
         {
           _id: { toString: () => "507f1f77bcf86cd799439012" },
@@ -40,8 +43,13 @@ describe("listRemindersDueForNotification", () => {
     expect(findMock).toHaveBeenCalledWith({
       isCompleted: false,
       scheduledAtUtc: { $ne: null, $lte: asOf },
+      $or: [
+        { notificationSentAt: { $exists: false } },
+        { notificationSentAt: null },
+      ],
     });
     expect(due).toHaveLength(1);
     expect(due[0]?.scheduledAtUtc.toISOString()).toBe("2026-10-23T06:00:00.000Z");
+    expect(limitMock).toHaveBeenCalledWith(50);
   });
 });

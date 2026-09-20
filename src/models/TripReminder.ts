@@ -54,13 +54,23 @@ const tripReminderSchema = new mongoose.Schema(
     scheduledAtUtc: {
       type: Date,
     },
+    notificationClaimedAt: {
+      type: Date,
+    },
+    notificationSentAt: {
+      type: Date,
+    },
   },
   { timestamps: true },
 );
 
 tripReminderSchema.index({ tripId: 1, userId: 1, date: 1, time: 1 });
 tripReminderSchema.index({ userId: 1, tripId: 1, isCompleted: 1 });
-tripReminderSchema.index({ isCompleted: 1, scheduledAtUtc: 1 });
+tripReminderSchema.index({
+  isCompleted: 1,
+  notificationSentAt: 1,
+  scheduledAtUtc: 1,
+});
 
 export type TripReminderDocument = InferSchemaType<typeof tripReminderSchema> & {
   _id: mongoose.Types.ObjectId;

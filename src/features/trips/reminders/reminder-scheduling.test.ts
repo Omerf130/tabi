@@ -95,12 +95,18 @@ describe("reminder scheduling persistence", () => {
     expect(findOneAndUpdateMock).toHaveBeenCalledWith(
       expect.any(Object),
       expect.objectContaining({
-        text: "Updated title",
-        timeZone: "Asia/Jerusalem",
-        scheduledAtUtc: existingScheduled,
+        $set: expect.objectContaining({
+          text: "Updated title",
+          timeZone: "Asia/Jerusalem",
+          scheduledAtUtc: existingScheduled,
+        }),
       }),
       expect.any(Object),
     );
+    const updateArg = findOneAndUpdateMock.mock.calls[0]?.[1] as {
+      $unset?: Record<string, string>;
+    };
+    expect(updateArg.$unset).toBeUndefined();
   });
 
   it("recomputes schedule when date or time changes using browser timezone", async () => {
@@ -127,12 +133,18 @@ describe("reminder scheduling persistence", () => {
     });
 
     const updatePayload = findOneAndUpdateMock.mock.calls[0]?.[1] as {
-      timeZone: string;
-      scheduledAtUtc: Date;
+      $set: { timeZone: string; scheduledAtUtc: Date };
+      $unset: { notificationClaimedAt: string; notificationSentAt: string };
     };
 
-    expect(updatePayload.timeZone).toBe("Asia/Tokyo");
-    expect(updatePayload.scheduledAtUtc.toISOString()).toBe("2026-10-23T01:00:00.000Z");
+    expect(updatePayload.$set.timeZone).toBe("Asia/Tokyo");
+    expect(updatePayload.$set.scheduledAtUtc.toISOString()).toBe(
+      "2026-10-23T01:00:00.000Z",
+    );
+    expect(updatePayload.$unset).toEqual({
+      notificationClaimedAt: "",
+      notificationSentAt: "",
+    });
   });
 
   it("rejects nonexistent local times", async () => {

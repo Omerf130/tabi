@@ -65,6 +65,36 @@
 
   },
 
+  "PushDelivery": {
+    "tripReminderBody": "You have a trip reminder"
+  },
+
+  "AccountNotifications": {
+    "title": "Notifications",
+    "lead": "Tabi can notify this device about reminders you create for your trips. Notifications are optional and only for your reminders.",
+    "deviceSectionTitle": "This device",
+    "status": {
+      "loading": "Checking notification support…",
+      "unsupported": "Notifications are not supported in this browser.",
+      "requiresInstall": "On iPhone, add Tabi to your Home Screen first, then enable notifications from the installed app.",
+      "permissionDenied": "Notifications are blocked for Tabi in your browser or device settings.",
+      "permissionDefault": "Notifications are off for this device.",
+      "subscribed": "Notifications are enabled for this device.",
+      "notSubscribed": "Permission is granted, but this device is not registered with Tabi yet.",
+      "error": "Could not read notification status. Try again."
+    },
+    "actions": {
+      "enable": "Enable notifications",
+      "disableDevice": "Turn off notifications on this device"
+    },
+    "errors": {
+      "generic": "Could not update notifications. Try again.",
+      "invalidInput": "Invalid subscription data.",
+      "vapidNotConfigured": "Notifications are not configured on the server yet.",
+      "forbidden": "Could not update this device subscription."
+    }
+  },
+
   "Profile": {
     "title": "Profile",
     "identitySection": "Identity",

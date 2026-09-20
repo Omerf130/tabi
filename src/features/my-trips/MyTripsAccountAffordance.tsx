@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { logoutAction } from "@/features/auth/actions";
+import { LogoutWithPushCleanup } from "@/features/push/LogoutWithPushCleanup.client";
 import { buildProfileHrefWithReturnTo } from "@/features/account/profile-return-to";
 import { UserAvatar } from "@/features/account/UserAvatar";
 import styles from "./MyTripsScreen.module.scss";
@@ -43,11 +43,11 @@ export function MyTripsAccountAffordance({
         <Link href={profileHref} className={styles.accountProfileLink}>
           {t("profile")}
         </Link>
-        <form action={logoutAction}>
+        <LogoutWithPushCleanup>
           <button type="submit" className={styles.accountSignOut}>
             {t("signOut")}
           </button>
-        </form>
+        </LogoutWithPushCleanup>
       </div>
     </details>
   );

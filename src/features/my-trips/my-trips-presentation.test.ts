@@ -116,7 +116,7 @@ describe("my trips presentation contracts", () => {
     const account = readSource("features/my-trips/MyTripsAccountAffordance.tsx");
 
     expect(hero).toContain("MyTripsAccountAffordance");
-    expect(account).toContain("logoutAction");
+    expect(account).toContain("LogoutWithPushCleanup");
     expect(account).toContain("buildProfileHrefWithReturnTo");
     expect(account).toContain('useTranslations("MyTrips.account")');
   });

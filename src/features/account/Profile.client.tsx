@@ -17,7 +17,7 @@ import {
   IconMembers,
   IconNavigation,
 } from "@/components/ui/icons";
-import { logoutAction } from "@/features/auth/actions";
+import { LogoutWithPushCleanup } from "@/features/push/LogoutWithPushCleanup.client";
 import { updateUserNameAction } from "@/features/account/actions/update-user-name";
 import {
   removeUserProfileImageAction,
@@ -332,11 +332,11 @@ export function ProfileClient({ model, currencies }: ProfileClientProps) {
           {t("accountSection")}
         </h2>
         <div className={styles.group}>
-          <form action={logoutAction} className={styles.logoutForm}>
+          <LogoutWithPushCleanup className={styles.logoutForm}>
             <button type="submit" className={styles.logoutButton}>
               {t("logout")}
             </button>
-          </form>
+          </LogoutWithPushCleanup>
         </div>
       </section>
 

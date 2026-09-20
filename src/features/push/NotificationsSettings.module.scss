@@ -1,0 +1,46 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 36rem;
+}
+
+.lead {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.sectionLabel {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-secondary);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.statusCard {
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+}
+
+.statusText {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+
+.error {
+  margin: 0;
+  color: var(--color-danger);
+  font-size: var(--text-secondary);
+}
