@@ -27,6 +27,8 @@ import {
   type TripSettingsVariant,
 } from "@/features/trips/settings/section-variant";
 import sectionStyles from "@/features/trips/settings/TripSettingsSections.module.scss";
+import { TripSettingsCollectionEmpty } from "@/features/trips/settings/TripSettingsCollectionEmpty.client";
+import { IconBell } from "@/components/ui/icons";
 import styles from "./TripReminderSettings.module.scss";
 
 const initialState: TripReminderActionState = {};
@@ -275,7 +277,11 @@ export function TripReminderSettings({
           ))}
         </ul>
       ) : (
-        <p className={styles.empty}>{t("emptyUpcoming")}</p>
+        <TripSettingsCollectionEmpty
+          className={styles.settingsCollectionEmpty}
+          title={t("emptyUpcoming")}
+          icon={<IconBell aria-hidden />}
+        />
       )}
 
       {completed.length > 0 ? (

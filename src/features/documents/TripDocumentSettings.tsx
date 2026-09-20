@@ -38,6 +38,8 @@ import {
   type TripSettingsVariant,
 } from "@/features/trips/settings/section-variant";
 import sectionStyles from "@/features/trips/settings/TripSettingsSections.module.scss";
+import { TripSettingsCollectionEmpty } from "@/features/trips/settings/TripSettingsCollectionEmpty.client";
+import { IconDocuments } from "@/components/ui/icons";
 import styles from "./TripDocumentSettings.module.scss";
 
 const initialState: TravelDocumentActionState = {};
@@ -542,7 +544,12 @@ export function TripDocumentSettings({
           ))}
         </ul>
       ) : (
-        <p className={styles.empty}>{t("emptySettings")}</p>
+        <TripSettingsCollectionEmpty
+          className={styles.settingsCollectionEmpty}
+          title={t("emptySettings")}
+          icon={<IconDocuments aria-hidden />}
+          motif="documents"
+        />
       )}
     </section>
   );

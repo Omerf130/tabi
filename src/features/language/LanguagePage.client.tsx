@@ -1,10 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
+import { ConfigNotice } from "@/components/ui/ConfigNotice";
+import { ProviderAlert } from "@/components/ui/ProviderAlert";
+import { IconDictionary, IconMapPin } from "@/components/ui/icons";
 import { CustomPhraseTranslator } from "./CustomPhraseTranslator.client";
 import { CategoryGrid } from "./CategoryGrid";
+import { LanguagePhraseListEmpty } from "./LanguagePhraseListEmpty.client";
 import { PhraseListRow } from "./PhraseListRow";
 import { normalizeSearchText } from "./search-phrases";
 import type { LanguagePageViewModel } from "./types";
@@ -51,16 +54,30 @@ export function LanguagePageClient({
     return items.filter((item) => item.searchBlob.includes(normalizedQuery));
   }, [phrases, query, showFavorites, favoritePhraseIds, initialCategory]);
 
+  const normalizedQuery = normalizeSearchText(query);
+  const phraseListEmptyMode = normalizedQuery
+    ? "search"
+    : showFavorites
+      ? "favorites"
+      : "filtered";
+
   if (runtimeState === "unknown_travel_language") {
     return (
       <div className={styles.page}>
-        <div className={styles.runtimeNotice} role="status">
-          <p className={styles.runtimeNoticeTitle}>{tRuntime("unresolvedTravelLanguageTitle")}</p>
-          <p className={styles.runtimeNoticeBody}>{tRuntime("unresolvedTravelLanguageBody")}</p>
-          <Link href={tripDetailsHref} className={styles.runtimeNoticeAction}>
-            {tRuntime("updateTripDetails")}
-          </Link>
-        </div>
+        <ConfigNotice
+          className={styles.languageConfigNotice}
+          visual={{
+            motif: "generic",
+            icon: <IconDictionary aria-hidden />,
+            accentIcon: <IconMapPin aria-hidden />,
+          }}
+          title={tRuntime("unresolvedTravelLanguageTitle")}
+          description={tRuntime("unresolvedTravelLanguageBody")}
+          primaryAction={{
+            label: tRuntime("updateTripDetails"),
+            href: tripDetailsHref,
+          }}
+        />
       </div>
     );
   }
@@ -68,9 +85,12 @@ export function LanguagePageClient({
   return (
     <div className={styles.page}>
       {translationWarning ? (
-        <p className={styles.runtimeWarning} role="status">
-          {tRuntime("translationUnavailable")}
-        </p>
+        <ProviderAlert
+          className={styles.translationProviderAlert}
+          tone="warning"
+          icon={<IconDictionary aria-hidden />}
+          message={tRuntime("translationUnavailable")}
+        />
       ) : null}
 
       <div className={styles.searchWrap}>
@@ -96,9 +116,11 @@ export function LanguagePageClient({
       />
 
       {displayedPhrases.length === 0 ? (
-        <p className={styles.emptyState}>
-          {showFavorites ? t("noFavorites") : t("noResults")}
-        </p>
+        <LanguagePhraseListEmpty
+          tripId={tripId}
+          mode={phraseListEmptyMode}
+          onClearSearch={() => setQuery("")}
+        />
       ) : (
         <ul className={styles.phraseList}>
           {displayedPhrases.map((phrase) => (

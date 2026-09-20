@@ -4,6 +4,8 @@ import { useTranslations } from "next-intl";
 import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button/Button";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { IconShield } from "@/components/ui/icons";
 import {
   deleteTripEmergencyResourceAction,
   type TripEmergencyResourceActionState,
@@ -69,7 +71,12 @@ export function CustomResourcesSection({
       ) : null}
 
       {resources.length === 0 && !showCreateForm ? (
-        <p className={styles.empty}>{t("errors.noCustomResources")}</p>
+        <EmptyState
+          variant="inline"
+          className={styles.customResourcesInlineEmpty}
+          visual={{ motif: "generic", icon: <IconShield aria-hidden /> }}
+          title={t("errors.noCustomResources")}
+        />
       ) : (
         <ul className={styles.resourceList}>
           {resources.map((resource) =>

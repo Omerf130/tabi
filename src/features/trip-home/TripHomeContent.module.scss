@@ -2104,15 +2104,6 @@
   color: var(--trip-home-text-muted);
 }
 
-.planEmpty {
-  margin: 0;
-  padding: var(--space-4);
-  border-radius: var(--radius-lg);
-  background: rgb(247 248 251 / 80%);
-  font-size: 0.9375rem;
-  color: var(--trip-home-text-muted);
-}
-
 .planTimeline {
   display: flex;
   flex-direction: column;

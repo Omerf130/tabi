@@ -125,40 +125,16 @@
   color: var(--color-danger);
 }
 
-.emptyState {
-  margin: 0;
-  padding: var(--space-6) 0;
-  text-align: center;
-  color: var(--color-text-muted);
+.phraseListEmpty {
+  margin-block-start: var(--space-4);
 }
 
-.runtimeNotice,
-.runtimeWarning {
-  margin: 0;
-  padding: var(--space-4);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
+.languageConfigNotice {
+  margin-block: var(--space-2);
 }
 
-.runtimeNoticeTitle {
-  margin: 0 0 var(--space-2);
-  font-weight: var(--font-weight-semibold);
-}
-
-.runtimeNoticeBody {
-  margin: 0 0 var(--space-3);
-  color: var(--color-text-muted);
-}
-
-.runtimeNoticeAction {
-  color: var(--color-accent);
-  text-decoration: none;
-  font-weight: var(--font-weight-medium);
-}
-
-.runtimeWarning {
-  color: var(--color-text-muted);
+.translationProviderAlert {
+  margin-block-end: var(--space-4);
 }
 
 .customTranslator {
@@ -178,11 +154,15 @@
   font-weight: var(--font-weight-semibold);
 }
 
-.customTranslatorHint,
-.customTranslatorDisabled {
+.customTranslatorHint {
   margin: 0;
   font-size: var(--text-secondary);
   color: var(--color-text-muted);
+}
+
+.customTranslatorConfigNotice,
+.customTranslatorProviderAlert {
+  margin: 0;
 }
 
 .customTranslatorForm {

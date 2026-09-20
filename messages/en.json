@@ -278,7 +278,6 @@
     "accommodationManageOne": "Manage stay",
     "accommodationManageMany": "Manage stays",
     "documentsSection": "Documents",
-    "emptyDay": "No items on this day",
     "focusedDayOpenAria": "Day {dayNumber}, {weekdayLabel}, {dateLabel}. Open full day",
     "focusedNextHeading": "Up next",
     "focusedWeatherAria": "Weather: {condition}, {temperature}, {location}",
@@ -1095,6 +1094,7 @@
       "favoriteFailed": "Could not update favorites.",
       "noResults": "No phrases found.",
       "noFavorites": "No favorites yet.",
+      "clearSearch": "Clear search",
       "favoritesSection": "Favorites",
       "searchPlaceholder": "Search phrase…",
       "showAll": "All phrases",
@@ -1421,7 +1421,6 @@
   "TripCover": {
     "title": "Trip cover photo",
     "hint": "A personal photo shown at the top of Home. JPEG, PNG, or WebP up to 5MB.",
-    "empty": "No trip photo selected yet.",
     "replacePhoto": "+ Replace photo",
     "uploadPhoto": "+ Upload photo",
     "uploadField": "Upload photo",

@@ -278,7 +278,6 @@
     "accommodationManageOne": "ניהול מקום הלינה",
     "accommodationManageMany": "ניהול מקומות לינה",
     "documentsSection": "מסמכים",
-    "emptyDay": "אין פריטים ביום זה",
     "focusedDayOpenAria": "יום {dayNumber}, {weekdayLabel}, {dateLabel}. פתיחת יום מלא",
     "focusedNextHeading": "הבא בתכנון",
     "focusedWeatherAria": "מזג אוויר: {condition}, {temperature}, {location}",
@@ -1095,6 +1094,7 @@
       "favoriteFailed": "לא ניתן לעדכן מועדפים",
       "noResults": "לא נמצאו ביטויים",
       "noFavorites": "אין מועדפים עדיין",
+      "clearSearch": "נקה חיפוש",
       "favoritesSection": "מועדפים",
       "searchPlaceholder": "חיפוש ביטוי…",
       "showAll": "כל הביטויים",
@@ -1421,7 +1421,6 @@
   "TripCover": {
     "title": "תמונת הטיול",
     "hint": "תמונה אישית שתופיע בראש מסך הבית. JPEG, PNG או WebP עד 5MB.",
-    "empty": "עדיין לא נבחרה תמונת טיול.",
     "replacePhoto": "+ החלפת תמונה",
     "uploadPhoto": "+ העלאת תמונה",
     "uploadField": "העלאת תמונה",

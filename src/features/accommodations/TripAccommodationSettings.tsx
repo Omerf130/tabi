@@ -38,6 +38,8 @@ import {
 } from "@/features/quick-add/quick-add-pinned-form";
 import { PlaceModeSegment } from "@/features/itinerary/PlaceModeSegment.client";
 import sectionStyles from "@/features/trips/settings/TripSettingsSections.module.scss";
+import { TripSettingsCollectionEmpty } from "@/features/trips/settings/TripSettingsCollectionEmpty.client";
+import { IconAccommodation } from "@/components/ui/icons";
 import { getMaxAccommodationCheckOutDate } from "./accommodation-date-semantics";
 import {
   resolveAccommodationLocalFieldLang,
@@ -633,7 +635,11 @@ export function TripAccommodationSettings({
           ))}
         </ul>
       ) : (
-        <p className={styles.empty}>{t("emptySettings")}</p>
+        <TripSettingsCollectionEmpty
+          className={styles.settingsCollectionEmpty}
+          title={t("emptySettings")}
+          icon={<IconAccommodation aria-hidden />}
+        />
       )}
     </section>
   );

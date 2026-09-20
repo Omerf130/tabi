@@ -1,8 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { ConfigNotice } from "@/components/ui/ConfigNotice";
+import { ProviderAlert } from "@/components/ui/ProviderAlert";
+import { IconDictionary } from "@/components/ui/icons";
 import { resolveLanguageTextDirection } from "./resolve-language-text-direction";
 import styles from "./LanguagePage.module.scss";
 
@@ -38,10 +40,15 @@ export function CustomPhraseTranslator({
         <h2 id="custom-translator-title" className={styles.customTranslatorTitle}>
           {t("title")}
         </h2>
-        <p className={styles.customTranslatorDisabled}>{t("unknownTravelLanguage")}</p>
-        <Link href={travelLanguageSettingsHref} className={styles.runtimeNoticeAction}>
-          {t("openTravelLanguageSettings")}
-        </Link>
+        <ConfigNotice
+          className={styles.customTranslatorConfigNotice}
+          visual={{ motif: "generic", icon: <IconDictionary aria-hidden /> }}
+          title={t("unknownTravelLanguage")}
+          primaryAction={{
+            label: t("openTravelLanguageSettings"),
+            href: travelLanguageSettingsHref,
+          }}
+        />
       </section>
     );
   }
@@ -129,19 +136,34 @@ export function CustomPhraseTranslator({
         </p>
       ) : null}
       {state.status === "rate_limited" ? (
-        <p className={styles.customTranslatorError} role="alert">
-          {t("rateLimited")}
-        </p>
+        <ProviderAlert
+          className={styles.customTranslatorProviderAlert}
+          tone="warning"
+          icon={<IconDictionary aria-hidden />}
+          message={t("rateLimited")}
+        />
       ) : null}
       {state.status === "unavailable" ? (
-        <p className={styles.customTranslatorError} role="alert">
-          {t("unavailable")}
-        </p>
+        <ProviderAlert
+          className={styles.customTranslatorProviderAlert}
+          icon={<IconDictionary aria-hidden />}
+          message={t("unavailable")}
+          retryAction={{
+            label: t("translate"),
+            onClick: () => setState({ status: "idle" }),
+          }}
+        />
       ) : null}
       {state.status === "unknown_target" ? (
-        <p className={styles.customTranslatorError} role="alert">
-          {t("unknownTravelLanguage")}
-        </p>
+        <ConfigNotice
+          className={styles.customTranslatorConfigNotice}
+          visual={{ motif: "generic", icon: <IconDictionary aria-hidden /> }}
+          title={t("unknownTravelLanguage")}
+          primaryAction={{
+            label: t("openTravelLanguageSettings"),
+            href: travelLanguageSettingsHref,
+          }}
+        />
       ) : null}
 
       {state.status === "success" ? (

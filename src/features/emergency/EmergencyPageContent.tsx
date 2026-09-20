@@ -1,8 +1,11 @@
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { requireUser } from "@/features/auth/session";
 import { AppPage } from "@/features/app-shell/AppPage";
 import { Card } from "@/components/ui/Card/Card";
+import { ConfigNotice } from "@/components/ui/ConfigNotice";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { IconDocuments, IconMapPin, IconShield } from "@/components/ui/icons";
 import { CurrentLocationPanel } from "./CurrentLocationPanel.client";
 import { CustomResourcesSection } from "./CustomResourcesSection.client";
 import { EmergencyResourceActions } from "./EmergencyResourceActions";
@@ -50,18 +53,27 @@ export async function EmergencyPageContent(model: EmergencyPageViewModel) {
         ) : null}
 
         {model.verified.status === "missing_destination" ? (
-          <section className={styles.section} aria-live="polite">
-            <p className={styles.notice}>{t("missingDestinationNotice")}</p>
-            <Link href={model.tripDetailsHref} className={styles.actionButton}>
-              {t("updateTripDestination")}
-            </Link>
-          </section>
+          <ConfigNotice
+            className={styles.emergencyConfigNotice}
+            visual={{
+              motif: "generic",
+              icon: <IconShield aria-hidden />,
+              accentIcon: <IconMapPin aria-hidden />,
+            }}
+            title={t("missingDestinationNotice")}
+            primaryAction={{
+              label: t("updateTripDestination"),
+              href: model.tripDetailsHref,
+            }}
+          />
         ) : null}
 
         {model.verified.status === "unsupported_country" ? (
-          <section className={styles.section} aria-live="polite">
-            <p className={styles.notice}>{t("unsupportedCountryNotice")}</p>
-          </section>
+          <ConfigNotice
+            className={styles.emergencyConfigNotice}
+            visual={{ motif: "generic", icon: <IconShield aria-hidden /> }}
+            title={t("unsupportedCountryNotice")}
+          />
         ) : null}
 
         <section className={styles.section} aria-labelledby="location-heading">
@@ -117,7 +129,12 @@ export async function EmergencyPageContent(model: EmergencyPageViewModel) {
             {t("emergencyDocuments")}
           </h2>
           {model.documents.length === 0 ? (
-            <p className={styles.empty}>{t("errors.noDocuments")}</p>
+            <EmptyState
+              variant="inline"
+              className={styles.emergencyInlineEmpty}
+              visual={{ motif: "generic", icon: <IconDocuments aria-hidden /> }}
+              title={t("errors.noDocuments")}
+            />
           ) : (
             <ul className={styles.linkList}>
               {model.documents.map((document) => (
