@@ -2,6 +2,7 @@ import { AppPage } from "@/features/app-shell/AppPage";
 import { requireUser } from "@/features/auth/session";
 import { getTranslations } from "next-intl/server";
 import type { TripWorkspace } from "@/features/trips/public-trip";
+import { dayWeatherTripDestinationFromWorkspace } from "@/features/trips/destination/day-weather-trip-destination";
 import { getTodayTripLocal } from "@/features/trips/destination/trip-calendar-for-workspace";
 import { listTransportsForItineraryDay } from "@/features/transport/queries";
 import { listRemindersForUserTripDay } from "@/features/trips/reminders/queries";
@@ -83,6 +84,7 @@ export async function DayPageContent({ trip, date }: DayPageContentProps) {
       transports,
       accommodations: tripData.accommodations,
       transportRecords: tripData.transportById,
+      tripDestination: dayWeatherTripDestinationFromWorkspace(trip),
       t: tItinerary,
     }),
   ]);
@@ -136,6 +138,7 @@ export async function DayPageContent({ trip, date }: DayPageContentProps) {
             documentLinkOptions={documentLinkOptions}
             transportRecords={tripData.transportById}
             activityPhotos={activityPhotos}
+            destinationCalendarTimeZone={trip.destinationCalendarTimeZone}
           />
         </div>
       </div>

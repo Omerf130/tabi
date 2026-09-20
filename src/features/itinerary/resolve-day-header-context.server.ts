@@ -10,6 +10,7 @@ import type { TransportRecord } from "@/features/transport/types";
 import { getWeatherSnapshot } from "@/features/weather/queries";
 import { formatTemperatureC } from "@/features/weather/format-weather";
 import { WeatherApiRequestError } from "@/features/weather/weatherapi.server";
+import type { DayWeatherTripDestination } from "@/features/trips/destination/day-weather-trip-destination";
 import type { ActivityViewModel } from "./types";
 import type { TransportItineraryItemViewModel } from "@/features/transport/types";
 import { extractFocusedDayWeather } from "./focused-day-weather";
@@ -57,6 +58,7 @@ export async function resolveDayHeaderContext(input: {
   transports: readonly TransportItineraryItemViewModel[];
   accommodations: readonly AccommodationViewModel[];
   transportRecords: ReadonlyMap<string, TransportRecord>;
+  tripDestination?: DayWeatherTripDestination;
   t: AppTranslator<"Itinerary">;
 }): Promise<Pick<ItineraryDayHeaderViewModel, "locationLabel" | "weather" | "accommodationContext">> {
   const accommodationContext = buildAccommodationContext(
@@ -71,6 +73,7 @@ export async function resolveDayHeaderContext(input: {
     activities: input.activities,
     dayTransports: input.transports,
     transportRecords: input.transportRecords,
+    tripDestination: input.tripDestination,
   });
 
   if (!resolvedLocation) {

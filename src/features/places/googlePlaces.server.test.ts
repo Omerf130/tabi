@@ -13,7 +13,6 @@ import {
   PLACES_AUTOCOMPLETE_FIELD_MASK,
   PLACES_DETAILS_FIELD_MASK,
   PLACES_DETAILS_GEOGRAPHY_FIELD_MASK,
-  PLACES_DISPLAY_LANGUAGE_CODE,
   PLACES_GEOGRAPHIC_PRIMARY_TYPES,
   PLACES_LODGING_PRIMARY_TYPES,
   PLACES_SEARCH_LANGUAGE_CODE,
@@ -172,7 +171,7 @@ describe("googlePlaces.server", () => {
     const [, init] = fetchMock.mock.calls[0]!;
     const body = JSON.parse(String(init.body));
     expect(body.languageCode).toBe(PLACES_SEARCH_LANGUAGE_CODE);
-    expect(body.languageCode).not.toBe(PLACES_DISPLAY_LANGUAGE_CODE);
+    expect(body.languageCode).not.toBe("ja");
   });
 
   it("fetches geography details with caller-provided Hebrew localization", async () => {
@@ -312,6 +311,7 @@ describe("googlePlaces.server", () => {
       sessionToken: "11111111-1111-4111-8111-111111111111",
       primaryText: "Hotel Gracery Shinjuku",
       secondaryText: "Shinjuku, Tokyo",
+      displayLanguageCode: "ja",
     });
 
     expect(preview.placeId).toBe("ChIJN1t_tDeuEmsRUsoyG83frY4");
@@ -322,7 +322,7 @@ describe("googlePlaces.server", () => {
     const [url, init] = fetchMock.mock.calls[0]!;
     expect(String(url)).toContain("ChIJN1t_tDeuEmsRUsoyG83frY4");
     expect(String(url)).toContain("sessionToken=");
-    expect(String(url)).toContain(`languageCode=${PLACES_DISPLAY_LANGUAGE_CODE}`);
+    expect(String(url)).toContain("languageCode=ja");
     expect(init.headers["X-Goog-FieldMask"]).toBe(PLACES_DETAILS_FIELD_MASK);
   });
 });

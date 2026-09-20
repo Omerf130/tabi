@@ -1,14 +1,12 @@
-import {
-  getDefaultJapanTransportTimezone,
-  TRANSPORT_TIMEZONE_OPTIONS,
-} from "./timezone-options";
+import { resolveDefaultTransportTimezone } from "./resolve-default-transport-timezone";
 import type { TransportFormValues, TransportRecord } from "./types";
 import type { TransportType } from "./transport-types";
 
-export function createEmptyTransportFormValues(type: TransportType): TransportFormValues {
-  const defaultTimezone = getDefaultJapanTransportTimezone(
-    TRANSPORT_TIMEZONE_OPTIONS,
-  );
+export function createEmptyTransportFormValues(
+  type: TransportType,
+  destinationCalendarTimeZone = "UTC",
+): TransportFormValues {
+  const defaultTimezone = resolveDefaultTransportTimezone(destinationCalendarTimeZone);
 
   return {
     type,

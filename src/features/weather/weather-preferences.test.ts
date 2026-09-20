@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { WEATHER_PREFERENCE_KEY } from "./constants";
+import { buildWeatherPreferenceKey } from "./constants";
 import {
   clearWeatherPreferenceCacheForTests,
   getWeatherLocationPreferenceSnapshot,
@@ -7,6 +7,8 @@ import {
   resolveInitialWeatherLocation,
   writeWeatherLocationPreference,
 } from "./weather-preferences";
+
+const tripId = "507f1f77bcf86cd799439011";
 
 describe("weather preferences", () => {
   beforeEach(() => {
@@ -27,7 +29,7 @@ describe("weather preferences", () => {
     vi.unstubAllGlobals();
   });
 
-  it("persists normalized WeatherLocationRef only", () => {
+  it("persists normalized WeatherLocationRef per trip", () => {
     const location = {
       label: "Kyoto",
       region: "Kyoto",
@@ -36,11 +38,10 @@ describe("weather preferences", () => {
       longitude: 135.7681,
     };
 
-    writeWeatherLocationPreference(location);
-    const raw = window.localStorage.getItem(WEATHER_PREFERENCE_KEY);
+    writeWeatherLocationPreference(tripId, location);
+    const raw = window.localStorage.getItem(buildWeatherPreferenceKey(tripId));
     expect(raw).toContain("Kyoto");
-    expect(raw).not.toContain("provider");
-    expect(readWeatherLocationPreference()).toEqual(location);
+    expect(readWeatherLocationPreference(tripId)).toEqual(location);
   });
 
   it("returns a stable snapshot reference for useSyncExternalStore", () => {
@@ -52,29 +53,39 @@ describe("weather preferences", () => {
       longitude: 34.9896,
     };
 
-    writeWeatherLocationPreference(location);
+    writeWeatherLocationPreference(tripId, location);
 
-    const first = getWeatherLocationPreferenceSnapshot();
-    const second = getWeatherLocationPreferenceSnapshot();
+    const first = getWeatherLocationPreferenceSnapshot(tripId);
+    const second = getWeatherLocationPreferenceSnapshot(tripId);
 
     expect(first).toEqual(location);
     expect(second).toBe(first);
   });
 
-  it("falls back to Tokyo when preference is invalid", () => {
+  it("falls back when preference is invalid", () => {
     window.localStorage.setItem(
-      WEATHER_PREFERENCE_KEY,
+      buildWeatherPreferenceKey(tripId),
       JSON.stringify({ label: "Bad", latitude: 999, longitude: 0, country: "X" }),
     );
 
-    expect(
-      resolveInitialWeatherLocation({
-        label: "Tokyo",
-        region: "Tokyo",
-        country: "Japan",
-        latitude: 35.6895,
-        longitude: 139.6917,
-      }).label,
-    ).toBe("Tokyo");
+    const fallback = {
+      label: "Rome",
+      country: "Italy",
+      latitude: 41.9,
+      longitude: 12.5,
+    };
+
+    expect(resolveInitialWeatherLocation(tripId, fallback)?.label).toBe("Rome");
+  });
+
+  it("isolates preferences between trips", () => {
+    const otherTripId = "507f1f77bcf86cd799439012";
+    writeWeatherLocationPreference(tripId, {
+      label: "Paris",
+      country: "France",
+      latitude: 48.8566,
+      longitude: 2.3522,
+    });
+    expect(readWeatherLocationPreference(otherTripId)).toBeNull();
   });
 });

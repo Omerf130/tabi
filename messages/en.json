@@ -663,6 +663,35 @@
 
     },
 
+    "seed": {
+      "passport": "Passport",
+      "phoneCharger": "Phone charger",
+      "powerBank": "Power bank",
+      "walkingClothes": "Comfortable walking clothes",
+      "medications": "Personal medications",
+      "compactUmbrella": "Compact umbrella",
+      "travelInsurance": "Travel insurance",
+      "flightCheckIn": "Flight check-in",
+      "documentsInWallet": "Confirm documents are in the travel wallet",
+      "offlineMaps": "Download offline maps (Google Maps)",
+      "dailyCharges": "Review daily charges",
+      "saveTickets": "Save train / entry tickets",
+      "photoBackup": "Back up important photos",
+      "nextDayWeather": "Check tomorrow's weather forecast",
+      "trimDayBag": "Remove unneeded items from day bag",
+      "powerBankShop": "Power bank",
+      "walkingShoes": "Comfortable walking shoes (if needed)",
+      "luggageCover": "Luggage cover",
+      "toiletriesTravelSize": "Travel-size toiletries",
+      "smallDayBag": "Small day bag",
+      "jpTypeAAdapter": "Japan Type A power adapter",
+      "jpIcCardPrep": "Prepare IC card (Suica / Pasmo)",
+      "jpEsim": "eSIM / data plan for Japan",
+      "jpJrPass": "Book JR Pass / tickets (if relevant)",
+      "jpIcTopUp": "Top up IC card (Suica / Pasmo)",
+      "jpAdapterShop": "Japan power adapter"
+    },
+
     "errors": {
 
       "generic": "Couldn't update the list. Please try again.",

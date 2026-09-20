@@ -62,7 +62,7 @@ describe("resolveDayLocation", () => {
       sourceType: "accommodation",
       sourceId: "h1",
     });
-    expect(searchWeatherLocationsMock).toHaveBeenCalledWith("Tokyo, Japan");
+    expect(searchWeatherLocationsMock).toHaveBeenCalledWith("Tokyo");
     expect(searchWeatherLocationsMock).toHaveBeenCalledTimes(1);
   });
 

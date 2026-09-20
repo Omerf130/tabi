@@ -29,6 +29,7 @@ describe("homeCurrency must not be inferred", () => {
       "utf8",
     );
     expect(source).toContain("homeCurrency: user?.homeCurrency ?? null");
-    expect(source).not.toMatch(/destination|timezone|geolocation|countryCode/i);
+    expect(source).not.toMatch(/homeCurrency\s*=.*destination|homeCurrency\s*=.*countryCode/i);
+    expect(source).toContain("destinationFromCurrency");
   });
 });

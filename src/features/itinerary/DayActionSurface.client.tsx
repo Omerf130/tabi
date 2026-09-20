@@ -70,6 +70,7 @@ type DayActionSurfaceProps = {
   showCostFields?: boolean;
   financeBaseCurrency?: string;
   currencies?: readonly import("@/features/currency/types").CurrencyOption[];
+  destinationCalendarTimeZone?: string;
 };
 
 function ReminderEditForm({
@@ -181,6 +182,7 @@ export function DayActionSurface({
   showCostFields = false,
   financeBaseCurrency = "ILS",
   currencies = [],
+  destinationCalendarTimeZone = "UTC",
 }: DayActionSurfaceProps) {
   const t = useTranslations("Itinerary");
   const tActivity = useTranslations("Activity");
@@ -433,7 +435,10 @@ export function DayActionSurface({
                 transportType={state.transportType}
                 onTransportTypeChange={handleTransportTypeChange}
                 defaultValues={{
-                  ...createEmptyTransportFormValues(state.transportType),
+                  ...createEmptyTransportFormValues(
+                    state.transportType,
+                    destinationCalendarTimeZone,
+                  ),
                   departureDate: date,
                 }}
                 onSuccess={handleMutationSuccess}

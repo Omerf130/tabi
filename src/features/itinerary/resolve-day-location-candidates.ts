@@ -5,10 +5,15 @@ import {
 import type { AccommodationViewModel } from "@/features/accommodations/types";
 import { compareTransportDepartureTimesForSameDay } from "@/features/transport/transport-datetime";
 import type { TransportItineraryItemViewModel, TransportRecord } from "@/features/transport/types";
+import type { DayWeatherTripDestination } from "@/features/trips/destination/day-weather-trip-destination";
 import { isGoogleBackedActivity } from "./activity-place-domain";
 import type { ActivityViewModel } from "./types";
 
-export type DayLocationSourceType = "accommodation" | "activity" | "transport";
+export type DayLocationSourceType =
+  | "accommodation"
+  | "activity"
+  | "transport"
+  | "trip_destination";
 
 export type DayLocationCandidate = {
   sourceType: DayLocationSourceType;
@@ -65,7 +70,17 @@ export type ResolveDayLocationCandidatesInput = {
   activities: readonly ActivityViewModel[];
   dayTransports: readonly TransportItineraryItemViewModel[];
   transportRecords: ReadonlyMap<string, TransportRecord>;
+  tripDestination?: DayWeatherTripDestination;
 };
+
+function buildCityWeatherQuery(city: string, tripDestination?: DayWeatherTripDestination): string {
+  const trimmedCity = city.trim();
+  const country = tripDestination?.country?.trim();
+  if (country) {
+    return `${trimmedCity}, ${country}`;
+  }
+  return trimmedCity;
+}
 
 export function resolveDayLocationCandidates({
   date,
@@ -73,6 +88,7 @@ export function resolveDayLocationCandidates({
   activities,
   dayTransports,
   transportRecords,
+  tripDestination,
 }: ResolveDayLocationCandidatesInput): DayLocationCandidate[] {
   const candidates: DayLocationCandidate[] = [];
 
@@ -91,7 +107,8 @@ export function resolveDayLocationCandidates({
     candidates.push({
       sourceType: "accommodation",
       sourceId: primaryAccommodation.id,
-      query: `${primaryAccommodation.city.trim()}, Japan`,
+      query: buildCityWeatherQuery(primaryAccommodation.city, tripDestination),
+      country: tripDestination?.country,
     });
   }
 
@@ -148,6 +165,23 @@ export function resolveDayLocationCandidates({
       sourceType: "transport",
       sourceId: transport.id,
       query: buildTransportSearchQuery(endpoint.locationName, endpoint.locationCode),
+    });
+  }
+
+  if (
+    tripDestination &&
+    typeof tripDestination.latitude === "number" &&
+    typeof tripDestination.longitude === "number"
+  ) {
+    candidates.push({
+      sourceType: "trip_destination",
+      sourceId: "trip-destination",
+      query: tripDestination.displayName?.trim() || tripDestination.country?.trim() || "Destination",
+      coordinates: {
+        latitude: tripDestination.latitude,
+        longitude: tripDestination.longitude,
+      },
+      country: tripDestination.country,
     });
   }
 

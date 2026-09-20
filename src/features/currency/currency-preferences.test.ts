@@ -36,31 +36,33 @@ describe("currency preferences", () => {
     expect(readCurrencyPairPreference()).toEqual({ from: "EUR", to: "JPY" });
   });
 
-  it("falls back to JPY → ILS when no preference exists", () => {
-    const currencies = [{ code: "JPY" }, { code: "ILS" }, { code: "USD" }];
-    expect(resolveInitialCurrencyPair(currencies, "JPY", "ILS")).toEqual({
-      from: "JPY",
+  it("uses destination currency as FROM when no preference exists", () => {
+    const currencies = [{ code: "EUR" }, { code: "ILS" }, { code: "USD" }];
+    expect(resolveInitialCurrencyPair(currencies, "EUR", "ILS")).toEqual({
+      from: "EUR",
       to: "ILS",
     });
   });
 
-  it("uses home currency as TO fallback when no localStorage preference", () => {
-    const currencies = [{ code: "JPY" }, { code: "ILS" }, { code: "USD" }];
-    expect(resolveInitialCurrencyPair(currencies, "JPY", "ILS", "USD")).toEqual({
-      from: "JPY",
+  it("uses home currency as TO when no localStorage preference", () => {
+    const currencies = [{ code: "EUR" }, { code: "ILS" }, { code: "USD" }];
+    expect(resolveInitialCurrencyPair(currencies, "EUR", "ILS", "USD")).toEqual({
+      from: "EUR",
       to: "USD",
     });
   });
 
-  it("keeps null home currency on JPY → ILS fallback", () => {
-    const currencies = [{ code: "JPY" }, { code: "ILS" }];
-    expect(resolveInitialCurrencyPair(currencies, "JPY", "ILS", null)).toEqual({
-      from: "JPY",
+  it("uses neutral bootstrap when destination currency is unknown", () => {
+    const currencies = [{ code: "JPY" }, { code: "ILS" }, { code: "USD" }];
+    expect(
+      resolveInitialCurrencyPair(currencies, null, "ILS", null, "USD"),
+    ).toEqual({
+      from: "USD",
       to: "ILS",
     });
   });
 
-  it("prefers stored pair over home currency", () => {
+  it("prefers stored pair over destination currency", () => {
     const currencies = [{ code: "EUR" }, { code: "GBP" }, { code: "USD" }];
     writeCurrencyPairPreference({ from: "EUR", to: "GBP" });
     expect(resolveInitialCurrencyPair(currencies, "JPY", "ILS", "USD")).toEqual({
@@ -72,7 +74,7 @@ describe("currency preferences", () => {
   it("restores a valid stored pair", () => {
     const currencies = [{ code: "USD" }, { code: "EUR" }, { code: "JPY" }];
     writeCurrencyPairPreference({ from: "USD", to: "EUR" });
-    expect(resolveInitialCurrencyPair(currencies, "JPY", "ILS")).toEqual({
+    expect(resolveInitialCurrencyPair(currencies, null, "ILS")).toEqual({
       from: "USD",
       to: "EUR",
     });

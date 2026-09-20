@@ -33,7 +33,7 @@ async function resolveCandidate(
       label: candidate.query,
       latitude: candidate.coordinates.latitude,
       longitude: candidate.coordinates.longitude,
-      country: candidate.country ?? "Japan",
+      country: candidate.country?.trim() || "",
       sourceType: candidate.sourceType,
       sourceId: candidate.sourceId,
     };

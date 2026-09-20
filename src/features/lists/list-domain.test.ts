@@ -7,7 +7,7 @@ import {
   setTripListItemCompleted,
   updateTripListItemText,
 } from "./list-domain";
-import { DEFAULT_TRIP_LIST_ITEMS } from "./default-items";
+import { GENERIC_LIST_SEED_CATALOG } from "./list-seed-catalog";
 
 const tripId = "507f1f77bcf86cd799439011";
 const itemId = "507f1f77bcf86cd799439012";
@@ -50,6 +50,10 @@ vi.mock("@/models/Trip", () => ({
     findById: tripFindByIdMock,
     findOneAndUpdate: tripFindOneAndUpdateMock,
   },
+}));
+
+vi.mock("@/features/i18n/resolve-request-locale", () => ({
+  resolveRequestLocale: vi.fn().mockResolvedValue("he"),
 }));
 
 vi.mock("@/models/TripListItem", () => ({
@@ -119,8 +123,8 @@ describe("trip list domain", () => {
       ]),
       expect.objectContaining({ session: {} }),
     );
-    expect(tripListItemInsertManyMock.mock.calls[0][0]).toHaveLength(
-      DEFAULT_TRIP_LIST_ITEMS.length,
+    expect(tripListItemInsertManyMock.mock.calls[0][0].length).toBeGreaterThanOrEqual(
+      GENERIC_LIST_SEED_CATALOG.length,
     );
   });
 

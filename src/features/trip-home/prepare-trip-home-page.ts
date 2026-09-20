@@ -14,6 +14,7 @@ import {
   listActivitiesForTripDay,
 } from "@/features/itinerary/queries";
 import { resolveDayLocation } from "@/features/itinerary/resolve-day-location.server";
+import { dayWeatherTripDestinationFromWorkspace } from "@/features/trips/destination/day-weather-trip-destination";
 import {
   listTripListItemsForTypes,
   listTripListsSummary,
@@ -257,6 +258,7 @@ export async function prepareTripHomePage(
     activities: dayActivitiesWithNavigation,
     dayTransports,
     transportRecords: transportRecordMap,
+    tripDestination: dayWeatherTripDestinationFromWorkspace(trip),
   });
 
   if (resolvedLocation) {

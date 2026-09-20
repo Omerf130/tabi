@@ -62,6 +62,7 @@ function createInitialRateState(
 export function CurrencyConverter({
   tripId,
   currencies,
+  destinationFromCurrency,
   initialFrom,
   initialTo,
   initialAmount,
@@ -76,11 +77,12 @@ export function CurrencyConverter({
     () =>
       resolveInitialCurrencyPair(
         currencies,
-        initialFrom,
+        destinationFromCurrency,
         initialTo,
         homeCurrency,
+        initialFrom !== initialTo ? initialFrom : null,
       ),
-    [currencies, initialFrom, initialTo, homeCurrency],
+    [currencies, destinationFromCurrency, initialFrom, initialTo, homeCurrency],
   );
   const initialRateState = useMemo(
     () => createInitialRateState(initialPair, initialRate),

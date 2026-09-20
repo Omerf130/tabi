@@ -88,6 +88,7 @@ function resolveExplicitManualIdentity(
 export async function resolveAccommodationIdentity(
   accommodation: AccommodationRecord,
   fallbackName: string,
+  options: { countryCode?: string | null } = {},
 ): Promise<ResolvedAccommodationIdentity> {
   const placeSource = resolveStoredPlaceSource(accommodation.placeSource);
 
@@ -97,7 +98,9 @@ export async function resolveAccommodationIdentity(
       return resolveLegacyManualIdentity(accommodation, fallbackName);
     }
 
-    const display = await getPlaceDisplayForTraveler(googlePlaceId, fallbackName);
+    const display = await getPlaceDisplayForTraveler(googlePlaceId, fallbackName, {
+      countryCode: options.countryCode,
+    });
     if (!display) {
       return {
         placeSource: "google",

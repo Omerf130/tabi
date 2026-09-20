@@ -6,7 +6,6 @@ import {
   PLACES_AUTOCOMPLETE_MAX_SUGGESTIONS,
   PLACES_DETAILS_FIELD_MASK,
   PLACES_DETAILS_GEOGRAPHY_FIELD_MASK,
-  PLACES_DISPLAY_LANGUAGE_CODE,
   PLACES_GEOGRAPHIC_PRIMARY_TYPES,
   PLACES_LODGING_PRIMARY_TYPES,
   PLACES_ERROR_CODES,
@@ -22,6 +21,7 @@ import {
   getCachedPlaceDisplay,
   setCachedPlaceDisplay,
 } from "./placeDisplayCache";
+import { resolvePlacesDisplayLanguageCode } from "@/features/trips/destination/resolve-places-display-language";
 import type {
   PlaceDisplaySnapshot,
   PlacePrimaryTypes,
@@ -116,7 +116,7 @@ async function fetchPlaceDetails(
   }
   url.searchParams.set(
     "languageCode",
-    options.languageCode ?? PLACES_DISPLAY_LANGUAGE_CODE,
+    options.languageCode ?? PLACES_SEARCH_LANGUAGE_CODE,
   );
 
   const response = await fetch(url, {
@@ -292,10 +292,12 @@ export async function resolveSelectedPlace(input: {
   sessionToken: string;
   primaryText: string;
   secondaryText?: string;
+  displayLanguageCode?: string;
 }): Promise<ResolvedPlacePreview> {
+  const displayLanguageCode = input.displayLanguageCode ?? PLACES_SEARCH_LANGUAGE_CODE;
   const details = await fetchPlaceDetails(input.placeId, {
     sessionToken: input.sessionToken,
-    languageCode: PLACES_DISPLAY_LANGUAGE_CODE,
+    languageCode: displayLanguageCode,
   });
 
   const displayNameJapanese = details.displayName?.text?.trim();
@@ -360,9 +362,12 @@ export async function getPlaceDisplaySnapshot(
     fallbackSecondaryText?: string;
     fallbackName?: string;
     languageCode?: string;
+    localDisplayLanguageCode?: string;
   } = {},
 ): Promise<PlaceDisplaySnapshot | null> {
   const languageCode = options.languageCode ?? PLACES_SEARCH_LANGUAGE_CODE;
+  const localDisplayLanguageCode =
+    options.localDisplayLanguageCode ?? PLACES_SEARCH_LANGUAGE_CODE;
   const cached = getCachedPlaceDisplay(placeId, languageCode);
   if (cached) {
     return cached;
@@ -385,14 +390,18 @@ export async function getPlaceDisplaySnapshot(
       placeId,
       name,
       nameJapanese:
-        languageCode === PLACES_DISPLAY_LANGUAGE_CODE
+        languageCode === localDisplayLanguageCode &&
+        languageCode !== PLACES_SEARCH_LANGUAGE_CODE
           ? details.displayName?.text?.trim()
           : undefined,
       ...(city ? { city } : {}),
       addressEnglish:
         languageCode === PLACES_SEARCH_LANGUAGE_CODE ? formattedAddress : undefined,
       addressJapanese:
-        languageCode === PLACES_DISPLAY_LANGUAGE_CODE ? formattedAddress : undefined,
+        languageCode === localDisplayLanguageCode &&
+        languageCode !== PLACES_SEARCH_LANGUAGE_CODE
+          ? formattedAddress
+          : undefined,
       googleMapsUrl: details.googleMapsUri?.trim() || undefined,
     };
 
@@ -406,30 +415,39 @@ export async function getPlaceDisplaySnapshot(
 export async function getPlaceDisplayForTraveler(
   placeId: string,
   fallbackName = "Lodging",
+  options: { countryCode?: string | null } = {},
 ): Promise<PlaceDisplaySnapshot | null> {
+  const localDisplayLanguageCode = resolvePlacesDisplayLanguageCode(options.countryCode);
+
   const english = await getPlaceDisplaySnapshot(placeId, {
     languageCode: PLACES_SEARCH_LANGUAGE_CODE,
-    fallbackName,
-  });
-  const japanese = await getPlaceDisplaySnapshot(placeId, {
-    languageCode: PLACES_DISPLAY_LANGUAGE_CODE,
+    localDisplayLanguageCode,
     fallbackName,
   });
 
-  if (!english && !japanese) {
+  const local =
+    localDisplayLanguageCode === PLACES_SEARCH_LANGUAGE_CODE
+      ? null
+      : await getPlaceDisplaySnapshot(placeId, {
+          languageCode: localDisplayLanguageCode,
+          localDisplayLanguageCode,
+          fallbackName,
+        });
+
+  if (!english && !local) {
     return null;
   }
 
-  const city = english?.city ?? japanese?.city;
+  const city = english?.city ?? local?.city;
 
   return {
     placeId,
-    name: english?.name ?? japanese?.name ?? fallbackName,
-    nameJapanese: japanese?.name,
+    name: english?.name ?? local?.name ?? fallbackName,
+    nameJapanese: local?.nameJapanese,
     ...(city ? { city } : {}),
     addressEnglish: english?.addressEnglish,
-    addressJapanese: japanese?.addressJapanese,
-    googleMapsUrl: english?.googleMapsUrl ?? japanese?.googleMapsUrl,
+    addressJapanese: local?.addressJapanese,
+    googleMapsUrl: english?.googleMapsUrl ?? local?.googleMapsUrl,
   };
 }
 

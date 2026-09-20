@@ -15,6 +15,8 @@ export type ExchangeRate = {
 export type CurrencyConverterInitialData = {
   tripId: string;
   currencies: CurrencyOption[];
+  /** Resolved from trip destination countryCode; null when unknown (never JPY guess). */
+  destinationFromCurrency: string | null;
   initialFrom: string;
   initialTo: string;
   initialAmount: string;

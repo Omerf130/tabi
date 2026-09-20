@@ -1,14 +1,10 @@
 import type { WeatherLocationRef } from "./types";
 
-export const DEFAULT_WEATHER_LOCATION: WeatherLocationRef = {
-  label: "Tokyo",
-  region: "Tokyo",
-  country: "Japan",
-  latitude: 35.6895,
-  longitude: 139.6917,
-};
+export const WEATHER_PREFERENCE_KEY_PREFIX = "tabi.weather.v1.location";
 
-export const WEATHER_PREFERENCE_KEY = "tabi.weather.v1.location";
+export function buildWeatherPreferenceKey(tripId: string): string {
+  return `${WEATHER_PREFERENCE_KEY_PREFIX}.${tripId}`;
+}
 
 export const WEATHER_SEARCH_DEBOUNCE_MS = 300;
 export const WEATHER_SEARCH_MIN_INPUT_LENGTH = 3;

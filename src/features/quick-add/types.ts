@@ -37,6 +37,7 @@ export type QuickAddBootstrap = {
   startDate: string;
   endDate: string;
   tripDates: readonly string[];
+  destinationCalendarTimeZone: string;
   financeBaseCurrency: string;
   currencies: readonly CurrencyOption[];
   showCostFields: boolean;

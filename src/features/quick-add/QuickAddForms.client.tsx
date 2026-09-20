@@ -229,7 +229,10 @@ export function QuickAddForms({
                 onTransportTypeChange(transportType);
               }}
               defaultValues={{
-                ...createEmptyTransportFormValues(step.transportType as TransportType),
+                ...createEmptyTransportFormValues(
+                  step.transportType as TransportType,
+                  bootstrap.destinationCalendarTimeZone,
+                ),
                 ...(date ? { departureDate: date } : {}),
               }}
               onSuccess={onSuccess}

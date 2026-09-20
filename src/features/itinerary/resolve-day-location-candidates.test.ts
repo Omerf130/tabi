@@ -69,8 +69,21 @@ describe("resolveDayLocationCandidates", () => {
     expect(candidates[0]).toEqual({
       sourceType: "accommodation",
       sourceId: "h1",
-      query: "Tokyo, Japan",
+      query: "Tokyo",
     });
+  });
+
+  it("appends structured trip country for accommodation search when available", () => {
+    const candidates = resolveDayLocationCandidates({
+      date: "2026-10-26",
+      accommodations: [accommodation()],
+      activities: [],
+      dayTransports: [],
+      transportRecords: new Map(),
+      tripDestination: { country: "Japan", countryCode: "JP" },
+    });
+
+    expect(candidates[0]?.query).toBe("Tokyo, Japan");
   });
 
   it("falls back to the first located activity", () => {

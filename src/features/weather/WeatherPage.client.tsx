@@ -30,15 +30,15 @@ import type { WeatherLocationRef, WeatherPageProps, WeatherSnapshot } from "./ty
 import styles from "./WeatherView.module.scss";
 
 function createInitialSnapshotState(
-  location: WeatherLocationRef,
+  location: WeatherLocationRef | null,
   initialSnapshot: WeatherSnapshot | null,
 ): {
   snapshot: WeatherSnapshot | null;
   loadFailed: boolean;
   cache: Record<string, WeatherSnapshot>;
 } {
-  if (!initialSnapshot) {
-    return { snapshot: null, loadFailed: true, cache: {} };
+  if (!location || !initialSnapshot) {
+    return { snapshot: null, loadFailed: !location, cache: {} };
   }
 
   return {
@@ -99,8 +99,8 @@ export function WeatherPage({
   const intlLocale = localeToIntlLocale(resolveAppLocale(useLocale()));
   const initialState = createInitialSnapshotState(defaultLocation, initialSnapshot);
   const storedLocation = useSyncExternalStore(
-    subscribeToWeatherLocationPreference,
-    getWeatherLocationPreferenceSnapshot,
+    (onStoreChange) => subscribeToWeatherLocationPreference(tripId, onStoreChange),
+    () => getWeatherLocationPreferenceSnapshot(tripId),
     () => null,
   );
 
@@ -183,7 +183,7 @@ export function WeatherPage({
       return;
     }
 
-    if (locationsMatchCoordinates(storedLocation, defaultLocation)) {
+    if (defaultLocation && locationsMatchCoordinates(storedLocation, defaultLocation)) {
       return;
     }
 
@@ -196,11 +196,15 @@ export function WeatherPage({
 
   function handleLocationSelect(nextLocation: WeatherLocationRef) {
     setSelectedLocation(nextLocation);
-    writeWeatherLocationPreference(nextLocation);
+    writeWeatherLocationPreference(tripId, nextLocation);
     void fetchSnapshot(nextLocation, true);
   }
 
   function handleRetry() {
+    if (!location) {
+      setSearchOpen(true);
+      return;
+    }
     void fetchSnapshot(location, false, true);
   }
 
@@ -235,7 +239,9 @@ export function WeatherPage({
       </header>
 
       <div className={styles.locationBlock}>
-        <h2 className={styles.locationName}>{location.label}</h2>
+        <h2 className={styles.locationName}>
+          {location?.label ?? t("searchLocation")}
+        </h2>
         {snapshot ? (
           <p className={styles.locationDate}>
             {formatWeatherHeroDate(snapshot.observedAt, intlLocale)}
@@ -245,7 +251,18 @@ export function WeatherPage({
         )}
       </div>
 
-      {loadFailed ? (
+      {!location && !snapshot ? (
+        <div className={styles.errorBlock}>
+          <p className={styles.errorText}>{t("searchLocation")}</p>
+          <button
+            type="button"
+            className={styles.retryButton}
+            onClick={() => setSearchOpen(true)}
+          >
+            {t("searchLocation")}
+          </button>
+        </div>
+      ) : loadFailed ? (
         <div className={styles.errorBlock} role="alert">
           <p className={styles.errorText}>{t("loadFailed")}</p>
           <button type="button" className={styles.retryButton} onClick={handleRetry}>

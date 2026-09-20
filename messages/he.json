@@ -663,6 +663,35 @@
 
     },
 
+    "seed": {
+      "passport": "דרכון",
+      "phoneCharger": "מטען לטלפון",
+      "powerBank": "Power bank",
+      "walkingClothes": "בגדים נוחים להליכה",
+      "medications": "תרופות אישיות",
+      "compactUmbrella": "מטריה קומפקטית",
+      "travelInsurance": "ביטוח נסיעות",
+      "flightCheckIn": "Check-in לטיסה",
+      "documentsInWallet": "לוודא שכל המסמכים זמינים בארנק הנסיעה",
+      "offlineMaps": "להוריד מפות offline (Google Maps)",
+      "dailyCharges": "בדיקת חיובים יומית",
+      "saveTickets": "שמירת כרטיסי רכבת / כניסה",
+      "photoBackup": "גיבוי תמונות חשובות",
+      "nextDayWeather": "לבדוק תחזית מזג אוויר ליום הבא",
+      "trimDayBag": "לרוקן תיק יום מדברים מיותרים",
+      "powerBankShop": "Power bank",
+      "walkingShoes": "נעלי הליכה נוחות (אם חסר)",
+      "luggageCover": "כיסוי מזוודה",
+      "toiletriesTravelSize": "מוצרי הגיינה / נסיעה בגודל נסיעה",
+      "smallDayBag": "תיק יום קטן",
+      "jpTypeAAdapter": "מתאם חשמל ליפן (Type A)",
+      "jpIcCardPrep": "הכנה לכרטיס IC / Suica / Pasmo",
+      "jpEsim": "eSIM / חבילת גלישה ליפן",
+      "jpJrPass": "הזמנת JR Pass / כרטיסים (אם רלוונטי)",
+      "jpIcTopUp": "טעינת כרטיס IC / Suica",
+      "jpAdapterShop": "מתאם חשמל ליפן"
+    },
+
     "errors": {
 
       "generic": "לא ניתן לעדכן את הרשימה. נסו שוב.",

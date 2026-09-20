@@ -3,6 +3,7 @@ import { requireUser } from "@/features/auth/session";
 import { getTranslations } from "next-intl/server";
 import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
 import type { TripWorkspace } from "@/features/trips/public-trip";
+import { dayWeatherTripDestinationFromWorkspace } from "@/features/trips/destination/day-weather-trip-destination";
 import { getTodayTripLocal } from "@/features/trips/destination/trip-calendar-for-workspace";
 import { getTripDayCount } from "@/features/trips/trip-days";
 import { listIncompleteRemindersForUserTrip } from "@/features/trips/reminders/queries";
@@ -63,6 +64,7 @@ export async function ItineraryPageContent({ trip }: ItineraryPageContentProps) 
         ).length,
         todayTripLocal,
         destinationCalendarTimeZone: trip.destinationCalendarTimeZone,
+        tripDestination: dayWeatherTripDestinationFromWorkspace(trip),
       })
     : null;
 

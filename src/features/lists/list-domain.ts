@@ -3,7 +3,9 @@ import "server-only";
 import mongoose from "mongoose";
 import type { TripListType } from "./constants";
 import { TRIP_LIST_ERROR_CODES } from "./constants";
-import { DEFAULT_TRIP_LIST_ITEMS } from "./default-items";
+import { createAppTranslator } from "@/features/i18n/create-app-translator";
+import { resolveRequestLocale } from "@/features/i18n/resolve-request-locale";
+import { buildListSeedItems } from "./build-list-seed-items";
 import { getNextTripListItemOrder } from "./list-item-order";
 import { connectDb } from "@/lib/db/connect";
 import { withTransaction } from "@/lib/db/transaction";
@@ -26,8 +28,11 @@ export class TripListItemNotFoundError extends Error {
   }
 }
 
-function buildDefaultInsertPayload(tripId: string) {
-  return DEFAULT_TRIP_LIST_ITEMS.map((item) => ({
+async function buildDefaultInsertPayload(tripId: string, countryCode?: string | null) {
+  const locale = await resolveRequestLocale();
+  const t = createAppTranslator("Lists", locale);
+  const items = buildListSeedItems(countryCode, t);
+  return items.map((item) => ({
     tripId,
     listType: item.listType,
     text: item.text,
@@ -39,7 +44,9 @@ function buildDefaultInsertPayload(tripId: string) {
 export async function ensureTripListsSeeded(tripId: string): Promise<void> {
   await connectDb();
 
-  const trip = await Trip.findById(tripId).select("initializations.listsV1").lean();
+  const trip = await Trip.findById(tripId)
+    .select("initializations.listsV1 destination.countryCode")
+    .lean();
   if (trip?.initializations?.listsV1 === true) {
     return;
   }
@@ -55,7 +62,11 @@ export async function ensureTripListsSeeded(tripId: string): Promise<void> {
       return;
     }
 
-    await TripListItem.insertMany(buildDefaultInsertPayload(tripId), { session });
+    const payload = await buildDefaultInsertPayload(
+      tripId,
+      claimed.destination?.countryCode,
+    );
+    await TripListItem.insertMany(payload, { session });
   });
 }
 

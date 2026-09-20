@@ -1,4 +1,4 @@
-import { WEATHER_PREFERENCE_KEY } from "./constants";
+import { buildWeatherPreferenceKey } from "./constants";
 import { weatherLocationRefSchema } from "./schemas";
 import type { WeatherLocationRef } from "./types";
 
@@ -6,6 +6,7 @@ type WeatherPreferenceListener = () => void;
 
 const weatherPreferenceListeners = new Set<WeatherPreferenceListener>();
 
+let cachedPreferenceKey: string | undefined;
 let cachedPreferenceRaw: string | null | undefined;
 let cachedPreferenceSnapshot: WeatherLocationRef | null = null;
 
@@ -20,6 +21,7 @@ function locationsEqual(left: WeatherLocationRef, right: WeatherLocationRef): bo
 }
 
 function invalidateWeatherPreferenceCache(): void {
+  cachedPreferenceKey = undefined;
   cachedPreferenceRaw = undefined;
   cachedPreferenceSnapshot = null;
 }
@@ -35,12 +37,15 @@ function notifyWeatherPreferenceListeners(): void {
 }
 
 export function subscribeToWeatherLocationPreference(
+  tripId: string,
   onStoreChange: () => void,
 ): () => void {
   weatherPreferenceListeners.add(onStoreChange);
 
+  const preferenceKey = buildWeatherPreferenceKey(tripId);
+
   const onStorage = (event: StorageEvent) => {
-    if (event.key === WEATHER_PREFERENCE_KEY || event.key === null) {
+    if (event.key === preferenceKey || event.key === null) {
       onStoreChange();
     }
   };
@@ -57,23 +62,28 @@ export function subscribeToWeatherLocationPreference(
   };
 }
 
-export function getWeatherLocationPreferenceSnapshot(): WeatherLocationRef | null {
+export function getWeatherLocationPreferenceSnapshot(
+  tripId: string,
+): WeatherLocationRef | null {
   if (typeof window === "undefined") {
     return null;
   }
 
+  const preferenceKey = buildWeatherPreferenceKey(tripId);
+
   let raw: string | null;
   try {
-    raw = window.localStorage.getItem(WEATHER_PREFERENCE_KEY);
+    raw = window.localStorage.getItem(preferenceKey);
   } catch {
     invalidateWeatherPreferenceCache();
     return null;
   }
 
-  if (raw === cachedPreferenceRaw) {
+  if (cachedPreferenceKey === preferenceKey && raw === cachedPreferenceRaw) {
     return cachedPreferenceSnapshot;
   }
 
+  cachedPreferenceKey = preferenceKey;
   cachedPreferenceRaw = raw;
 
   if (!raw) {
@@ -103,22 +113,28 @@ export function getWeatherLocationPreferenceSnapshot(): WeatherLocationRef | nul
   }
 }
 
-export function readWeatherLocationPreference(): WeatherLocationRef | null {
-  return getWeatherLocationPreferenceSnapshot();
+export function readWeatherLocationPreference(tripId: string): WeatherLocationRef | null {
+  return getWeatherLocationPreferenceSnapshot(tripId);
 }
 
-export function writeWeatherLocationPreference(location: WeatherLocationRef): void {
+export function writeWeatherLocationPreference(
+  tripId: string,
+  location: WeatherLocationRef,
+): void {
   if (typeof window === "undefined") {
     return;
   }
 
+  const preferenceKey = buildWeatherPreferenceKey(tripId);
+
   try {
     const nextRaw = JSON.stringify(location);
-    if (nextRaw === cachedPreferenceRaw) {
+    if (cachedPreferenceKey === preferenceKey && nextRaw === cachedPreferenceRaw) {
       return;
     }
 
-    window.localStorage.setItem(WEATHER_PREFERENCE_KEY, nextRaw);
+    window.localStorage.setItem(preferenceKey, nextRaw);
+    cachedPreferenceKey = preferenceKey;
     cachedPreferenceRaw = nextRaw;
     cachedPreferenceSnapshot = location;
     notifyWeatherPreferenceListeners();
@@ -128,8 +144,9 @@ export function writeWeatherLocationPreference(location: WeatherLocationRef): vo
 }
 
 export function resolveInitialWeatherLocation(
-  fallback: WeatherLocationRef,
-): WeatherLocationRef {
-  const preference = readWeatherLocationPreference();
+  tripId: string,
+  fallback: WeatherLocationRef | null,
+): WeatherLocationRef | null {
+  const preference = readWeatherLocationPreference(tripId);
   return preference ?? fallback;
 }

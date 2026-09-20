@@ -5,6 +5,7 @@ import { resolveRequestLocale } from "@/features/i18n/resolve-request-locale";
 import { attachLinkedCostsToIds } from "@/features/finance/linked-expense-queries";
 import { connectDb } from "@/lib/db/connect";
 import { Accommodation } from "@/models/Accommodation";
+import { Trip } from "@/models/Trip";
 import {
   formatCalendarDateDisplay,
   formatCalendarDateRangeDisplay,
@@ -26,8 +27,11 @@ function optionalString(value: string | null | undefined): string | undefined {
 async function toAccommodationViewModel(
   accommodation: AccommodationRecord,
   fallbackName: string,
+  tripCountryCode?: string | null,
 ): Promise<AccommodationViewModel> {
-  const identity = await resolveAccommodationIdentity(accommodation, fallbackName);
+  const identity = await resolveAccommodationIdentity(accommodation, fallbackName, {
+    countryCode: tripCountryCode,
+  });
 
   return {
     id: accommodation._id.toString(),
@@ -61,8 +65,13 @@ async function toAccommodationViewModel(
 async function toAccommodationSettingsViewModel(
   accommodation: AccommodationRecord,
   fallbackName: string,
+  tripCountryCode?: string | null,
 ): Promise<AccommodationSettingsViewModel> {
-  const base = await toAccommodationViewModel(accommodation, fallbackName);
+  const base = await toAccommodationViewModel(
+    accommodation,
+    fallbackName,
+    tripCountryCode,
+  );
 
   return {
     ...base,
@@ -91,13 +100,15 @@ export async function listAccommodationsForTrip(
   await connectDb();
   const locale = await resolveRequestLocale();
   const fallbackName = createAppTranslator("Accommodation", locale)("fallbackName");
-  const accommodations = await Accommodation.find({ tripId })
-    .sort({ checkInDate: 1, _id: 1 })
-    .lean();
+  const [accommodations, trip] = await Promise.all([
+    Accommodation.find({ tripId }).sort({ checkInDate: 1, _id: 1 }).lean(),
+    Trip.findById(tripId).select("destination.countryCode").lean(),
+  ]);
+  const tripCountryCode = trip?.destination?.countryCode;
 
   const viewModels = await Promise.all(
     accommodations.map((accommodation) =>
-      toAccommodationViewModel(accommodation, fallbackName),
+      toAccommodationViewModel(accommodation, fallbackName, tripCountryCode),
     ),
   );
   return attachLinkedCostsToIds(tripId, "accommodation", viewModels);
@@ -109,13 +120,15 @@ export async function listAccommodationsForTripSettings(
   await connectDb();
   const locale = await resolveRequestLocale();
   const fallbackName = createAppTranslator("Accommodation", locale)("fallbackName");
-  const accommodations = await Accommodation.find({ tripId })
-    .sort({ checkInDate: 1, _id: 1 })
-    .lean();
+  const [accommodations, trip] = await Promise.all([
+    Accommodation.find({ tripId }).sort({ checkInDate: 1, _id: 1 }).lean(),
+    Trip.findById(tripId).select("destination.countryCode").lean(),
+  ]);
+  const tripCountryCode = trip?.destination?.countryCode;
 
   const viewModels = await Promise.all(
     accommodations.map((accommodation) =>
-      toAccommodationSettingsViewModel(accommodation, fallbackName),
+      toAccommodationSettingsViewModel(accommodation, fallbackName, tripCountryCode),
     ),
   );
   return attachLinkedCostsToIds(tripId, "accommodation", viewModels);
@@ -137,7 +150,12 @@ export async function getAccommodationForTrip(
 
   const locale = await resolveRequestLocale();
   const fallbackName = createAppTranslator("Accommodation", locale)("fallbackName");
-  const viewModel = await toAccommodationViewModel(accommodation, fallbackName);
+  const trip = await Trip.findById(tripId).select("destination.countryCode").lean();
+  const viewModel = await toAccommodationViewModel(
+    accommodation,
+    fallbackName,
+    trip?.destination?.countryCode,
+  );
   const [withCost] = await attachLinkedCostsToIds(tripId, "accommodation", [viewModel]);
   return withCost;
 }
@@ -158,5 +176,10 @@ export async function getAccommodationForTripSettings(
 
   const locale = await resolveRequestLocale();
   const fallbackName = createAppTranslator("Accommodation", locale)("fallbackName");
-  return toAccommodationSettingsViewModel(accommodation, fallbackName);
+  const trip = await Trip.findById(tripId).select("destination.countryCode").lean();
+  return toAccommodationSettingsViewModel(
+    accommodation,
+    fallbackName,
+    trip?.destination?.countryCode,
+  );
 }

@@ -1,4 +1,4 @@
-export const DEFAULT_FROM_CURRENCY = "JPY";
+/** Converter target bootstrap when home currency is unset (not destination currency). */
 export const DEFAULT_TO_CURRENCY = "ILS";
 export const DEFAULT_AMOUNT = "1000";
 

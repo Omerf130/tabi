@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/features/auth/session";
 import { requireTripOwner } from "@/features/trips/authorization";
+import { resolvePlacesDisplayLanguageCode } from "@/features/trips/destination/resolve-places-display-language";
 import {
   GooglePlacesConfigError,
   GooglePlacesRequestError,
@@ -34,11 +35,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: PLACES_MESSAGES.invalidInput }, { status: 400 });
   }
 
+  let trip;
   try {
-    await requireTripOwner(parsed.data.tripId);
+    trip = await requireTripOwner(parsed.data.tripId);
   } catch {
     return NextResponse.json({ error: PLACES_MESSAGES.forbidden }, { status: 403 });
   }
+
+  const displayLanguageCode = resolvePlacesDisplayLanguageCode(
+    trip.destination?.countryCode,
+  );
 
   if (
     !checkPlacesRateLimit(
@@ -64,6 +70,7 @@ export async function POST(request: Request) {
             sessionToken: parsed.data.sessionToken,
             primaryText: parsed.data.primaryText,
             secondaryText: parsed.data.secondaryText,
+            displayLanguageCode,
           });
     return NextResponse.json({ preview });
   } catch (error) {

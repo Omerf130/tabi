@@ -5,6 +5,7 @@ import {
   isAccommodationOccupiedOnDate,
 } from "@/features/accommodations/accommodation-domain";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
+import type { DayWeatherTripDestination } from "@/features/trips/destination/day-weather-trip-destination";
 import { getWallClockTimeInTimeZone } from "@/features/trips/destination/trip-local-calendar";
 import { getTripPhase } from "@/features/trips/trip-phase";
 import {
@@ -40,6 +41,7 @@ export type BuildFocusedDayCardInput = {
   incompleteReminderCount: number;
   todayTripLocal: string;
   destinationCalendarTimeZone: string;
+  tripDestination?: DayWeatherTripDestination;
 };
 
 function getPrimaryOccupiedAccommodation(
@@ -83,6 +85,7 @@ export async function buildFocusedDayCard({
   incompleteReminderCount,
   todayTripLocal,
   destinationCalendarTimeZone,
+  tripDestination,
 }: BuildFocusedDayCardInput): Promise<FocusedDayCardViewModel> {
   const phase = getTripPhase(startDate, endDate, todayTripLocal);
   const temporalState = getTripDayTemporalState(focusedDate, todayTripLocal);
@@ -108,6 +111,7 @@ export async function buildFocusedDayCard({
     activities,
     dayTransports,
     transportRecords,
+    tripDestination,
   });
 
   if (resolvedLocation) {

@@ -45,7 +45,7 @@ export type WeatherSnapshot = {
 
 export type WeatherPageInitialData = {
   tripId: string;
-  defaultLocation: WeatherLocationRef;
+  defaultLocation: WeatherLocationRef | null;
   initialSnapshot: WeatherSnapshot | null;
 };
 

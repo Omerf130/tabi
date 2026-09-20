@@ -8,9 +8,10 @@ export type CurrencyPairPreference = {
 
 export function resolveInitialCurrencyPair(
   currencies: readonly { code: string }[],
-  fallbackFrom: string,
+  destinationFromCurrency: string | null | undefined,
   fallbackTo: string,
   homeCurrency?: string | null,
+  neutralFromCurrency?: string | null,
 ): CurrencyPairPreference {
   const preference = readCurrencyPairPreference();
   if (
@@ -26,13 +27,26 @@ export function resolveInitialCurrencyPair(
   const normalizedHome = homeCurrency?.trim().toUpperCase();
   if (
     normalizedHome &&
-    isSupportedCurrencyCode(currencies, normalizedHome) &&
-    normalizedHome !== fallbackFrom
+    isSupportedCurrencyCode(currencies, normalizedHome)
   ) {
     to = normalizedHome;
   }
 
-  return { from: fallbackFrom, to };
+  const normalizedDestination = destinationFromCurrency?.trim().toUpperCase();
+  if (
+    normalizedDestination &&
+    isSupportedCurrencyCode(currencies, normalizedDestination) &&
+    normalizedDestination !== to
+  ) {
+    return { from: normalizedDestination, to };
+  }
+
+  const neutralFrom = neutralFromCurrency?.trim().toUpperCase();
+  if (neutralFrom && isSupportedCurrencyCode(currencies, neutralFrom) && neutralFrom !== to) {
+    return { from: neutralFrom, to };
+  }
+
+  return { from: to, to };
 }
 
 export function readCurrencyPairPreference(): CurrencyPairPreference | null {
