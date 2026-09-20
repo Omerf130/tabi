@@ -18,7 +18,7 @@ describe("public trip DTOs", () => {
   });
 
   it("retains exact date strings in workspace DTO", () => {
-    const workspace = toTripWorkspace(trip, "owner");
+    const workspace = toTripWorkspace(trip, "owner", "Asia/Tokyo");
     expect(workspace).toEqual({
       id: "trip-1",
       name: "ירח דבש",
@@ -29,6 +29,7 @@ describe("public trip DTOs", () => {
       coverImage: undefined,
       coverVisualKey: null,
       themeKey: "default",
+      destinationCalendarTimeZone: "Asia/Tokyo",
       destination: undefined,
     });
   });
@@ -40,6 +41,7 @@ describe("public trip DTOs", () => {
         themeKey: "unknown-theme",
       },
       "owner",
+      "UTC",
     );
     expect(workspace.themeKey).toBe("default");
   });

@@ -11,6 +11,7 @@ import {
   fetchPlaceGeographyDetails,
 } from "./googlePlaces.server";
 import { PLACES_ERROR_CODES } from "./constants";
+import { resolveDestinationTimeZoneOrFallback } from "@/features/trips/destination/resolve-destination-time-zone";
 import { isGeographicWeatherPlace } from "@/features/weather/is-geographic-place";
 
 export type TripDestinationSnapshot = {
@@ -21,6 +22,7 @@ export type TripDestinationSnapshot = {
   countryCode?: string;
   latitude: number;
   longitude: number;
+  timeZone?: string;
 };
 
 function buildSecondaryLabel(input: {
@@ -82,6 +84,11 @@ export async function resolveDestinationSnapshot(
     extractCityFromSecondaryText(options.secondaryText);
   const formattedAddress = details.formattedAddress?.trim();
 
+  const timeZone = await resolveDestinationTimeZoneOrFallback({
+    latitude,
+    longitude,
+  });
+
   return {
     googlePlaceId,
     displayName,
@@ -95,5 +102,6 @@ export async function resolveDestinationSnapshot(
     countryCode,
     latitude,
     longitude,
+    timeZone,
   };
 }

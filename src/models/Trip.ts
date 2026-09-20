@@ -38,6 +38,10 @@ const tripDestinationSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    timeZone: {
+      type: String,
+      trim: true,
+    },
   },
   { _id: false },
 );

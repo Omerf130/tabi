@@ -17,7 +17,7 @@ import { TransportPageContent } from "@/features/transport/TransportPageContent"
 import { requireTripMember } from "@/features/trips/authorization";
 import { listRemindersForUserTrip } from "@/features/trips/reminders/queries";
 import { TripReminderSettings } from "@/features/trips/reminders/TripReminderSettings";
-import { getJapanCalendarDate } from "@/features/trips/calendar-date";
+import { getTodayTripLocal } from "@/features/trips/destination/trip-calendar-for-workspace";
 import {
   isOwnerOnlyManagementSection,
   parseTripManagementSection,
@@ -60,7 +60,7 @@ export default async function TripManageSectionPage({
     notFound();
   }
 
-  const todayJapan = getJapanCalendarDate();
+  const todayTripLocal = getTodayTripLocal(trip);
 
   switch (section) {
     case "accommodations": {
@@ -114,7 +114,11 @@ export default async function TripManageSectionPage({
     }
 
     case "reminders": {
-      const reminders = await listRemindersForUserTrip(trip.id, user.id, todayJapan);
+      const reminders = await listRemindersForUserTrip(
+        trip.id,
+        user.id,
+        todayTripLocal,
+      );
       return (
         <TripReminderSettings
           tripId={trip.id}

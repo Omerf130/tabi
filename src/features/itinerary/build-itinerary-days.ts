@@ -1,4 +1,3 @@
-import { getJapanCalendarDate } from "@/features/trips/calendar-date";
 import type { TripWorkspace } from "@/features/trips/public-trip";
 import {
   formatTripDayDateLabel,
@@ -18,7 +17,7 @@ type BuildItineraryDaysInput = {
   endDate: string;
   activities?: readonly ActivityViewModel[];
   transportsByDate?: ReadonlyMap<string, readonly TransportItineraryItemViewModel[]>;
-  todayJapan?: string;
+  todayTripLocal: string;
 };
 
 export function buildItineraryDays({
@@ -26,7 +25,7 @@ export function buildItineraryDays({
   endDate,
   activities = [],
   transportsByDate = new Map(),
-  todayJapan = getJapanCalendarDate(),
+  todayTripLocal,
 }: BuildItineraryDaysInput): TripDayViewModel[] {
   const dates = getInclusiveDateRange(startDate, endDate);
   const grouped = groupActivitiesByDate(activities);
@@ -42,7 +41,7 @@ export function buildItineraryDays({
       weekdayLabel: formatTripDayWeekday(date),
       dateLabel: formatTripDayDateLabel(date),
       headingLabel: formatTripDayHeading(date),
-      temporalState: getTripDayTemporalState(date, todayJapan),
+      temporalState: getTripDayTemporalState(date, todayTripLocal),
       activities: dayActivities,
       items,
     };
@@ -53,13 +52,13 @@ export function buildItineraryDaysForTrip(
   trip: Pick<TripWorkspace, "startDate" | "endDate">,
   activities: readonly ActivityViewModel[] = [],
   transportsByDate: ReadonlyMap<string, readonly TransportItineraryItemViewModel[]> = new Map(),
-  todayJapan?: string,
+  todayTripLocal: string,
 ): TripDayViewModel[] {
   return buildItineraryDays({
     startDate: trip.startDate,
     endDate: trip.endDate,
     activities,
     transportsByDate,
-    todayJapan,
+    todayTripLocal,
   });
 }

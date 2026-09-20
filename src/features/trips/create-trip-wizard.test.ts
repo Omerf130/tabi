@@ -62,6 +62,7 @@ describe("createTripWithOwnerMembership", () => {
       countryCode: "JP",
       latitude: 36.2,
       longitude: 138.25,
+      timeZone: "Asia/Tokyo",
     });
     pickVisualKeyForGroupMock.mockReturnValue("japan-01");
     tripCreateMock.mockResolvedValue([{ _id: { toString: () => "507f1f77bcf86cd799439011" } }]);

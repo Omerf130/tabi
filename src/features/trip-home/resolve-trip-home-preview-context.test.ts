@@ -9,6 +9,7 @@ import {
 const tripDates = {
   startDate: "2026-10-25",
   endDate: "2026-11-18",
+  destinationTimeZone: "Asia/Tokyo",
 };
 
 describe("resolveTripHomePreviewContext", () => {
@@ -29,11 +30,11 @@ describe("resolveTripHomePreviewContext", () => {
       return;
     }
 
-    expect(context.todayJapan).toBe(tripDates.startDate);
-    expect(context.nowJapanTime).toBe(TRIP_HOME_PREVIEW_WALL_CLOCK_TIME);
+    expect(context.todayTripLocal).toBe(tripDates.startDate);
+    expect(context.nowTripLocal).toBe(TRIP_HOME_PREVIEW_WALL_CLOCK_TIME);
     expect(context.forcedPhase).toBe("active");
     expect(
-      getTripPhase(tripDates.startDate, tripDates.endDate, context.todayJapan),
+      getTripPhase(tripDates.startDate, tripDates.endDate, context.todayTripLocal),
     ).toBe("active");
   });
 
@@ -50,11 +51,11 @@ describe("resolveTripHomePreviewContext", () => {
       return;
     }
 
-    expect(context.todayJapan).toBe("2026-09-25");
+    expect(context.todayTripLocal).toBe("2026-09-25");
     expect(TRIP_HOME_PREVIEW_BEFORE_DAY_OFFSET).toBe(-30);
     expect(context.forcedPhase).toBe("upcoming");
     expect(
-      getTripPhase(tripDates.startDate, tripDates.endDate, context.todayJapan),
+      getTripPhase(tripDates.startDate, tripDates.endDate, context.todayTripLocal),
     ).toBe("upcoming");
   });
 
@@ -71,10 +72,10 @@ describe("resolveTripHomePreviewContext", () => {
       return;
     }
 
-    expect(context.todayJapan).toBe("2026-11-19");
+    expect(context.todayTripLocal).toBe("2026-11-19");
     expect(context.forcedPhase).toBe("completed");
     expect(
-      getTripPhase(tripDates.startDate, tripDates.endDate, context.todayJapan),
+      getTripPhase(tripDates.startDate, tripDates.endDate, context.todayTripLocal),
     ).toBe("completed");
   });
 
@@ -92,7 +93,7 @@ describe("resolveTripHomePreviewContext", () => {
         return;
       }
 
-      expect(context.nowJapanTime).toBe("12:00");
+      expect(context.nowTripLocal).toBe("12:00");
     }
   });
 
@@ -124,6 +125,7 @@ describe("resolveTripHomePreviewContext", () => {
     const input = {
       startDate: "2026-10-25",
       endDate: "2026-11-18",
+      destinationTimeZone: "Asia/Tokyo",
       previewPhase: "during" as const,
     };
 
@@ -148,8 +150,8 @@ describe("resolveTripHomePreviewContext", () => {
       return;
     }
 
-    expect(context.nowJapanTime).toBe("22:30");
-    expect(context.todayJapan).toBe(tripDates.startDate);
+    expect(context.nowTripLocal).toBe("22:30");
+    expect(context.todayTripLocal).toBe(tripDates.startDate);
   });
 
   it("falls back to 12:00 for invalid previewTime", () => {
@@ -166,7 +168,7 @@ describe("resolveTripHomePreviewContext", () => {
       return;
     }
 
-    expect(context.nowJapanTime).toBe("12:00");
+    expect(context.nowTripLocal).toBe("12:00");
   });
 
   it("ignores previewTime outside during preview", () => {
@@ -183,7 +185,7 @@ describe("resolveTripHomePreviewContext", () => {
       return;
     }
 
-    expect(context.nowJapanTime).toBe("12:00");
+    expect(context.nowTripLocal).toBe("12:00");
   });
 
   it("ignores previewTime in production", () => {
@@ -221,7 +223,7 @@ describe("resolveTripHomePreviewContext", () => {
       const phase = getTripPhase(
         tripDates.startDate,
         tripDates.endDate,
-        context.todayJapan,
+        context.todayTripLocal,
       );
 
       expect(phase).toBe(testCase.expectedPhase);

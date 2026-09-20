@@ -11,7 +11,11 @@ import { buildDayWorkspaceViewModel } from "./build-day-workspace";
 import { shouldActivityUsePlaceImage } from "./should-activity-use-place-image";
 import type { ActivityViewModel } from "./types";
 
-const trip = { startDate: "2026-10-25", endDate: "2026-11-18" };
+const trip = {
+  startDate: "2026-10-25",
+  endDate: "2026-11-18",
+  destinationCalendarTimeZone: "UTC",
+};
 
 describe("itinerary redesign contracts", () => {
   it("resolves /itinerary to canonical day URLs by trip phase", () => {
@@ -88,6 +92,7 @@ describe("itinerary redesign contracts", () => {
       endDate: "2026-10-27",
       date: "2026-10-26",
       isOwner: true,
+      todayTripLocal: "2026-10-26",
       activities: [
         {
           id: "a1",
@@ -135,6 +140,7 @@ describe("itinerary redesign contracts", () => {
       endDate: "2026-10-27",
       date: "2026-10-26",
       isOwner: false,
+      todayTripLocal: "2026-10-26",
       activities: [],
       transports: [],
       accommodations: [

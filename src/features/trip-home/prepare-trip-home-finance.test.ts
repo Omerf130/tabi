@@ -65,6 +65,7 @@ const trip = {
   coverVisualKey: "japan-01",
   role: "owner" as const,
   themeKey: "default" as const,
+  destinationCalendarTimeZone: "Asia/Tokyo",
 };
 
 describe("prepareTripHomePage finance loading", () => {
@@ -76,8 +77,8 @@ describe("prepareTripHomePage finance loading", () => {
 
   it("loads finance recap for completed trip home", async () => {
     resolveTripHomePreviewContextMock.mockReturnValue({
-      todayJapan: "2026-12-01",
-      nowJapanTime: "12:00",
+      todayTripLocal: "2026-12-01",
+      nowTripLocal: "12:00",
       isPreview: false,
     });
 
@@ -96,8 +97,8 @@ describe("prepareTripHomePage finance loading", () => {
 
   it("does not load finance recap for before trip home", async () => {
     resolveTripHomePreviewContextMock.mockReturnValue({
-      todayJapan: "2026-10-01",
-      nowJapanTime: "12:00",
+      todayTripLocal: "2026-10-01",
+      nowTripLocal: "12:00",
       isPreview: false,
     });
 
@@ -111,8 +112,8 @@ describe("prepareTripHomePage finance loading", () => {
 
   it("does not load finance recap for during trip home", async () => {
     resolveTripHomePreviewContextMock.mockReturnValue({
-      todayJapan: "2026-11-01",
-      nowJapanTime: "12:00",
+      todayTripLocal: "2026-11-01",
+      nowTripLocal: "12:00",
       isPreview: false,
     });
 

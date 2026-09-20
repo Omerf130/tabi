@@ -4,7 +4,8 @@ import { useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { formatAppDate } from "@/features/i18n/formatting";
 import { localeToIntlLocale, resolveAppLocale } from "@/features/i18n/locale";
-import { getJapanCalendarDate } from "@/features/trips/calendar-date";
+import { FALLBACK_TRIP_CALENDAR_TIMEZONE } from "@/features/trips/destination/constants";
+import { getCalendarDateInTimeZone } from "@/features/trips/destination/trip-local-calendar";
 import {
   buildCalendarMonthGrid,
   getInitialVisibleMonth,
@@ -34,7 +35,7 @@ export function TripDateRangeCalendar({
   const locale = resolveAppLocale(useLocale());
   const intlLocale = localeToIntlLocale(locale);
   const t = useTranslations("CreateTrip.dates");
-  const todayJapan = getJapanCalendarDate();
+  const todayReference = getCalendarDateInTimeZone(FALLBACK_TRIP_CALENDAR_TIMEZONE);
   const initialMonth = getInitialVisibleMonth(startDate, endDate);
   const [visibleYear, setVisibleYear] = useState(initialMonth.year);
   const [visibleMonth, setVisibleMonth] = useState(initialMonth.month);
@@ -117,7 +118,7 @@ export function TripDateRangeCalendar({
               cell.date,
               startDate,
               endDate,
-              todayJapan,
+              todayReference,
             );
             const selectedLabel =
               cell.date === startDate

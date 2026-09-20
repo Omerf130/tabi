@@ -6,7 +6,7 @@ import type { AccommodationViewModel } from "@/features/accommodations/types";
 import { buildLanguageCategoryHref, buildLanguagePhraseHref } from "@/features/language/constants";
 import { getPhraseFromDefaultPack } from "@/features/language/builtin/registry";
 import type { AppTranslator } from "@/features/i18n/create-app-translator";
-import { getJapanCalendarDate } from "@/features/trips/calendar-date";
+import { getCalendarDateInTimeZone } from "@/features/trips/destination/trip-local-calendar";
 import { getTripPhase } from "@/features/trips/trip-phase";
 import { selectContextualAccommodation } from "@/features/travel-hub/select-contextual-accommodation";
 import {
@@ -107,7 +107,9 @@ type BuildEmergencyViewModelInput = {
   accommodations: readonly AccommodationViewModel[];
   customResources: readonly TripEmergencyResourceDocument[];
   emergencyDocuments: readonly EmergencyDocumentViewModel[];
-  todayJapan?: string;
+  destinationCalendarTimeZone: string;
+  /** Test/dev override; production callers omit and use destination timezone. */
+  todayTripLocal?: string;
   preferredMapsApp?: PreferredMapsApp;
   t: AppTranslator<"Emergency">;
 };
@@ -119,10 +121,14 @@ export function buildEmergencyViewModel({
   accommodations,
   customResources,
   emergencyDocuments,
-  todayJapan = getJapanCalendarDate(),
+  destinationCalendarTimeZone,
+  todayTripLocal: todayTripLocalOverride,
   preferredMapsApp,
   t,
 }: BuildEmergencyViewModelInput): EmergencyPageViewModel {
+  const todayTripLocal =
+    todayTripLocalOverride ??
+    getCalendarDateInTimeZone(destinationCalendarTimeZone);
   const pack = getDefaultEmergencyPack();
   const actionLabels: EmergencyResourceActionLabels = {
     openWebsite: t("openWebsite"),
@@ -139,8 +145,12 @@ export function buildEmergencyViewModel({
     ["tourist_hotline", "embassy_consular", "other_official"].includes(resource.kind),
   );
 
-  const tripPhase = getTripPhase(startDate, endDate, todayJapan);
-  const contextual = selectContextualAccommodation(accommodations, tripPhase, todayJapan);
+  const tripPhase = getTripPhase(startDate, endDate, todayTripLocal);
+  const contextual = selectContextualAccommodation(
+    accommodations,
+    tripPhase,
+    todayTripLocal,
+  );
   const currentAccommodation =
     contextual?.variant === "current"
       ? {

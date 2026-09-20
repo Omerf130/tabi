@@ -16,10 +16,10 @@ type TripRecord = {
 function toMyTripsCardItem(
   trip: TripRecord,
   role: TripMemberRole,
-  todayJapan: string,
+  todayTripLocal: string,
 ): MyTripsCardItem {
   const tripId = trip._id.toString();
-  const listItem = toTripListItem(trip, role, todayJapan);
+  const listItem = toTripListItem(trip, role, todayTripLocal);
   const hasCoverImage = Boolean(trip.coverImage?.pathname);
   const visual = resolveTripCardVisual(
     tripId,
@@ -37,15 +37,17 @@ function toMyTripsCardItem(
 export function buildMyTripsCards(
   trips: TripRecord[],
   roleByTripId: Map<string, TripMemberRole>,
-  todayJapan: string,
+  todayTripLocalByTripId: Map<string, string>,
 ): MyTripsCardItem[] {
   const items = trips
     .map((trip) => {
-      const role = roleByTripId.get(trip._id.toString());
-      if (!role) {
+      const tripId = trip._id.toString();
+      const role = roleByTripId.get(tripId);
+      const todayTripLocal = todayTripLocalByTripId.get(tripId);
+      if (!role || !todayTripLocal) {
         return null;
       }
-      return toMyTripsCardItem(trip, role, todayJapan);
+      return toMyTripsCardItem(trip, role, todayTripLocal);
     })
     .filter((item): item is MyTripsCardItem => item !== null);
 

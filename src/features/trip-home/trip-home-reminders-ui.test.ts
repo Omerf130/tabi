@@ -52,7 +52,7 @@ describe("trip home reminders UI contracts", () => {
       /function buildRemindersManager[\s\S]*currentTripDate,\s*\n\s*reminders:/,
     );
     expect(buildVm).toMatch(
-      /remindersManager: buildRemindersManager\(input, todayJapan\)/,
+      /remindersManager: buildRemindersManager\(input, todayTripLocal\)/,
     );
   });
 });

@@ -14,10 +14,6 @@ vi.mock("@/features/weather/queries", () => ({
   getWeatherSnapshot: getWeatherSnapshotMock,
 }));
 
-vi.mock("@/features/trips/japan-wall-clock", () => ({
-  getJapanWallClockTime: () => "10:00",
-}));
-
 const baseInput = {
   tripId: "trip-1",
   focusedDate: "2026-10-26",
@@ -64,7 +60,8 @@ const baseInput = {
     },
   ],
   incompleteReminderCount: 2,
-  todayJapan: "2026-10-26",
+  todayTripLocal: "2026-10-26",
+  destinationCalendarTimeZone: "Asia/Tokyo",
 };
 
 describe("buildFocusedDayCard", () => {
@@ -164,7 +161,7 @@ describe("buildFocusedDayCard", () => {
     const card = await buildFocusedDayCard({
       ...baseInput,
       focusedDate: "2026-10-25",
-      todayJapan: "2026-10-20",
+      todayTripLocal: "2026-10-20",
     });
 
     expect(card.showTodayBadge).toBe(false);

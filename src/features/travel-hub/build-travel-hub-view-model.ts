@@ -9,7 +9,6 @@ import type { TripListSummaryViewModel } from "@/features/lists/types";
 import type { TravelHubFinanceSummary } from "@/features/finance/types";
 import type { TransportRecord } from "@/features/transport/types";
 import { buildWeatherHref } from "@/features/weather/constants";
-import { getJapanCalendarDate } from "@/features/trips/calendar-date";
 import { getTripPhase } from "@/features/trips/trip-phase";
 import { buildTravelHubAccommodationRow } from "./build-travel-hub-accommodation-row";
 import { buildTravelHubDocumentsTile } from "./build-travel-hub-documents-tile";
@@ -34,7 +33,7 @@ type BuildTravelHubViewModelInput = {
   transports: readonly TransportRecord[];
   lists: readonly TripListSummaryViewModel[];
   documentCount: number;
-  currentTripDate?: string;
+  currentTripDate: string;
   accommodationPhotoPresentation?: PlacePhotoPresentation | null;
   finance: TravelHubFinanceSummary;
   t: AppTranslator<"TravelHub">;
@@ -63,7 +62,7 @@ export function buildTravelHubViewModel({
   transports,
   lists,
   documentCount,
-  currentTripDate = getJapanCalendarDate(),
+  currentTripDate,
   accommodationPhotoPresentation = null,
   finance,
   t,

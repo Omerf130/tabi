@@ -70,8 +70,8 @@ describe("during trip home", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-11-01",
-      nowJapanTime: "13:00",
+      todayTripLocal: "2026-11-01",
+      nowTripLocal: "13:00",
       dayActivities: [
         activity({ id: "a1", title: "Morning", startTime: "09:00" }),
       ],
@@ -129,8 +129,8 @@ describe("during trip home", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-11-01",
-      nowJapanTime: "13:00",
+      todayTripLocal: "2026-11-01",
+      nowTripLocal: "13:00",
       dayActivities,
     });
 
@@ -147,8 +147,8 @@ describe("during trip home", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-11-01",
-      nowJapanTime: "13:00",
+      todayTripLocal: "2026-11-01",
+      nowTripLocal: "13:00",
       preferredMapsApp: "waze",
       dayActivities: [
         activity({
@@ -196,8 +196,8 @@ describe("during trip home", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-11-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-11-01",
+      nowTripLocal: "10:00",
     });
 
     expect(model.phase).toBe("active");
@@ -222,8 +222,8 @@ describe("during trip home", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-11-01",
-      nowJapanTime: "20:00",
+      todayTripLocal: "2026-11-01",
+      nowTripLocal: "20:00",
       tonightAccommodation,
     });
 
@@ -240,8 +240,8 @@ describe("during trip home", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-11-01",
-      nowJapanTime: "13:00",
+      todayTripLocal: "2026-11-01",
+      nowTripLocal: "13:00",
       dayActivities: [],
       dayTransports: [],
     });
@@ -289,8 +289,8 @@ describe("during trip home", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-11-01",
-      nowJapanTime: "13:00",
+      todayTripLocal: "2026-11-01",
+      nowTripLocal: "13:00",
       dayActivities,
     });
 
@@ -316,8 +316,8 @@ describe("during trip home", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-11-01",
-      nowJapanTime: "13:00",
+      todayTripLocal: "2026-11-01",
+      nowTripLocal: "13:00",
       dayActivities: [
         activity({
           id: "now",

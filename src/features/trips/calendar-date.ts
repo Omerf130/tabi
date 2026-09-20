@@ -1,5 +1,3 @@
-import { TRIP_CALENDAR_TIMEZONE } from "./constants";
-
 const CALENDAR_DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
 
 export function parseCalendarDateParts(
@@ -77,12 +75,6 @@ export function addCalendarDays(date: string, delta: number): string {
   const utcDate = new Date(Date.UTC(parts.year, parts.month - 1, parts.day));
   utcDate.setUTCDate(utcDate.getUTCDate() + delta);
   return formatCalendarDateFromUtcDate(utcDate);
-}
-
-export function getJapanCalendarDate(now = new Date()): string {
-  return new Intl.DateTimeFormat("en-CA", {
-    timeZone: TRIP_CALENDAR_TIMEZONE,
-  }).format(now);
 }
 
 /** Formats YYYY-MM-DD for display without timezone conversion. */

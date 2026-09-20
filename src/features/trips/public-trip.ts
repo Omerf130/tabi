@@ -14,6 +14,10 @@ export type TripListItem = {
 export type TripWorkspaceDestination = {
   displayName: string;
   country?: string;
+  countryCode?: string;
+  latitude?: number;
+  longitude?: number;
+  timeZone?: string;
 };
 
 export type TripWorkspace = {
@@ -26,6 +30,8 @@ export type TripWorkspace = {
   coverImage?: TripCoverImage;
   coverVisualKey?: string | null;
   themeKey: TripThemeKey;
+  /** Resolved IANA timezone for trip-scoped calendar behavior (server-derived). */
+  destinationCalendarTimeZone: string;
   destination?: TripWorkspaceDestination;
 };
 
@@ -49,13 +55,17 @@ type TripRecord = {
   destination?: {
     displayName: string;
     country?: string | null;
+    countryCode?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+    timeZone?: string | null;
   } | null;
 };
 
 export function toTripListItem(
   trip: TripRecord,
   role: TripMemberRole,
-  todayJapan?: string,
+  todayTripLocal: string,
 ): TripListItem {
   return {
     id: trip._id.toString(),
@@ -63,13 +73,14 @@ export function toTripListItem(
     startDate: trip.startDate,
     endDate: trip.endDate,
     role,
-    phase: getTripPhase(trip.startDate, trip.endDate, todayJapan),
+    phase: getTripPhase(trip.startDate, trip.endDate, todayTripLocal),
   };
 }
 
 export function toTripWorkspace(
   trip: TripRecord,
   role: TripMemberRole,
+  destinationCalendarTimeZone: string,
 ): TripWorkspace {
   return {
     id: trip._id.toString(),
@@ -86,10 +97,21 @@ export function toTripWorkspace(
       : undefined,
     coverVisualKey: trip.coverVisualKey ?? null,
     themeKey: resolveTripThemeKey(trip.themeKey),
+    destinationCalendarTimeZone,
     destination: trip.destination
       ? {
           displayName: trip.destination.displayName,
           country: trip.destination.country ?? undefined,
+          countryCode: trip.destination.countryCode ?? undefined,
+          latitude:
+            typeof trip.destination.latitude === "number"
+              ? trip.destination.latitude
+              : undefined,
+          longitude:
+            typeof trip.destination.longitude === "number"
+              ? trip.destination.longitude
+              : undefined,
+          timeZone: trip.destination.timeZone?.trim() || undefined,
         }
       : undefined,
   };

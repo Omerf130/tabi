@@ -111,7 +111,7 @@ describe("buildItineraryOverviewSummaries", () => {
       accommodations,
       documents,
       incompleteReminderDates: new Set(["2026-10-26"]),
-      todayJapan: "2026-10-26",
+      todayTripLocal: "2026-10-26",
     });
 
     expect(summaries).toHaveLength(3);
@@ -135,6 +135,7 @@ describe("buildItineraryOverviewSummaries", () => {
       accommodations,
       documents: [],
       incompleteReminderDates: new Set(),
+      todayTripLocal: "2026-10-25",
     });
 
     expect(summaries[0]?.accommodationLabel).toBe("Hotel Alpha");

@@ -22,6 +22,7 @@ const baseTrip = {
   endDate: "2026-11-02",
   role: "owner" as const,
   themeKey: "default" as const,
+  destinationCalendarTimeZone: "Asia/Tokyo",
   destination: {
     displayName: "Tokyo",
     country: "Japan",

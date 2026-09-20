@@ -30,6 +30,7 @@ export async function prepareEmergencyPage(tripId: string): Promise<EmergencyPag
     accommodations,
     customResources,
     emergencyDocuments,
+    destinationCalendarTimeZone: trip.destinationCalendarTimeZone,
     preferredMapsApp: user.preferredMapsApp,
     t,
   });

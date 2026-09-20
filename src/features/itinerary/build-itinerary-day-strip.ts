@@ -23,13 +23,13 @@ export function buildItineraryDayStrip(input: {
   startDate: string;
   endDate: string;
   selectedDate: string;
-  todayJapan: string;
+  todayTripLocal: string;
 }): ItineraryDayStripItem[] {
   const dates = getInclusiveDateRange(input.startDate, input.endDate);
 
   return dates.map((date) => {
     const dayNumber = getTripDayNumber(input.startDate, input.endDate, date)!;
-    const temporalState = getTripDayTemporalState(date, input.todayJapan);
+    const temporalState = getTripDayTemporalState(date, input.todayTripLocal);
 
     return {
       date,

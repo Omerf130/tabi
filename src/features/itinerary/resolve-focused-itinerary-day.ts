@@ -1,19 +1,18 @@
-import { getJapanCalendarDate } from "@/features/trips/calendar-date";
 import { getTripPhase } from "@/features/trips/trip-phase";
 
 export function resolveFocusedItineraryDay(
   startDate: string,
   endDate: string,
-  todayJapan = getJapanCalendarDate(),
+  todayTripLocal: string,
 ): string | null {
-  const phase = getTripPhase(startDate, endDate, todayJapan);
+  const phase = getTripPhase(startDate, endDate, todayTripLocal);
 
   if (phase === "upcoming") {
     return startDate;
   }
 
   if (phase === "active") {
-    return todayJapan;
+    return todayTripLocal;
   }
 
   return null;

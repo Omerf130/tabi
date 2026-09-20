@@ -50,6 +50,7 @@ export async function createTripReminderAction(
     date: formData.get("date"),
     time: formData.get("time"),
     text: formData.get("text"),
+    timeZone: formData.get("timeZone"),
   });
 
   if (!parsed.success) {
@@ -72,6 +73,7 @@ export async function createTripReminderAction(
       date: parsed.data.date,
       time: parsed.data.time,
       text: parsed.data.text,
+      timeZone: parsed.data.timeZone,
     });
     revalidateTripReminderPaths(trip.id, [parsed.data.date]);
     return { ok: true, successCode: TRIP_REMINDER_SUCCESS_CODES.created };
@@ -93,6 +95,7 @@ export async function updateTripReminderAction(
     date: formData.get("date"),
     time: formData.get("time"),
     text: formData.get("text"),
+    timeZone: formData.get("timeZone"),
   });
 
   if (!parsed.success) {
@@ -121,6 +124,7 @@ export async function updateTripReminderAction(
       date: parsed.data.date,
       time: parsed.data.time,
       text: parsed.data.text,
+      timeZone: parsed.data.timeZone,
     });
     revalidateTripReminderPaths(
       trip.id,

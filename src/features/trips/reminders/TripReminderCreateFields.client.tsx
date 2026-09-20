@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { Textarea } from "@/components/ui/Textarea/Textarea";
+import { TripReminderBrowserTimeZoneField } from "./TripReminderBrowserTimeZoneField.client";
 import styles from "./TripReminderSettings.module.scss";
 
 type TripReminderCreateFieldsProps = {
@@ -31,6 +32,7 @@ export function TripReminderCreateFields({
   return (
     <>
       <input type="hidden" name="tripId" value={tripId} />
+      <TripReminderBrowserTimeZoneField />
       {lockDate && defaultDate ? (
         <input type="hidden" name="date" value={defaultDate} />
       ) : null}

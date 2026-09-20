@@ -34,6 +34,7 @@ export default async function AccommodationsPage({
   const { items, currentTripDate } = await prepareAccommodationsListPage(
     trip.id,
     accommodations,
+    trip.destinationCalendarTimeZone,
   );
 
   return (

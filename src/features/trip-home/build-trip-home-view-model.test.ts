@@ -37,8 +37,8 @@ describe("buildTripHomeViewModel", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-10-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-10-01",
+      nowTripLocal: "10:00",
       usePreviewCountdownReference: true,
       dayActivities: [
         activity({
@@ -76,8 +76,8 @@ describe("buildTripHomeViewModel", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-10-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-10-01",
+      nowTripLocal: "10:00",
       dayActivities: [],
     });
 
@@ -96,8 +96,8 @@ describe("buildTripHomeViewModel", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-10-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-10-01",
+      nowTripLocal: "10:00",
       preparation: {
         totalCount: 12,
         completedCount: 8,
@@ -147,8 +147,8 @@ describe("buildTripHomeViewModel", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-11-01",
-      nowJapanTime: "13:00",
+      todayTripLocal: "2026-11-01",
+      nowTripLocal: "13:00",
       dayActivities: [
         activity({
           id: "now",
@@ -186,8 +186,8 @@ describe("buildTripHomeViewModel", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-11-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-11-01",
+      nowTripLocal: "10:00",
     });
 
     expect(model.phase).toBe("active");
@@ -202,8 +202,8 @@ describe("buildTripHomeViewModel", () => {
     const upcoming = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-10-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-10-01",
+      nowTripLocal: "10:00",
       allReminders: [
         {
           id: "r1",
@@ -241,8 +241,8 @@ describe("buildTripHomeViewModel", () => {
     const active = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-11-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-11-01",
+      nowTripLocal: "10:00",
       allReminders: [],
     });
 
@@ -257,8 +257,8 @@ describe("buildTripHomeViewModel", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-11-01",
-      nowJapanTime: "13:00",
+      todayTripLocal: "2026-11-01",
+      nowTripLocal: "13:00",
       todayReminders: [
         { id: "r1", time: "14:00", text: "להזמין מונית" },
         { id: "r2", time: "17:30", text: "להתקשר למסעדה" },
@@ -280,8 +280,8 @@ describe("buildTripHomeViewModel", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-12-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-12-01",
+      nowTripLocal: "10:00",
       financeRecap: buildTestNoExpensesRecap(),
     });
 
@@ -314,8 +314,8 @@ describe("buildTripHomeViewModel", () => {
         ...trip,
         coverVisualKey: "japan-01",
       },
-      todayJapan: "2026-10-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-10-01",
+      nowTripLocal: "10:00",
     });
 
     expect(model.hero.heroImageSrc).not.toBe(NEUTRAL_FALLBACK_VISUAL_SRC);
@@ -330,8 +330,8 @@ describe("buildTripHomeViewModel", () => {
         coverImage: { pathname: "x", contentType: "image/jpeg" },
         coverVisualKey: "japan-01",
       },
-      todayJapan: "2026-10-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-10-01",
+      nowTripLocal: "10:00",
     });
 
     expect(model.hero.heroImageSrc).toBe(

@@ -7,6 +7,7 @@ import {
   TRIP_REMINDER_ERROR_CODES,
   type TripReminderErrorCode,
 } from "./constants";
+import { resolveReminderScheduledAtUtc } from "./resolve-reminder-scheduled-at-utc";
 
 export class TripReminderValidationError extends Error {
   readonly code: TripReminderErrorCode;
@@ -38,6 +39,26 @@ function assertReminderDateInTrip(
   }
 }
 
+function assertResolvedReminderSchedule(input: {
+  date: string;
+  time: string;
+  timeZone: string;
+}): { timeZone: string; scheduledAtUtc: Date } {
+  const timeZone = input.timeZone.trim();
+  const resolved = resolveReminderScheduledAtUtc({
+    date: input.date,
+    time: input.time,
+    timeZone,
+  });
+  if (!resolved.ok) {
+    if (resolved.reason === "invalidTimeZone") {
+      throw new TripReminderValidationError(TRIP_REMINDER_ERROR_CODES.invalidTimeZone);
+    }
+    throw new TripReminderValidationError(TRIP_REMINDER_ERROR_CODES.nonexistentLocalTime);
+  }
+  return { timeZone, scheduledAtUtc: resolved.scheduledAtUtc };
+}
+
 export async function createTripReminder(input: {
   tripId: string;
   userId: string;
@@ -46,8 +67,14 @@ export async function createTripReminder(input: {
   date: string;
   time: string;
   text: string;
+  timeZone: string;
 }): Promise<string> {
   assertReminderDateInTrip(input.date, input.startDate, input.endDate);
+  const schedule = assertResolvedReminderSchedule({
+    date: input.date,
+    time: input.time,
+    timeZone: input.timeZone,
+  });
   await connectDb();
   const created = await TripReminder.create({
     tripId: input.tripId,
@@ -56,6 +83,8 @@ export async function createTripReminder(input: {
     time: input.time,
     text: input.text,
     isCompleted: false,
+    timeZone: schedule.timeZone,
+    scheduledAtUtc: schedule.scheduledAtUtc,
   });
 
   return created._id.toString();
@@ -70,12 +99,45 @@ export async function updateTripReminder(input: {
   date: string;
   time: string;
   text: string;
+  timeZone: string;
 }): Promise<void> {
   assertReminderDateInTrip(input.date, input.startDate, input.endDate);
   await connectDb();
+  const existing = await TripReminder.findOne({
+    _id: input.reminderId,
+    tripId: input.tripId,
+    userId: input.userId,
+  }).lean();
+
+  if (!existing) {
+    throw new TripReminderNotFoundError();
+  }
+
+  const dateTimeUnchanged =
+    existing.date === input.date && existing.time === input.time;
+
+  let timeZone = existing.timeZone;
+  let scheduledAtUtc = existing.scheduledAtUtc;
+
+  if (!dateTimeUnchanged) {
+    const schedule = assertResolvedReminderSchedule({
+      date: input.date,
+      time: input.time,
+      timeZone: input.timeZone,
+    });
+    timeZone = schedule.timeZone;
+    scheduledAtUtc = schedule.scheduledAtUtc;
+  }
+
   const updated = await TripReminder.findOneAndUpdate(
     { _id: input.reminderId, tripId: input.tripId, userId: input.userId },
-    { date: input.date, time: input.time, text: input.text },
+    {
+      date: input.date,
+      time: input.time,
+      text: input.text,
+      timeZone,
+      scheduledAtUtc,
+    },
     { new: true },
   ).lean();
 

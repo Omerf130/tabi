@@ -86,6 +86,7 @@ describe("S4A Trip theme domain foundation", () => {
         endDate: "2026-01-07",
       },
       "member",
+      "UTC",
     );
     expect(workspace.themeKey).toBe("default");
   });

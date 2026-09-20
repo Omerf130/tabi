@@ -3,7 +3,6 @@ import {
   addCalendarDays,
   compareCalendarDates,
   formatCalendarDateDisplay,
-  getJapanCalendarDate,
   isValidCalendarDateString,
   normalizeCalendarDateInput,
 } from "./calendar-date";
@@ -77,9 +76,3 @@ describe("formatCalendarDateDisplay", () => {
   });
 });
 
-describe("getJapanCalendarDate", () => {
-  it("returns YYYY-MM-DD", () => {
-    const value = getJapanCalendarDate(new Date("2026-10-25T15:00:00.000Z"));
-    expect(value).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-  });
-});

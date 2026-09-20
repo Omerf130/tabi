@@ -4,13 +4,13 @@ import { cache } from "react";
 import { connectDb } from "@/lib/db/connect";
 import { Trip } from "@/models/Trip";
 import { TripMember, type TripMemberRole } from "@/models/TripMember";
-import { getJapanCalendarDate } from "./calendar-date";
+import { ensureTripDestinationTimeZone } from "./destination/ensure-trip-destination-time-zone";
+import { getCalendarDateInTimeZone } from "./destination/trip-local-calendar";
 import { toTripListItem, toTripWorkspace, type TripListItem, type TripWorkspace } from "./public-trip";
 import { sortTripListItems } from "./trip-sort";
 
 export async function listTripsForUser(userId: string): Promise<TripListItem[]> {
   await connectDb();
-  const todayJapan = getJapanCalendarDate();
   const memberships = await TripMember.find({ userId }).lean();
 
   if (memberships.length === 0) {
@@ -27,16 +27,21 @@ export async function listTripsForUser(userId: string): Promise<TripListItem[]> 
     ]),
   );
 
-  const items = tripIds
-    .map((tripId) => {
-      const trip = tripById.get(tripId.toString());
-      const role = roleByTripId.get(tripId.toString());
-      if (!trip || !role) {
-        return null;
-      }
-      return toTripListItem(trip, role, todayJapan);
-    })
-    .filter((item): item is TripListItem => item !== null);
+  const items: TripListItem[] = [];
+  for (const tripId of tripIds) {
+    const trip = tripById.get(tripId.toString());
+    const role = roleByTripId.get(tripId.toString());
+    if (!trip || !role) {
+      continue;
+    }
+    const tripIdStr = trip._id.toString();
+    const destinationTimeZone = await ensureTripDestinationTimeZone(
+      tripIdStr,
+      trip.destination ?? undefined,
+    );
+    const todayTripLocal = getCalendarDateInTimeZone(destinationTimeZone);
+    items.push(toTripListItem(trip, role, todayTripLocal));
+  }
 
   return sortTripListItems(items);
 }
@@ -58,8 +63,13 @@ export const getTripWithMembership = cache(
     }
 
     const role = membership.role as TripMemberRole;
+    const tripIdStr = trip._id.toString();
+    const destinationTimeZone = await ensureTripDestinationTimeZone(
+      tripIdStr,
+      trip.destination ?? undefined,
+    );
     return {
-      trip: toTripWorkspace(trip, role),
+      trip: toTripWorkspace(trip, role, destinationTimeZone),
       role,
     };
   },

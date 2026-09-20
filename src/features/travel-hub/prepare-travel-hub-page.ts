@@ -6,7 +6,7 @@ import { buildAccommodationPhotoHref } from "@/features/place-images/build-place
 import { getPlacePhotoPresentation } from "@/features/place-images/get-place-photo-presentation";
 import { createPlacePhotoRequestContext } from "@/features/place-images/request-dedupe";
 import type { TransportRecord } from "@/features/transport/types";
-import { getJapanCalendarDate } from "@/features/trips/calendar-date";
+import { getCalendarDateInTimeZone } from "@/features/trips/destination/trip-local-calendar";
 import { prepareTravelHubFinanceSummary } from "@/features/finance/queries";
 import { getTripPhase } from "@/features/trips/trip-phase";
 import { getTranslations } from "next-intl/server";
@@ -22,6 +22,7 @@ type PrepareTravelHubPageInput = {
     endDate: string;
     coverImage?: unknown;
     coverVisualKey?: string | null;
+    destinationCalendarTimeZone: string;
   };
   accommodations: readonly AccommodationViewModel[];
   transports: readonly TransportRecord[];
@@ -32,7 +33,9 @@ type PrepareTravelHubPageInput = {
 export async function prepareTravelHubPage(
   input: PrepareTravelHubPageInput,
 ): Promise<TravelHubViewModel> {
-  const currentTripDate = getJapanCalendarDate();
+  const currentTripDate = getCalendarDateInTimeZone(
+    input.trip.destinationCalendarTimeZone,
+  );
   const tripPhase = getTripPhase(
     input.trip.startDate,
     input.trip.endDate,

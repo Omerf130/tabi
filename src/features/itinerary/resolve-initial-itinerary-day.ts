@@ -1,11 +1,15 @@
-import { getJapanCalendarDate } from "@/features/trips/calendar-date";
+import { getTodayTripLocal } from "@/features/trips/destination/trip-calendar-for-workspace";
 import { getTripPhase } from "@/features/trips/trip-phase";
 import { isDateWithinTrip } from "@/features/trips/trip-days";
 
 export function resolveInitialItineraryDay(
-  trip: { startDate: string; endDate: string },
+  trip: {
+    startDate: string;
+    endDate: string;
+    destinationCalendarTimeZone: string;
+  },
   requestedDate?: string | null,
-  todayJapan = getJapanCalendarDate(),
+  todayTripLocal = getTodayTripLocal(trip),
 ): string {
   if (
     requestedDate &&
@@ -14,7 +18,7 @@ export function resolveInitialItineraryDay(
     return requestedDate;
   }
 
-  const phase = getTripPhase(trip.startDate, trip.endDate, todayJapan);
+  const phase = getTripPhase(trip.startDate, trip.endDate, todayTripLocal);
 
   if (phase === "upcoming") {
     return trip.startDate;
@@ -24,8 +28,8 @@ export function resolveInitialItineraryDay(
     return trip.startDate;
   }
 
-  if (isDateWithinTrip(trip.startDate, trip.endDate, todayJapan)) {
-    return todayJapan;
+  if (isDateWithinTrip(trip.startDate, trip.endDate, todayTripLocal)) {
+    return todayTripLocal;
   }
 
   return trip.startDate;

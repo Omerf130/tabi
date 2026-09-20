@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { resolveInitialItineraryDay } from "./resolve-initial-itinerary-day";
 
-const trip = { startDate: "2026-10-25", endDate: "2026-11-18" };
+const trip = {
+  startDate: "2026-10-25",
+  endDate: "2026-11-18",
+  destinationCalendarTimeZone: "UTC",
+};
 
 describe("resolveInitialItineraryDay", () => {
   it("uses valid requested date within trip range", () => {
@@ -25,7 +29,7 @@ describe("resolveInitialItineraryDay", () => {
     );
   });
 
-  it("defaults to today during trip using Japan calendar", () => {
+  it("defaults to today during trip using trip-local calendar", () => {
     expect(resolveInitialItineraryDay(trip, null, "2026-10-26")).toBe(
       "2026-10-26",
     );

@@ -1,5 +1,8 @@
-import { addCalendarDays, getJapanCalendarDate } from "@/features/trips/calendar-date";
-import { getJapanWallClockTime } from "@/features/trips/japan-wall-clock";
+import { addCalendarDays } from "@/features/trips/calendar-date";
+import {
+  getCalendarDateInTimeZone,
+  getWallClockTimeInTimeZone,
+} from "@/features/trips/destination/trip-local-calendar";
 import type { TripPhase } from "@/features/trips/trip-phase";
 
 export const TRIP_HOME_PREVIEW_WALL_CLOCK_TIME = "12:00";
@@ -9,14 +12,14 @@ export const TRIP_HOME_PREVIEW_BEFORE_DAY_OFFSET = -30;
 export type TripHomePreviewPhaseParam = "before" | "during" | "after";
 
 export type TripHomePreviewContext = {
-  todayJapan: string;
-  nowJapanTime: string;
+  todayTripLocal: string;
+  nowTripLocal: string;
   isPreview: false;
 };
 
 export type TripHomeActivePreviewContext = {
-  todayJapan: string;
-  nowJapanTime: string;
+  todayTripLocal: string;
+  nowTripLocal: string;
   isPreview: true;
   previewPhase: TripHomePreviewPhaseParam;
   forcedPhase: TripPhase;
@@ -48,7 +51,7 @@ function previewPhaseToForcedPhase(
   }
 }
 
-function resolvePreviewTodayJapan(
+function resolvePreviewTodayTripLocal(
   previewPhase: TripHomePreviewPhaseParam,
   startDate: string,
   endDate: string,
@@ -88,12 +91,13 @@ function resolvePreviewWallClockTime(
 export function resolveTripHomePreviewContext(input: {
   startDate: string;
   endDate: string;
+  destinationTimeZone: string;
   previewPhase?: string | null;
   previewTime?: string | null;
 }): ResolvedTripHomePreviewContext {
   const productionContext: TripHomePreviewContext = {
-    todayJapan: getJapanCalendarDate(),
-    nowJapanTime: getJapanWallClockTime(),
+    todayTripLocal: getCalendarDateInTimeZone(input.destinationTimeZone),
+    nowTripLocal: getWallClockTimeInTimeZone(input.destinationTimeZone),
     isPreview: false,
   };
 
@@ -107,12 +111,12 @@ export function resolveTripHomePreviewContext(input: {
   }
 
   return {
-    todayJapan: resolvePreviewTodayJapan(
+    todayTripLocal: resolvePreviewTodayTripLocal(
       previewPhase,
       input.startDate,
       input.endDate,
     ),
-    nowJapanTime: resolvePreviewWallClockTime(previewPhase, input.previewTime),
+    nowTripLocal: resolvePreviewWallClockTime(previewPhase, input.previewTime),
     isPreview: true,
     previewPhase,
     forcedPhase: previewPhaseToForcedPhase(previewPhase),

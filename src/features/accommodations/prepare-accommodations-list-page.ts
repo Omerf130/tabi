@@ -2,7 +2,7 @@ import "server-only";
 
 import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import { resolveRequestLocale } from "@/features/i18n/resolve-request-locale";
-import { getJapanCalendarDate } from "@/features/trips/calendar-date";
+import { getCalendarDateInTimeZone } from "@/features/trips/destination/trip-local-calendar";
 import { attachAccommodationPhotoPresentations } from "./attach-accommodation-photo-presentations";
 import { buildAccommodationListItem } from "./build-accommodation-list-item";
 import type {
@@ -18,9 +18,10 @@ export type PreparedAccommodationsListPage = {
 export async function prepareAccommodationsListPage(
   tripId: string,
   accommodations: readonly AccommodationViewModel[],
+  destinationCalendarTimeZone: string,
 ): Promise<PreparedAccommodationsListPage> {
   const [currentTripDate, locale] = await Promise.all([
-    Promise.resolve(getJapanCalendarDate()),
+    Promise.resolve(getCalendarDateInTimeZone(destinationCalendarTimeZone)),
     resolveRequestLocale(),
   ]);
   const t = createAppTranslator("Accommodation", locale);

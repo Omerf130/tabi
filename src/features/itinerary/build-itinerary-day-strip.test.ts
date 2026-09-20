@@ -11,7 +11,7 @@ describe("buildItineraryDayStrip", () => {
       startDate: "2026-10-25",
       endDate: "2026-11-18",
       selectedDate: "2026-10-30",
-      todayJapan: "2026-10-26",
+      todayTripLocal: "2026-10-26",
     });
 
     expect(days).toHaveLength(25);
@@ -36,7 +36,7 @@ describe("buildItineraryDayStrip", () => {
       startDate: "2026-10-25",
       endDate: "2026-10-27",
       selectedDate: "2026-10-26",
-      todayJapan: "2026-10-26",
+      todayTripLocal: "2026-10-26",
     });
 
     expect(days.find((day) => day.date === "2026-10-26")?.isToday).toBe(true);

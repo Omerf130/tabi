@@ -46,6 +46,7 @@ describe("Maps settings", () => {
         endDate: "2026-01-07",
         role: "owner",
         themeKey: "default",
+        destinationCalendarTimeZone: "UTC",
       },
       isOwner: true,
       baseCurrency: "ILS",

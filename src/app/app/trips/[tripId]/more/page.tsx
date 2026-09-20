@@ -45,6 +45,7 @@ export default async function TripMorePage({
       endDate: trip.endDate,
       coverImage: trip.coverImage,
       coverVisualKey: trip.coverVisualKey,
+      destinationCalendarTimeZone: trip.destinationCalendarTimeZone,
     },
     accommodations,
     transports,

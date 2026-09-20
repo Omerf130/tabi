@@ -1,8 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { fetchPlaceGeographyDetailsMock } = vi.hoisted(() => ({
-  fetchPlaceGeographyDetailsMock: vi.fn(),
-}));
+const { fetchPlaceGeographyDetailsMock, resolveDestinationTimeZoneOrFallbackMock } =
+  vi.hoisted(() => ({
+    fetchPlaceGeographyDetailsMock: vi.fn(),
+    resolveDestinationTimeZoneOrFallbackMock: vi.fn(),
+  }));
 
 vi.mock("./googlePlaces.server", async (importOriginal) => {
   const actual = await importOriginal<typeof import("./googlePlaces.server")>();
@@ -12,12 +14,17 @@ vi.mock("./googlePlaces.server", async (importOriginal) => {
   };
 });
 
+vi.mock("@/features/trips/destination/resolve-destination-time-zone", () => ({
+  resolveDestinationTimeZoneOrFallback: resolveDestinationTimeZoneOrFallbackMock,
+}));
+
 import { GooglePlacesRequestError } from "./googlePlaces.server";
 import { resolveDestinationSnapshot } from "./resolve-destination-snapshot";
 
 describe("resolveDestinationSnapshot", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    resolveDestinationTimeZoneOrFallbackMock.mockResolvedValue("Asia/Tokyo");
   });
 
   it("returns a canonical geographic snapshot", async () => {
@@ -44,6 +51,11 @@ describe("resolveDestinationSnapshot", () => {
       secondaryLabel: "Tokyo, Japan",
       country: "Japan",
       countryCode: "JP",
+      latitude: 35.6762,
+      longitude: 139.6503,
+      timeZone: "Asia/Tokyo",
+    });
+    expect(resolveDestinationTimeZoneOrFallbackMock).toHaveBeenCalledWith({
       latitude: 35.6762,
       longitude: 139.6503,
     });

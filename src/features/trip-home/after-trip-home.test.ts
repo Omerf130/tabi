@@ -38,8 +38,8 @@ describe("after trip home", () => {
         coverImage: { pathname: "cover.jpg", contentType: "image/jpeg" },
         coverVisualKey: "japan-01",
       },
-      todayJapan: "2026-12-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-12-01",
+      nowTripLocal: "10:00",
       financeRecap: buildTestNoExpensesRecap(),
     });
 
@@ -62,8 +62,8 @@ describe("after trip home", () => {
           country: "Italy",
         },
       },
-      todayJapan: "2026-12-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-12-01",
+      nowTripLocal: "10:00",
       financeRecap: buildTestNoExpensesRecap(),
     });
 
@@ -82,8 +82,8 @@ describe("after trip home", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-12-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-12-01",
+      nowTripLocal: "10:00",
       financeRecap: buildTestNoExpensesRecap(),
     });
 
@@ -102,8 +102,8 @@ describe("after trip home", () => {
     const model = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-12-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-12-01",
+      nowTripLocal: "10:00",
       financeRecap: buildTestNoExpensesRecap(),
     });
 
@@ -121,15 +121,15 @@ describe("after trip home", () => {
     const before = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-10-01",
-      nowJapanTime: "10:00",
+      todayTripLocal: "2026-10-01",
+      nowTripLocal: "10:00",
     });
 
     const during = buildTripHomeViewModel({
       trip,
       translations,
-      todayJapan: "2026-11-01",
-      nowJapanTime: "13:00",
+      todayTripLocal: "2026-11-01",
+      nowTripLocal: "13:00",
     });
 
     expect(before.phase).toBe("upcoming");

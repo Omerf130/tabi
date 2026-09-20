@@ -53,14 +53,14 @@ import type { TripHomeHeroViewModel, TripHomeViewModel } from "./types";
 
 function getTonightAccommodation(
   accommodations: readonly AccommodationViewModel[],
-  todayJapan: string,
+  todayTripLocal: string,
 ): AccommodationViewModel | null {
   const occupied = accommodations
     .filter((accommodation) =>
       isAccommodationOccupiedOnDate(
         accommodation.checkInDate,
         accommodation.checkOutDate,
-        todayJapan,
+        todayTripLocal,
       ),
     )
     .sort(compareAccommodations);
@@ -94,12 +94,13 @@ export async function prepareTripHomePage(
   const previewContext = resolveTripHomePreviewContext({
     startDate: trip.startDate,
     endDate: trip.endDate,
+    destinationTimeZone: trip.destinationCalendarTimeZone,
     previewPhase: options.previewPhase,
     previewTime: options.previewTime,
   });
-  const todayJapan = previewContext.todayJapan;
-  const nowJapanTime = previewContext.nowJapanTime;
-  const phase = getTripPhase(trip.startDate, trip.endDate, todayJapan);
+  const todayTripLocal = previewContext.todayTripLocal;
+  const nowTripLocal = previewContext.nowTripLocal;
+  const phase = getTripPhase(trip.startDate, trip.endDate, todayTripLocal);
 
   if (phase === "upcoming") {
     const photoContext = createPlacePhotoRequestContext();
@@ -123,7 +124,7 @@ export async function prepareTripHomePage(
       listTripListsSummary(trip.id),
       listTripListItemsForTypes(trip.id, PREPARATION_LIST_TYPES),
       listIncompleteRemindersForUserTrip(trip.id, userId),
-      listRemindersForUserTrip(trip.id, userId, todayJapan),
+      listRemindersForUserTrip(trip.id, userId, todayTripLocal),
       listAccommodationsForTrip(trip.id),
     ]);
 
@@ -159,8 +160,8 @@ export async function prepareTripHomePage(
 
     return buildTripHomeViewModel({
       trip,
-      todayJapan,
-      nowJapanTime,
+      todayTripLocal,
+      nowTripLocal,
       dayActivities,
       dayTransports,
       accommodations,
@@ -172,7 +173,7 @@ export async function prepareTripHomePage(
       ),
       upcomingReminders: selectUpcomingHomeReminders(
         reminderRecords,
-        todayJapan,
+        todayTripLocal,
         translations.tReminders,
       ),
       allReminders,
@@ -193,8 +194,8 @@ export async function prepareTripHomePage(
 
     return buildTripHomeViewModel({
       trip,
-      todayJapan,
-      nowJapanTime,
+      todayTripLocal,
+      nowTripLocal,
       financeRecap,
       activityCount: activities.length,
       accommodationCount: accommodations.length,
@@ -213,15 +214,15 @@ export async function prepareTripHomePage(
     accommodations,
     transportRecords,
   ] = await Promise.all([
-    listActivitiesForTripDay(trip.id, todayJapan),
+    listActivitiesForTripDay(trip.id, todayTripLocal),
     listTransportsForItineraryDay(
       trip.id,
-      todayJapan,
+      todayTripLocal,
       trip.startDate,
       trip.endDate,
     ),
-    listIncompleteRemindersForUserTripDay(trip.id, userId, todayJapan),
-    listRemindersForUserTrip(trip.id, userId, todayJapan),
+    listIncompleteRemindersForUserTripDay(trip.id, userId, todayTripLocal),
+    listRemindersForUserTrip(trip.id, userId, todayTripLocal),
     listAccommodationsForTrip(trip.id),
     listTransportsForTrip(trip.id),
   ]);
@@ -234,15 +235,15 @@ export async function prepareTripHomePage(
   const todayReminders = selectTodayHomeReminders(
     todayReminderRecords,
     phase,
-    todayJapan,
+    todayTripLocal,
   );
 
   const { nowActivity, nextActivity } = resolveNowAndNextUp(
     dayActivitiesWithNavigation,
-    nowJapanTime,
+    nowTripLocal,
   );
 
-  const tonightAccommodation = getTonightAccommodation(accommodations, todayJapan);
+  const tonightAccommodation = getTonightAccommodation(accommodations, todayTripLocal);
 
   const transportRecordMap = new Map(
     transportRecords.map((record) => [record.id, record]),
@@ -251,7 +252,7 @@ export async function prepareTripHomePage(
   let weather: TripHomeHeroViewModel["weather"];
 
   const resolvedLocation = await resolveDayLocation({
-    date: todayJapan,
+    date: todayTripLocal,
     accommodations,
     activities: dayActivitiesWithNavigation,
     dayTransports,
@@ -261,7 +262,7 @@ export async function prepareTripHomePage(
   if (resolvedLocation) {
     try {
       const snapshot = await getWeatherSnapshot(resolvedLocation);
-      const dayWeather = extractFocusedDayWeather(snapshot, todayJapan);
+      const dayWeather = extractFocusedDayWeather(snapshot, todayTripLocal);
       if (dayWeather) {
         weather = {
           temperatureLabel: formatTemperatureC(dayWeather.temperatureC),
@@ -306,8 +307,8 @@ export async function prepareTripHomePage(
 
   return buildTripHomeViewModel({
     trip,
-    todayJapan,
-    nowJapanTime,
+    todayTripLocal,
+    nowTripLocal,
     dayActivities: dayActivitiesWithNavigation,
     dayTransports,
     todayReminders,

@@ -5,8 +5,7 @@ import {
   isAccommodationOccupiedOnDate,
 } from "@/features/accommodations/accommodation-domain";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
-import { getJapanCalendarDate } from "@/features/trips/calendar-date";
-import { getJapanWallClockTime } from "@/features/trips/japan-wall-clock";
+import { getWallClockTimeInTimeZone } from "@/features/trips/destination/trip-local-calendar";
 import { getTripPhase } from "@/features/trips/trip-phase";
 import {
   formatTripDayDateLabel,
@@ -39,7 +38,8 @@ export type BuildFocusedDayCardInput = {
   transportRecords: ReadonlyMap<string, TransportRecord>;
   accommodations: readonly AccommodationViewModel[];
   incompleteReminderCount: number;
-  todayJapan?: string;
+  todayTripLocal: string;
+  destinationCalendarTimeZone: string;
 };
 
 function getPrimaryOccupiedAccommodation(
@@ -81,19 +81,22 @@ export async function buildFocusedDayCard({
   transportRecords,
   accommodations,
   incompleteReminderCount,
-  todayJapan = getJapanCalendarDate(),
+  todayTripLocal,
+  destinationCalendarTimeZone,
 }: BuildFocusedDayCardInput): Promise<FocusedDayCardViewModel> {
-  const phase = getTripPhase(startDate, endDate, todayJapan);
-  const temporalState = getTripDayTemporalState(focusedDate, todayJapan);
+  const phase = getTripPhase(startDate, endDate, todayTripLocal);
+  const temporalState = getTripDayTemporalState(focusedDate, todayTripLocal);
   const dayNumber = getTripDayNumber(startDate, endDate, focusedDate)!;
   const dayActivities = activities.filter((activity) => activity.date === focusedDate);
-  const filterPassed = phase === "active" && focusedDate === todayJapan;
+  const filterPassed = phase === "active" && focusedDate === todayTripLocal;
 
   const nextItems = resolveNextTwoDayItems({
     activities: dayActivities,
     transports: dayTransports,
     filterPassed,
-    nowJapanTime: filterPassed ? getJapanWallClockTime() : undefined,
+    nowJapanTime: filterPassed
+      ? getWallClockTimeInTimeZone(destinationCalendarTimeZone)
+      : undefined,
   }).map(toNextItemViewModel);
 
   const primaryAccommodation = getPrimaryOccupiedAccommodation(accommodations, focusedDate);
@@ -133,7 +136,7 @@ export async function buildFocusedDayCard({
     dateLabel: formatTripDayDateLabel(focusedDate),
     temporalState,
     href: buildItineraryDayHref(tripId, focusedDate),
-    showTodayBadge: phase === "active" && focusedDate === todayJapan,
+    showTodayBadge: phase === "active" && focusedDate === todayTripLocal,
     weather,
     accommodationName: primaryAccommodation?.name,
     nextItems,

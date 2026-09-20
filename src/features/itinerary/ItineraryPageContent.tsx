@@ -3,6 +3,7 @@ import { requireUser } from "@/features/auth/session";
 import { getTranslations } from "next-intl/server";
 import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
 import type { TripWorkspace } from "@/features/trips/public-trip";
+import { getTodayTripLocal } from "@/features/trips/destination/trip-calendar-for-workspace";
 import { getTripDayCount } from "@/features/trips/trip-days";
 import { listIncompleteRemindersForUserTrip } from "@/features/trips/reminders/queries";
 import { buildFocusedDayCard } from "./build-focused-day-card.server";
@@ -28,6 +29,8 @@ export async function ItineraryPageContent({ trip }: ItineraryPageContentProps) 
     incompleteReminders.map((reminder) => reminder.date),
   );
 
+  const todayTripLocal = getTodayTripLocal(trip);
+
   const days = buildItineraryOverviewSummaries({
     tripId: trip.id,
     startDate: trip.startDate,
@@ -37,9 +40,14 @@ export async function ItineraryPageContent({ trip }: ItineraryPageContentProps) 
     accommodations: tripData.accommodations,
     documents: tripData.documents,
     incompleteReminderDates,
+    todayTripLocal,
   });
 
-  const focusedDate = resolveFocusedItineraryDay(trip.startDate, trip.endDate);
+  const focusedDate = resolveFocusedItineraryDay(
+    trip.startDate,
+    trip.endDate,
+    todayTripLocal,
+  );
   const focusedDayCard = focusedDate
     ? await buildFocusedDayCard({
         tripId: trip.id,
@@ -53,6 +61,8 @@ export async function ItineraryPageContent({ trip }: ItineraryPageContentProps) 
         incompleteReminderCount: incompleteReminders.filter(
           (reminder) => reminder.date === focusedDate,
         ).length,
+        todayTripLocal,
+        destinationCalendarTimeZone: trip.destinationCalendarTimeZone,
       })
     : null;
 

@@ -22,6 +22,7 @@ describe("createTripReminder validation", () => {
         date: "2026-12-01",
         time: "14:30",
         text: "מחוץ לטווח",
+        timeZone: "Asia/Jerusalem",
       }),
     ).rejects.toBeInstanceOf(TripReminderValidationError);
   });

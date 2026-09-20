@@ -9,7 +9,7 @@ describe("buildItineraryDays", () => {
     const days = buildItineraryDays({
       startDate: "2026-10-25",
       endDate: "2026-11-18",
-      todayJapan: "2026-10-25",
+      todayTripLocal: "2026-10-25",
     });
 
     expect(days).toHaveLength(25);
@@ -19,11 +19,11 @@ describe("buildItineraryDays", () => {
     expect(days[24]?.dayNumber).toBe(25);
   });
 
-  it("marks temporal states relative to todayJapan", () => {
+  it("marks temporal states relative to todayTripLocal", () => {
     const days = buildItineraryDays({
       startDate: "2026-10-25",
       endDate: "2026-10-27",
-      todayJapan: "2026-10-26",
+      todayTripLocal: "2026-10-26",
     });
 
     expect(days[0]?.temporalState).toBe("past");
@@ -35,7 +35,7 @@ describe("buildItineraryDays", () => {
     const days = buildItineraryDays({
       startDate: "2026-10-25",
       endDate: "2026-10-25",
-      todayJapan: "2026-10-25",
+      todayTripLocal: "2026-10-25",
     });
 
     expect(days[0]?.weekdayLabel.length).toBeGreaterThan(0);
@@ -48,7 +48,7 @@ describe("buildItineraryDays", () => {
     const days = buildItineraryDays({
       startDate: "2026-10-25",
       endDate: "2026-10-26",
-      todayJapan: "2026-10-25",
+      todayTripLocal: "2026-10-25",
       activities: [
         {
           id: "a",
@@ -96,7 +96,7 @@ describe("buildItineraryDays", () => {
     const days = buildItineraryDays({
       startDate: "2026-10-25",
       endDate: "2026-10-25",
-      todayJapan: "2026-10-25",
+      todayTripLocal: "2026-10-25",
       activities: [
         {
           id: "a",

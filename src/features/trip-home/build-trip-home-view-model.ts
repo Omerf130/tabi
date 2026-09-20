@@ -3,11 +3,7 @@ import { resolveTripVisualSrc } from "@/features/destination-visuals/resolve-tri
 import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import type { ActivityViewModel } from "@/features/itinerary/types";
 import type { PlacePhotoPresentation } from "@/features/place-images/types";
-import {
-  formatCalendarDateRangeDisplay,
-  getJapanCalendarDate,
-} from "@/features/trips/calendar-date";
-import { getJapanWallClockTime } from "@/features/trips/japan-wall-clock";
+import { formatCalendarDateRangeDisplay } from "@/features/trips/calendar-date";
 import type { TripReminderViewModel } from "@/features/trips/reminders/types";
 import type { UpcomingHomeReminderItem } from "@/features/trips/reminders/select-upcoming-home-reminders";
 import type { TodayHomeReminderItem } from "@/features/trips/reminders/select-today-home-reminders";
@@ -87,8 +83,8 @@ type BuildTripHomeViewModelInput = {
   upNextPhotoPresentation?: PlacePhotoPresentation;
   tonightPhotoPresentation?: PlacePhotoPresentation;
   weather?: TripHomeHeroViewModel["weather"];
-  todayJapan?: string;
-  nowJapanTime?: string;
+  todayTripLocal: string;
+  nowTripLocal: string;
   financeRecap?: AfterTripFinanceRecapViewModel;
   activityCount?: number;
   accommodationCount?: number;
@@ -199,18 +195,18 @@ function buildBeforeJourney(
 
 function buildTodaysPlanSection(
   tripId: string,
-  todayJapan: string,
+  todayTripLocal: string,
   dayNumber: number,
   totalDays: number,
   preview: ReturnType<typeof buildActiveHomeItineraryPreview>,
   translations: TripHomeTranslations,
 ): TripHomeItinerarySection {
   const { tHome, tCommon } = translations;
-  const itineraryHref = `/app/trips/${tripId}/itinerary/${todayJapan}`;
+  const itineraryHref = `/app/trips/${tripId}/itinerary/${todayTripLocal}`;
 
   return {
     title: tHome("todaysPlanTitle"),
-    subtitle: `${formatTripDayWeekday(todayJapan)} · ${formatTripDayDateLabel(todayJapan)}`,
+    subtitle: `${formatTripDayWeekday(todayTripLocal)} · ${formatTripDayDateLabel(todayTripLocal)}`,
     dayMeta: tCommon("dayMeta", { dayNumber, totalDays }),
     items: preview.items,
     overflowCount: preview.overflowCount,
@@ -262,13 +258,13 @@ export function buildTripHomeViewModel(
     upNextPhotoPresentation = EMPTY_PHOTO,
     tonightPhotoPresentation = EMPTY_PHOTO,
     weather,
-    todayJapan = getJapanCalendarDate(),
-    nowJapanTime = getJapanWallClockTime(),
+    todayTripLocal,
+    nowTripLocal,
     translations,
     preferredMapsApp,
   } = input;
 
-  const phase = getTripPhase(trip.startDate, trip.endDate, todayJapan);
+  const phase = getTripPhase(trip.startDate, trip.endDate, todayTripLocal);
   const totalDays = getTripDayCount(trip.startDate, trip.endDate);
   const heroBase = buildHeroBase(input);
   const { tHome } = translations;
@@ -276,8 +272,8 @@ export function buildTripHomeViewModel(
   if (phase === "upcoming") {
     const referenceMs = input.usePreviewCountdownReference
       ? resolveTripCountdownReferenceMs({
-          previewCalendarDate: todayJapan,
-          previewWallClock: nowJapanTime,
+          previewCalendarDate: todayTripLocal,
+          previewWallClock: nowTripLocal,
         })
       : undefined;
 
@@ -296,7 +292,7 @@ export function buildTripHomeViewModel(
         },
         totalDays,
       ),
-      remindersManager: buildRemindersManager(input, todayJapan),
+      remindersManager: buildRemindersManager(input, todayTripLocal),
     } satisfies TripHomeUpcomingViewModel;
   }
 
@@ -339,10 +335,10 @@ export function buildTripHomeViewModel(
     } satisfies TripHomeCompletedViewModel;
   }
 
-  const dayNumber = getTripDayNumber(trip.startDate, trip.endDate, todayJapan)!;
+  const dayNumber = getTripDayNumber(trip.startDate, trip.endDate, todayTripLocal)!;
   const { nowActivity, nextActivity } = resolveNowAndNextUp(
     dayActivities,
-    nowJapanTime,
+    nowTripLocal,
   );
   const excludeIds = new Set<string>();
   if (nowActivity) {
@@ -355,7 +351,7 @@ export function buildTripHomeViewModel(
   const preview = buildActiveHomeItineraryPreview(
     dayActivities,
     dayTransports,
-    nowJapanTime,
+    nowTripLocal,
     excludeIds,
   );
 
@@ -399,7 +395,7 @@ export function buildTripHomeViewModel(
 
   const todaysPlan = buildTodaysPlanSection(
     trip.id,
-    todayJapan,
+    todayTripLocal,
     dayNumber,
     totalDays,
     preview,
@@ -413,8 +409,8 @@ export function buildTripHomeViewModel(
       currentDay: {
         dayNumber,
         totalDays,
-        weekdayLabel: formatTripDayWeekday(todayJapan),
-        dateLabel: formatTripDayDateLabel(todayJapan),
+        weekdayLabel: formatTripDayWeekday(todayTripLocal),
+        dateLabel: formatTripDayDateLabel(todayTripLocal),
       },
       weather,
     },
@@ -432,6 +428,6 @@ export function buildTripHomeViewModel(
         : todaysPlan.items.length + todaysPlan.overflowCount,
       todayPlanHref: todaysPlan.ctaHref,
     },
-    remindersManager: buildRemindersManager(input, todayJapan),
+    remindersManager: buildRemindersManager(input, todayTripLocal),
   } satisfies TripHomeActiveViewModel;
 }

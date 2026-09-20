@@ -1,11 +1,15 @@
-import { getJapanCalendarDate } from "@/features/trips/calendar-date";
+import { getTodayTripLocal } from "@/features/trips/destination/trip-calendar-for-workspace";
 import { isDateWithinTrip } from "@/features/trips/trip-days";
 
 export function resolveDefaultActivityDate(
-  trip: { startDate: string; endDate: string },
+  trip: {
+    startDate: string;
+    endDate: string;
+    destinationCalendarTimeZone: string;
+  },
   requestedDate?: string | null,
-  todayJapan = getJapanCalendarDate(),
 ): string {
+  const todayTripLocal = getTodayTripLocal(trip);
   if (
     requestedDate &&
     isDateWithinTrip(trip.startDate, trip.endDate, requestedDate)
@@ -13,8 +17,8 @@ export function resolveDefaultActivityDate(
     return requestedDate;
   }
 
-  if (isDateWithinTrip(trip.startDate, trip.endDate, todayJapan)) {
-    return todayJapan;
+  if (isDateWithinTrip(trip.startDate, trip.endDate, todayTripLocal)) {
+    return todayTripLocal;
   }
 
   return trip.startDate;

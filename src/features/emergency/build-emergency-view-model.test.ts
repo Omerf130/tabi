@@ -39,6 +39,7 @@ describe("buildEmergencyViewModel", () => {
       accommodations: [],
       customResources: [],
       emergencyDocuments: [],
+      destinationCalendarTimeZone: "UTC",
       t,
     });
 
@@ -54,7 +55,8 @@ describe("buildEmergencyViewModel", () => {
       accommodations: [makeAccommodation()],
       customResources: [],
       emergencyDocuments: [],
-      todayJapan: "2026-10-26",
+      destinationCalendarTimeZone: "UTC",
+      todayTripLocal: "2026-10-26",
       t,
     });
 
@@ -68,7 +70,8 @@ describe("buildEmergencyViewModel", () => {
       accommodations: [makeAccommodation()],
       customResources: [],
       emergencyDocuments: [],
-      todayJapan: "2026-10-26",
+      destinationCalendarTimeZone: "UTC",
+      todayTripLocal: "2026-10-26",
       preferredMapsApp: "waze",
       t,
     });
@@ -81,7 +84,8 @@ describe("buildEmergencyViewModel", () => {
       accommodations: [makeAccommodation({ checkInDate: "2026-11-05" })],
       customResources: [],
       emergencyDocuments: [],
-      todayJapan: "2026-10-26",
+      destinationCalendarTimeZone: "UTC",
+      todayTripLocal: "2026-10-26",
       t,
     });
 
@@ -96,6 +100,7 @@ describe("buildEmergencyViewModel", () => {
       accommodations: [],
       customResources: [],
       emergencyDocuments: [],
+      destinationCalendarTimeZone: "UTC",
       t,
     });
 

@@ -44,7 +44,7 @@ export function getCalendarDayVisualState(
   date: string,
   startDate: string,
   endDate: string,
-  todayJapan: string,
+  todayReference: string,
 ): CalendarDayVisualState {
   if (startDate && endDate) {
     const afterStart = compareCalendarDates(date, startDate) >= 0;
@@ -67,7 +67,7 @@ export function getCalendarDayVisualState(
     return "range-start";
   }
 
-  if (date === todayJapan) {
+  if (date === todayReference) {
     return "today";
   }
 

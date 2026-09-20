@@ -1,16 +1,16 @@
-import { compareCalendarDates, getJapanCalendarDate } from "./calendar-date";
+import { compareCalendarDates } from "./calendar-date";
 
 export type TripPhase = "upcoming" | "active" | "completed";
 
 export function getTripPhase(
   startDate: string,
   endDate: string,
-  todayJapan = getJapanCalendarDate(),
+  todayTripLocal: string,
 ): TripPhase {
-  if (compareCalendarDates(todayJapan, startDate) < 0) {
+  if (compareCalendarDates(todayTripLocal, startDate) < 0) {
     return "upcoming";
   }
-  if (compareCalendarDates(todayJapan, endDate) > 0) {
+  if (compareCalendarDates(todayTripLocal, endDate) > 0) {
     return "completed";
   }
   return "active";

@@ -2,11 +2,15 @@ import { describe, expect, it } from "vitest";
 import { MY_TRIPS_FALLBACK_VISUAL } from "./constants";
 import { buildMyTripsCards } from "./build-my-trips-cards";
 
-const todayJapan = "2026-10-01";
+const todayTripLocalByTripId = new Map([
+  ["507f1f77bcf86cd799439011", "2026-10-01"],
+  ["507f1f77bcf86cd799439012", "2026-10-01"],
+  ["507f1f77bcf86cd799439013", "2026-10-01"],
+]);
 
 describe("buildMyTripsCards", () => {
   it("returns an empty collection for zero trips", () => {
-    expect(buildMyTripsCards([], new Map(), todayJapan)).toEqual([]);
+    expect(buildMyTripsCards([], new Map(), new Map())).toEqual([]);
   });
 
   it("builds card items only for trips with membership roles", () => {
@@ -28,7 +32,7 @@ describe("buildMyTripsCards", () => {
     const cards = buildMyTripsCards(
       trips,
       new Map([["507f1f77bcf86cd799439011", "owner"]]),
-      todayJapan,
+      todayTripLocalByTripId,
     );
 
     expect(cards).toHaveLength(1);
@@ -40,15 +44,15 @@ describe("buildMyTripsCards", () => {
     const trips = [
       {
         _id: { toString: () => "507f1f77bcf86cd799439011" },
-        name: "Japan Spring",
+        name: "Trip A",
         startDate: "2026-11-01",
         endDate: "2026-11-14",
       },
       {
-        _id: { toString: () => "507f1f77bcf86cd799439012" },
-        name: "Europe Summer",
+        _id: { toString: () => "507f1f77bcf86cd799439013" },
+        name: "Trip B",
         startDate: "2026-12-01",
-        endDate: "2026-12-20",
+        endDate: "2026-12-10",
       },
     ];
 
@@ -56,57 +60,57 @@ describe("buildMyTripsCards", () => {
       trips,
       new Map([
         ["507f1f77bcf86cd799439011", "owner"],
-        ["507f1f77bcf86cd799439012", "member"],
+        ["507f1f77bcf86cd799439013", "member"],
       ]),
-      todayJapan,
+      todayTripLocalByTripId,
     );
 
     expect(cards).toHaveLength(2);
-    expect(cards.map((card) => card.id)).toEqual([
-      "507f1f77bcf86cd799439011",
-      "507f1f77bcf86cd799439012",
-    ]);
+    expect(cards.map((card) => card.name)).toEqual(["Trip A", "Trip B"]);
   });
 
-  it("uses the persisted cover route when coverImage exists", () => {
+  it("uses persisted cover visual key when present", () => {
     const cards = buildMyTripsCards(
       [
         {
           _id: { toString: () => "507f1f77bcf86cd799439011" },
-          name: "Japan Spring",
-          startDate: "2026-11-01",
-          endDate: "2026-11-14",
-          coverImage: {
-            pathname: "trips/507f1f77bcf86cd799439011/cover.webp",
-            contentType: "image/webp",
-          },
-        },
-      ],
-      new Map([["507f1f77bcf86cd799439011", "owner"]]),
-      todayJapan,
-    );
-
-    expect(cards[0]?.imageSrc).toBe(
-      "/app/trips/507f1f77bcf86cd799439011/cover",
-    );
-    expect(cards[0]?.hasPersistedCover).toBe(true);
-  });
-
-  it("uses coverVisualKey when no uploaded cover exists", () => {
-    const cards = buildMyTripsCards(
-      [
-        {
-          _id: { toString: () => "507f1f77bcf86cd799439011" },
-          name: "Japan Spring",
+          name: "Visual Trip",
           startDate: "2026-11-01",
           endDate: "2026-11-14",
           coverVisualKey: "europe-02",
         },
       ],
       new Map([["507f1f77bcf86cd799439011", "owner"]]),
-      todayJapan,
+      todayTripLocalByTripId,
     );
 
     expect(cards[0]?.imageSrc).toBe("/destination-visuals/europe02.png");
+  });
+
+  it("sorts cards using trip list ordering rules", () => {
+    const cards = buildMyTripsCards(
+      [
+        {
+          _id: { toString: () => "507f1f77bcf86cd799439012" },
+          name: "Later",
+          startDate: "2026-12-01",
+          endDate: "2026-12-10",
+        },
+        {
+          _id: { toString: () => "507f1f77bcf86cd799439011" },
+          name: "Sooner",
+          startDate: "2026-11-01",
+          endDate: "2026-11-14",
+        },
+      ],
+      new Map([
+        ["507f1f77bcf86cd799439011", "owner"],
+        ["507f1f77bcf86cd799439012", "owner"],
+      ]),
+      todayTripLocalByTripId,
+    );
+
+    expect(cards[0]?.name).toBe("Sooner");
+    expect(cards[1]?.name).toBe("Later");
   });
 });

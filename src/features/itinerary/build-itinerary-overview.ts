@@ -2,7 +2,6 @@ import { isAccommodationOccupiedOnDate } from "@/features/accommodations/accommo
 import type { AccommodationViewModel } from "@/features/accommodations/types";
 import { toDocumentDayRelevanceInput } from "@/features/documents/resolve-travel-documents-batch";
 import type { ResolvedTravelDocumentViewModel } from "@/features/documents/types";
-import { getJapanCalendarDate } from "@/features/trips/calendar-date";
 import {
   formatTripDayDateLabel,
   formatTripDayWeekday,
@@ -25,7 +24,7 @@ type BuildItineraryOverviewInput = {
   accommodations: readonly AccommodationViewModel[];
   documents: readonly ResolvedTravelDocumentViewModel[];
   incompleteReminderDates: ReadonlySet<string>;
-  todayJapan?: string;
+  todayTripLocal: string;
 };
 
 function getOccupiedAccommodations(
@@ -63,7 +62,7 @@ export function buildItineraryOverviewSummaries({
   accommodations,
   documents,
   incompleteReminderDates,
-  todayJapan = getJapanCalendarDate(),
+  todayTripLocal,
 }: BuildItineraryOverviewInput): DaySummaryViewModel[] {
   const dates = getInclusiveDateRange(startDate, endDate);
   const activitiesByDate = groupActivitiesByDate(activities);
@@ -78,7 +77,7 @@ export function buildItineraryOverviewSummaries({
       dayNumber: getTripDayNumber(startDate, endDate, date)!,
       weekdayLabel: formatTripDayWeekday(date),
       dateLabel: formatTripDayDateLabel(date),
-      temporalState: getTripDayTemporalState(date, todayJapan),
+      temporalState: getTripDayTemporalState(date, todayTripLocal),
       href: buildItineraryDayHref(tripId, date),
       accommodationLabel: occupiedAccommodations[0]?.name,
       activityCount: dayActivities.length,

@@ -5,7 +5,6 @@ import type { ResolvedTravelDocumentViewModel } from "@/features/documents/types
 import { mergeItineraryDayItems } from "@/features/transport/merge-itinerary-day-items";
 import type { TransportItineraryItemViewModel } from "@/features/transport/types";
 import type { TripReminderViewModel } from "@/features/trips/reminders/types";
-import { getJapanCalendarDate } from "@/features/trips/calendar-date";
 import {
   formatTripDayDateLabel,
   formatTripDayHeading,
@@ -34,7 +33,7 @@ type BuildDayWorkspaceInput = {
   accommodations: readonly AccommodationViewModel[];
   documents: readonly ResolvedTravelDocumentViewModel[];
   reminders: readonly TripReminderViewModel[];
-  todayJapan?: string;
+  todayTripLocal: string;
   financeBaseCurrency?: string;
   currencies?: readonly CurrencyOption[];
   dayHeader?: Pick<
@@ -76,7 +75,7 @@ export function buildDayWorkspaceViewModel({
   accommodations,
   documents,
   reminders,
-  todayJapan = getJapanCalendarDate(),
+  todayTripLocal,
   financeBaseCurrency = "ILS",
   currencies = [],
   dayHeader,
@@ -89,7 +88,7 @@ export function buildDayWorkspaceViewModel({
   const dayNumber = getTripDayNumber(startDate, endDate, date)!;
   const weekdayLabel = formatTripDayWeekday(date);
   const dateLabel = formatTripDayDateLabel(date);
-  const temporalState = getTripDayTemporalState(date, todayJapan);
+  const temporalState = getTripDayTemporalState(date, todayTripLocal);
 
   return {
     date,

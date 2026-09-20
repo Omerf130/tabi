@@ -7,6 +7,7 @@ import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { Textarea } from "@/components/ui/Textarea/Textarea";
 import { TripReminderCreateFields } from "./TripReminderCreateFields.client";
+import { TripReminderBrowserTimeZoneField } from "./TripReminderBrowserTimeZoneField.client";
 import { AuthSubmitButton } from "@/features/auth/AuthSubmitButton";
 import {
   completeTripReminderAction,
@@ -77,6 +78,7 @@ function ReminderRow({
         <form action={updateAction} className={styles.editForm}>
           <input type="hidden" name="tripId" value={tripId} />
           <input type="hidden" name="reminderId" value={reminder.id} />
+          <TripReminderBrowserTimeZoneField />
           <div className={styles.formRow}>
             <Field label={tCommon("date")} htmlFor={`edit-date-${reminder.id}`}>
               <Input

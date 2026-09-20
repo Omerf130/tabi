@@ -4,6 +4,8 @@ export const TRIP_REMINDER_ERROR_CODES = {
   generic: "generic",
   notFound: "notFound",
   dateOutOfRange: "dateOutOfRange",
+  invalidTimeZone: "invalidTimeZone",
+  nonexistentLocalTime: "nonexistentLocalTime",
 } as const;
 
 export type TripReminderErrorCode =

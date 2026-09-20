@@ -2,7 +2,7 @@ import { AppPage } from "@/features/app-shell/AppPage";
 import { requireUser } from "@/features/auth/session";
 import { getTranslations } from "next-intl/server";
 import type { TripWorkspace } from "@/features/trips/public-trip";
-import { getJapanCalendarDate } from "@/features/trips/calendar-date";
+import { getTodayTripLocal } from "@/features/trips/destination/trip-calendar-for-workspace";
 import { listTransportsForItineraryDay } from "@/features/transport/queries";
 import { listRemindersForUserTripDay } from "@/features/trips/reminders/queries";
 import { prepareEntityCostFormContext } from "@/features/finance/linked-expense-queries";
@@ -44,7 +44,7 @@ function toActivityPhotoMap(
 export async function DayPageContent({ trip, date }: DayPageContentProps) {
   const user = await requireUser();
   const tItinerary = await getTranslations("Itinerary");
-  const todayJapan = getJapanCalendarDate();
+  const todayTripLocal = getTodayTripLocal(trip);
   const validatedDate = parseItineraryDateParam(date, trip.startDate, trip.endDate);
   if (!validatedDate) {
     return null;
@@ -60,7 +60,7 @@ export async function DayPageContent({ trip, date }: DayPageContentProps) {
         trip.endDate,
       ),
       loadItineraryTripData(trip.id, trip.startDate, trip.endDate),
-      listRemindersForUserTripDay(trip.id, user.id, validatedDate, todayJapan),
+      listRemindersForUserTripDay(trip.id, user.id, validatedDate, todayTripLocal),
       trip.role === "owner"
         ? prepareEntityCostFormContext(trip.id)
         : Promise.resolve(null),
@@ -78,7 +78,7 @@ export async function DayPageContent({ trip, date }: DayPageContentProps) {
       dayNumber: 0,
       weekdayLabel: "",
       dateLabel: "",
-      isToday: validatedDate === todayJapan,
+      isToday: validatedDate === todayTripLocal,
       activities: activitiesWithNavigation,
       transports,
       accommodations: tripData.accommodations,
@@ -98,7 +98,7 @@ export async function DayPageContent({ trip, date }: DayPageContentProps) {
     accommodations: tripData.accommodations,
     documents: tripData.documents,
     reminders,
-    todayJapan,
+    todayTripLocal,
     financeBaseCurrency: financeContext?.baseCurrency ?? "ILS",
     currencies: financeContext?.currencies ?? [],
     dayHeader: dayHeaderContext,
@@ -117,7 +117,7 @@ export async function DayPageContent({ trip, date }: DayPageContentProps) {
     startDate: trip.startDate,
     endDate: trip.endDate,
     selectedDate: validatedDate,
-    todayJapan,
+    todayTripLocal,
   });
   const activityPhotos = toActivityPhotoMap(photoPresentations);
 

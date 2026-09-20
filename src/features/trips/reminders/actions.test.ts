@@ -85,6 +85,7 @@ describe("trip reminder actions", () => {
     formData.set("date", "2026-10-25");
     formData.set("time", "14:30");
     formData.set("text", "להזמין מונית");
+    formData.set("timeZone", "Asia/Jerusalem");
 
     const result = await createTripReminderAction({}, formData);
 
