@@ -14,6 +14,10 @@
   gap: var(--space-4);
 }
 
+.listEmptyState {
+  width: 100%;
+}
+
 .itemList {
   display: flex;
   flex-direction: column;

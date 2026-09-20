@@ -484,7 +484,11 @@
   color: var(--finance-muted);
 }
 
-.emptyCopy,
+.financeSectionEmpty,
+.financeInlineEmpty {
+  width: 100%;
+}
+
 .memberNotice {
   margin: 0;
   font-size: 0.8125rem;

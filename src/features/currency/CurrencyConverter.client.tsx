@@ -14,7 +14,9 @@ import {
   parseAmount,
   roundForCurrency,
 } from "./convert";
-import { IconChevron } from "@/components/ui/icons";
+import { ConfigNotice } from "@/components/ui/ConfigNotice";
+import { ProviderAlert } from "@/components/ui/ProviderAlert";
+import { IconChevron, IconCurrency } from "@/components/ui/icons";
 import { findCurrencyOption } from "./currency-metadata";
 import { resolveNextCurrencyPair } from "./currency-selection";
 import {
@@ -267,9 +269,12 @@ export function CurrencyConverter({
 
   if (!fromOption || !toOption) {
     return (
-      <div className={styles.errorBlock}>
-        <p className={styles.errorText}>{t("invalidCurrency")}</p>
-      </div>
+      <ConfigNotice
+        className={styles.configNotice}
+        visual={{ motif: "generic", icon: <IconCurrency aria-hidden /> }}
+        title={t("configInvalidTitle")}
+        description={t("configInvalidDescription")}
+      />
     );
   }
 
@@ -353,12 +358,13 @@ export function CurrencyConverter({
       </div>
 
       {loadFailed ? (
-        <div className={styles.errorBlock}>
-          <p className={styles.errorText}>{t("loadRateFailed")}</p>
-          <button type="button" className={styles.retryButton} onClick={handleRetry}>
-            {t("retry")}
-          </button>
-        </div>
+        <ProviderAlert
+          className={styles.providerAlert}
+          icon={<IconCurrency aria-hidden />}
+          title={t("loadRateFailedTitle")}
+          message={t("loadRateFailed")}
+          retryAction={{ label: t("retry"), onClick: handleRetry }}
+        />
       ) : rate && unitRate !== null ? (
         <div className={styles.meta}>
           <p className={styles.rateLine}>

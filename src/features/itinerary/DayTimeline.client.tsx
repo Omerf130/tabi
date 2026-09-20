@@ -2,6 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { IconItinerary } from "@/components/ui/icons";
 import { ActivityRow } from "./ActivityRow";
 import { ActivityRowActions } from "./ActivityRowActions";
 import { TransportItineraryRow } from "./TransportItineraryRow";
@@ -78,12 +80,17 @@ export function DayTimeline({
           })}
         </ul>
       ) : (
-        <div className={styles.emptyDay}>
-          <p className={styles.emptyDayTitle}>{t("dayTimelineEmptyTitle")}</p>
-          {day.isOwner ? (
-            <p className={styles.emptyDayHint}>{t("dayTimelineEmptyHint")}</p>
-          ) : null}
-        </div>
+        <EmptyState
+          variant="section"
+          visualDensity="compact"
+          className={styles.dayTimelineEmpty}
+          visual={{
+            motif: "generic",
+            icon: <IconItinerary aria-hidden />,
+          }}
+          title={t("dayTimelineEmptyTitle")}
+          description={day.isOwner ? t("dayTimelineEmptyHint") : undefined}
+        />
       )}
     </section>
   );

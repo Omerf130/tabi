@@ -9,6 +9,7 @@ import { formatAppNumber } from "@/features/i18n/formatting";
 import { useLocale } from "next-intl";
 import { resolveAppLocale } from "@/features/i18n/locale";
 import { formatCurrencyAmount } from "@/features/currency/convert";
+import { FinanceExpensesEmpty } from "./FinanceExpensesEmpty.client";
 import { FinanceCategoryDonut } from "./FinanceCategoryDonut";
 import { FinanceExpenseList } from "./FinanceExpenseList";
 import { FinanceExpenseSheet } from "./FinanceExpenseSheet.client";
@@ -169,7 +170,7 @@ export function FinancePageContent({
                 baseCurrency={summary.baseCurrency}
               />
             ) : (
-              <p className={styles.emptyCopy}>{t("noCategoriesYet")}</p>
+              <FinanceExpensesEmpty variant="categories" />
             )}
           </section>
         </div>
@@ -202,7 +203,7 @@ export function FinancePageContent({
               }}
             />
           ) : (
-            <p className={styles.emptyCopy}>{t("noExpensesYet")}</p>
+            <FinanceExpensesEmpty variant="expenses" />
           )}
         </section>
 

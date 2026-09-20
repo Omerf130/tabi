@@ -231,34 +231,9 @@
   transform: rotate(180deg);
 }
 
-.emptyState {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem 0.25rem;
-}
-
-.emptyTitle {
-  margin: 0;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-.emptyAction {
-  align-self: flex-start;
-  padding: 0;
-  border: none;
-  background: transparent;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--color-link);
-  cursor: pointer;
-}
-
-.emptyAction:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
+.managerEmptyState {
+  width: 100%;
+  padding-block: 0.5rem;
 }
 
 .formBody {

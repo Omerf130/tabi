@@ -11,6 +11,7 @@ import {
 } from "./actions";
 import { TRIP_LIST_ERROR_CODES, type TripListType } from "./constants";
 import type { TripListItemViewModel } from "./types";
+import { ListChecklistEmpty } from "./ListChecklistEmpty.client";
 import styles from "./ListDetail.module.scss";
 
 type ListChecklistProps = {
@@ -186,6 +187,7 @@ export function ListChecklist({
 
   return (
     <div className={styles.checklist}>
+      {optimisticItems.length === 0 ? <ListChecklistEmpty /> : null}
       <ul className={styles.itemList}>
         {optimisticItems.map((item) => {
           const isEditing = editingItemId === item.id;

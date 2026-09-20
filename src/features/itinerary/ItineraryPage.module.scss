@@ -359,10 +359,9 @@
   padding-inline-start: calc(1rem + var(--space-3));
 }
 
-.emptyDay {
-  margin: 0 0 var(--space-3);
-  font-size: var(--text-secondary);
-  color: var(--color-text-muted);
+.overviewEmpty {
+  width: 100%;
+  margin-block-end: var(--space-4);
 }
 
 .dayAddAction {

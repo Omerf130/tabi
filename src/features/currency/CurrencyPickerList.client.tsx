@@ -7,6 +7,8 @@ import {
   getPriorityCurrencies,
 } from "./currency-metadata";
 import { resolveAppLocale } from "@/features/i18n/locale";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { IconSearch } from "@/components/ui/icons";
 import type { CurrencyOption } from "./types";
 import styles from "./CurrencyConverter.module.scss";
 
@@ -82,7 +84,17 @@ export function CurrencyPickerList({
 
       <div className={styles.pickerSectionsScroll}>
         {filtered.length === 0 ? (
-          <p className={styles.emptyResults}>{t("noResults")}</p>
+          <EmptyState
+            variant="search"
+            className={styles.pickerSearchEmpty}
+            visual={{ motif: "search", icon: <IconSearch aria-hidden /> }}
+            title={t("noResults")}
+            description={t("noResultsHint")}
+            primaryAction={{
+              label: t("clearSearch"),
+              onClick: () => setQuery(""),
+            }}
+          />
         ) : (
           <>
             {priorityFiltered.length > 0 ? (

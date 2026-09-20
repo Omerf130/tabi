@@ -10,6 +10,7 @@ import { listIncompleteRemindersForUserTrip } from "@/features/trips/reminders/q
 import { buildFocusedDayCard } from "./build-focused-day-card.server";
 import { buildItineraryOverviewSummaries } from "./build-itinerary-overview";
 import { DaySummaryList } from "./DaySummaryList";
+import { ItineraryOverviewEmpty } from "./ItineraryOverviewEmpty.client";
 import { loadItineraryTripData } from "./load-itinerary-trip-data";
 import { resolveFocusedItineraryDay } from "./resolve-focused-itinerary-day";
 import styles from "./ItineraryPage.module.scss";
@@ -69,6 +70,11 @@ export async function ItineraryPageContent({ trip }: ItineraryPageContentProps) 
     : null;
 
   const dayCount = getTripDayCount(trip.startDate, trip.endDate);
+  const hasAnyScheduledContent = days.some(
+    (day) => day.activityCount > 0 || day.transportCount > 0,
+  );
+  const startDayHref =
+    days.find((day) => day.date === focusedDate)?.href ?? days[0]?.href ?? "";
 
   return (
     <AppPage width="wide">
@@ -80,6 +86,13 @@ export async function ItineraryPageContent({ trip }: ItineraryPageContentProps) 
           <p className={styles.summary}>{tCommon("tripDays", { count: dayCount })}</p>
         </div>
       </header>
+
+      {!hasAnyScheduledContent && startDayHref ? (
+        <ItineraryOverviewEmpty
+          isOwner={trip.role === "owner"}
+          startDayHref={startDayHref}
+        />
+      ) : null}
 
       <DaySummaryList days={days} focusedDayCard={focusedDayCard} />
     </AppPage>

@@ -116,10 +116,8 @@
   color: var(--color-text-muted);
 }
 
-.emptyState {
-  margin: 0;
-  font-size: var(--text-secondary);
-  color: var(--color-text-muted);
+.dayRemindersEmpty {
+  width: 100%;
 }
 
 .accommodationList,

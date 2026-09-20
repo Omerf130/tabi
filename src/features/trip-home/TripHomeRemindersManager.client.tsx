@@ -11,7 +11,8 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { IconBack, IconChevron } from "@/components/ui/icons";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { IconBack, IconBell, IconChevron, IconSearch } from "@/components/ui/icons";
 import {
   completeTripReminderAction,
   createTripReminderAction,
@@ -20,6 +21,7 @@ import {
   type TripReminderActionState,
 } from "@/features/trips/reminders/actions";
 import {
+  filterRemindersForTab,
   getReminderManagerEmptyMessage,
   groupRemindersForTab,
   type ReminderManagerTab,
@@ -106,6 +108,14 @@ function ReminderListView({
   );
 
   const emptyMessage = getReminderManagerEmptyMessage(activeTab, t);
+  const hasAnyReminders = managerData.reminders.length > 0;
+  const isFilterMiss =
+    hasAnyReminders &&
+    filterRemindersForTab(
+      managerData.reminders,
+      activeTab,
+      managerData.currentTripDate,
+    ).length === 0;
 
   return (
     <>
@@ -127,14 +137,35 @@ function ReminderListView({
 
       <div className={styles.managerBody}>
         {groups.length === 0 ? (
-          <div className={styles.emptyState}>
-            <p className={styles.emptyTitle}>{emptyMessage}</p>
-            {activeTab !== "completed" ? (
-              <button type="button" className={styles.emptyAction} onClick={onCreate}>
-                + {t("remindersNew")}
-              </button>
-            ) : null}
-          </div>
+          isFilterMiss ? (
+            <EmptyState
+              variant="search"
+              className={styles.managerEmptyState}
+              visual={{ motif: "search", icon: <IconSearch aria-hidden /> }}
+              title={emptyMessage}
+              description={t("remindersFilterEmptyHint")}
+              primaryAction={{
+                label: t("remindersShowAllTab"),
+                onClick: () => onTabChange("all"),
+              }}
+            />
+          ) : (
+            <EmptyState
+              variant="section"
+              visualDensity="compact"
+              className={styles.managerEmptyState}
+              visual={{ motif: "generic", icon: <IconBell aria-hidden /> }}
+              title={emptyMessage}
+              primaryAction={
+                activeTab !== "completed"
+                  ? {
+                      label: t("remindersNew"),
+                      onClick: onCreate,
+                    }
+                  : undefined
+              }
+            />
+          )
         ) : (
           groups.map((group) => (
             <section key={group.date} className={styles.dateGroup}>
