@@ -63,8 +63,6 @@ export function getDayActionSurfaceTitle(
       return t("dayActionAccommodationCreate");
     case "document-create":
       return t("dayActionDocumentCreate");
-    case "reminder-create":
-      return t("dayActionReminderCreate");
     case "reminder-edit":
       return t("dayActionReminderEdit");
     default:

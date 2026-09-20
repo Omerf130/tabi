@@ -18,7 +18,6 @@ export type DayActionState =
   | { kind: "transport-edit"; transportId: string }
   | { kind: "accommodation-create" }
   | { kind: "document-create" }
-  | { kind: "reminder-create" }
   | { kind: "reminder-edit"; reminderId: string };
 
 export function isDayActionOpen(state: DayActionState): boolean {

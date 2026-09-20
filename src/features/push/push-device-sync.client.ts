@@ -4,6 +4,7 @@ import {
   subscribePushSubscriptionAction,
   unsubscribePushSubscriptionAction,
 } from "./actions";
+import type { PushSubscriptionErrorCode } from "./constants";
 import { serializePushSubscription } from "./serialize-push-subscription";
 import {
   ensureBrowserPushSubscription,
@@ -27,6 +28,7 @@ function toFormData(serialized: {
 export async function enablePushNotificationsOnDevice(): Promise<{
   ok: boolean;
   permission: NotificationPermission | "unsupported";
+  errorCode?: PushSubscriptionErrorCode;
 }> {
   const permission = await requestNotificationPermissionFromUserGesture();
   if (permission !== "granted") {
@@ -40,7 +42,11 @@ export async function enablePushNotificationsOnDevice(): Promise<{
   }
 
   const result = await subscribePushSubscriptionAction({}, toFormData(serialized));
-  return { ok: Boolean(result.ok), permission };
+  return {
+    ok: Boolean(result.ok),
+    permission,
+    errorCode: result.errorCode,
+  };
 }
 
 export async function disablePushNotificationsOnDevice(): Promise<void> {

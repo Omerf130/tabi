@@ -25,6 +25,7 @@ import {
   type ReminderManagerTab,
 } from "@/features/trips/reminders/filter-trip-home-reminders";
 import type { TripReminderViewModel } from "@/features/trips/reminders/types";
+import { ReminderPushAwarenessCallout } from "@/features/push/ReminderPushAwarenessCallout.client";
 import { translateReminderError } from "@/features/trips/reminders/translate-reminder-error";
 import { TripHomeReminderFormFields } from "./TripHomeReminderForm.client";
 import type { TripHomeRemindersManagerData } from "./types";
@@ -258,6 +259,9 @@ function ReminderFormView({
             dateId={`${formId}-date`}
             timeId={`${formId}-time`}
             textId={`${formId}-text`}
+          />
+          <ReminderPushAwarenessCallout
+            returnTo={`/app/trips/${managerData.tripId}`}
           />
           {formError ? (
             <p className={styles.formError} role="alert">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import type { PushSubscriptionErrorCode } from "./constants";
 import {
   disablePushNotificationsOnDevice,
   enablePushNotificationsOnDevice,
@@ -61,9 +62,12 @@ export function usePushNotifications() {
   const [uiState, setUiState] = useState<PushDeviceUiState>("loading");
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState(false);
+  const [actionErrorCode, setActionErrorCode] =
+    useState<PushSubscriptionErrorCode | null>(null);
 
   const refresh = useCallback(async () => {
     setActionError(false);
+    setActionErrorCode(null);
 
     if (typeof window === "undefined") {
       setUiState("loading");
@@ -112,14 +116,17 @@ export function usePushNotifications() {
   const enable = useCallback(async () => {
     setBusy(true);
     setActionError(false);
+    setActionErrorCode(null);
     try {
       const result = await enablePushNotificationsOnDevice();
       if (!result.ok) {
         setActionError(true);
+        setActionErrorCode(result.errorCode ?? "generic");
       }
       await refresh();
     } catch {
       setActionError(true);
+      setActionErrorCode("generic");
       setUiState("error");
     } finally {
       setBusy(false);
@@ -129,11 +136,13 @@ export function usePushNotifications() {
   const disable = useCallback(async () => {
     setBusy(true);
     setActionError(false);
+    setActionErrorCode(null);
     try {
       await disablePushNotificationsOnDevice();
       await refresh();
     } catch {
       setActionError(true);
+      setActionErrorCode("generic");
       setUiState("error");
     } finally {
       setBusy(false);
@@ -144,6 +153,7 @@ export function usePushNotifications() {
     uiState,
     busy,
     actionError,
+    actionErrorCode,
     refresh,
     enable,
     disable,

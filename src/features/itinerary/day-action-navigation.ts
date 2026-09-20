@@ -4,7 +4,6 @@ export function getDayActionBackTarget(state: DayActionState): DayActionState | 
   switch (state.kind) {
     case "activity-create":
     case "document-create":
-    case "reminder-create":
     case "accommodation-create":
     case "transport-type":
       return { kind: "menu" };

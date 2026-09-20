@@ -23,6 +23,8 @@ import {
   type TripReminderActionState,
 } from "@/features/trips/reminders/actions";
 import type { TripReminderViewModel } from "@/features/trips/reminders/types";
+import { ReminderPushAwarenessCallout } from "@/features/push/ReminderPushAwarenessCallout.client";
+import { TripReminderBrowserTimeZoneField } from "@/features/trips/reminders/TripReminderBrowserTimeZoneField.client";
 import { translateReminderError } from "@/features/trips/reminders/translate-reminder-error";
 import reminderStyles from "@/features/trips/reminders/TripReminderSettings.module.scss";
 import type { DayDocumentLinkOptions } from "./build-day-document-link-options";
@@ -63,6 +65,8 @@ type DayActionSurfaceProps = {
   reminders: readonly TripReminderViewModel[];
   onStateChange: (state: DayActionState) => void;
   onClose: () => void;
+  onOpenReminderQuickAdd?: () => void;
+  reminderNotificationsReturnTo: string;
   showCostFields?: boolean;
   financeBaseCurrency?: string;
   currencies?: readonly import("@/features/currency/types").CurrencyOption[];
@@ -73,6 +77,7 @@ function ReminderEditForm({
   startDate,
   endDate,
   reminder,
+  notificationsReturnTo,
   onCancel,
   onSuccess,
   onDirtyChange,
@@ -81,6 +86,7 @@ function ReminderEditForm({
   startDate: string;
   endDate: string;
   reminder: TripReminderViewModel;
+  notificationsReturnTo: string;
   onCancel: () => void;
   onSuccess: () => void;
   onDirtyChange: (dirty: boolean) => void;
@@ -109,6 +115,7 @@ function ReminderEditForm({
     >
       <input type="hidden" name="tripId" value={tripId} />
       <input type="hidden" name="reminderId" value={reminder.id} />
+      <TripReminderBrowserTimeZoneField />
       <div className={reminderStyles.formRow}>
         <Field label={tCommon("date")} htmlFor={`day-action-edit-date-${reminder.id}`}>
           <Input
@@ -140,6 +147,7 @@ function ReminderEditForm({
           required
         />
       </Field>
+      <ReminderPushAwarenessCallout returnTo={notificationsReturnTo} />
       {updateError ? (
         <p className={reminderStyles.error} role="alert">
           {updateError}
@@ -168,6 +176,8 @@ export function DayActionSurface({
   reminders,
   onStateChange,
   onClose,
+  onOpenReminderQuickAdd,
+  reminderNotificationsReturnTo,
   showCostFields = false,
   financeBaseCurrency = "ILS",
   currencies = [],
@@ -258,7 +268,12 @@ export function DayActionSurface({
       onStateChange({ kind: "document-create" });
       return;
     }
-    onStateChange({ kind: "reminder-create" });
+    if (onOpenReminderQuickAdd) {
+      onOpenReminderQuickAdd();
+      onClose();
+      return;
+    }
+    onStateChange({ kind: "menu" });
   }
 
   function handleTransportTypeSelect(
@@ -493,6 +508,7 @@ export function DayActionSurface({
               startDate={startDate}
               endDate={endDate}
               reminder={reminder}
+              notificationsReturnTo={reminderNotificationsReturnTo}
               onCancel={requestClose}
               onSuccess={handleMutationSuccess}
               onDirtyChange={setDirty}

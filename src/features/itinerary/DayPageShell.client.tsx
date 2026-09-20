@@ -178,6 +178,8 @@ export function DayPageShell({
         reminders={allReminders}
         onStateChange={setActionState}
         onClose={closeAction}
+        onOpenReminderQuickAdd={openReminderCreate}
+        reminderNotificationsReturnTo={pathname}
         showCostFields={day.isOwner}
         financeBaseCurrency={day.financeBaseCurrency}
         currencies={day.currencies}

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button/Button";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { Textarea } from "@/components/ui/Textarea/Textarea";
+import { ReminderPushAwarenessCallout } from "@/features/push/ReminderPushAwarenessCallout.client";
 import { TripReminderCreateFields } from "./TripReminderCreateFields.client";
 import { TripReminderBrowserTimeZoneField } from "./TripReminderBrowserTimeZoneField.client";
 import { AuthSubmitButton } from "@/features/auth/AuthSubmitButton";
@@ -110,6 +111,9 @@ function ReminderRow({
               required
             />
           </Field>
+          <ReminderPushAwarenessCallout
+            returnTo={`/app/trips/${tripId}/manage/reminders`}
+          />
           {updateError ? (
             <p className={styles.error} role="alert">
               {updateError}
@@ -231,6 +235,9 @@ export function TripReminderSettings({
               startDate={startDate}
               endDate={endDate}
               idPrefix="settings-reminder"
+            />
+            <ReminderPushAwarenessCallout
+              returnTo={`/app/trips/${tripId}/manage/reminders`}
             />
             {createError ? (
               <p className={styles.error} role="alert">

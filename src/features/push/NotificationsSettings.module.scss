@@ -32,6 +32,25 @@
   line-height: 1.5;
 }
 
+.statusHint {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-secondary);
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+
+.installAction {
+  margin-top: calc(-1 * var(--space-2));
+}
+
+.disableHint {
+  margin: 0;
+  max-width: 32rem;
+  font-size: var(--text-secondary);
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+
 .actions {
   display: flex;
   flex-direction: column;

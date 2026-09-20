@@ -69,9 +69,19 @@
     "tripReminderBody": "You have a trip reminder"
   },
 
+  "ReminderNotifications": {
+    "calloutInactive": "Your reminder will be saved, but notifications are not active on this device.",
+    "calloutDenied": "Your reminder will be saved, but notifications are blocked on this device.",
+    "calloutRequiresInstall": "Your reminder will be saved. To get notifications on this iPhone, add Tabi to your Home Screen first.",
+    "calloutUnsupported": "Your reminder will be saved. Reminder notifications are not supported on this device.",
+    "linkEnable": "Enable notifications",
+    "linkSettings": "Notification settings",
+    "linkNotifications": "Notifications"
+  },
+
   "AccountNotifications": {
     "title": "Notifications",
-    "lead": "Tabi can notify this device about reminders you create for your trips. Notifications are optional and only for your reminders.",
+    "lead": "Tabi can notify this device about trip reminders you create. Notifications are optional and only for your reminders.",
     "deviceSectionTitle": "This device",
     "status": {
       "loading": "Checking notification support…",
@@ -83,6 +93,8 @@
       "notSubscribed": "Permission is granted, but this device is not registered with Tabi yet.",
       "error": "Could not read notification status. Try again."
     },
+    "deniedHint": "To turn notifications on, allow Tabi in your browser or device settings, then return here if needed.",
+    "disableHint": "This turns off notifications on this device only. Your reminders stay saved, and other devices you enabled stay subscribed. Your browser may still show notifications as allowed until you change that in settings.",
     "actions": {
       "enable": "Enable notifications",
       "disableDevice": "Turn off notifications on this device"
@@ -1426,7 +1438,7 @@
       },
       "notifications": {
         "title": "Notifications",
-        "subtitle": "Reminders and app alerts"
+        "subtitle": "Trip reminder notifications on this device"
       },
       "export": {
         "title": "Export trip",

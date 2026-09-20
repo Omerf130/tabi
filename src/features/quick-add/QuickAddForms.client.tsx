@@ -17,6 +17,7 @@ import type { TransportType } from "@/features/transport/transport-types";
 import { AuthSubmitButton } from "@/features/auth/AuthSubmitButton";
 import { createTripReminderAction, type TripReminderActionState } from "@/features/trips/reminders/actions";
 import { translateReminderError } from "@/features/trips/reminders/translate-reminder-error";
+import { ReminderPushAwarenessCallout } from "@/features/push/ReminderPushAwarenessCallout.client";
 import { TripReminderCreateFields } from "@/features/trips/reminders/TripReminderCreateFields.client";
 import reminderStyles from "@/features/trips/reminders/TripReminderSettings.module.scss";
 import { QuickAddPinnedFields } from "./QuickAddPinnedFields.client";
@@ -120,6 +121,9 @@ function QuickAddReminderForm({
             lockDate={lockDate}
             idPrefix="quick-add-reminder"
             rows={3}
+          />
+          <ReminderPushAwarenessCallout
+            returnTo={context.originPath ?? `/app/trips/${context.tripId}`}
           />
           {createError ? (
             <p className={reminderStyles.error} role="alert">

@@ -34,6 +34,7 @@ describe("trip home reminders UI contracts", () => {
     expect(manager).toContain('setView("create")');
     expect(manager).toContain('setView("edit")');
     expect(manager).toContain("ReminderFormView");
+    expect(manager).toContain("ReminderPushAwarenessCallout");
     expect(manager).not.toMatch(/showModal\(\)[\s\S]*showModal\(\)/);
   });
 

@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { Textarea } from "@/components/ui/Textarea/Textarea";
+import { TripReminderBrowserTimeZoneField } from "@/features/trips/reminders/TripReminderBrowserTimeZoneField.client";
 import styles from "./TripHomeRemindersManager.module.scss";
 
 type TripHomeReminderFormFieldsProps = {
@@ -32,6 +33,7 @@ export function TripHomeReminderFormFields({
 
   return (
     <>
+      <TripReminderBrowserTimeZoneField />
       <div className={styles.formRow}>
         <Field label={tCommon("date")} htmlFor={dateId}>
           <Input
