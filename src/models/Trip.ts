@@ -121,6 +121,12 @@ const tripSchema = new mongoose.Schema(
       enum: TRIP_THEME_KEYS,
       default: DEFAULT_TRIP_THEME_KEY,
     },
+    /** Owner override for destination travel language (BCP-47). Unset resolves from destination country. */
+    travelLanguageCode: {
+      type: String,
+      trim: true,
+      default: null,
+    },
     initializations: {
       type: {
         listsV1: {

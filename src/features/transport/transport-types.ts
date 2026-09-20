@@ -31,10 +31,6 @@ export function createTransportTypeSingularLabelResolver(
   return (type: TransportType) => t(`typesSingular.${type}`);
 }
 
-export function createTrainCategoryLabelResolver(t: AppTranslator<"Transport">) {
-  return (category: TrainCategory) => t(`trainCategories.${category}`);
-}
-
 export function isTransportType(value: string): value is TransportType {
   return (TRANSPORT_TYPES as readonly string[]).includes(value);
 }

@@ -40,6 +40,7 @@ const initialState: TransportActionState = {};
 
 type TransportFormProps = {
   tripId: string;
+  destinationCountryCode?: string | null;
   defaultValues: TransportFormValues;
   mode: "create" | "edit";
   transportId?: string;
@@ -232,6 +233,7 @@ function TypeSpecificFields({
 
 export function TransportForm({
   tripId,
+  destinationCountryCode,
   defaultValues,
   mode,
   transportId,
@@ -252,7 +254,7 @@ export function TransportForm({
   const tErrors = useTranslations("Transport.errors");
   const typeLabel = createTransportTypeLabelResolver(t);
   const typeSingularLabel = createTransportTypeSingularLabelResolver(t);
-  const trainCategoryLabel = createTrainCategoryLabelResolver(t);
+  const trainCategoryLabel = createTrainCategoryLabelResolver(t, destinationCountryCode);
   const timezoneOptions = createTransportTimezoneOptions(t);
   const router = useRouter();
   const action = mode === "create" ? createTransportAction : updateTransportAction;
@@ -360,7 +362,7 @@ export function TransportForm({
                   required
                   maxLength={200}
                   dir="auto"
-                  placeholder="Tokyo"
+                  placeholder={t("departureLocationPlaceholder")}
                   aria-invalid={departureLocationError ? true : undefined}
                 />
                 {departureLocationError ? (
@@ -385,7 +387,7 @@ export function TransportForm({
                   required
                   maxLength={200}
                   dir="auto"
-                  placeholder="Kyoto"
+                  placeholder={t("arrivalLocationPlaceholder")}
                   aria-invalid={arrivalLocationError ? true : undefined}
                 />
                 {arrivalLocationError ? (

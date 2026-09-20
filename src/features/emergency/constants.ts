@@ -1,5 +1,3 @@
-export const DEFAULT_EMERGENCY_PACK_ID = "JP";
-
 export const EMERGENCY_ERROR_CODES = {
   notFound: "notFound",
   validationFailed: "validationFailed",

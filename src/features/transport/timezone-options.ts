@@ -49,12 +49,6 @@ export function isSupportedTransportTimezone(
   return options.some((option) => option.value === value);
 }
 
-export function getDefaultJapanTransportTimezone(
-  options: readonly TransportTimezoneOption[],
-): string {
-  return options.find((option) => option.defaultForJapan)?.value ?? "Asia/Tokyo";
-}
-
 /** Hebrew fallback for legacy call sites; prefer createTransportTimezoneOptions. */
 export const TRANSPORT_TIMEZONE_OPTIONS = createTransportTimezoneOptions(
   createAppTranslator("Transport", "he"),

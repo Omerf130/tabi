@@ -71,6 +71,7 @@ type DayActionSurfaceProps = {
   financeBaseCurrency?: string;
   currencies?: readonly import("@/features/currency/types").CurrencyOption[];
   destinationCalendarTimeZone?: string;
+  destinationCountryCode?: string | null;
 };
 
 function ReminderEditForm({
@@ -183,6 +184,7 @@ export function DayActionSurface({
   financeBaseCurrency = "ILS",
   currencies = [],
   destinationCalendarTimeZone = "UTC",
+  destinationCountryCode,
 }: DayActionSurfaceProps) {
   const t = useTranslations("Itinerary");
   const tActivity = useTranslations("Activity");
@@ -429,6 +431,7 @@ export function DayActionSurface({
               <TransportForm
                 key={`transport-create-${state.transportType}-${date}`}
                 tripId={tripId}
+                destinationCountryCode={destinationCountryCode}
                 mode="create"
                 overlayNavigation
                 plannerPresentation
@@ -453,6 +456,7 @@ export function DayActionSurface({
               <TransportForm
                 key={`transport-edit-${transportRecord.id}`}
                 tripId={tripId}
+                destinationCountryCode={destinationCountryCode}
                 mode="edit"
                 transportId={transportRecord.id}
                 defaultValues={toTransportFormValues(transportRecord)}
@@ -471,6 +475,7 @@ export function DayActionSurface({
               tripId={tripId}
               startDate={startDate}
               endDate={endDate}
+              destinationCountryCode={destinationCountryCode}
               idPrefix="day-add-accommodation"
               action={createAccommodationAction}
               submitLabel={t("dayActionAddAccommodation")}

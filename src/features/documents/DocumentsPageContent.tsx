@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
@@ -21,8 +20,6 @@ import {
   IconTrain,
 } from "@/components/ui/icons";
 import { AppPage } from "@/features/app-shell/AppPage";
-import japanWalletHero from "@/assets/pics/ChatGPT Image Sep 8, 2026, 08_41_47 PM.png";
-import walletBottomArtwork from "@/assets/pics/ChatGPT Image Sep 8, 2026, 08_59_02 PM.png";
 import { getTravelDocumentsSettingsHref } from "@/features/documents/constants";
 import {
   createTravelWalletVisualFilterOptions,
@@ -171,26 +168,11 @@ export function DocumentsPageContent({
   return (
     <AppPage width="wide">
       <div className={styles.documentsCanvas}>
-        <div className={styles.bottomDecoration} aria-hidden>
-          <Image
-            src={walletBottomArtwork}
-            alt=""
-            fill
-            className={styles.bottomDecorationImage}
-            sizes="(max-width: 768px) 100vw, 72rem"
-          />
-        </div>
+        <div className={styles.bottomDecoration} aria-hidden />
 
         <div className={styles.walletPage}>
         <section className={styles.hero} aria-labelledby="wallet-hero-title">
-          <Image
-            src={japanWalletHero}
-            alt=""
-            fill
-            priority
-            className={styles.heroArtwork}
-            sizes="(max-width: 768px) 100vw, 950px"
-          />
+          <div className={styles.heroBackdrop} aria-hidden />
           <div className={styles.heroReadabilityOverlay} aria-hidden />
           <div className={styles.heroContent}>
             <h1 id="wallet-hero-title" className={styles.heroTitle}>

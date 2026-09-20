@@ -1,15 +1,10 @@
 # Architecture
 
-Tabi V1 is a **mobile-first travel companion for Japan**. A **Trip** is an independent workspace. A **User** is a platform account that may belong to many trips.
+Tabi is a **mobile-first global travel planning and companion** application. A **Trip** is an independent workspace with canonical destination metadata (`Trip.destination.countryCode`, coordinates, calendar timezone). A **User** is a platform account that may belong to many trips.
 
-```
-User A: owner of Japan 2026, member of Japan 2027
-User B: owner of Japan 2026
-```
+The application must never assume there is only one trip or one destination. Reusable application code must not hardcode individual travelers, hotels, itinerary dates, activities, or other trip content. That data belongs on a Trip.
 
-The application must never assume there is only one trip. Reusable application code must not hardcode individual travelers, hotels, itinerary dates, activities, or other trip content. That data belongs on a Trip.
-
-V1 **may** assume Japan as the destination for product features (JPY, Suica/IC, Shinkansen, Takkyubin, Kanji addresses, Japan emergency information, and similar). That is intentional.
+**Destination-specific behavior** (travel currency defaults, weather seed, AOSP emergency numbers, JP list overlays, local lodging script fields, travel language, Places local display language, and similar) is derived from the trip destination. There is **no global Japan default** when destination is missing. Japan remains a first-class supported destination with JP-specific overlays when `countryCode === "JP"`.
 
 ## Workspace model
 
@@ -24,7 +19,7 @@ See [permissions.md](permissions.md) and [data-domain.md](data-domain.md).
 - Next.js App Router, TypeScript (`strict`), SCSS Modules.
 - Prefer **Server Components**. Add a Client Component only when the UI needs browser state or event handlers.
 - No global client store in Phase 0. Domain logic should live next to its feature when those phases arrive (`src/features/...`), not in a generic `utils` dump.
-- Styling uses semantic CSS variables (`--color-primary`, etc.). For V1 those tokens **are** the Tabi Japan visual identity. They are not a destination-switching engine. See [theming.md](theming.md).
+- Styling uses semantic CSS variables (`--color-primary`, etc.). Theme choice (including Sakura) is independent of trip destination. See [theming.md](theming.md).
 - Reusable UI primitives live in `src/components/ui/` (SCSS Modules). Prefer Server Components; client only when a primitive needs event state (BottomNav active routing via TripPrimaryNav, the design-system preview, auth form pending state).
 - Trip-scoped pages use **TripShellLayout** + **TripHeader** + **AppPage**. See [app-shell.md](app-shell.md).
 - Itinerary days are derived from Trip dates server-side; accordion UX in client island. Trip Home is server-rendered from lifecycle + today's Activities. See [itinerary-foundation.md](itinerary-foundation.md), [trip-home.md](trip-home.md).

@@ -31,6 +31,10 @@ describe("public trip DTOs", () => {
       themeKey: "default",
       destinationCalendarTimeZone: "Asia/Tokyo",
       destination: undefined,
+      travelLanguageCode: null,
+      effectiveTravelLanguageCode: null,
+      travelLanguageSource: "unknown",
+      alternativeTravelLanguageCodes: [],
     });
   });
 

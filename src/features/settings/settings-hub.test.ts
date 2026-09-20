@@ -12,6 +12,7 @@ import {
   buildSettingsLanguageHref,
 } from "./constants";
 import { buildTripSettingsNotificationsHref } from "@/features/push/account-notifications-routes";
+import { UNKNOWN_TRIP_TRAVEL_LANGUAGE_FIELDS } from "@/features/trips/public-trip";
 import { buildSettingsHubViewModel } from "./build-settings-hub-view-model";
 
 const tripId = "507f1f77bcf86cd799439011";
@@ -28,6 +29,7 @@ const baseTrip = {
     displayName: "Tokyo",
     country: "Japan",
   },
+  ...UNKNOWN_TRIP_TRAVEL_LANGUAGE_FIELDS,
 };
 
 function findRow(
@@ -104,6 +106,15 @@ describe("Settings hub", () => {
     expect(findRow(model, "language")?.href).toBe(
       buildSettingsLanguageHref(tripId),
     );
+    const tEn = createAppTranslator("Settings", "en");
+    const enModel = buildSettingsHubViewModel({
+      trip: baseTrip,
+      isOwner: true,
+      baseCurrency: "USD",
+      locale: "en",
+      t: tEn,
+    });
+    expect(findRow(enModel, "language")?.subtitle).toContain("destination");
     expect(findRow(model, "language")?.comingSoon).toBe(false);
     expect(findRow(model, "maps")?.comingSoon).toBe(false);
     expect(findRow(model, "maps")?.href).toContain("/manage/maps");

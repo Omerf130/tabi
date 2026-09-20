@@ -37,7 +37,6 @@ export async function togglePhraseFavoriteAction(
   const parsed = togglePhraseFavoriteSchema.safeParse({
     tripId: formData.get("tripId"),
     phraseId: formData.get("phraseId"),
-    packId: formData.get("packId"),
   });
 
   if (!parsed.success) {
@@ -47,9 +46,14 @@ export async function togglePhraseFavoriteAction(
   try {
     const user = await requireUser();
     const trip = await requireTripMember(parsed.data.tripId);
+    const targetLanguage = trip.effectiveTravelLanguageCode;
+    if (!targetLanguage) {
+      return { errorCode: PHRASEBOOK_ERROR_CODES.favoriteFailed };
+    }
+
     const result = await togglePhraseFavorite({
       userId: user.id,
-      packId: parsed.data.packId,
+      targetLanguage,
       phraseId: parsed.data.phraseId,
     });
     revalidateLanguagePaths(trip.id, parsed.data.phraseId);

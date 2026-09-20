@@ -33,19 +33,28 @@ describe("Language settings", () => {
     expect(getActiveNavSection(path, tripId)).toBe("settings");
   });
 
-  it("shows language-only UI and reuses locale action", () => {
+  it("shows travel-language UI on trip settings page, not interface locale", () => {
     const clientPath = join(
       process.cwd(),
-      "src/features/settings/language/LanguageSettings.client.tsx",
+      "src/features/settings/language/TravelLanguageSettings.client.tsx",
     );
-    const source = readFileSync(clientPath, "utf8");
-    expect(source).toContain("InterfaceLanguagePreference");
-    expect(source).not.toContain("updateUserLocaleAction");
-    expect(source).toContain('variant="settingsList"');
-    expect(source).toContain("languagePage.sectionTitle");
-    expect(source).not.toContain("myTrips");
-    expect(source).not.toContain("LogoutButton");
-    expect(source).not.toContain("accountEmail");
+    const contentPath = join(
+      process.cwd(),
+      "src/features/settings/language/LanguageSettingsContent.tsx",
+    );
+    const clientSource = readFileSync(clientPath, "utf8");
+    const contentSource = readFileSync(contentPath, "utf8");
+    expect(clientSource).toContain("travelLanguagePage");
+    expect(clientSource).not.toContain("InterfaceLanguagePreference");
+    expect(contentSource).toContain("buildTravelLanguageSettingsViewModel");
+    expect(contentSource).not.toContain("user.locale");
+  });
+
+  it("keeps interface locale on Profile only", () => {
+    const profilePath = join(process.cwd(), "src/features/account/Profile.client.tsx");
+    const profileSource = readFileSync(profilePath, "utf8");
+    expect(profileSource).toContain("InterfaceLanguagePreference");
+    expect(profileSource).toContain("languagePage.sectionHint");
   });
 
   it("hides account footer on language settings route", () => {

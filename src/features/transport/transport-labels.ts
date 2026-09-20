@@ -13,8 +13,17 @@ export function createTransportTypeSingularLabelResolver(
   return (type: TransportType) => t(`typesSingular.${type}`);
 }
 
-export function createTrainCategoryLabelResolver(t: AppTranslator<"Transport">) {
-  return (category: TrainCategory) => t(`trainCategories.${category}`);
+export function createTrainCategoryLabelResolver(
+  t: AppTranslator<"Transport">,
+  destinationCountryCode?: string | null,
+) {
+  const isJapanTrip = destinationCountryCode?.trim().toUpperCase() === "JP";
+  return (category: TrainCategory) => {
+    if (category === "shinkansen" && !isJapanTrip) {
+      return t("trainCategories.shinkansenHighSpeed");
+    }
+    return t(`trainCategories.${category}`);
+  };
 }
 
 export function getTransportFilterEmptyMessageKey(

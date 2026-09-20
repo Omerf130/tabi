@@ -4,7 +4,7 @@ Trip-scoped travel currency converter at `/app/trips/[tripId]/currency`.
 
 ## Defaults
 
-- Pair: **JPY → ILS**
+- Pair: **destination travel currency → user home currency** when known; otherwise neutral bootstrap (never silent JPY when country is missing). See `src/features/currency/queries.ts`.
 - Amount: **1000**
 - Preferences: `tabi.currency.v1.from` / `tabi.currency.v1.to` in `localStorage`
 

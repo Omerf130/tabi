@@ -1,6 +1,16 @@
 import type { TripMemberRole } from "@/models/TripMember";
+import {
+  resolveTripTravelLanguage,
+  type ResolvedTripTravelLanguage,
+  type TripTravelLanguageSource,
+} from "./destination/resolve-trip-travel-language";
 import { resolveTripThemeKey, type TripThemeKey } from "./theme";
 import { getTripPhase, type TripPhase } from "./trip-phase";
+
+export type {
+  ResolvedTripTravelLanguage,
+  TripTravelLanguageSource,
+};
 
 export type TripListItem = {
   id: string;
@@ -33,12 +43,30 @@ export type TripWorkspace = {
   /** Resolved IANA timezone for trip-scoped calendar behavior (server-derived). */
   destinationCalendarTimeZone: string;
   destination?: TripWorkspaceDestination;
+  travelLanguageCode: string | null;
+  effectiveTravelLanguageCode: string | null;
+  travelLanguageSource: TripTravelLanguageSource;
+  alternativeTravelLanguageCodes: string[];
 };
 
 export type TripCoverImage = {
   pathname: string;
   contentType: string;
 };
+
+/** Server-derived unknown travel language (no destination country / override). */
+export const UNKNOWN_TRIP_TRAVEL_LANGUAGE_FIELDS = {
+  travelLanguageCode: null,
+  effectiveTravelLanguageCode: null,
+  travelLanguageSource: "unknown",
+  alternativeTravelLanguageCodes: [],
+} as const satisfies Pick<
+  TripWorkspace,
+  | "travelLanguageCode"
+  | "effectiveTravelLanguageCode"
+  | "travelLanguageSource"
+  | "alternativeTravelLanguageCodes"
+>;
 
 type TripRecord = {
   _id: { toString(): string };
@@ -52,6 +80,7 @@ type TripRecord = {
   } | null;
   coverVisualKey?: string | null;
   themeKey?: string | null;
+  travelLanguageCode?: string | null;
   destination?: {
     displayName: string;
     country?: string | null;
@@ -82,6 +111,11 @@ export function toTripWorkspace(
   role: TripMemberRole,
   destinationCalendarTimeZone: string,
 ): TripWorkspace {
+  const travelLanguage = resolveTripTravelLanguage({
+    travelLanguageCode: trip.travelLanguageCode,
+    countryCode: trip.destination?.countryCode,
+  });
+
   return {
     id: trip._id.toString(),
     name: trip.name,
@@ -114,5 +148,9 @@ export function toTripWorkspace(
           timeZone: trip.destination.timeZone?.trim() || undefined,
         }
       : undefined,
+    travelLanguageCode: travelLanguage.travelLanguageCode,
+    effectiveTravelLanguageCode: travelLanguage.effectiveTravelLanguageCode,
+    travelLanguageSource: travelLanguage.source,
+    alternativeTravelLanguageCodes: travelLanguage.alternativeTravelLanguageCodes,
   };
 }

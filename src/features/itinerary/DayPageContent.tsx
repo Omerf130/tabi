@@ -139,6 +139,7 @@ export async function DayPageContent({ trip, date }: DayPageContentProps) {
             transportRecords={tripData.transportById}
             activityPhotos={activityPhotos}
             destinationCalendarTimeZone={trip.destinationCalendarTimeZone}
+            destinationCountryCode={trip.destination?.countryCode}
           />
         </div>
       </div>

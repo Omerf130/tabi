@@ -2,8 +2,9 @@ import "server-only";
 
 import { connectDb } from "@/lib/db/connect";
 import { PhraseFavorite } from "@/models/PhraseFavorite";
-import { DEFAULT_PHRASEBOOK_PACK_ID, PHRASEBOOK_ERROR_CODES } from "./constants";
-import { getDefaultPhrasebookPack, getPhraseFromDefaultPack } from "./builtin/registry";
+import { isValidPhraseIntentId } from "./is-valid-phrase-intent-id";
+import { PHRASEBOOK_ERROR_CODES } from "./constants";
+import { normalizeTravelLanguageCode } from "@/features/trips/destination/normalize-travel-language-code";
 
 export class PhraseFavoriteValidationError extends Error {
   readonly code: (typeof PHRASEBOOK_ERROR_CODES)[keyof typeof PHRASEBOOK_ERROR_CODES];
@@ -15,17 +16,20 @@ export class PhraseFavoriteValidationError extends Error {
   }
 }
 
-function resolveTargetLanguageFromPack(packId: string): string {
-  if (packId !== DEFAULT_PHRASEBOOK_PACK_ID) {
+function assertValidFavoriteTarget(input: {
+  targetLanguage: string;
+  phraseId: string;
+}): string {
+  const normalizedTarget = normalizeTravelLanguageCode(input.targetLanguage);
+  if (!normalizedTarget) {
     throw new PhraseFavoriteValidationError(PHRASEBOOK_ERROR_CODES.favoriteFailed);
   }
-  return getDefaultPhrasebookPack().targetLanguage;
-}
 
-function assertPhraseInDefaultPack(phraseId: string): void {
-  if (!getPhraseFromDefaultPack(phraseId)) {
+  if (!isValidPhraseIntentId(input.phraseId)) {
     throw new PhraseFavoriteValidationError(PHRASEBOOK_ERROR_CODES.favoriteFailed);
   }
+
+  return normalizedTarget;
 }
 
 export async function listFavoritePhraseIds(
@@ -33,7 +37,8 @@ export async function listFavoritePhraseIds(
   targetLanguage: string,
 ): Promise<string[]> {
   await connectDb();
-  const documents = await PhraseFavorite.find({ userId, targetLanguage })
+  const normalizedTarget = normalizeTravelLanguageCode(targetLanguage) ?? targetLanguage;
+  const documents = await PhraseFavorite.find({ userId, targetLanguage: normalizedTarget })
     .sort({ createdAt: 1, phraseId: 1 })
     .lean();
 
@@ -42,11 +47,10 @@ export async function listFavoritePhraseIds(
 
 export async function togglePhraseFavorite(input: {
   userId: string;
-  packId: string;
+  targetLanguage: string;
   phraseId: string;
 }): Promise<{ isFavorite: boolean }> {
-  assertPhraseInDefaultPack(input.phraseId);
-  const targetLanguage = resolveTargetLanguageFromPack(input.packId);
+  const targetLanguage = assertValidFavoriteTarget(input);
 
   await connectDb();
 

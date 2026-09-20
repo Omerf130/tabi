@@ -36,4 +36,4 @@ Do not store the whole trip application in one MongoDB document. Each domain bel
 1. Trip-owned queries always filter by `tripId` derived from membership, not from an unchecked client field.
 2. Users do not own itinerary rows directly; the Trip does. Access is via TripMember.
 3. Exact schemas are deferred. When a phase implements a domain, add indexes for `tripId` (and unique membership on `(tripId, userId)`).
-4. Do not hardcode travelers, hotels, itinerary dates, or activities into reusable app code. Japan 2026 content is Trip-owned data (Phase 28). V1 features may still assume Japan (JPY, Suica, trains, and similar).
+4. Do not hardcode travelers, hotels, itinerary dates, or activities into reusable app code. Destination-specific list overlays and labels apply only when `Trip.destination.countryCode` matches (e.g. JP packing items). There is no global Japan default.

@@ -2,7 +2,7 @@
 
 Guidance only. Completing Phase 0 is not permission to implement later phases.
 
-V1 is **Tabi for Japan**. Japan-specific product features are in scope; a destination theme engine is not.
+Tabi is a **global travel companion**; destination-specific overlays (including Japan) are scoped by `Trip.destination.countryCode`. Theme choice is independent of destination.
 
 | Phase | Name |
 |---|---|
@@ -87,7 +87,7 @@ Travel Hub redesign: `/more` becomes **מרכז הטיול** with hero placehold
 
 ## Phase 12
 
-Currency Converter: trip-scoped travel reference converter at `/currency` with Frankfurter API v2 (server-only), default **JPY → ILS** at amount **1000**, two-panel UI, searchable picker, session rate cache, and `localStorage` pair preferences. See [currency-converter.md](currency-converter.md).
+Currency Converter: trip-scoped travel reference converter at `/currency` with Frankfurter API v2 (server-only), initial pair from destination currency + user home currency (no universal JPY default), amount **1000**, two-panel UI, searchable picker, session rate cache, and `localStorage` pair preferences. See [currency-converter.md](currency-converter.md).
 
 ## Phase 13
 

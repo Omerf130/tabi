@@ -1,0 +1,24 @@
+{
+  "sourceId": "aosp-ecc",
+  "sourceRevision": 2,
+  "gitCommit": "039f1e2e9ff22fd6bb67c3e5a03b5870461314dd",
+  "sourceUrl": "https://android.googlesource.com/platform/packages/services/Telephony/+/ecc/input/eccdata.txt",
+  "inputPath": "ecc/input/eccdata.txt",
+  "generatedAt": "2026-09-20T18:05:54.435Z",
+  "contentSha256": "b5d6824863d4513c5b65d4017986230dd3cb7e1ca14ef23d1ce066f5b1d0f574",
+  "datasetImportedAt": "2026-09-20",
+  "stats": {
+    "countryBlocksParsed": 227,
+    "countriesWithServices": 225,
+    "serviceRows": 435,
+    "sourceEccRowsDiscarded": 103,
+    "discardReasons": {
+      "routing_normal": 23,
+      "unsupported_type:MOUNTAIN_RESCUE": 3,
+      "no_supported_types": 40,
+      "unsupported_type:TYPE_UNSPECIFIED": 32,
+      "unsupported_type:MARINE_GUARD": 5
+    },
+    "dedupeMergedPhones": 0
+  }
+}

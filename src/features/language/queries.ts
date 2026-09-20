@@ -1,37 +1,32 @@
 import "server-only";
 
 import { getTranslations } from "next-intl/server";
-import { getDefaultPhrasebookPack } from "./builtin/registry";
-import { DEFAULT_PHRASEBOOK_PACK_ID } from "./constants";
-import { listFavoritePhraseIds } from "./phrase-favorite-domain";
+import { resolveRequestLocale } from "@/features/i18n/resolve-request-locale";
+import { getTripWithMembership } from "@/features/trips/queries";
 import {
-  createPhrasebookCategoryLabels,
-  toPhraseDetailViewModel,
-  toPhraseListItemViewModel,
-} from "./to-phrase-view-model";
+  buildLanguagePageViewModel,
+  buildPhraseDetailViewModelForTrip,
+} from "./prepare-phrasebook-runtime";
 import type { LanguagePageViewModel, PhraseDetailViewModel } from "./types";
 
 export async function prepareLanguagePage(
   tripId: string,
   userId: string,
-): Promise<LanguagePageViewModel> {
+): Promise<LanguagePageViewModel | null> {
+  const membership = await getTripWithMembership(userId, tripId);
+  if (!membership) {
+    return null;
+  }
+
+  const uiLocale = await resolveRequestLocale();
   const t = await getTranslations("Language");
-  const pack = getDefaultPhrasebookPack();
-  const favoritePhraseIds = await listFavoritePhraseIds(userId, pack.targetLanguage);
-  const favoriteSet = new Set(favoritePhraseIds);
 
-  const phrases = pack.phrases.map((phrase) =>
-    toPhraseListItemViewModel(tripId, phrase, favoriteSet.has(phrase.id), t),
-  );
-
-  return {
-    tripId,
-    packId: DEFAULT_PHRASEBOOK_PACK_ID,
-    targetLanguage: pack.targetLanguage,
-    phrases,
-    favoritePhraseIds,
-    categoryLabels: createPhrasebookCategoryLabels(t),
-  };
+  return buildLanguagePageViewModel({
+    trip: membership.trip,
+    userId,
+    uiLocale,
+    t,
+  });
 }
 
 export async function getPhraseDetailForTrip(
@@ -39,13 +34,16 @@ export async function getPhraseDetailForTrip(
   userId: string,
   phraseId: string,
 ): Promise<PhraseDetailViewModel | null> {
-  const t = await getTranslations("Language");
-  const pack = getDefaultPhrasebookPack();
-  const phrase = pack.phrases.find((item) => item.id === phraseId);
-  if (!phrase) {
+  const membership = await getTripWithMembership(userId, tripId);
+  if (!membership) {
     return null;
   }
 
-  const favoritePhraseIds = await listFavoritePhraseIds(userId, pack.targetLanguage);
-  return toPhraseDetailViewModel(phrase, favoritePhraseIds.includes(phraseId), t);
+  const t = await getTranslations("Language");
+  return buildPhraseDetailViewModelForTrip({
+    trip: membership.trip,
+    userId,
+    phraseId,
+    t,
+  });
 }

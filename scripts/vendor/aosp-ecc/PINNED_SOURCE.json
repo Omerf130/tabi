@@ -1,0 +1,8 @@
+﻿{
+  "sourceId": "aosp-ecc",
+  "gitCommit": "039f1e2e9ff22fd6bb67c3e5a03b5870461314dd",
+  "gitUrl": "https://android.googlesource.com/platform/packages/services/Telephony/+",
+  "inputPath": "ecc/input/eccdata.txt",
+  "eccdataFetchedFrom": "refs/heads/main",
+  "pinnedAt": "2026-09-20"
+}

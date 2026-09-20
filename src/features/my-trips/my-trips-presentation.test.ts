@@ -2,7 +2,11 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { CREATE_TRIP_PATH, MY_TRIPS_HERO_VISUAL } from "./constants";
+import {
+  CREATE_TRIP_PATH,
+  MY_TRIPS_FALLBACK_VISUAL,
+  MY_TRIPS_HERO_VISUAL,
+} from "./constants";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -11,8 +15,9 @@ function readSource(relativePath: string): string {
 }
 
 describe("my trips presentation contracts", () => {
-  it("uses an existing destination visual for the hero", () => {
-    expect(MY_TRIPS_HERO_VISUAL).toBe("/destination-visuals/japan.png");
+  it("uses a neutral global hero visual (not Japan-specific)", () => {
+    expect(MY_TRIPS_HERO_VISUAL).toBe(MY_TRIPS_FALLBACK_VISUAL);
+    expect(MY_TRIPS_HERO_VISUAL).not.toContain("japan.png");
     expect(MY_TRIPS_HERO_VISUAL).not.toContain("blob:");
   });
 

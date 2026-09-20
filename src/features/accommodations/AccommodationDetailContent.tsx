@@ -5,20 +5,28 @@ import { AppPage } from "@/features/app-shell/AppPage";
 import { GooglePlacesAttribution } from "@/features/places/GooglePlacesAttribution";
 import { buildAccommodationTaxiHref } from "@/features/accommodations/constants";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
+import {
+  resolveAccommodationLocalFieldLang,
+  resolveAccommodationLocalFieldMessageKeys,
+} from "./accommodation-local-field-labels";
 import styles from "./AccommodationDetail.module.scss";
 
 type AccommodationDetailContentProps = {
   tripId: string;
   accommodation: AccommodationViewModel;
   mapsNavigationHref?: string;
+  destinationCountryCode?: string | null;
 };
 
 export async function AccommodationDetailContent({
   tripId,
   accommodation,
   mapsNavigationHref,
+  destinationCountryCode,
 }: AccommodationDetailContentProps) {
   const t = await getTranslations("Accommodation");
+  const localFieldKeys = resolveAccommodationLocalFieldMessageKeys(destinationCountryCode);
+  const localLang = resolveAccommodationLocalFieldLang(destinationCountryCode);
 
   return (
     <AppPage width="content">
@@ -30,8 +38,8 @@ export async function AccommodationDetailContent({
           </div>
           {accommodation.nameJapanese ? (
             <div className={styles.detailItem}>
-              <dt>{t("nameJapanese")}</dt>
-              <dd dir="auto" lang="ja">
+              <dt>{t(localFieldKeys.nameLabelKey)}</dt>
+              <dd dir="auto" lang={localLang}>
                 {accommodation.nameJapanese}
               </dd>
             </div>
@@ -56,8 +64,8 @@ export async function AccommodationDetailContent({
           ) : null}
           {accommodation.addressJapanese ? (
             <div className={styles.detailItem}>
-              <dt>{t("addressJapanese")}</dt>
-              <dd dir="auto" lang="ja">
+              <dt>{t(localFieldKeys.addressLabelKey)}</dt>
+              <dd dir="auto" lang={localLang}>
                 {accommodation.addressJapanese}
               </dd>
             </div>

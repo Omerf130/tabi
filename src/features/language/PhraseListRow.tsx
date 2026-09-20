@@ -16,7 +16,11 @@ export function PhraseListRow({ tripId, phrase }: PhraseListRowProps) {
           <p className={styles.phraseSource} dir="auto">
             {phrase.sourceText}
           </p>
-          <p className={styles.phraseTargetPreview} lang="ja" dir="ltr">
+          <p
+            className={styles.phraseTargetPreview}
+            lang={phrase.targetLanguage ?? undefined}
+            dir={phrase.targetLanguageDirection}
+          >
             {phrase.targetTextPreview}
           </p>
         </div>

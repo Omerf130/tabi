@@ -18,8 +18,6 @@ export const TRANSPORT_OPERATOR_MAX_LENGTH = 120;
 export const TRANSPORT_SERVICE_NUMBER_MAX_LENGTH = 40;
 export const TRANSPORT_VEHICLE_NOTES_MAX_LENGTH = 200;
 
-export const DEFAULT_JAPAN_TRANSPORT_TIMEZONE = "Asia/Tokyo";
-
 export const TRANSPORT_ERROR_CODES = {
   notFound: "notFound",
   invalidEndpoint: "invalidEndpoint",

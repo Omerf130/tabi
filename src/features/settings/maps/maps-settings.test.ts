@@ -10,6 +10,7 @@ import {
 import { buildSettingsHubViewModel } from "@/features/settings/build-settings-hub-view-model";
 import { createAppTranslator } from "@/features/i18n/create-app-translator";
 import { resolvePreferredMapsApp } from "@/lib/maps/maps-app";
+import { UNKNOWN_TRIP_TRAVEL_LANGUAGE_FIELDS } from "@/features/trips/public-trip";
 
 const tripId = "507f1f77bcf86cd799439011";
 
@@ -47,6 +48,7 @@ describe("Maps settings", () => {
         role: "owner",
         themeKey: "default",
         destinationCalendarTimeZone: "UTC",
+        ...UNKNOWN_TRIP_TRAVEL_LANGUAGE_FIELDS,
       },
       isOwner: true,
       baseCurrency: "ILS",

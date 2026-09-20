@@ -24,6 +24,7 @@ type TransportDetailContentProps = {
   tripId: string;
   transport: TransportDetailViewModel;
   isOwner: boolean;
+  destinationCountryCode?: string | null;
 };
 
 function DetailRow({ label, value }: { label: string; value?: string | null }) {
@@ -117,11 +118,12 @@ export function TransportDetailContent({
   tripId,
   transport,
   isOwner,
+  destinationCountryCode,
 }: TransportDetailContentProps) {
   const t = useTranslations("Transport");
   const tCommon = useTranslations("Common");
   const tErrors = useTranslations("Transport.errors");
-  const trainCategoryLabel = createTrainCategoryLabelResolver(t);
+  const trainCategoryLabel = createTrainCategoryLabelResolver(t, destinationCountryCode);
   const router = useRouter();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [state, formAction] = useActionState(deleteTransportAction, initialState);

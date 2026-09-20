@@ -1,41 +1,4 @@
-export const EMERGENCY_RESOURCE_KINDS = [
-  "police",
-  "ambulance_fire",
-  "tourist_hotline",
-  "embassy_consular",
-  "other_official",
-] as const;
-
-export type EmergencyResourceKind = (typeof EMERGENCY_RESOURCE_KINDS)[number];
-
-export type EmergencySourceMeta = {
-  sourceLabel: string;
-  sourceUrl: string;
-  verifiedAt: string;
-};
-
-export type EmergencyResource = {
-  id: string;
-  kind: EmergencyResourceKind;
-  title: string;
-  subtitle?: string;
-  description?: string;
-  phone?: string;
-  secondaryPhone?: string;
-  internationalPhone?: string;
-  email?: string;
-  address?: string;
-  url?: string;
-  availability?: string;
-  source: EmergencySourceMeta;
-};
-
-export type EmergencyPack = {
-  id: string;
-  countryCode: string;
-  label: string;
-  resources: readonly EmergencyResource[];
-};
+import type { EmergencyServiceCategory } from "./data/emergency-dataset-schema";
 
 export const EMERGENCY_CUSTOM_CATEGORIES = [
   "insurance",
@@ -56,9 +19,29 @@ export type EmergencyResourceAction =
   | { type: "address"; label: string; href: string; value: string }
   | { type: "copy"; label: string; value: string };
 
-export type BuiltInEmergencyResourceViewModel = EmergencyResource & {
+export type VerifiedEmergencyServiceViewModel = {
+  id: string;
+  category: EmergencyServiceCategory;
+  phone: string;
   actions: EmergencyResourceAction[];
 };
+
+export type EmergencyDatasetSourceViewModel = {
+  sourceId: string;
+  sourceRevision: number;
+  datasetImportedAt: string;
+  gitCommit: string;
+};
+
+export type EmergencyVerifiedViewModel =
+  | {
+      status: "ready";
+      countryCode: string;
+      services: VerifiedEmergencyServiceViewModel[];
+      source: EmergencyDatasetSourceViewModel;
+    }
+  | { status: "missing_destination" }
+  | { status: "unsupported_country"; countryCode?: string };
 
 export type TripEmergencyResourceViewModel = {
   id: string;
@@ -103,9 +86,8 @@ export type EmergencyDocumentViewModel = {
 
 export type EmergencyPageViewModel = {
   tripId: string;
-  packId: string;
-  urgentResources: BuiltInEmergencyResourceViewModel[];
-  assistanceResources: BuiltInEmergencyResourceViewModel[];
+  verified: EmergencyVerifiedViewModel;
+  tripDetailsHref: string;
   currentAccommodation: EmergencyAccommodationViewModel | null;
   documents: EmergencyDocumentViewModel[];
   customResources: TripEmergencyResourceViewModel[];

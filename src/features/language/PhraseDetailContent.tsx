@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { AppPage } from "@/features/app-shell/AppPage";
 import { FavoriteToggle } from "./FavoriteToggle.client";
 import type { PhraseDetailViewModel } from "./types";
@@ -8,7 +9,9 @@ type PhraseDetailContentProps = {
   phrase: PhraseDetailViewModel;
 };
 
-export function PhraseDetailContent({ tripId, phrase }: PhraseDetailContentProps) {
+export async function PhraseDetailContent({ tripId, phrase }: PhraseDetailContentProps) {
+  const t = await getTranslations("Language");
+
   return (
     <AppPage width="content">
       <div className={styles.presentation}>
@@ -21,20 +24,21 @@ export function PhraseDetailContent({ tripId, phrase }: PhraseDetailContentProps
           />
         </div>
 
-        <p className={styles.targetText} lang="ja" dir="ltr">
+        <p
+          className={styles.targetText}
+          lang={phrase.targetLanguage ?? undefined}
+          dir={phrase.targetLanguageDirection}
+        >
           {phrase.targetText}
         </p>
 
-        {phrase.pronunciationSource ? (
-          <p className={styles.pronunciationSource} dir="rtl">
-            {phrase.pronunciationSource}
-          </p>
-        ) : null}
-
-        {phrase.pronunciationLatin ? (
-          <p className={styles.pronunciationLatin} dir="ltr">
-            {phrase.pronunciationLatin}
-          </p>
+        {phrase.transliterationLatin ? (
+          <>
+            <p className={styles.pronunciationLatinLabel}>{t("runtime.pronunciationLatinLabel")}</p>
+            <p className={styles.pronunciationLatin} dir="ltr">
+              {phrase.transliterationLatin}
+            </p>
+          </>
         ) : null}
 
         <p className={styles.sourceText} dir="auto">

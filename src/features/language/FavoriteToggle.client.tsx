@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { togglePhraseFavoriteAction, type PhraseFavoriteActionState } from "./actions";
-import { PHRASEBOOK_ERROR_CODES, DEFAULT_PHRASEBOOK_PACK_ID } from "./constants";
+import { PHRASEBOOK_ERROR_CODES } from "./constants";
 import styles from "./LanguagePage.module.scss";
 
 const initialState: PhraseFavoriteActionState = {};
@@ -41,7 +41,6 @@ export function FavoriteToggle({
     <form action={formAction} className={styles.favoriteForm}>
       <input type="hidden" name="tripId" value={tripId} />
       <input type="hidden" name="phraseId" value={phraseId} />
-      <input type="hidden" name="packId" value={DEFAULT_PHRASEBOOK_PACK_ID} />
       <button
         type="submit"
         className={compact ? styles.favoriteButtonCompact : styles.favoriteButton}

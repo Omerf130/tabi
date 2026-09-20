@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { buildTestNoExpensesRecap } from "@/features/finance/after-trip-finance-recap-fixture";
+import { UNKNOWN_TRIP_TRAVEL_LANGUAGE_FIELDS } from "@/features/trips/public-trip";
 import { prepareTripHomePage } from "./prepare-trip-home-page";
 
 const { prepareAfterTripFinanceRecapMock, resolveTripHomePreviewContextMock } =
@@ -66,6 +67,7 @@ const trip = {
   role: "owner" as const,
   themeKey: "default" as const,
   destinationCalendarTimeZone: "Asia/Tokyo",
+  ...UNKNOWN_TRIP_TRAVEL_LANGUAGE_FIELDS,
 };
 
 describe("prepareTripHomePage finance loading", () => {

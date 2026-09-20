@@ -1,21 +1,12 @@
 {
-
   "Navigation": {
-
     "home": "Home",
-
     "itinerary": "Itinerary",
-
     "documents": "Documents",
-
     "settings": "Settings",
-
     "more": "More",
-
     "ariaLabel": "Primary navigation"
-
   },
-
   "QuickAdd": {
     "navLabel": "Add",
     "openAria": "Add to trip",
@@ -40,35 +31,21 @@
       "documentDesc": "Tickets, bookings, and files"
     }
   },
-
   "TripHeader": {
-
     "back": "Back",
-
     "myTrips": "My Trips"
-
   },
-
   "AccountMenu": {
-
     "footerAriaLabel": "Account and navigation",
-
     "myTrips": "My Trips",
-
     "logout": "Sign out",
-
     "interfaceLanguage": "Interface language",
-
     "languageHebrew": "עברית",
-
     "languageEnglish": "English"
-
   },
-
   "PushDelivery": {
     "tripReminderBody": "You have a trip reminder"
   },
-
   "ReminderNotifications": {
     "calloutInactive": "Your reminder will be saved, but notifications are not active on this device.",
     "calloutDenied": "Your reminder will be saved, but notifications are blocked on this device.",
@@ -78,7 +55,6 @@
     "linkSettings": "Notification settings",
     "linkNotifications": "Notifications"
   },
-
   "AccountNotifications": {
     "title": "Notifications",
     "lead": "Tabi can notify this device about trip reminders you create. Notifications are optional and only for your reminders.",
@@ -106,7 +82,6 @@
       "forbidden": "Could not update this device subscription."
     }
   },
-
   "Profile": {
     "title": "Profile",
     "identitySection": "Identity",
@@ -135,48 +110,45 @@
       "invalidName": "Enter a name between 2 and 80 characters."
     }
   },
-
   "TripManagement": {
-
     "title": "Trip management",
-
     "introTitle": "Trip management",
-
     "introLead": "Everything you need to update and manage your trip in one place.",
-
     "navAria": "Trip management",
-
     "sections": {
-
-      "details": { "label": "Trip details", "shortLabel": "Trip details" },
-
-      "accommodations": { "label": "Stays", "shortLabel": "Stays" },
-
-      "transport": { "label": "Transport", "shortLabel": "Transport" },
-
-      "documents": { "label": "Documents", "shortLabel": "Documents" },
-
-      "reminders": { "label": "Reminders", "shortLabel": "Reminders" },
-
-      "members": { "label": "Trip members", "shortLabel": "Members" }
-
+      "details": {
+        "label": "Trip details",
+        "shortLabel": "Trip details"
+      },
+      "accommodations": {
+        "label": "Stays",
+        "shortLabel": "Stays"
+      },
+      "transport": {
+        "label": "Transport",
+        "shortLabel": "Transport"
+      },
+      "documents": {
+        "label": "Documents",
+        "shortLabel": "Documents"
+      },
+      "reminders": {
+        "label": "Reminders",
+        "shortLabel": "Reminders"
+      },
+      "members": {
+        "label": "Trip members",
+        "shortLabel": "Members"
+      }
     },
-
     "membersTitle": "Trip members",
-
     "newInvite": "+ New invite",
-
     "invitationsSection": "Active and recent invites"
-
   },
-
   "Errors": {
-
     "invalidLocale": "The selected interface language is not supported.",
     "invalidPreferredMapsApp": "The selected navigation app is not supported."
-
   },
-
   "Common": {
     "today": "Today",
     "all": "All",
@@ -218,7 +190,6 @@
     "noItems": "No items",
     "openReminderAria": "Open reminder"
   },
-
   "Home": {
     "heroIdentityAria": "Trip identity",
     "beforeJourneyAria": "Trip preparation",
@@ -286,7 +257,6 @@
     "countdownAria": "{days} days, {hours} hours, {minutes} minutes and {seconds} seconds until the trip starts",
     "navigateTo": "Navigate to {name}"
   },
-
   "Itinerary": {
     "heroTitle": "Trip itinerary",
     "dayStripAria": "Trip days",
@@ -354,7 +324,6 @@
     "itineraryCountTransportOnly": "{count, plural, one {One transport} other {# transport}}",
     "itineraryCountMixed": "{count, plural, one {One item} other {# items}}"
   },
-
   "Activity": {
     "whereQuestion": "Where?",
     "whatQuestion": "What are you doing?",
@@ -395,274 +364,140 @@
       "invalidCostData": "Invalid cost details"
     }
   },
-
   "Finance": {
-
     "pageTitle": "Trip finances",
-
     "heroSubtitle": "Track expenses and budget in one place",
-
     "tripBudgetTitle": "Trip budget",
-
     "budgetSummaryAriaLabel": "Budget summary",
-
     "backToMore": "Back to more",
-
     "spent": "Spent",
-
     "remaining": "Remaining",
-
     "overBudgetShort": "Over budget",
-
     "percentConsumed": "Used",
-
     "overBudget": "Over budget",
-
     "totalExpenses": "Total expenses",
-
     "totalBudget": "Budget",
-
     "totalExpensesCenter": "Total expenses",
-
     "noExpensesYet": "No expenses yet",
-
     "noCategoriesYet": "No expenses by category yet",
-
     "memberNoBudget": "No budget set for this trip",
-
     "setBudgetCta": "Set trip budget",
-
     "editBudgetCta": "Edit budget",
-
     "categoriesSectionTitle": "Expenses by category",
-
     "recentSectionTitle": "Recent expenses",
-
     "allSectionTitle": "All expenses",
-
     "showAll": "Show all",
-
     "showRecent": "Back to summary",
-
     "addExpense": "Add expense",
-
     "editExpense": "Edit expense",
-
     "addExpenseSubtitle": "Add an expense to the trip",
-
     "saveExpense": "Save",
-
     "deleteExpense": "Delete expense",
-
     "deleteExpenseConfirm": "Delete this expense?",
-
     "removeLinkedCost": "Remove cost",
-
     "removeLinkedCostConfirm": "Remove this cost? The source item will stay unchanged.",
-
     "cancel": "Cancel",
-
     "close": "Close",
-
     "titleLabel": "Description / name",
-
     "categoryLabel": "Category",
-
     "dateLabel": "Date",
-
     "amountLabel": "Amount",
-
     "currencyLabel": "Currency",
-
     "notesLabel": "Notes (optional)",
-
     "conversionPreview": "At current exchange rate",
-
     "conversionPreviewFailed": "Could not load exchange rate right now",
-
     "settingsTitle": "Finance settings",
     "budgetSettingsTitle": "Trip budget",
-
     "baseCurrencyLabel": "Base currency",
-
     "budgetAmountLabel": "Total budget",
-
     "budgetAmountPlaceholder": "For example: 30000",
-
     "saveSettings": "Save",
-
     "clearBudget": "Clear budget",
-
     "entityCostSectionTitle": "Cost",
-
     "entityCostHelper": "You can leave this empty and add it later",
-
     "entityCostDisplayPrefix": "Cost",
-
     "activityCostCategoryLabel": "Expense category",
-
     "linkedSourceTitleLabel": "Source item",
-
     "afterRecapTitle": "Expense summary",
-
     "afterNoExpenses": "No expenses recorded for this trip",
-
     "afterFullFinanceCta": "View full finance summary",
-
     "afterOpenFinanceCta": "Open finances",
-
     "hubNoExpenses": "No expenses added yet",
-
     "hubBudgetMeta": "of {budget} budget",
-
     "hubProgressAriaLabel": "{title}: {percent}% used",
-
     "linkedToActivity": "Linked to activity",
-
     "linkedToAccommodation": "Linked to accommodation",
-
     "linkedToTransport": "Linked to transport",
-
     "deletedSourceFallback": "Deleted item",
-
     "accommodationFallbackName": "Accommodation",
-
     "categories": {
-
       "accommodation": "Accommodation",
-
       "food": "Food",
-
       "transport": "Transport",
-
       "activities": "Activities",
-
       "shopping": "Shopping",
-
       "flights": "Flights",
-
       "other": "Other"
-
     },
-
     "errors": {
-
       "generic": "Something went wrong. Please try again.",
-
       "validationFailed": "Invalid data",
-
       "settingsNotFound": "Finance settings not found",
-
       "budgetRequired": "Enter a positive budget amount",
-
       "budgetInvalid": "Invalid budget amount",
-
       "baseCurrencyInvalid": "Unsupported base currency",
-
       "baseCurrencyLocked": "Base currency cannot be changed after expenses were added",
-
       "expenseAmountInvalid": "Expense amount must be greater than zero",
-
       "manualTitleRequired": "Enter an expense name",
-
       "linkedSourceRequired": "Linked expense is missing a source id",
-
       "manualSourceIdForbidden": "Manual expenses cannot be linked to an entity",
-
       "linkedTitleForbidden": "Linked expenses do not store a title",
-
       "categoryInvalid": "Invalid category",
-
       "sourceTypeInvalid": "Invalid source type",
-
       "conversionPreviewFailed": "Could not load exchange rate right now",
-
       "invalidCostData": "Invalid cost details"
-
     }
-
   },
-
   "Currency": {
-
     "pageTitle": "Currency",
-
     "loadRateFailed": "Could not load the exchange rate right now.",
-
     "retry": "Try again",
-
     "refreshFailed": "We couldn't refresh the rate. Showing the last loaded rate.",
-
     "estimatedRate": "Estimated rate",
-
     "disclaimer": "Estimated rate. The actual rate may vary by card issuer, bank, or exchange provider.",
-
     "invalidCurrency": "Unsupported currency",
-
     "sameCurrency": "Choose two different currencies",
-
     "popularSection": "Popular",
-
     "allSection": "All currencies",
-
     "searchPlaceholder": "Search currency...",
-
     "noResults": "No currencies found",
-
     "pickerTitle": "Choose currency",
-
     "close": "Close",
-
     "fromCurrencyPanelAriaLabel": "Source currency",
-
     "toCurrencyPanelAriaLabel": "Target currency",
-
     "amountToConvertAriaLabel": "Amount to convert",
-
     "swapCurrenciesAriaLabel": "Swap currencies",
-
     "selectSourceCurrencyAriaLabel": "Choose source currency: {code} {name}",
-
     "selectTargetCurrencyAriaLabel": "Choose target currency: {code} {name}"
-
   },
-
   "Lists": {
-
     "pageTitle": "Lists",
-
     "progressLabel": "{completed} of {total} completed",
-
     "deleteConfirm": "Delete this item?",
-
     "addItemPlaceholder": "Add item",
-
     "addItemButton": "Add",
-
     "editButton": "Edit",
-
     "deleteButton": "Delete",
-
     "saveButton": "Save",
-
     "cancelButton": "Cancel",
-
     "markCompletedAriaLabel": "Mark as completed",
-
     "markIncompleteAriaLabel": "Mark as not completed",
-
     "definitions": {
-
       "packing": "Packing list",
-
       "before_trip": "Before the flight",
-
       "during_trip": "During the trip",
-
       "pre_trip_shopping": "Pre-trip shopping"
-
     },
-
     "seed": {
       "passport": "Passport",
       "phoneCharger": "Phone charger",
@@ -691,35 +526,20 @@
       "jpIcTopUp": "Top up IC card (Suica / Pasmo)",
       "jpAdapterShop": "Japan power adapter"
     },
-
     "errors": {
-
       "generic": "Couldn't update the list. Please try again.",
-
       "notFound": "Item not found",
-
       "textRequired": "Enter item text",
-
       "textTooLong": "Text is too long"
-
     },
-
     "success": {
-
       "created": "Item added",
-
       "updated": "Item updated",
-
       "deleted": "Item deleted",
-
       "completed": "Item marked as completed",
-
       "uncompleted": "Item marked as not completed"
-
     }
-
   },
-
   "Documents": {
     "pageTitle": "Travel wallet",
     "listPageTitle": "Documents",
@@ -807,7 +627,6 @@
       "deleteConfirm": "Delete this document?"
     }
   },
-
   "TravelHub": {
     "heroTitle": "Travel tools",
     "heroSubtitle": "What you need for a smooth trip",
@@ -833,13 +652,31 @@
     "documentsCountOne": "One document",
     "documentsCountMany": "{count} documents",
     "quickTools": {
-      "currency": { "label": "Currency", "description": "Currency conversion" },
-      "weather": { "label": "Weather", "description": "Trip forecast" },
-      "language": { "label": "Language", "description": "Language and communication" },
-      "emergency": { "label": "Emergency", "description": "Important information" }
+      "currency": {
+        "label": "Currency",
+        "description": "Currency conversion"
+      },
+      "weather": {
+        "label": "Weather",
+        "description": "Trip forecast"
+      },
+      "language": {
+        "label": "Language",
+        "description": "Language and communication"
+      },
+      "emergency": {
+        "label": "Emergency",
+        "description": "Important information"
+      }
     },
-    "attentionSections": { "upcoming": "Before the trip", "active": "During the trip" },
-    "contextualAccommodation": { "current": "Your stay now", "upcoming": "Your next stay" },
+    "attentionSections": {
+      "upcoming": "Before the trip",
+      "active": "During the trip"
+    },
+    "contextualAccommodation": {
+      "current": "Your stay now",
+      "upcoming": "Your next stay"
+    },
     "attentionMessages": {
       "packingOne": "One item left to pack",
       "packingMany": "{count} items left to pack",
@@ -857,7 +694,6 @@
     "tripMembers": "Trip members",
     "myTrips": "My trips"
   },
-
   "Accommodation": {
     "pageTitle": "Stays",
     "addButtonAria": "Add stay",
@@ -876,6 +712,13 @@
     "manualName": "Stay name",
     "manualNameJapanese": "Stay name in Japanese",
     "manualNameJapaneseHint": "Optional — for taxi mode",
+    "manualNameKorean": "Stay name in Korean",
+    "manualNameLocal": "Local stay name",
+    "manualNameLocalHint": "Optional — for taxi mode",
+    "localName": "Local name",
+    "localAddress": "Local address",
+    "nameKorean": "Name in Korean",
+    "addressKorean": "Address in Korean",
     "googleMapsLink": "Google Maps link",
     "fallbackName": "Stay",
     "nightCountOne": "One night",
@@ -883,7 +726,11 @@
     "taxiModePageTitle": "Taxi mode",
     "taxiMissingAddress": "No address on file. Add an address in trip settings.",
     "filterAria": "Filter stays",
-    "filters": { "all": "All", "upcoming": "Upcoming", "past": "Past" },
+    "filters": {
+      "all": "All",
+      "upcoming": "Upcoming",
+      "past": "Past"
+    },
     "filterTab": "{label} ({count})",
     "emptyAll": "No stays",
     "emptyUpcoming": "No upcoming stays",
@@ -916,13 +763,17 @@
       "deleteConfirmDetail": "This removes the stay from Tabi only — it does not cancel the hotel booking."
     }
   },
-
   "Transport": {
     "pageTitle": "Transport",
     "filterAria": "Filter transport",
     "addMenuAria": "Add transport",
     "addMenuTypeAria": "Transport type",
-    "filters": { "all": "All", "flight": "Flights", "train": "Trains", "other": "Other" },
+    "filters": {
+      "all": "All",
+      "flight": "Flights",
+      "train": "Trains",
+      "other": "Other"
+    },
     "filterTab": "{label} ({count})",
     "emptyAll": "No transport",
     "emptyAllHintOwner": "Add flights, trains, and rides so they appear here and on the itinerary.",
@@ -961,8 +812,11 @@
       "car": "Car / transfer",
       "taxi": "Taxi"
     },
+    "departureLocationPlaceholder": "Central Station",
+    "arrivalLocationPlaceholder": "Destination city",
     "trainCategories": {
       "shinkansen": "Shinkansen",
+      "shinkansenHighSpeed": "High-speed train",
       "limited_express": "Limited Express",
       "reserved": "Reserved train",
       "local": "Local train",
@@ -1045,7 +899,6 @@
       "deleteConfirm": "Delete this transport segment?"
     }
   },
-
   "Weather": {
     "pageTitle": "Weather",
     "backAria": "Back",
@@ -1076,23 +929,70 @@
     "adviceLayer": "A light layer is recommended",
     "adviceComfort": "Comfortable weather for travel",
     "conditions": {
-      "1000": "Clear", "1003": "Partly cloudy", "1006": "Cloudy", "1009": "Overcast", "1030": "Mist",
-      "1063": "Patchy rain", "1066": "Patchy snow", "1069": "Rain and snow mix", "1072": "Freezing drizzle", "1087": "Thunderstorms",
-      "1114": "Blowing snow", "1117": "Blizzard", "1135": "Fog", "1147": "Freezing fog", "1150": "Light drizzle",
-      "1153": "Drizzle", "1168": "Freezing drizzle", "1171": "Heavy freezing drizzle", "1180": "Light rain", "1183": "Patchy light rain",
-      "1186": "Moderate rain", "1189": "Heavy rain", "1192": "Very heavy rain", "1195": "Extreme rain", "1198": "Light freezing rain",
-      "1201": "Freezing rain", "1204": "Heavy freezing rain", "1207": "Heavy freezing rain", "1210": "Light snow", "1213": "Snow",
-      "1216": "Heavy snow", "1219": "Heavy snow", "1222": "Heavy snow", "1225": "Blizzard", "1237": "Ice pellets",
-      "1240": "Rain and hail", "1243": "Heavy rain and hail", "1246": "Extreme hail", "1249": "Freezing rain and hail", "1252": "Heavy freezing rain and hail",
-      "1255": "Extreme freezing hail", "1258": "Freezing rain, hail and snow", "1261": "Heavy freezing rain, hail and snow", "1264": "Hail storm",
-      "1273": "Light showers", "1276": "Moderate showers", "1279": "Heavy showers", "1282": "Extreme showers"
+      "1000": "Clear",
+      "1003": "Partly cloudy",
+      "1006": "Cloudy",
+      "1009": "Overcast",
+      "1030": "Mist",
+      "1063": "Patchy rain",
+      "1066": "Patchy snow",
+      "1069": "Rain and snow mix",
+      "1072": "Freezing drizzle",
+      "1087": "Thunderstorms",
+      "1114": "Blowing snow",
+      "1117": "Blizzard",
+      "1135": "Fog",
+      "1147": "Freezing fog",
+      "1150": "Light drizzle",
+      "1153": "Drizzle",
+      "1168": "Freezing drizzle",
+      "1171": "Heavy freezing drizzle",
+      "1180": "Light rain",
+      "1183": "Patchy light rain",
+      "1186": "Moderate rain",
+      "1189": "Heavy rain",
+      "1192": "Very heavy rain",
+      "1195": "Extreme rain",
+      "1198": "Light freezing rain",
+      "1201": "Freezing rain",
+      "1204": "Heavy freezing rain",
+      "1207": "Heavy freezing rain",
+      "1210": "Light snow",
+      "1213": "Snow",
+      "1216": "Heavy snow",
+      "1219": "Heavy snow",
+      "1222": "Heavy snow",
+      "1225": "Blizzard",
+      "1237": "Ice pellets",
+      "1240": "Rain and hail",
+      "1243": "Heavy rain and hail",
+      "1246": "Extreme hail",
+      "1249": "Freezing rain and hail",
+      "1252": "Heavy freezing rain and hail",
+      "1255": "Extreme freezing hail",
+      "1258": "Freezing rain, hail and snow",
+      "1261": "Heavy freezing rain, hail and snow",
+      "1264": "Hail storm",
+      "1273": "Light showers",
+      "1276": "Moderate showers",
+      "1279": "Heavy showers",
+      "1282": "Extreme showers"
     }
   },
-
   "Emergency": {
     "pageTitle": "Emergency and help",
-    "urgentSection": "Immediate emergency",
-    "assistanceSection": "Tourist and consular assistance",
+    "verifiedSectionTitle": "Emergency numbers for this destination",
+    "missingDestinationNotice": "Set a destination country on this trip to show local emergency numbers.",
+    "unsupportedCountryNotice": "Tabi does not currently have emergency-number data for this destination.",
+    "updateTripDestination": "Update trip destination",
+    "customResourcesHint": "Added by trip members",
+    "services": {
+      "general": "General emergency",
+      "police": "Police",
+      "ambulance": "Ambulance",
+      "fire": "Fire",
+      "ambulance_and_fire": "Ambulance and fire"
+    },
     "myLocation": "My location",
     "currentAccommodation": "Current stay",
     "accommodationDetails": "Stay details",
@@ -1104,7 +1004,7 @@
     "myTripResources": "My trip resources",
     "emergencyPhrases": "Useful emergency phrases",
     "allEmergencyPhrases": "All emergency phrases",
-    "sourceNote": "Official information manually verified against the cited sources.",
+    "sourceNote": "Source: Android Open Source Project Emergency Number Database (ECC revision {revision}, dataset import {imported}). Numbers are taken from this pinned dataset; Tabi does not independently verify them when you call.",
     "categories": {
       "insurance": "Insurance",
       "medical": "Medical",
@@ -1153,7 +1053,6 @@
       "saveResource": "Save"
     }
   },
-
   "Language": {
     "pageTitle": "Language and communication",
     "categoryNavAria": "Phrase categories",
@@ -1177,9 +1076,106 @@
       "showAll": "All phrases",
       "favoriteAdd": "Add to favorites",
       "favoriteRemove": "Remove from favorites"
+    },
+    "runtime": {
+      "unresolvedTravelLanguageTitle": "Trip language not set yet",
+      "unresolvedTravelLanguageBody": "Tabi needs a destination country on this trip before it can show destination-language phrases.",
+      "updateTripDetails": "Update trip destination",
+      "translationUnavailable": "Some translations are temporarily unavailable. Cached phrases may still appear.",
+      "targetUnavailable": "Translation unavailable",
+      "pronunciationLatinLabel": "Pronunciation in Latin letters"
+    },
+    "customTranslator": {
+      "title": "Translate your own phrase",
+      "hint": "Type something in your interface language. Tabi translates it into this trip’s travel language.",
+      "inputLabel": "Your phrase",
+      "placeholder": "Type a phrase to translate…",
+      "translate": "Translate",
+      "translating": "Translating…",
+      "pronunciationLatinLabel": "Pronunciation in Latin letters",
+      "validationError": "Enter a phrase to translate.",
+      "unavailable": "Translation is temporarily unavailable. Try again in a moment.",
+      "rateLimited": "You’ve reached the translation limit for now. Wait a few minutes and try again.",
+      "unknownTravelLanguage": "Set a travel language for this trip before translating your own phrases.",
+      "openTravelLanguageSettings": "Open travel language settings"
+    },
+    "phrases": {
+      "basics": {
+        "hello": "Hello",
+        "thank-you": "Thank you",
+        "thank-you-very-much": "Thank you very much",
+        "excuse-me": "Excuse me / Sorry, may I?",
+        "please": "Please",
+        "yes": "Yes",
+        "no": "No",
+        "dont-understand": "I do not understand",
+        "speak-english": "Do you speak English?",
+        "goodbye": "Goodbye"
+      },
+      "restaurants": {
+        "table-for-two": "A table for two, please",
+        "menu-english": "Do you have a menu in English?",
+        "no-meat": "Without meat, please",
+        "allergy": "I am allergic to… (name the ingredient)",
+        "water": "Water, please",
+        "bill": "Can we have the bill?",
+        "card-payment": "Can I pay by card?",
+        "delicious": "That was very delicious"
+      },
+      "transport": {
+        "where-station": "Where is the station?",
+        "where-platform": "Where is the platform?",
+        "train-to": "Does this train go to…?",
+        "buy-ticket": "Where can I buy a ticket?",
+        "taxi-address": "Please take me to this address",
+        "one-person": "One ticket for one adult",
+        "next-stop": "What is the next stop?",
+        "express-train": "Is this an express train?"
+      },
+      "hotel": {
+        "reservation": "I have a reservation",
+        "check-in": "Check-in, please",
+        "luggage": "Can I leave my luggage?",
+        "check-out-time": "What time is check-out?",
+        "wifi": "What is the Wi-Fi password?",
+        "breakfast": "Where is breakfast?",
+        "towel": "Can I have an extra towel?"
+      },
+      "shopping": {
+        "how-much": "How much does this cost?",
+        "other-size": "Do you have another size?",
+        "card": "Can I pay by card?",
+        "tax-free": "Is tax-free shopping available?",
+        "just-looking": "I am just looking",
+        "bag": "Can I have a bag, please?"
+      },
+      "directions": {
+        "restroom": "Where is the restroom?",
+        "exit": "Where is the exit?",
+        "how-to-get": "How do I get to…?",
+        "far-from-here": "Is it far from here?",
+        "walk-minutes": "How many minutes on foot?",
+        "lost": "I am lost"
+      },
+      "emergency": {
+        "need-help": "I need help",
+        "ambulance": "Please call an ambulance",
+        "hospital": "Where is the nearest hospital?",
+        "lost-passport": "I lost my passport",
+        "police": "Please call the police",
+        "feel-sick": "I do not feel well",
+        "allergy-medicine": "I have an allergy — I need medicine"
+      },
+      "numbers_time": {
+        "one": "One",
+        "two": "Two",
+        "ten": "Ten",
+        "what-time": "What time is it?",
+        "today": "Today",
+        "tomorrow": "Tomorrow"
+      }
     }
   },
-
   "Welcome": {
     "brandName": "Tabi",
     "taglineLine1": "Your journey.",
@@ -1190,7 +1186,6 @@
     "metadataTitle": "Tabi — Your journey. Perfectly planned.",
     "metadataDescription": "Plan and travel with everything in one place — itinerary, stays, transport, and documents."
   },
-
   "PwaInstall": {
     "cta": "Install Tabi",
     "iosTitle": "Install Tabi on your iPhone",
@@ -1199,7 +1194,6 @@
     "iosStep2": "Choose \"Add to Home Screen\"",
     "iosStep3": "Confirm \"Add\""
   },
-
   "Offline": {
     "metadataTitle": "Offline · Tabi",
     "bannerTitle": "No internet connection",
@@ -1208,14 +1202,12 @@
     "pageBody": "An internet connection is required to load this information.",
     "tryAgain": "Try again"
   },
-
   "SwUpdate": {
     "title": "A new version of Tabi is available",
     "body": "A quick update will load the latest version.",
     "primary": "Update now",
     "secondary": "Later"
   },
-
   "Auth": {
     "brandName": "Tabi",
     "login": {
@@ -1257,7 +1249,6 @@
       "googleSignInFailed": "We couldn't sign you in with Google. Please try again."
     }
   },
-
   "MyTrips": {
     "metadataTitle": "My Trips · Tabi",
     "brandName": "Tabi",
@@ -1301,7 +1292,6 @@
       }
     }
   },
-
   "Places": {
     "loadingSuggestions": "Loading suggestions...",
     "noResults": "No results found. Try another search or enter manually.",
@@ -1311,7 +1301,6 @@
       "resolveFailed": "Could not load place details. Please try again."
     }
   },
-
   "Trips": {
     "errors": {
       "generic": "Something went wrong. Please try again.",
@@ -1331,7 +1320,6 @@
       "member": "Trip member"
     }
   },
-
   "TripMembers": {
     "createInviteTitle": "Create invite link",
     "permission": "Permission",
@@ -1357,7 +1345,6 @@
       "roleChanged": "Role updated."
     }
   },
-
   "TripInvitations": {
     "landingTitle": "Trip invitation",
     "enterTrip": "Enter trip",
@@ -1381,7 +1368,6 @@
       "ownerHint": "Owners can manage trip members and create additional invites."
     }
   },
-
   "TripReminders": {
     "pageTitle": "Reminders",
     "settingsTitle": "Personal reminders",
@@ -1407,7 +1393,6 @@
       "nonexistentLocalTime": "That time does not exist on the selected date (daylight saving change)."
     }
   },
-
   "TripCover": {
     "title": "Trip cover photo",
     "hint": "A personal photo shown at the top of Home. JPEG, PNG, or WebP up to 5MB.",
@@ -1427,7 +1412,6 @@
       "uploaded": "Trip photo updated."
     }
   },
-
   "Settings": {
     "title": "Settings",
     "comingSoon": "Coming Soon",
@@ -1458,8 +1442,8 @@
         "subtitleMember": "Trip base currency · {currency}"
       },
       "language": {
-        "title": "Language",
-        "subtitle": "Interface language for the app"
+        "title": "Travel language",
+        "subtitle": "Phrases and translation at your destination"
       },
       "maps": {
         "title": "Maps & navigation",
@@ -1496,6 +1480,37 @@
       "sectionTitle": "Interface language",
       "sectionHint": "Your personal interface preference. It applies across your Tabi account and all trips."
     },
+    "travelLanguagePage": {
+      "back": "Back to Settings",
+      "title": "Travel language",
+      "lead": "Choose the language used for destination phrases and your own translations on this trip.",
+      "summaryTitle": "Current setup",
+      "destinationLabel": "Destination",
+      "destinationUnknown": "Not set yet",
+      "destinationDefaultLabel": "Suggested for destination",
+      "destinationDefaultUnknown": "Set a destination to see a suggestion",
+      "effectiveLanguageLabel": "Language in use",
+      "effectiveLanguageUnknown": "Not available yet",
+      "selectionSourceLabel": "How it is chosen",
+      "selectionSourceAutomatic": "Automatic — based on destination",
+      "selectionSourceOverride": "Chosen for this trip",
+      "pickerTitle": "Change travel language",
+      "pickerHint": "Trip owners can pick another supported language or return to automatic.",
+      "automaticOption": "Automatic — based on destination",
+      "manualOption": "Choose a specific language",
+      "chooseLanguageLabel": "Language",
+      "chooseLanguagePlaceholder": "Select a language",
+      "recommendedGroup": "Suggested for your destination",
+      "allLanguagesGroup": "All supported languages",
+      "save": "Save",
+      "savedSuccess": "Travel language saved.",
+      "memberTitle": "Travel language",
+      "memberHint": "Only the trip owner can change the travel language. You can still use phrases in the language shown above.",
+      "errors": {
+        "validation": "Could not save that language. Check your selection and try again.",
+        "generic": "Something went wrong. Try again."
+      }
+    },
     "mapsPage": {
       "back": "Back to Settings",
       "lead": "Choose which app Tabi should use when you open directions or a location.",
@@ -1508,7 +1523,6 @@
       }
     }
   },
-
   "TripTheme": {
     "pageTitle": "Appearance & Theme",
     "pageDescription": "Choose how this trip looks inside Tabi. Everyone on the trip sees the same theme.",
@@ -1550,7 +1564,6 @@
       "generic": "Something went wrong. Try again."
     }
   },
-
   "TripSettings": {
     "pageTitle": "Settings",
     "detailsTitle": "Trip details",
@@ -1558,7 +1571,6 @@
     "tripName": "Trip name",
     "dates": "Dates"
   },
-
   "TravelersSettings": {
     "pageTitle": "Travelers & Collaboration",
     "lead": "See who is on this trip and manage invitations.",
@@ -1597,7 +1609,6 @@
     "demoteOwnerConfirm": "Remove owner permissions for this traveler? They will no longer manage members or invites.",
     "revokeConfirm": "Revoke this invitation? The link will stop working."
   },
-
   "CurrencySettings": {
     "pageTitle": "Currency",
     "lead": "Choose how this trip tracks money and which currency you personally use.",
@@ -1620,7 +1631,6 @@
       "invalidCurrency": "Choose a supported currency."
     }
   },
-
   "TripDetailsSettings": {
     "pageTitle": "Trip details",
     "lead": "Update your trip name, destination, dates, and cover.",
@@ -1699,23 +1709,19 @@
       }
     }
   },
-
   "More": {
     "pageTitle": "More"
   },
-
   "ItineraryPage": {
     "pageTitle": "Itinerary",
     "dayPageTitle": "Day {dayNumber}"
   },
-
   "FinancePreview": {
     "title": "Trip money",
     "badge": "Coming soon",
     "headline": "Budget and expenses in one place",
     "footer": "Budget tracking • Expenses • Categories"
   },
-
   "CreateTrip": {
     "metadataTitle": "Create trip · Tabi",
     "brandName": "Tabi",
@@ -1763,7 +1769,7 @@
       "tripName": "Trip Name",
       "tripDescription": "Trip Description",
       "optional": "(optional)",
-      "descriptionPlaceholder": "Our honeymoon in Japan",
+      "descriptionPlaceholder": "Notes about this trip",
       "summaryTitle": "Trip summary",
       "summaryDestination": "Destination",
       "summaryDates": "Dates",
@@ -1835,7 +1841,4 @@
       "backToDetails": "Back to trip details"
     }
   }
-
 }
-
-

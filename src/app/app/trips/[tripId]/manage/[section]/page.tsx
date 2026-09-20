@@ -73,6 +73,7 @@ export default async function TripManageSectionPage({
           tripId={trip.id}
           startDate={trip.startDate}
           endDate={trip.endDate}
+          destinationCountryCode={trip.destination?.countryCode}
           accommodations={accommodations}
           variant="workspace"
           financeBaseCurrency={financeContext.baseCurrency}

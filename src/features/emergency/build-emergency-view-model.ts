@@ -4,17 +4,15 @@ import {
 } from "@/features/accommodations/constants";
 import type { AccommodationViewModel } from "@/features/accommodations/types";
 import { buildLanguageCategoryHref, buildLanguagePhraseHref } from "@/features/language/constants";
-import { getPhraseFromDefaultPack } from "@/features/language/builtin/registry";
+import { resolvePhraseIntentMessageKey } from "@/features/language/phrase-intent-message-key";
 import type { AppTranslator } from "@/features/i18n/create-app-translator";
 import { getCalendarDateInTimeZone } from "@/features/trips/destination/trip-local-calendar";
 import { getTripPhase } from "@/features/trips/trip-phase";
 import { selectContextualAccommodation } from "@/features/travel-hub/select-contextual-accommodation";
-import {
-  CURATED_EMERGENCY_PHRASE_IDS,
-  DEFAULT_EMERGENCY_PACK_ID,
-} from "./constants";
+import { buildTripDetailsSettingsHref } from "@/features/settings/constants";
+import { CURATED_EMERGENCY_PHRASE_IDS } from "./constants";
 import { createEmergencyCategoryLabelResolver } from "./emergency-labels";
-import { getDefaultEmergencyPack } from "./builtin/registry";
+import { resolveCountryEmergencyServices } from "./resolve-country-emergency-services";
 import {
   buildEmergencyResourceActions,
   type EmergencyResourceActionLabels,
@@ -22,12 +20,9 @@ import {
 import {
   EMERGENCY_CUSTOM_CATEGORIES,
   type EmergencyCustomCategory,
-} from "./types";
-import type {
-  BuiltInEmergencyResourceViewModel,
-  EmergencyDocumentViewModel,
-  EmergencyPageViewModel,
-  TripEmergencyResourceViewModel,
+  type EmergencyPageViewModel,
+  type EmergencyVerifiedViewModel,
+  type VerifiedEmergencyServiceViewModel,
 } from "./types";
 import type { TripEmergencyResourceDocument } from "@/models/TripEmergencyResource";
 import { buildAccommodationNavigationHref } from "@/lib/maps/navigation-entities";
@@ -42,25 +37,39 @@ function buildCategoryLabels(
   ) as Record<EmergencyCustomCategory, string>;
 }
 
-function toBuiltInViewModel(
-  resource: ReturnType<typeof getDefaultEmergencyPack>["resources"][number],
-  actionLabels: EmergencyResourceActionLabels,
-  preferredMapsApp: PreferredMapsApp,
-): BuiltInEmergencyResourceViewModel {
+function buildVerifiedViewModel(input: {
+  countryCode: string | null | undefined;
+  actionLabels: EmergencyResourceActionLabels;
+  preferredMapsApp?: PreferredMapsApp;
+}): EmergencyVerifiedViewModel {
+  const resolution = resolveCountryEmergencyServices(input.countryCode);
+  if (resolution.status !== "ready") {
+    return resolution;
+  }
+
+  const services: VerifiedEmergencyServiceViewModel[] = resolution.record.services.map(
+    (service) => ({
+      id: service.id,
+      category: service.category,
+      phone: service.phone,
+      actions: buildEmergencyResourceActions(
+        { phone: service.phone },
+        input.actionLabels,
+        input.preferredMapsApp,
+      ),
+    }),
+  );
+
   return {
-    ...resource,
-    actions: buildEmergencyResourceActions(
-      {
-        phone: resource.phone,
-        secondaryPhone: resource.secondaryPhone,
-        internationalPhone: resource.internationalPhone,
-        email: resource.email,
-        address: resource.address,
-        url: resource.url,
-      },
-      actionLabels,
-      preferredMapsApp,
-    ),
+    status: "ready",
+    countryCode: resolution.countryCode,
+    services,
+    source: {
+      sourceId: resolution.manifest.sourceId,
+      sourceRevision: resolution.manifest.sourceRevision,
+      datasetImportedAt: resolution.manifest.datasetImportedAt,
+      gitCommit: resolution.manifest.gitCommit,
+    },
   };
 }
 
@@ -69,7 +78,7 @@ function toCustomResourceViewModel(
   resolveCategoryLabel: ReturnType<typeof createEmergencyCategoryLabelResolver>,
   actionLabels: EmergencyResourceActionLabels,
   preferredMapsApp: PreferredMapsApp,
-): TripEmergencyResourceViewModel {
+) {
   const tripId = resource.tripId.toString();
   return {
     id: resource._id.toString(),
@@ -102,20 +111,22 @@ function toCustomResourceViewModel(
 
 type BuildEmergencyViewModelInput = {
   tripId: string;
+  destinationCountryCode: string | null | undefined;
   startDate: string;
   endDate: string;
   accommodations: readonly AccommodationViewModel[];
   customResources: readonly TripEmergencyResourceDocument[];
-  emergencyDocuments: readonly EmergencyDocumentViewModel[];
+  emergencyDocuments: EmergencyPageViewModel["documents"];
   destinationCalendarTimeZone: string;
-  /** Test/dev override; production callers omit and use destination timezone. */
   todayTripLocal?: string;
   preferredMapsApp?: PreferredMapsApp;
   t: AppTranslator<"Emergency">;
+  tLanguage: AppTranslator<"Language">;
 };
 
 export function buildEmergencyViewModel({
   tripId,
+  destinationCountryCode,
   startDate,
   endDate,
   accommodations,
@@ -125,25 +136,22 @@ export function buildEmergencyViewModel({
   todayTripLocal: todayTripLocalOverride,
   preferredMapsApp,
   t,
+  tLanguage,
 }: BuildEmergencyViewModelInput): EmergencyPageViewModel {
   const todayTripLocal =
     todayTripLocalOverride ??
     getCalendarDateInTimeZone(destinationCalendarTimeZone);
-  const pack = getDefaultEmergencyPack();
   const actionLabels: EmergencyResourceActionLabels = {
     openWebsite: t("openWebsite"),
     openInMap: t("openInMap"),
     copyReference: t("copyReference"),
   };
-  const builtIn = pack.resources.map((resource) =>
-    toBuiltInViewModel(resource, actionLabels, preferredMapsApp),
-  );
-  const urgentResources = builtIn.filter((resource) =>
-    ["police", "ambulance_fire"].includes(resource.kind),
-  );
-  const assistanceResources = builtIn.filter((resource) =>
-    ["tourist_hotline", "embassy_consular", "other_official"].includes(resource.kind),
-  );
+
+  const verified = buildVerifiedViewModel({
+    countryCode: destinationCountryCode,
+    actionLabels,
+    preferredMapsApp,
+  });
 
   const tripPhase = getTripPhase(startDate, endDate, todayTripLocal);
   const contextual = selectContextualAccommodation(
@@ -171,15 +179,15 @@ export function buildEmergencyViewModel({
       : null;
 
   const phraseLinks = CURATED_EMERGENCY_PHRASE_IDS.flatMap((phraseId) => {
-    const phrase = getPhraseFromDefaultPack(phraseId);
-    if (!phrase) {
-      return [];
-    }
+    const messageKey = resolvePhraseIntentMessageKey(phraseId);
+    const sourceText = tLanguage(
+      messageKey as Parameters<AppTranslator<"Language">>[0],
+    );
     return [
       {
-        id: phrase.id,
-        sourceText: phrase.sourceText,
-        detailHref: buildLanguagePhraseHref(tripId, phrase.id),
+        id: phraseId,
+        sourceText,
+        detailHref: buildLanguagePhraseHref(tripId, phraseId),
       },
     ];
   });
@@ -188,9 +196,8 @@ export function buildEmergencyViewModel({
 
   return {
     tripId,
-    packId: DEFAULT_EMERGENCY_PACK_ID,
-    urgentResources,
-    assistanceResources,
+    verified,
+    tripDetailsHref: buildTripDetailsSettingsHref(tripId),
     currentAccommodation,
     documents: [...emergencyDocuments],
     customResources: customResources.map((resource) =>

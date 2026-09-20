@@ -131,3 +131,112 @@
   text-align: center;
   color: var(--color-text-muted);
 }
+
+.runtimeNotice,
+.runtimeWarning {
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.runtimeNoticeTitle {
+  margin: 0 0 var(--space-2);
+  font-weight: var(--font-weight-semibold);
+}
+
+.runtimeNoticeBody {
+  margin: 0 0 var(--space-3);
+  color: var(--color-text-muted);
+}
+
+.runtimeNoticeAction {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+}
+
+.runtimeWarning {
+  color: var(--color-text-muted);
+}
+
+.customTranslator {
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.customTranslatorTitle {
+  margin: 0;
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+}
+
+.customTranslatorHint,
+.customTranslatorDisabled {
+  margin: 0;
+  font-size: var(--text-secondary);
+  color: var(--color-text-muted);
+}
+
+.customTranslatorForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.customTranslatorInput {
+  width: 100%;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-subtle);
+  font: inherit;
+  resize: vertical;
+}
+
+.customTranslatorButton {
+  align-self: flex-start;
+  min-height: var(--size-touch-min);
+  padding: var(--space-2) var(--space-4);
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  color: var(--color-on-primary);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.customTranslatorError {
+  margin: 0;
+  font-size: var(--text-secondary);
+  color: var(--color-danger);
+}
+
+.customTranslatorResult {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.customTranslatorResultText {
+  margin: 0;
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-medium);
+}
+
+.customTranslatorPronunciationLabel {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-caption);
+  color: var(--color-text-muted);
+}
+
+.customTranslatorTransliteration {
+  margin: 0;
+  font-size: var(--text-secondary);
+}

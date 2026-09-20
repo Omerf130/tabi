@@ -140,7 +140,7 @@ V1 limit: **180 inclusive days**.
 | Concern | Approach |
 |---|---|
 | Calendar-date arithmetic | UTC-probed string math |
-| “Today” while traveling | `getJapanCalendarDate()` using `Asia/Tokyo` |
+| “Today” while traveling | `getCalendarDateInTimeZone(trip.destinationCalendarTimeZone)` |
 
 ## Temporal day state
 

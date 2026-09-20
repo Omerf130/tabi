@@ -18,7 +18,10 @@ export function getPhrasebookPack(packId: string): PhrasebookPack | null {
   return PACKS[packId] ?? null;
 }
 
-/** V1 default: Tabi explicitly uses the he-ja pack. No Trip language field yet. */
+/**
+ * Legacy he-ja pack registry.
+ * Phrasebook runtime (G8.4+) uses PHRASE_INTENTS + canonical translation — not this pack.
+ */
 export function getDefaultPhrasebookPack(): PhrasebookPack {
   return HE_JA_PACK;
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { TripHeader } from "@/features/app-shell/TripHeader";
 import { LanguagePageContent } from "@/features/language/LanguagePageContent";
@@ -44,6 +45,9 @@ export default async function LanguagePage({
     getTranslations("Language"),
   ]);
   const pageData = await prepareLanguagePage(trip.id, user.id);
+  if (!pageData) {
+    notFound();
+  }
 
   return (
     <>

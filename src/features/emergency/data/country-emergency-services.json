@@ -1,0 +1,3529 @@
+{
+  "countries": {
+    "AD": {
+      "countryCode": "AD",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "AD:police:110",
+          "category": "police",
+          "phone": "110"
+        },
+        {
+          "id": "AD:ambulance:116",
+          "category": "ambulance",
+          "phone": "116"
+        },
+        {
+          "id": "AD:fire:118",
+          "category": "fire",
+          "phone": "118"
+        }
+      ]
+    },
+    "AE": {
+      "countryCode": "AE",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "AE:police:999",
+          "category": "police",
+          "phone": "999"
+        },
+        {
+          "id": "AE:ambulance:998",
+          "category": "ambulance",
+          "phone": "998"
+        },
+        {
+          "id": "AE:fire:997",
+          "category": "fire",
+          "phone": "997"
+        }
+      ]
+    },
+    "AF": {
+      "countryCode": "AF",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "AF:general:119",
+          "category": "general",
+          "phone": "119"
+        },
+        {
+          "id": "AF:ambulance:020112",
+          "category": "ambulance",
+          "phone": "020112"
+        }
+      ]
+    },
+    "AG": {
+      "countryCode": "AG",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "AG:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "AI": {
+      "countryCode": "AI",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "AI:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "AL": {
+      "countryCode": "AL",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "AL:police:129",
+          "category": "police",
+          "phone": "129"
+        },
+        {
+          "id": "AL:ambulance:127",
+          "category": "ambulance",
+          "phone": "127"
+        },
+        {
+          "id": "AL:fire:128",
+          "category": "fire",
+          "phone": "128"
+        }
+      ]
+    },
+    "AM": {
+      "countryCode": "AM",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "AM:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "AO": {
+      "countryCode": "AO",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "AO:police:113",
+          "category": "police",
+          "phone": "113"
+        },
+        {
+          "id": "AO:ambulance:112",
+          "category": "ambulance",
+          "phone": "112"
+        },
+        {
+          "id": "AO:fire:115",
+          "category": "fire",
+          "phone": "115"
+        }
+      ]
+    },
+    "AR": {
+      "countryCode": "AR",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "AR:general:911",
+          "category": "general",
+          "phone": "911"
+        },
+        {
+          "id": "AR:police:101",
+          "category": "police",
+          "phone": "101"
+        },
+        {
+          "id": "AR:ambulance:107",
+          "category": "ambulance",
+          "phone": "107"
+        },
+        {
+          "id": "AR:fire:100",
+          "category": "fire",
+          "phone": "100"
+        }
+      ]
+    },
+    "AS": {
+      "countryCode": "AS",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "AS:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "AT": {
+      "countryCode": "AT",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "AT:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "AU": {
+      "countryCode": "AU",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "AU:general:000",
+          "category": "general",
+          "phone": "000"
+        }
+      ]
+    },
+    "AW": {
+      "countryCode": "AW",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "AW:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "AZ": {
+      "countryCode": "AZ",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "AZ:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "BA": {
+      "countryCode": "BA",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "BA:police:122",
+          "category": "police",
+          "phone": "122"
+        },
+        {
+          "id": "BA:ambulance:124",
+          "category": "ambulance",
+          "phone": "124"
+        },
+        {
+          "id": "BA:fire:123",
+          "category": "fire",
+          "phone": "123"
+        }
+      ]
+    },
+    "BB": {
+      "countryCode": "BB",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "BB:police:211",
+          "category": "police",
+          "phone": "211"
+        },
+        {
+          "id": "BB:ambulance:511",
+          "category": "ambulance",
+          "phone": "511"
+        },
+        {
+          "id": "BB:fire:311",
+          "category": "fire",
+          "phone": "311"
+        }
+      ]
+    },
+    "BD": {
+      "countryCode": "BD",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "BD:general:999",
+          "category": "general",
+          "phone": "999"
+        }
+      ]
+    },
+    "BE": {
+      "countryCode": "BE",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "BE:general:112",
+          "category": "general",
+          "phone": "112"
+        },
+        {
+          "id": "BE:general:100",
+          "category": "general",
+          "phone": "100"
+        }
+      ]
+    },
+    "BF": {
+      "countryCode": "BF",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "BF:police:17",
+          "category": "police",
+          "phone": "17"
+        },
+        {
+          "id": "BF:ambulance_and_fire:18",
+          "category": "ambulance_and_fire",
+          "phone": "18"
+        }
+      ]
+    },
+    "BG": {
+      "countryCode": "BG",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "BG:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "BH": {
+      "countryCode": "BH",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "BH:general:999",
+          "category": "general",
+          "phone": "999"
+        }
+      ]
+    },
+    "BI": {
+      "countryCode": "BI",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "BI:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "BJ": {
+      "countryCode": "BJ",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "BJ:police:117",
+          "category": "police",
+          "phone": "117"
+        },
+        {
+          "id": "BJ:fire:118",
+          "category": "fire",
+          "phone": "118"
+        }
+      ]
+    },
+    "BM": {
+      "countryCode": "BM",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "BM:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "BN": {
+      "countryCode": "BN",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "BN:police:993",
+          "category": "police",
+          "phone": "993"
+        },
+        {
+          "id": "BN:ambulance:991",
+          "category": "ambulance",
+          "phone": "991"
+        },
+        {
+          "id": "BN:fire:995",
+          "category": "fire",
+          "phone": "995"
+        }
+      ]
+    },
+    "BO": {
+      "countryCode": "BO",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "BO:police:110",
+          "category": "police",
+          "phone": "110"
+        },
+        {
+          "id": "BO:ambulance:118",
+          "category": "ambulance",
+          "phone": "118"
+        },
+        {
+          "id": "BO:fire:119",
+          "category": "fire",
+          "phone": "119"
+        }
+      ]
+    },
+    "BR": {
+      "countryCode": "BR",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "BR:police:190",
+          "category": "police",
+          "phone": "190"
+        }
+      ]
+    },
+    "BS": {
+      "countryCode": "BS",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "BS:general:919",
+          "category": "general",
+          "phone": "919"
+        }
+      ]
+    },
+    "BT": {
+      "countryCode": "BT",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "BT:police:113",
+          "category": "police",
+          "phone": "113"
+        },
+        {
+          "id": "BT:ambulance:112",
+          "category": "ambulance",
+          "phone": "112"
+        },
+        {
+          "id": "BT:fire:110",
+          "category": "fire",
+          "phone": "110"
+        }
+      ]
+    },
+    "BW": {
+      "countryCode": "BW",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "BW:police:999",
+          "category": "police",
+          "phone": "999"
+        },
+        {
+          "id": "BW:ambulance:997",
+          "category": "ambulance",
+          "phone": "997"
+        },
+        {
+          "id": "BW:fire:998",
+          "category": "fire",
+          "phone": "998"
+        }
+      ]
+    },
+    "BY": {
+      "countryCode": "BY",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "BY:police:102",
+          "category": "police",
+          "phone": "102"
+        },
+        {
+          "id": "BY:ambulance:103",
+          "category": "ambulance",
+          "phone": "103"
+        },
+        {
+          "id": "BY:fire:101",
+          "category": "fire",
+          "phone": "101"
+        }
+      ]
+    },
+    "BZ": {
+      "countryCode": "BZ",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "BZ:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "CA": {
+      "countryCode": "CA",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "CA:general:911",
+          "category": "general",
+          "phone": "911"
+        },
+        {
+          "id": "CA:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "CD": {
+      "countryCode": "CD",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "CD:police:118",
+          "category": "police",
+          "phone": "118"
+        }
+      ]
+    },
+    "CF": {
+      "countryCode": "CF",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "CF:general:117",
+          "category": "general",
+          "phone": "117"
+        }
+      ]
+    },
+    "CG": {
+      "countryCode": "CG",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "CG:police:118",
+          "category": "police",
+          "phone": "118"
+        }
+      ]
+    },
+    "CH": {
+      "countryCode": "CH",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "CH:general:112",
+          "category": "general",
+          "phone": "112"
+        },
+        {
+          "id": "CH:general:911",
+          "category": "general",
+          "phone": "911"
+        },
+        {
+          "id": "CH:police:117",
+          "category": "police",
+          "phone": "117"
+        }
+      ]
+    },
+    "CI": {
+      "countryCode": "CI",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "CI:police:170",
+          "category": "police",
+          "phone": "170"
+        },
+        {
+          "id": "CI:ambulance:185",
+          "category": "ambulance",
+          "phone": "185"
+        },
+        {
+          "id": "CI:fire:180",
+          "category": "fire",
+          "phone": "180"
+        }
+      ]
+    },
+    "CK": {
+      "countryCode": "CK",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "CK:general:999",
+          "category": "general",
+          "phone": "999"
+        }
+      ]
+    },
+    "CL": {
+      "countryCode": "CL",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "CL:police:133",
+          "category": "police",
+          "phone": "133"
+        },
+        {
+          "id": "CL:ambulance:131",
+          "category": "ambulance",
+          "phone": "131"
+        },
+        {
+          "id": "CL:fire:132",
+          "category": "fire",
+          "phone": "132"
+        }
+      ]
+    },
+    "CM": {
+      "countryCode": "CM",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "CM:police:117",
+          "category": "police",
+          "phone": "117"
+        },
+        {
+          "id": "CM:ambulance:119",
+          "category": "ambulance",
+          "phone": "119"
+        },
+        {
+          "id": "CM:fire:118",
+          "category": "fire",
+          "phone": "118"
+        }
+      ]
+    },
+    "CN": {
+      "countryCode": "CN",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "CN:police:110",
+          "category": "police",
+          "phone": "110"
+        },
+        {
+          "id": "CN:ambulance:120",
+          "category": "ambulance",
+          "phone": "120"
+        },
+        {
+          "id": "CN:fire:119",
+          "category": "fire",
+          "phone": "119"
+        }
+      ]
+    },
+    "CO": {
+      "countryCode": "CO",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "CO:general:123",
+          "category": "general",
+          "phone": "123"
+        }
+      ]
+    },
+    "CR": {
+      "countryCode": "CR",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "CR:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "CU": {
+      "countryCode": "CU",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "CU:police:106",
+          "category": "police",
+          "phone": "106"
+        },
+        {
+          "id": "CU:ambulance:104",
+          "category": "ambulance",
+          "phone": "104"
+        },
+        {
+          "id": "CU:fire:105",
+          "category": "fire",
+          "phone": "105"
+        }
+      ]
+    },
+    "CV": {
+      "countryCode": "CV",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "CV:police:132",
+          "category": "police",
+          "phone": "132"
+        },
+        {
+          "id": "CV:ambulance:130",
+          "category": "ambulance",
+          "phone": "130"
+        },
+        {
+          "id": "CV:fire:131",
+          "category": "fire",
+          "phone": "131"
+        }
+      ]
+    },
+    "CY": {
+      "countryCode": "CY",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "CY:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "CZ": {
+      "countryCode": "CZ",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "CZ:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "DE": {
+      "countryCode": "DE",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "DE:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "DJ": {
+      "countryCode": "DJ",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "DJ:police:17",
+          "category": "police",
+          "phone": "17"
+        },
+        {
+          "id": "DJ:ambulance_and_fire:18",
+          "category": "ambulance_and_fire",
+          "phone": "18"
+        }
+      ]
+    },
+    "DK": {
+      "countryCode": "DK",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "DK:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "DM": {
+      "countryCode": "DM",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "DM:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "DO": {
+      "countryCode": "DO",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "DO:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "DZ": {
+      "countryCode": "DZ",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "DZ:general:1548",
+          "category": "general",
+          "phone": "1548"
+        }
+      ]
+    },
+    "EC": {
+      "countryCode": "EC",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "EC:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "EE": {
+      "countryCode": "EE",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "EE:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "EG": {
+      "countryCode": "EG",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "EG:police:122",
+          "category": "police",
+          "phone": "122"
+        },
+        {
+          "id": "EG:ambulance:123",
+          "category": "ambulance",
+          "phone": "123"
+        },
+        {
+          "id": "EG:fire:180",
+          "category": "fire",
+          "phone": "180"
+        }
+      ]
+    },
+    "ER": {
+      "countryCode": "ER",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "ER:police:127799",
+          "category": "police",
+          "phone": "127799"
+        },
+        {
+          "id": "ER:ambulance:202914",
+          "category": "ambulance",
+          "phone": "202914"
+        },
+        {
+          "id": "ER:fire:202099",
+          "category": "fire",
+          "phone": "202099"
+        }
+      ]
+    },
+    "ES": {
+      "countryCode": "ES",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "ES:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "ET": {
+      "countryCode": "ET",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "ET:general:991",
+          "category": "general",
+          "phone": "991"
+        }
+      ]
+    },
+    "FI": {
+      "countryCode": "FI",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "FI:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "FJ": {
+      "countryCode": "FJ",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "FJ:police:917",
+          "category": "police",
+          "phone": "917"
+        },
+        {
+          "id": "FJ:ambulance_and_fire:911",
+          "category": "ambulance_and_fire",
+          "phone": "911"
+        }
+      ]
+    },
+    "FK": {
+      "countryCode": "FK",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "FK:general:999",
+          "category": "general",
+          "phone": "999"
+        }
+      ]
+    },
+    "FM": {
+      "countryCode": "FM",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "FM:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "FO": {
+      "countryCode": "FO",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "FO:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "FR": {
+      "countryCode": "FR",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "FR:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "GA": {
+      "countryCode": "GA",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "GA:general:177",
+          "category": "general",
+          "phone": "177"
+        }
+      ]
+    },
+    "GB": {
+      "countryCode": "GB",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "GB:general:999",
+          "category": "general",
+          "phone": "999"
+        }
+      ]
+    },
+    "GD": {
+      "countryCode": "GD",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "GD:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "GE": {
+      "countryCode": "GE",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "GE:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "GF": {
+      "countryCode": "GF",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "GF:police:17",
+          "category": "police",
+          "phone": "17"
+        },
+        {
+          "id": "GF:ambulance:15",
+          "category": "ambulance",
+          "phone": "15"
+        },
+        {
+          "id": "GF:fire:18",
+          "category": "fire",
+          "phone": "18"
+        }
+      ]
+    },
+    "GH": {
+      "countryCode": "GH",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "GH:police:191",
+          "category": "police",
+          "phone": "191"
+        },
+        {
+          "id": "GH:ambulance:193",
+          "category": "ambulance",
+          "phone": "193"
+        },
+        {
+          "id": "GH:fire:192",
+          "category": "fire",
+          "phone": "192"
+        }
+      ]
+    },
+    "GI": {
+      "countryCode": "GI",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "GI:police:199",
+          "category": "police",
+          "phone": "199"
+        },
+        {
+          "id": "GI:ambulance_and_fire:190",
+          "category": "ambulance_and_fire",
+          "phone": "190"
+        }
+      ]
+    },
+    "GL": {
+      "countryCode": "GL",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "GL:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "GM": {
+      "countryCode": "GM",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "GM:police:911",
+          "category": "police",
+          "phone": "911"
+        },
+        {
+          "id": "GM:ambulance:116",
+          "category": "ambulance",
+          "phone": "116"
+        },
+        {
+          "id": "GM:fire:118",
+          "category": "fire",
+          "phone": "118"
+        }
+      ]
+    },
+    "GN": {
+      "countryCode": "GN",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "GN:police:122",
+          "category": "police",
+          "phone": "122"
+        },
+        {
+          "id": "GN:ambulance:442020",
+          "category": "ambulance",
+          "phone": "442020"
+        },
+        {
+          "id": "GN:fire:1717",
+          "category": "fire",
+          "phone": "1717"
+        }
+      ]
+    },
+    "GQ": {
+      "countryCode": "GQ",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "GQ:police:113",
+          "category": "police",
+          "phone": "113"
+        },
+        {
+          "id": "GQ:fire:115",
+          "category": "fire",
+          "phone": "115"
+        }
+      ]
+    },
+    "GR": {
+      "countryCode": "GR",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "GR:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "GT": {
+      "countryCode": "GT",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "GT:police:120",
+          "category": "police",
+          "phone": "120"
+        },
+        {
+          "id": "GT:ambulance_and_fire:123",
+          "category": "ambulance_and_fire",
+          "phone": "123"
+        }
+      ]
+    },
+    "GU": {
+      "countryCode": "GU",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "GU:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "GW": {
+      "countryCode": "GW",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "GW:police:117",
+          "category": "police",
+          "phone": "117"
+        },
+        {
+          "id": "GW:ambulance:113",
+          "category": "ambulance",
+          "phone": "113"
+        },
+        {
+          "id": "GW:fire:118",
+          "category": "fire",
+          "phone": "118"
+        }
+      ]
+    },
+    "GY": {
+      "countryCode": "GY",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "GY:police:911",
+          "category": "police",
+          "phone": "911"
+        },
+        {
+          "id": "GY:ambulance:913",
+          "category": "ambulance",
+          "phone": "913"
+        },
+        {
+          "id": "GY:fire:912",
+          "category": "fire",
+          "phone": "912"
+        }
+      ]
+    },
+    "HK": {
+      "countryCode": "HK",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "HK:general:999",
+          "category": "general",
+          "phone": "999"
+        }
+      ]
+    },
+    "HN": {
+      "countryCode": "HN",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "HN:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "HR": {
+      "countryCode": "HR",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "HR:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "HT": {
+      "countryCode": "HT",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "HT:police:114",
+          "category": "police",
+          "phone": "114"
+        },
+        {
+          "id": "HT:ambulance:116",
+          "category": "ambulance",
+          "phone": "116"
+        },
+        {
+          "id": "HT:fire:115",
+          "category": "fire",
+          "phone": "115"
+        }
+      ]
+    },
+    "HU": {
+      "countryCode": "HU",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "HU:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "ID": {
+      "countryCode": "ID",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "ID:police:110",
+          "category": "police",
+          "phone": "110"
+        },
+        {
+          "id": "ID:ambulance:118",
+          "category": "ambulance",
+          "phone": "118"
+        },
+        {
+          "id": "ID:fire:113",
+          "category": "fire",
+          "phone": "113"
+        }
+      ]
+    },
+    "IE": {
+      "countryCode": "IE",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "IE:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "IL": {
+      "countryCode": "IL",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "IL:police:100",
+          "category": "police",
+          "phone": "100"
+        },
+        {
+          "id": "IL:ambulance:101",
+          "category": "ambulance",
+          "phone": "101"
+        },
+        {
+          "id": "IL:fire:102",
+          "category": "fire",
+          "phone": "102"
+        }
+      ]
+    },
+    "IN": {
+      "countryCode": "IN",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "IN:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "IO": {
+      "countryCode": "IO",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "IO:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "IQ": {
+      "countryCode": "IQ",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "IQ:general:130",
+          "category": "general",
+          "phone": "130"
+        }
+      ]
+    },
+    "IR": {
+      "countryCode": "IR",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "IR:police:110",
+          "category": "police",
+          "phone": "110"
+        },
+        {
+          "id": "IR:ambulance:115",
+          "category": "ambulance",
+          "phone": "115"
+        },
+        {
+          "id": "IR:fire:125",
+          "category": "fire",
+          "phone": "125"
+        }
+      ]
+    },
+    "IS": {
+      "countryCode": "IS",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "IS:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "IT": {
+      "countryCode": "IT",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "IT:general:112",
+          "category": "general",
+          "phone": "112"
+        },
+        {
+          "id": "IT:police:113",
+          "category": "police",
+          "phone": "113"
+        },
+        {
+          "id": "IT:ambulance:118",
+          "category": "ambulance",
+          "phone": "118"
+        },
+        {
+          "id": "IT:fire:115",
+          "category": "fire",
+          "phone": "115"
+        }
+      ]
+    },
+    "JM": {
+      "countryCode": "JM",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "JM:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "JO": {
+      "countryCode": "JO",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "JO:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "JP": {
+      "countryCode": "JP",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "JP:police:110",
+          "category": "police",
+          "phone": "110"
+        },
+        {
+          "id": "JP:ambulance_and_fire:119",
+          "category": "ambulance_and_fire",
+          "phone": "119"
+        }
+      ]
+    },
+    "KE": {
+      "countryCode": "KE",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "KE:general:999",
+          "category": "general",
+          "phone": "999"
+        }
+      ]
+    },
+    "KG": {
+      "countryCode": "KG",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "KG:police:102",
+          "category": "police",
+          "phone": "102"
+        },
+        {
+          "id": "KG:ambulance:103",
+          "category": "ambulance",
+          "phone": "103"
+        },
+        {
+          "id": "KG:fire:101",
+          "category": "fire",
+          "phone": "101"
+        }
+      ]
+    },
+    "KH": {
+      "countryCode": "KH",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "KH:police:117",
+          "category": "police",
+          "phone": "117"
+        },
+        {
+          "id": "KH:ambulance:119",
+          "category": "ambulance",
+          "phone": "119"
+        },
+        {
+          "id": "KH:fire:118",
+          "category": "fire",
+          "phone": "118"
+        }
+      ]
+    },
+    "KI": {
+      "countryCode": "KI",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "KI:police:192",
+          "category": "police",
+          "phone": "192"
+        },
+        {
+          "id": "KI:ambulance:194",
+          "category": "ambulance",
+          "phone": "194"
+        },
+        {
+          "id": "KI:fire:193",
+          "category": "fire",
+          "phone": "193"
+        }
+      ]
+    },
+    "KM": {
+      "countryCode": "KM",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "KM:police:17",
+          "category": "police",
+          "phone": "17"
+        },
+        {
+          "id": "KM:fire:18",
+          "category": "fire",
+          "phone": "18"
+        }
+      ]
+    },
+    "KN": {
+      "countryCode": "KN",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "KN:general:911",
+          "category": "general",
+          "phone": "911"
+        },
+        {
+          "id": "KN:fire:333",
+          "category": "fire",
+          "phone": "333"
+        }
+      ]
+    },
+    "KP": {
+      "countryCode": "KP",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "KP:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "KR": {
+      "countryCode": "KR",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "KR:police:112",
+          "category": "police",
+          "phone": "112"
+        },
+        {
+          "id": "KR:fire:119",
+          "category": "fire",
+          "phone": "119"
+        }
+      ]
+    },
+    "KW": {
+      "countryCode": "KW",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "KW:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "KY": {
+      "countryCode": "KY",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "KY:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "KZ": {
+      "countryCode": "KZ",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "KZ:police:102",
+          "category": "police",
+          "phone": "102"
+        },
+        {
+          "id": "KZ:ambulance:103",
+          "category": "ambulance",
+          "phone": "103"
+        },
+        {
+          "id": "KZ:fire:101",
+          "category": "fire",
+          "phone": "101"
+        }
+      ]
+    },
+    "LA": {
+      "countryCode": "LA",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "LA:police:1191",
+          "category": "police",
+          "phone": "1191"
+        },
+        {
+          "id": "LA:ambulance:1195",
+          "category": "ambulance",
+          "phone": "1195"
+        },
+        {
+          "id": "LA:fire:1190",
+          "category": "fire",
+          "phone": "1190"
+        }
+      ]
+    },
+    "LB": {
+      "countryCode": "LB",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "LB:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "LC": {
+      "countryCode": "LC",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "LC:police:999",
+          "category": "police",
+          "phone": "999"
+        },
+        {
+          "id": "LC:ambulance_and_fire:911",
+          "category": "ambulance_and_fire",
+          "phone": "911"
+        }
+      ]
+    },
+    "LI": {
+      "countryCode": "LI",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "LI:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "LK": {
+      "countryCode": "LK",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "LK:police:119",
+          "category": "police",
+          "phone": "119"
+        },
+        {
+          "id": "LK:ambulance_and_fire:110",
+          "category": "ambulance_and_fire",
+          "phone": "110"
+        }
+      ]
+    },
+    "LR": {
+      "countryCode": "LR",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "LR:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "LS": {
+      "countryCode": "LS",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "LS:police:123",
+          "category": "police",
+          "phone": "123"
+        },
+        {
+          "id": "LS:ambulance:121",
+          "category": "ambulance",
+          "phone": "121"
+        },
+        {
+          "id": "LS:fire:122",
+          "category": "fire",
+          "phone": "122"
+        }
+      ]
+    },
+    "LT": {
+      "countryCode": "LT",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "LT:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "LU": {
+      "countryCode": "LU",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "LU:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "LV": {
+      "countryCode": "LV",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "LV:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "LY": {
+      "countryCode": "LY",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "LY:general:1515",
+          "category": "general",
+          "phone": "1515"
+        }
+      ]
+    },
+    "MA": {
+      "countryCode": "MA",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MA:police:190",
+          "category": "police",
+          "phone": "190"
+        },
+        {
+          "id": "MA:ambulance_and_fire:150",
+          "category": "ambulance_and_fire",
+          "phone": "150"
+        }
+      ]
+    },
+    "MC": {
+      "countryCode": "MC",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MC:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "MD": {
+      "countryCode": "MD",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MD:police:902",
+          "category": "police",
+          "phone": "902"
+        },
+        {
+          "id": "MD:ambulance:903",
+          "category": "ambulance",
+          "phone": "903"
+        },
+        {
+          "id": "MD:fire:901",
+          "category": "fire",
+          "phone": "901"
+        }
+      ]
+    },
+    "ME": {
+      "countryCode": "ME",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "ME:police:122",
+          "category": "police",
+          "phone": "122"
+        },
+        {
+          "id": "ME:ambulance:124",
+          "category": "ambulance",
+          "phone": "124"
+        },
+        {
+          "id": "ME:fire:123",
+          "category": "fire",
+          "phone": "123"
+        }
+      ]
+    },
+    "MG": {
+      "countryCode": "MG",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MG:general:117",
+          "category": "general",
+          "phone": "117"
+        },
+        {
+          "id": "MG:fire:118",
+          "category": "fire",
+          "phone": "118"
+        }
+      ]
+    },
+    "MH": {
+      "countryCode": "MH",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "MH:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "MK": {
+      "countryCode": "MK",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MK:police:192",
+          "category": "police",
+          "phone": "192"
+        },
+        {
+          "id": "MK:ambulance:194",
+          "category": "ambulance",
+          "phone": "194"
+        },
+        {
+          "id": "MK:fire:193",
+          "category": "fire",
+          "phone": "193"
+        }
+      ]
+    },
+    "ML": {
+      "countryCode": "ML",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "ML:police:17",
+          "category": "police",
+          "phone": "17"
+        },
+        {
+          "id": "ML:ambulance:15",
+          "category": "ambulance",
+          "phone": "15"
+        },
+        {
+          "id": "ML:fire:18",
+          "category": "fire",
+          "phone": "18"
+        }
+      ]
+    },
+    "MM": {
+      "countryCode": "MM",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MM:police:199",
+          "category": "police",
+          "phone": "199"
+        },
+        {
+          "id": "MM:ambulance:192",
+          "category": "ambulance",
+          "phone": "192"
+        },
+        {
+          "id": "MM:fire:191",
+          "category": "fire",
+          "phone": "191"
+        }
+      ]
+    },
+    "MN": {
+      "countryCode": "MN",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MN:police:102",
+          "category": "police",
+          "phone": "102"
+        },
+        {
+          "id": "MN:ambulance:103",
+          "category": "ambulance",
+          "phone": "103"
+        },
+        {
+          "id": "MN:fire:101",
+          "category": "fire",
+          "phone": "101"
+        }
+      ]
+    },
+    "MO": {
+      "countryCode": "MO",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MO:general:999",
+          "category": "general",
+          "phone": "999"
+        }
+      ]
+    },
+    "MP": {
+      "countryCode": "MP",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "MP:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "MR": {
+      "countryCode": "MR",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MR:police:117",
+          "category": "police",
+          "phone": "117"
+        },
+        {
+          "id": "MR:ambulance_and_fire:118",
+          "category": "ambulance_and_fire",
+          "phone": "118"
+        }
+      ]
+    },
+    "MS": {
+      "countryCode": "MS",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "MS:police:999",
+          "category": "police",
+          "phone": "999"
+        },
+        {
+          "id": "MS:ambulance:6644912802",
+          "category": "ambulance",
+          "phone": "6644912802"
+        },
+        {
+          "id": "MS:fire:911",
+          "category": "fire",
+          "phone": "911"
+        }
+      ]
+    },
+    "MT": {
+      "countryCode": "MT",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MT:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "MU": {
+      "countryCode": "MU",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MU:police:999",
+          "category": "police",
+          "phone": "999"
+        },
+        {
+          "id": "MU:ambulance:114",
+          "category": "ambulance",
+          "phone": "114"
+        },
+        {
+          "id": "MU:fire:115",
+          "category": "fire",
+          "phone": "115"
+        }
+      ]
+    },
+    "MV": {
+      "countryCode": "MV",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MV:police:119",
+          "category": "police",
+          "phone": "119"
+        },
+        {
+          "id": "MV:ambulance:102",
+          "category": "ambulance",
+          "phone": "102"
+        },
+        {
+          "id": "MV:fire:118",
+          "category": "fire",
+          "phone": "118"
+        }
+      ]
+    },
+    "MW": {
+      "countryCode": "MW",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MW:police:997",
+          "category": "police",
+          "phone": "997"
+        },
+        {
+          "id": "MW:ambulance:998",
+          "category": "ambulance",
+          "phone": "998"
+        },
+        {
+          "id": "MW:fire:999",
+          "category": "fire",
+          "phone": "999"
+        }
+      ]
+    },
+    "MX": {
+      "countryCode": "MX",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "MX:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "MY": {
+      "countryCode": "MY",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MY:general:999",
+          "category": "general",
+          "phone": "999"
+        }
+      ]
+    },
+    "MZ": {
+      "countryCode": "MZ",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "MZ:police:119",
+          "category": "police",
+          "phone": "119"
+        },
+        {
+          "id": "MZ:ambulance:117",
+          "category": "ambulance",
+          "phone": "117"
+        },
+        {
+          "id": "MZ:fire:198",
+          "category": "fire",
+          "phone": "198"
+        }
+      ]
+    },
+    "NA": {
+      "countryCode": "NA",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "NA:police:10111",
+          "category": "police",
+          "phone": "10111"
+        },
+        {
+          "id": "NA:ambulance_and_fire:211111",
+          "category": "ambulance_and_fire",
+          "phone": "211111"
+        }
+      ]
+    },
+    "NC": {
+      "countryCode": "NC",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "NC:police:17",
+          "category": "police",
+          "phone": "17"
+        },
+        {
+          "id": "NC:ambulance:15",
+          "category": "ambulance",
+          "phone": "15"
+        },
+        {
+          "id": "NC:fire:18",
+          "category": "fire",
+          "phone": "18"
+        }
+      ]
+    },
+    "NE": {
+      "countryCode": "NE",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "NE:police:17",
+          "category": "police",
+          "phone": "17"
+        },
+        {
+          "id": "NE:ambulance:15",
+          "category": "ambulance",
+          "phone": "15"
+        },
+        {
+          "id": "NE:fire:18",
+          "category": "fire",
+          "phone": "18"
+        }
+      ]
+    },
+    "NG": {
+      "countryCode": "NG",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "NG:general:199",
+          "category": "general",
+          "phone": "199"
+        }
+      ]
+    },
+    "NI": {
+      "countryCode": "NI",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "NI:police:118",
+          "category": "police",
+          "phone": "118"
+        },
+        {
+          "id": "NI:ambulance:128",
+          "category": "ambulance",
+          "phone": "128"
+        },
+        {
+          "id": "NI:fire:115",
+          "category": "fire",
+          "phone": "115"
+        }
+      ]
+    },
+    "NL": {
+      "countryCode": "NL",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "NL:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "NO": {
+      "countryCode": "NO",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "NO:police:112",
+          "category": "police",
+          "phone": "112"
+        },
+        {
+          "id": "NO:ambulance:113",
+          "category": "ambulance",
+          "phone": "113"
+        },
+        {
+          "id": "NO:fire:110",
+          "category": "fire",
+          "phone": "110"
+        }
+      ]
+    },
+    "NP": {
+      "countryCode": "NP",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "NP:police:100",
+          "category": "police",
+          "phone": "100"
+        },
+        {
+          "id": "NP:ambulance:102",
+          "category": "ambulance",
+          "phone": "102"
+        },
+        {
+          "id": "NP:fire:101",
+          "category": "fire",
+          "phone": "101"
+        }
+      ]
+    },
+    "NR": {
+      "countryCode": "NR",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "NR:police:110",
+          "category": "police",
+          "phone": "110"
+        },
+        {
+          "id": "NR:ambulance:111",
+          "category": "ambulance",
+          "phone": "111"
+        },
+        {
+          "id": "NR:fire:112",
+          "category": "fire",
+          "phone": "112"
+        }
+      ]
+    },
+    "NU": {
+      "countryCode": "NU",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "NU:general:999",
+          "category": "general",
+          "phone": "999"
+        }
+      ]
+    },
+    "NZ": {
+      "countryCode": "NZ",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "NZ:general:111",
+          "category": "general",
+          "phone": "111"
+        },
+        {
+          "id": "NZ:general:112",
+          "category": "general",
+          "phone": "112"
+        },
+        {
+          "id": "NZ:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "OM": {
+      "countryCode": "OM",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "OM:general:9999",
+          "category": "general",
+          "phone": "9999"
+        }
+      ]
+    },
+    "PA": {
+      "countryCode": "PA",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "PA:police:104",
+          "category": "police",
+          "phone": "104"
+        },
+        {
+          "id": "PA:ambulance_and_fire:911",
+          "category": "ambulance_and_fire",
+          "phone": "911"
+        }
+      ]
+    },
+    "PE": {
+      "countryCode": "PE",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "PE:police:105",
+          "category": "police",
+          "phone": "105"
+        },
+        {
+          "id": "PE:ambulance:110",
+          "category": "ambulance",
+          "phone": "110"
+        },
+        {
+          "id": "PE:fire:116",
+          "category": "fire",
+          "phone": "116"
+        }
+      ]
+    },
+    "PF": {
+      "countryCode": "PF",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "PF:police:17",
+          "category": "police",
+          "phone": "17"
+        },
+        {
+          "id": "PF:ambulance:15",
+          "category": "ambulance",
+          "phone": "15"
+        },
+        {
+          "id": "PF:fire:18",
+          "category": "fire",
+          "phone": "18"
+        }
+      ]
+    },
+    "PG": {
+      "countryCode": "PG",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "PG:police:112",
+          "category": "police",
+          "phone": "112"
+        },
+        {
+          "id": "PG:ambulance:111",
+          "category": "ambulance",
+          "phone": "111"
+        },
+        {
+          "id": "PG:fire:110",
+          "category": "fire",
+          "phone": "110"
+        }
+      ]
+    },
+    "PH": {
+      "countryCode": "PH",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "PH:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "PK": {
+      "countryCode": "PK",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "PK:police:15",
+          "category": "police",
+          "phone": "15"
+        },
+        {
+          "id": "PK:ambulance:115",
+          "category": "ambulance",
+          "phone": "115"
+        },
+        {
+          "id": "PK:fire:16",
+          "category": "fire",
+          "phone": "16"
+        }
+      ]
+    },
+    "PL": {
+      "countryCode": "PL",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "PL:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "PM": {
+      "countryCode": "PM",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "PM:police:17",
+          "category": "police",
+          "phone": "17"
+        },
+        {
+          "id": "PM:ambulance:15",
+          "category": "ambulance",
+          "phone": "15"
+        },
+        {
+          "id": "PM:fire:18",
+          "category": "fire",
+          "phone": "18"
+        }
+      ]
+    },
+    "PR": {
+      "countryCode": "PR",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "PR:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "PS": {
+      "countryCode": "PS",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "PS:police:100",
+          "category": "police",
+          "phone": "100"
+        },
+        {
+          "id": "PS:ambulance:101",
+          "category": "ambulance",
+          "phone": "101"
+        },
+        {
+          "id": "PS:fire:102",
+          "category": "fire",
+          "phone": "102"
+        }
+      ]
+    },
+    "PT": {
+      "countryCode": "PT",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "PT:general:112",
+          "category": "general",
+          "phone": "112"
+        },
+        {
+          "id": "PT:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "PW": {
+      "countryCode": "PW",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "PW:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "PY": {
+      "countryCode": "PY",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "PY:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "QA": {
+      "countryCode": "QA",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "QA:general:999",
+          "category": "general",
+          "phone": "999"
+        }
+      ]
+    },
+    "RO": {
+      "countryCode": "RO",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "RO:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "RS": {
+      "countryCode": "RS",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "RS:police:192",
+          "category": "police",
+          "phone": "192"
+        },
+        {
+          "id": "RS:ambulance:194",
+          "category": "ambulance",
+          "phone": "194"
+        },
+        {
+          "id": "RS:fire:193",
+          "category": "fire",
+          "phone": "193"
+        }
+      ]
+    },
+    "RU": {
+      "countryCode": "RU",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "RU:general:112",
+          "category": "general",
+          "phone": "112"
+        },
+        {
+          "id": "RU:police:102",
+          "category": "police",
+          "phone": "102"
+        },
+        {
+          "id": "RU:ambulance:103",
+          "category": "ambulance",
+          "phone": "103"
+        },
+        {
+          "id": "RU:fire:101",
+          "category": "fire",
+          "phone": "101"
+        }
+      ]
+    },
+    "RW": {
+      "countryCode": "RW",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "RW:general:112",
+          "category": "general",
+          "phone": "112"
+        },
+        {
+          "id": "RW:fire:111",
+          "category": "fire",
+          "phone": "111"
+        }
+      ]
+    },
+    "SA": {
+      "countryCode": "SA",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "SA:police:999",
+          "category": "police",
+          "phone": "999"
+        },
+        {
+          "id": "SA:ambulance:997",
+          "category": "ambulance",
+          "phone": "997"
+        },
+        {
+          "id": "SA:fire:998",
+          "category": "fire",
+          "phone": "998"
+        }
+      ]
+    },
+    "SB": {
+      "countryCode": "SB",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "SB:police:999",
+          "category": "police",
+          "phone": "999"
+        },
+        {
+          "id": "SB:ambulance:911",
+          "category": "ambulance",
+          "phone": "911"
+        },
+        {
+          "id": "SB:fire:988",
+          "category": "fire",
+          "phone": "988"
+        }
+      ]
+    },
+    "SC": {
+      "countryCode": "SC",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "SC:general:999",
+          "category": "general",
+          "phone": "999"
+        }
+      ]
+    },
+    "SD": {
+      "countryCode": "SD",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "SD:general:999",
+          "category": "general",
+          "phone": "999"
+        },
+        {
+          "id": "SD:ambulance:333",
+          "category": "ambulance",
+          "phone": "333"
+        }
+      ]
+    },
+    "SE": {
+      "countryCode": "SE",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "SE:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "SG": {
+      "countryCode": "SG",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "SG:police:999",
+          "category": "police",
+          "phone": "999"
+        },
+        {
+          "id": "SG:ambulance_and_fire:995",
+          "category": "ambulance_and_fire",
+          "phone": "995"
+        }
+      ]
+    },
+    "SH": {
+      "countryCode": "SH",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "SH:general:999",
+          "category": "general",
+          "phone": "999"
+        },
+        {
+          "id": "SH:ambulance:911",
+          "category": "ambulance",
+          "phone": "911"
+        }
+      ]
+    },
+    "SI": {
+      "countryCode": "SI",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "SI:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "SK": {
+      "countryCode": "SK",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "SK:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "SL": {
+      "countryCode": "SL",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "SL:police:019",
+          "category": "police",
+          "phone": "019"
+        },
+        {
+          "id": "SL:ambulance_and_fire:999",
+          "category": "ambulance_and_fire",
+          "phone": "999"
+        }
+      ]
+    },
+    "SM": {
+      "countryCode": "SM",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "SM:police:113",
+          "category": "police",
+          "phone": "113"
+        },
+        {
+          "id": "SM:ambulance:118",
+          "category": "ambulance",
+          "phone": "118"
+        },
+        {
+          "id": "SM:fire:115",
+          "category": "fire",
+          "phone": "115"
+        }
+      ]
+    },
+    "SN": {
+      "countryCode": "SN",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "SN:police:17",
+          "category": "police",
+          "phone": "17"
+        },
+        {
+          "id": "SN:ambulance:15",
+          "category": "ambulance",
+          "phone": "15"
+        },
+        {
+          "id": "SN:fire:18",
+          "category": "fire",
+          "phone": "18"
+        }
+      ]
+    },
+    "SO": {
+      "countryCode": "SO",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "SO:general:888",
+          "category": "general",
+          "phone": "888"
+        }
+      ]
+    },
+    "SR": {
+      "countryCode": "SR",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "SR:general:115",
+          "category": "general",
+          "phone": "115"
+        }
+      ]
+    },
+    "SS": {
+      "countryCode": "SS",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "SS:general:999",
+          "category": "general",
+          "phone": "999"
+        }
+      ]
+    },
+    "ST": {
+      "countryCode": "ST",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "ST:police:222222",
+          "category": "police",
+          "phone": "222222"
+        },
+        {
+          "id": "ST:ambulance:221222",
+          "category": "ambulance",
+          "phone": "221222"
+        },
+        {
+          "id": "ST:fire:112",
+          "category": "fire",
+          "phone": "112"
+        }
+      ]
+    },
+    "SV": {
+      "countryCode": "SV",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "SV:general:911",
+          "category": "general",
+          "phone": "911"
+        },
+        {
+          "id": "SV:fire:913",
+          "category": "fire",
+          "phone": "913"
+        }
+      ]
+    },
+    "SY": {
+      "countryCode": "SY",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "SY:police:112",
+          "category": "police",
+          "phone": "112"
+        },
+        {
+          "id": "SY:ambulance:110",
+          "category": "ambulance",
+          "phone": "110"
+        },
+        {
+          "id": "SY:fire:113",
+          "category": "fire",
+          "phone": "113"
+        }
+      ]
+    },
+    "SZ": {
+      "countryCode": "SZ",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "SZ:police:999",
+          "category": "police",
+          "phone": "999"
+        },
+        {
+          "id": "SZ:ambulance:911",
+          "category": "ambulance",
+          "phone": "911"
+        },
+        {
+          "id": "SZ:fire:933",
+          "category": "fire",
+          "phone": "933"
+        }
+      ]
+    },
+    "TC": {
+      "countryCode": "TC",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "TC:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "TD": {
+      "countryCode": "TD",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "TD:police:17",
+          "category": "police",
+          "phone": "17"
+        },
+        {
+          "id": "TD:fire:18",
+          "category": "fire",
+          "phone": "18"
+        }
+      ]
+    },
+    "TG": {
+      "countryCode": "TG",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "TG:police:117",
+          "category": "police",
+          "phone": "117"
+        },
+        {
+          "id": "TG:fire:118",
+          "category": "fire",
+          "phone": "118"
+        }
+      ]
+    },
+    "TH": {
+      "countryCode": "TH",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "TH:police:191",
+          "category": "police",
+          "phone": "191"
+        },
+        {
+          "id": "TH:ambulance:1669",
+          "category": "ambulance",
+          "phone": "1669"
+        },
+        {
+          "id": "TH:fire:199",
+          "category": "fire",
+          "phone": "199"
+        }
+      ]
+    },
+    "TJ": {
+      "countryCode": "TJ",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "TJ:police:102",
+          "category": "police",
+          "phone": "102"
+        },
+        {
+          "id": "TJ:ambulance:103",
+          "category": "ambulance",
+          "phone": "103"
+        },
+        {
+          "id": "TJ:fire:101",
+          "category": "fire",
+          "phone": "101"
+        }
+      ]
+    },
+    "TK": {
+      "countryCode": "TK",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "TK:general:111",
+          "category": "general",
+          "phone": "111"
+        }
+      ]
+    },
+    "TL": {
+      "countryCode": "TL",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "TL:police:112",
+          "category": "police",
+          "phone": "112"
+        },
+        {
+          "id": "TL:ambulance:110",
+          "category": "ambulance",
+          "phone": "110"
+        },
+        {
+          "id": "TL:fire:3312210",
+          "category": "fire",
+          "phone": "3312210"
+        }
+      ]
+    },
+    "TM": {
+      "countryCode": "TM",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "TM:police:002",
+          "category": "police",
+          "phone": "002"
+        },
+        {
+          "id": "TM:ambulance:003",
+          "category": "ambulance",
+          "phone": "003"
+        },
+        {
+          "id": "TM:fire:001",
+          "category": "fire",
+          "phone": "001"
+        }
+      ]
+    },
+    "TN": {
+      "countryCode": "TN",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "TN:police:197",
+          "category": "police",
+          "phone": "197"
+        },
+        {
+          "id": "TN:ambulance:190",
+          "category": "ambulance",
+          "phone": "190"
+        },
+        {
+          "id": "TN:fire:198",
+          "category": "fire",
+          "phone": "198"
+        }
+      ]
+    },
+    "TO": {
+      "countryCode": "TO",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "TO:police:922",
+          "category": "police",
+          "phone": "922"
+        },
+        {
+          "id": "TO:ambulance:933",
+          "category": "ambulance",
+          "phone": "933"
+        },
+        {
+          "id": "TO:fire:999",
+          "category": "fire",
+          "phone": "999"
+        }
+      ]
+    },
+    "TR": {
+      "countryCode": "TR",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "TR:police:155",
+          "category": "police",
+          "phone": "155"
+        },
+        {
+          "id": "TR:ambulance:112",
+          "category": "ambulance",
+          "phone": "112"
+        },
+        {
+          "id": "TR:fire:110",
+          "category": "fire",
+          "phone": "110"
+        }
+      ]
+    },
+    "TT": {
+      "countryCode": "TT",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "TT:police:999",
+          "category": "police",
+          "phone": "999"
+        },
+        {
+          "id": "TT:ambulance_and_fire:990",
+          "category": "ambulance_and_fire",
+          "phone": "990"
+        }
+      ]
+    },
+    "TV": {
+      "countryCode": "TV",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "TV:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "TW": {
+      "countryCode": "TW",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "TW:police:110",
+          "category": "police",
+          "phone": "110"
+        },
+        {
+          "id": "TW:ambulance_and_fire:119",
+          "category": "ambulance_and_fire",
+          "phone": "119"
+        }
+      ]
+    },
+    "TZ": {
+      "countryCode": "TZ",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "TZ:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "UA": {
+      "countryCode": "UA",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "UA:police:102",
+          "category": "police",
+          "phone": "102"
+        },
+        {
+          "id": "UA:ambulance:103",
+          "category": "ambulance",
+          "phone": "103"
+        },
+        {
+          "id": "UA:fire:101",
+          "category": "fire",
+          "phone": "101"
+        }
+      ]
+    },
+    "UG": {
+      "countryCode": "UG",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "UG:general:999",
+          "category": "general",
+          "phone": "999"
+        }
+      ]
+    },
+    "US": {
+      "countryCode": "US",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "US:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "UY": {
+      "countryCode": "UY",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "UY:general:911",
+          "category": "general",
+          "phone": "911"
+        },
+        {
+          "id": "UY:ambulance:105",
+          "category": "ambulance",
+          "phone": "105"
+        },
+        {
+          "id": "UY:fire:104",
+          "category": "fire",
+          "phone": "104"
+        }
+      ]
+    },
+    "UZ": {
+      "countryCode": "UZ",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "UZ:police:102",
+          "category": "police",
+          "phone": "102"
+        },
+        {
+          "id": "UZ:ambulance:103",
+          "category": "ambulance",
+          "phone": "103"
+        },
+        {
+          "id": "UZ:fire:101",
+          "category": "fire",
+          "phone": "101"
+        }
+      ]
+    },
+    "VA": {
+      "countryCode": "VA",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "VA:police:113",
+          "category": "police",
+          "phone": "113"
+        },
+        {
+          "id": "VA:ambulance:118",
+          "category": "ambulance",
+          "phone": "118"
+        },
+        {
+          "id": "VA:fire:115",
+          "category": "fire",
+          "phone": "115"
+        }
+      ]
+    },
+    "VC": {
+      "countryCode": "VC",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "VC:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "VE": {
+      "countryCode": "VE",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "VE:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "VG": {
+      "countryCode": "VG",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "VG:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "VI": {
+      "countryCode": "VI",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "VI:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "VN": {
+      "countryCode": "VN",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "VN:police:113",
+          "category": "police",
+          "phone": "113"
+        },
+        {
+          "id": "VN:ambulance:115",
+          "category": "ambulance",
+          "phone": "115"
+        },
+        {
+          "id": "VN:fire:114",
+          "category": "fire",
+          "phone": "114"
+        }
+      ]
+    },
+    "VU": {
+      "countryCode": "VU",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "VU:police:111",
+          "category": "police",
+          "phone": "111"
+        },
+        {
+          "id": "VU:ambulance:112",
+          "category": "ambulance",
+          "phone": "112"
+        },
+        {
+          "id": "VU:fire:113",
+          "category": "fire",
+          "phone": "113"
+        }
+      ]
+    },
+    "WF": {
+      "countryCode": "WF",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "WF:police:17",
+          "category": "police",
+          "phone": "17"
+        },
+        {
+          "id": "WF:ambulance:15",
+          "category": "ambulance",
+          "phone": "15"
+        },
+        {
+          "id": "WF:fire:18",
+          "category": "fire",
+          "phone": "18"
+        }
+      ]
+    },
+    "WS": {
+      "countryCode": "WS",
+      "eccFallback": "911",
+      "services": [
+        {
+          "id": "WS:general:911",
+          "category": "general",
+          "phone": "911"
+        }
+      ]
+    },
+    "XK": {
+      "countryCode": "XK",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "XK:police:192",
+          "category": "police",
+          "phone": "192"
+        },
+        {
+          "id": "XK:ambulance:194",
+          "category": "ambulance",
+          "phone": "194"
+        },
+        {
+          "id": "XK:fire:193",
+          "category": "fire",
+          "phone": "193"
+        }
+      ]
+    },
+    "YE": {
+      "countryCode": "YE",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "YE:general:199",
+          "category": "general",
+          "phone": "199"
+        }
+      ]
+    },
+    "ZA": {
+      "countryCode": "ZA",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "ZA:general:112",
+          "category": "general",
+          "phone": "112"
+        }
+      ]
+    },
+    "ZM": {
+      "countryCode": "ZM",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "ZM:general:991",
+          "category": "general",
+          "phone": "991"
+        },
+        {
+          "id": "ZM:fire:993",
+          "category": "fire",
+          "phone": "993"
+        }
+      ]
+    },
+    "ZW": {
+      "countryCode": "ZW",
+      "eccFallback": "112",
+      "services": [
+        {
+          "id": "ZW:police:995",
+          "category": "police",
+          "phone": "995"
+        },
+        {
+          "id": "ZW:ambulance:999",
+          "category": "ambulance",
+          "phone": "999"
+        },
+        {
+          "id": "ZW:fire:993",
+          "category": "fire",
+          "phone": "993"
+        }
+      ]
+    }
+  }
+}

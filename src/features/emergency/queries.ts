@@ -22,9 +22,11 @@ export async function prepareEmergencyPage(tripId: string): Promise<EmergencyPag
     resolveRequestLocale(),
   ]);
   const t = createAppTranslator("Emergency", locale);
+  const tLanguage = createAppTranslator("Language", locale);
 
   return buildEmergencyViewModel({
     tripId: trip.id,
+    destinationCountryCode: trip.destination?.countryCode,
     startDate: trip.startDate,
     endDate: trip.endDate,
     accommodations,
@@ -33,5 +35,6 @@ export async function prepareEmergencyPage(tripId: string): Promise<EmergencyPag
     destinationCalendarTimeZone: trip.destinationCalendarTimeZone,
     preferredMapsApp: user.preferredMapsApp,
     t,
+    tLanguage,
   });
 }

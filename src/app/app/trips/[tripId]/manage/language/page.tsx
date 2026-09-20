@@ -13,7 +13,7 @@ export async function generateMetadata({
     requireTripMember(tripId),
     getTranslations("Settings"),
   ]);
-  return { title: `${t("rows.language.title")} · ${trip.name}` };
+  return { title: `${t("travelLanguagePage.title")} · ${trip.name}` };
 }
 
 export default async function TripSettingsLanguagePage({

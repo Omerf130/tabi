@@ -1,3 +1,5 @@
+import type { AppLocale } from "@/features/i18n/locale";
+
 export const PHRASEBOOK_CATEGORIES = [
   "basics",
   "restaurants",
@@ -11,6 +13,7 @@ export const PHRASEBOOK_CATEGORIES = [
 
 export type PhrasebookCategory = (typeof PHRASEBOOK_CATEGORIES)[number];
 
+/** Legacy pack row — retained for he-ja compatibility consumers only. */
 export type PhrasebookPhrase = {
   id: string;
   packId: string;
@@ -24,6 +27,7 @@ export type PhrasebookPhrase = {
   searchKeywords?: string[];
 };
 
+/** Legacy pack — retained for he-ja compatibility consumers only. */
 export type PhrasebookPack = {
   id: string;
   sourceLanguage: "he";
@@ -32,10 +36,18 @@ export type PhrasebookPack = {
   phrases: readonly PhrasebookPhrase[];
 };
 
+export type PhrasebookRuntimeState =
+  | "ready"
+  | "unknown_travel_language"
+  | "translation_unavailable";
+
 export type PhraseListItemViewModel = {
   id: string;
   sourceText: string;
   targetTextPreview: string;
+  targetLanguage: string | null;
+  targetLanguageDirection: "ltr" | "rtl";
+  targetAvailable: boolean;
   category: PhrasebookCategory;
   categoryLabel: string;
   isFavorite: boolean;
@@ -47,17 +59,25 @@ export type PhraseDetailViewModel = {
   id: string;
   sourceText: string;
   targetText: string;
-  pronunciationLatin?: string;
-  pronunciationSource?: string;
+  targetLanguage: string | null;
+  targetLanguageDirection: "ltr" | "rtl";
+  targetAvailable: boolean;
+  transliterationLatin?: string | null;
   categoryLabel: string;
   isFavorite: boolean;
 };
 
 export type LanguagePageViewModel = {
   tripId: string;
-  packId: string;
-  targetLanguage: string;
+  runtimeState: PhrasebookRuntimeState;
+  sourceLocale: AppLocale;
+  targetLanguage: string | null;
+  targetLanguageDirection: "ltr" | "rtl";
   phrases: PhraseListItemViewModel[];
   favoritePhraseIds: string[];
   categoryLabels: Record<PhrasebookCategory, string>;
+  tripDetailsHref: string;
+  travelLanguageSettingsHref: string;
+  translationWarning: boolean;
+  customTranslationEnabled: boolean;
 };

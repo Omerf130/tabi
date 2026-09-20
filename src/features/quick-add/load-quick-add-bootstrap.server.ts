@@ -14,6 +14,7 @@ type TripDatesInput = {
   endDate: string;
   role: TripMemberRole;
   destinationCalendarTimeZone: string;
+  destination?: { countryCode?: string | null } | null;
 };
 
 export async function loadQuickAddBootstrap(
@@ -35,6 +36,7 @@ export async function loadQuickAddBootstrap(
     endDate: trip.endDate,
     tripDates,
     destinationCalendarTimeZone: trip.destinationCalendarTimeZone,
+    destinationCountryCode: trip.destination?.countryCode ?? null,
     financeBaseCurrency: financeContext?.baseCurrency ?? "ILS",
     currencies: financeContext?.currencies ?? [],
     showCostFields: isOwner,

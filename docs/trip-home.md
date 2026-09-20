@@ -4,13 +4,13 @@ Phase 8 transforms `/app/trips/[tripId]` into a lifecycle-aware traveler dashboa
 
 ## Lifecycle
 
-Trip phase uses Japan calendar date (`getJapanCalendarDate`, `Asia/Tokyo`):
+Trip phase uses the trip destination calendar (`Trip.destinationCalendarTimeZone` via `getCalendarDateInTimeZone`):
 
 | Phase | Condition |
 |---|---|
-| `upcoming` | `todayJapan < startDate` |
-| `active` | `startDate <= todayJapan <= endDate` |
-| `completed` | `todayJapan > endDate` |
+| `upcoming` | `todayTripLocal < startDate` |
+| `active` | `startDate <= todayTripLocal <= endDate` |
+| `completed` | `todayTripLocal > endDate` |
 
 Implemented via [`getTripPhase`](../src/features/trips/trip-phase.ts).
 
@@ -30,7 +30,7 @@ Implemented via [`getTripPhase`](../src/features/trips/trip-phase.ts).
 - **Now** / **הבא בתור** emphasis integrated into timeline
 - Untimed activities shown as `ללא שעה`
 - Empty today: `היום עדיין פנוי`
-- CTA → `/itinerary/{todayJapan}`
+- CTA → `/itinerary/{todayTripLocal}`
 
 ### After trip
 
@@ -40,14 +40,16 @@ Implemented via [`getTripPhase`](../src/features/trips/trip-phase.ts).
 - **No daily itinerary preview**
 - **No Memories link in Phase 8** — added when Memories feature ships
 
-## Japan time semantics
+## Trip-local time semantics
 
 | Concern | Utility |
 |---|---|
-| Calendar today | `getJapanCalendarDate()` |
-| Wall clock now | `getJapanWallClockTime()` → `HH:mm` in Japan |
+| Calendar today | `getCalendarDateInTimeZone(destinationCalendarTimeZone)` |
+| Wall clock now | Trip-local `HH:mm` from destination timezone |
 
-Activity times are local Japan clock strings compared lexicographically via `compareWallClockTimes`.
+Activity times are local clock strings at the destination compared lexicographically via `compareWallClockTimes`.
+
+*(Legacy parameter names such as `todayJapan` / `nowJapanTime` may still appear in code but values are trip-local, not Japan-specific.)*
 
 ## Now algorithm
 

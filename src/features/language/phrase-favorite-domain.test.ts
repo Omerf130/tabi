@@ -4,7 +4,6 @@ import {
   listFavoritePhraseIds,
   togglePhraseFavorite,
 } from "./phrase-favorite-domain";
-import { DEFAULT_PHRASEBOOK_PACK_ID } from "./constants";
 
 const userId = "507f1f77bcf86cd799439011";
 
@@ -64,7 +63,7 @@ describe("phrase favorite domain", () => {
 
     const result = await togglePhraseFavorite({
       userId,
-      packId: DEFAULT_PHRASEBOOK_PACK_ID,
+      targetLanguage: "ja",
       phraseId: "basics.thank-you",
     });
 
@@ -84,7 +83,7 @@ describe("phrase favorite domain", () => {
 
     const result = await togglePhraseFavorite({
       userId,
-      packId: DEFAULT_PHRASEBOOK_PACK_ID,
+      targetLanguage: "it",
       phraseId: "basics.thank-you",
     });
 
@@ -92,11 +91,11 @@ describe("phrase favorite domain", () => {
     expect(phraseFavoriteDeleteOneMock).toHaveBeenCalledWith({ _id: "favorite-1" });
   });
 
-  it("rejects unknown phrase ids and pack ids", async () => {
+  it("rejects unknown phrase ids and invalid target languages", async () => {
     await expect(
       togglePhraseFavorite({
         userId,
-        packId: DEFAULT_PHRASEBOOK_PACK_ID,
+        targetLanguage: "ja",
         phraseId: "unknown.phrase",
       }),
     ).rejects.toBeInstanceOf(PhraseFavoriteValidationError);
@@ -104,7 +103,7 @@ describe("phrase favorite domain", () => {
     await expect(
       togglePhraseFavorite({
         userId,
-        packId: "he-it",
+        targetLanguage: "not-valid!!!",
         phraseId: "basics.hello",
       }),
     ).rejects.toBeInstanceOf(PhraseFavoriteValidationError);

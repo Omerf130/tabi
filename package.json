@@ -8,7 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "generate:emergency-country-data": "tsx scripts/generate-emergency-country-data.ts",
+    "generate:country-travel-languages": "tsx scripts/generate-country-travel-languages.ts",
+    "generate:phrase-intent-catalog": "tsx scripts/generate-phrase-intent-catalog.ts",
+    "sync:phrase-intent-i18n": "tsx scripts/sync-phrase-intent-i18n.ts",
+    "smoke:azure-translator": "tsx --env-file=.env.local scripts/azure-translator-smoke.ts"
   },
   "dependencies": {
     "@vercel/blob": "^2.8.0",
@@ -29,6 +34,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cldr-core": "^45.0.0",
     "esbuild": "^0.28.2",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",

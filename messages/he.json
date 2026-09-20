@@ -1,21 +1,12 @@
 {
-
   "Navigation": {
-
     "home": "בית",
-
     "itinerary": "מסלול",
-
     "documents": "מסמכים",
-
     "settings": "הגדרות",
-
     "more": "עוד",
-
     "ariaLabel": "ניווט ראשי"
-
   },
-
   "QuickAdd": {
     "navLabel": "הוספה",
     "openAria": "הוספה לטיול",
@@ -40,35 +31,21 @@
       "documentDesc": "כרטיסים, הזמנות וקבצים"
     }
   },
-
   "TripHeader": {
-
     "back": "חזרה",
-
     "myTrips": "הטיולים שלי"
-
   },
-
   "AccountMenu": {
-
     "footerAriaLabel": "חשבון וניווט",
-
     "myTrips": "הטיולים שלי",
-
     "logout": "יציאה",
-
     "interfaceLanguage": "שפת ממשק",
-
     "languageHebrew": "עברית",
-
     "languageEnglish": "English"
-
   },
-
   "PushDelivery": {
     "tripReminderBody": "יש לך תזכורת לטיול"
   },
-
   "ReminderNotifications": {
     "calloutInactive": "התזכורת תישמר, אבל התראות אינן פעילות במכשיר הזה.",
     "calloutDenied": "התזכורת תישמר, אבל ההתראות חסומות במכשיר הזה.",
@@ -78,7 +55,6 @@
     "linkSettings": "מידע על התראות",
     "linkNotifications": "התראות"
   },
-
   "AccountNotifications": {
     "title": "התראות",
     "lead": "Tabi יכולה להודיע למכשיר הזה על תזכורות לטיול שיצרתם. ההתראות אופציונליות ומיועדות רק לתזכורות שלכם.",
@@ -106,7 +82,6 @@
       "forbidden": "לא ניתן לעדכן את הרשמת המכשיר."
     }
   },
-
   "Profile": {
     "title": "פרופיל",
     "identitySection": "זהות",
@@ -135,48 +110,45 @@
       "invalidName": "יש להזין שם באורך 2–80 תווים."
     }
   },
-
   "TripManagement": {
-
     "title": "ניהול הטיול",
-
     "introTitle": "ניהול הטיול",
-
     "introLead": "כל מה שצריך כדי לעדכן ולנהל את הטיול שלכם במקום אחד.",
-
     "navAria": "ניהול הטיול",
-
     "sections": {
-
-      "details": { "label": "פרטי הטיול", "shortLabel": "פרטי הטיול" },
-
-      "accommodations": { "label": "מקומות לינה", "shortLabel": "לינה" },
-
-      "transport": { "label": "תחבורה", "shortLabel": "תחבורה" },
-
-      "documents": { "label": "מסמכים", "shortLabel": "מסמכים" },
-
-      "reminders": { "label": "תזכורות", "shortLabel": "תזכורות" },
-
-      "members": { "label": "חברי הטיול", "shortLabel": "חברים" }
-
+      "details": {
+        "label": "פרטי הטיול",
+        "shortLabel": "פרטי הטיול"
+      },
+      "accommodations": {
+        "label": "מקומות לינה",
+        "shortLabel": "לינה"
+      },
+      "transport": {
+        "label": "תחבורה",
+        "shortLabel": "תחבורה"
+      },
+      "documents": {
+        "label": "מסמכים",
+        "shortLabel": "מסמכים"
+      },
+      "reminders": {
+        "label": "תזכורות",
+        "shortLabel": "תזכורות"
+      },
+      "members": {
+        "label": "חברי הטיול",
+        "shortLabel": "חברים"
+      }
     },
-
     "membersTitle": "חברי הטיול",
-
     "newInvite": "+ הזמנה חדשה",
-
     "invitationsSection": "הזמנות פעילות ואחרונות"
-
   },
-
   "Errors": {
-
     "invalidLocale": "שפת הממשק שנבחרה אינה נתמכת.",
     "invalidPreferredMapsApp": "אפליקציית הניווט שנבחרה אינה נתמכת."
-
   },
-
   "Common": {
     "today": "היום",
     "all": "הכל",
@@ -218,7 +190,6 @@
     "noItems": "אין פריטים",
     "openReminderAria": "יש תזכורת פתוחה"
   },
-
   "Home": {
     "heroIdentityAria": "זהות הטיול",
     "beforeJourneyAria": "הכנה לטיול",
@@ -286,7 +257,6 @@
     "countdownAria": "{days} ימים, {hours} שעות, {minutes} דקות ו-{seconds} שניות עד תחילת הטיול",
     "navigateTo": "ניווט ל{name}"
   },
-
   "Itinerary": {
     "heroTitle": "מסלול הטיול",
     "dayStripAria": "ימי הטיול",
@@ -354,7 +324,6 @@
     "itineraryCountTransportOnly": "{count, plural, one {תחבורה אחת} other {# תחבורה}}",
     "itineraryCountMixed": "{count, plural, one {פריט אחד} other {# פריטים}}"
   },
-
   "Activity": {
     "whereQuestion": "איפה?",
     "whatQuestion": "מה עושים?",
@@ -395,274 +364,140 @@
       "invalidCostData": "נתוני עלות לא תקינים"
     }
   },
-
   "Finance": {
-
     "pageTitle": "הכסף בטיול",
-
     "heroSubtitle": "מעקב הוצאות ותקציב במקום אחד",
-
     "tripBudgetTitle": "תקציב הטיול",
-
     "budgetSummaryAriaLabel": "סיכום תקציב",
-
     "backToMore": "חזרה לעוד",
-
     "spent": "הוצאות",
-
     "remaining": "נותר",
-
     "overBudgetShort": "חריגה",
-
     "percentConsumed": "נוצל",
-
     "overBudget": "חריגה מהתקציב",
-
     "totalExpenses": "סה״כ הוצאות",
-
     "totalBudget": "תקציב",
-
     "totalExpensesCenter": "סה״כ הוצאות",
-
     "noExpensesYet": "עדיין אין הוצאות",
-
     "noCategoriesYet": "עדיין אין הוצאות לפי קטגוריות",
-
     "memberNoBudget": "לא הוגדר תקציב לטיול",
-
     "setBudgetCta": "הגדרת תקציב לטיול",
-
     "editBudgetCta": "עריכת תקציב",
-
     "categoriesSectionTitle": "הוצאות לפי קטגוריות",
-
     "recentSectionTitle": "הוצאות אחרונות",
-
     "allSectionTitle": "כל ההוצאות",
-
     "showAll": "הצג הכל",
-
     "showRecent": "חזרה לסיכום",
-
     "addExpense": "הוספת הוצאה",
-
     "editExpense": "עריכת הוצאה",
-
     "addExpenseSubtitle": "הוסיפו הוצאה לטיול",
-
     "saveExpense": "שמירה",
-
     "deleteExpense": "מחיקת הוצאה",
-
     "deleteExpenseConfirm": "למחוק את ההוצאה?",
-
     "removeLinkedCost": "הסרת העלות",
-
     "removeLinkedCostConfirm": "להסיר את העלות? הפריט המקור יישאר ללא שינוי.",
-
     "cancel": "ביטול",
-
     "close": "סגירה",
-
     "titleLabel": "תיאור / שם",
-
     "categoryLabel": "קטגוריה",
-
     "dateLabel": "תאריך",
-
     "amountLabel": "סכום",
-
     "currencyLabel": "מטבע",
-
     "notesLabel": "הערות (אופציונלי)",
-
     "conversionPreview": "לפי שער המרה עדכני",
-
     "conversionPreviewFailed": "לא ניתן לטעון שער המרה כרגע",
-
     "settingsTitle": "הגדרות כספים",
     "budgetSettingsTitle": "תקציב הטיול",
-
     "baseCurrencyLabel": "מטבע בסיס",
-
     "budgetAmountLabel": "תקציב כולל",
-
     "budgetAmountPlaceholder": "לדוגמה: 30000",
-
     "saveSettings": "שמירה",
-
     "clearBudget": "ניקוי תקציב",
-
     "entityCostSectionTitle": "עלות",
-
     "entityCostHelper": "אפשר להשאיר ריק ולהוסיף מאוחר יותר",
-
     "entityCostDisplayPrefix": "עלות",
-
     "activityCostCategoryLabel": "קטגוריית הוצאה",
-
     "linkedSourceTitleLabel": "פריט מקור",
-
     "afterRecapTitle": "סיכום ההוצאות",
-
     "afterNoExpenses": "לא נרשמו הוצאות לטיול הזה",
-
     "afterFullFinanceCta": "לסיכום הכספי המלא",
-
     "afterOpenFinanceCta": "לפתיחת הכספים",
-
     "hubNoExpenses": "עדיין לא נוספו הוצאות",
-
     "hubBudgetMeta": "מתוך {budget} תקציב",
-
     "hubProgressAriaLabel": "{title}: {percent}% נוצל",
-
     "linkedToActivity": "מחובר לפעילות",
-
     "linkedToAccommodation": "מחובר למקום לינה",
-
     "linkedToTransport": "מחובר לתחבורה",
-
     "deletedSourceFallback": "פריט שנמחק",
-
     "accommodationFallbackName": "מקום לינה",
-
     "categories": {
-
       "accommodation": "לינה",
-
       "food": "אוכל",
-
       "transport": "תחבורה",
-
       "activities": "אטרקציות",
-
       "shopping": "קניות",
-
       "flights": "טיסות",
-
       "other": "אחר"
-
     },
-
     "errors": {
-
       "generic": "משהו השתבש. נסו שוב.",
-
       "validationFailed": "נתונים לא תקינים",
-
       "settingsNotFound": "הגדרות כספים לא נמצאו",
-
       "budgetRequired": "יש להזין סכום תקציב חיובי",
-
       "budgetInvalid": "סכום תקציב לא תקין",
-
       "baseCurrencyInvalid": "מטבע בסיס לא נתמך",
-
       "baseCurrencyLocked": "לא ניתן לשנות מטבע בסיס לאחר שנוספו הוצאות לטיול",
-
       "expenseAmountInvalid": "סכום הוצאה חייב להיות גדול מאפס",
-
       "manualTitleRequired": "יש להזין שם להוצאה",
-
       "linkedSourceRequired": "חסר מזהה מקור להוצאה מקושרת",
-
       "manualSourceIdForbidden": "הוצאה ידנית לא יכולה להיות מקושרת לישות",
-
       "linkedTitleForbidden": "הוצאה מקושרת לא שומרת כותרת",
-
       "categoryInvalid": "קטגוריה לא תקינה",
-
       "sourceTypeInvalid": "סוג מקור לא תקין",
-
       "conversionPreviewFailed": "לא ניתן לטעון שער המרה כרגע",
-
       "invalidCostData": "נתוני עלות לא תקינים"
-
     }
-
   },
-
   "Currency": {
-
     "pageTitle": "מטבע",
-
     "loadRateFailed": "לא ניתן לטעון את שער ההמרה כרגע.",
-
     "retry": "נסה שוב",
-
     "refreshFailed": "לא הצלחנו לרענן את השער. מוצג השער האחרון שנטען.",
-
     "estimatedRate": "שער משוער",
-
     "disclaimer": "שער משוער. השער בפועל עשוי להשתנות בהתאם לחברת האשראי, לבנק או לספק ההמרה.",
-
     "invalidCurrency": "מטבע לא נתמך",
-
     "sameCurrency": "יש לבחור שני מטבעות שונים",
-
     "popularSection": "נפוצים",
-
     "allSection": "כל המטבעות",
-
     "searchPlaceholder": "חיפוש מטבע...",
-
     "noResults": "לא נמצאו מטבעות",
-
     "pickerTitle": "בחירת מטבע",
-
     "close": "סגירה",
-
     "fromCurrencyPanelAriaLabel": "מטבע מקור",
-
     "toCurrencyPanelAriaLabel": "מטבע יעד",
-
     "amountToConvertAriaLabel": "סכום להמרה",
-
     "swapCurrenciesAriaLabel": "החלפת מטבעות",
-
     "selectSourceCurrencyAriaLabel": "בחירת מטבע מקור: {code} {name}",
-
     "selectTargetCurrencyAriaLabel": "בחירת מטבע יעד: {code} {name}"
-
   },
-
   "Lists": {
-
     "pageTitle": "רשימות",
-
     "progressLabel": "{completed} מתוך {total} הושלמו",
-
     "deleteConfirm": "למחוק את הפריט?",
-
     "addItemPlaceholder": "הוספת פריט",
-
     "addItemButton": "הוספה",
-
     "editButton": "עריכה",
-
     "deleteButton": "מחיקה",
-
     "saveButton": "שמירה",
-
     "cancelButton": "ביטול",
-
     "markCompletedAriaLabel": "סמן כהושלם",
-
     "markIncompleteAriaLabel": "סמן כלא הושלם",
-
     "definitions": {
-
       "packing": "ציוד לארוז",
-
       "before_trip": "מטלות לפני הטיסה",
-
       "during_trip": "מטלות במהלך הטיול",
-
       "pre_trip_shopping": "קניות לקראת הטיול"
-
     },
-
     "seed": {
       "passport": "דרכון",
       "phoneCharger": "מטען לטלפון",
@@ -691,35 +526,20 @@
       "jpIcTopUp": "טעינת כרטיס IC / Suica",
       "jpAdapterShop": "מתאם חשמל ליפן"
     },
-
     "errors": {
-
       "generic": "לא ניתן לעדכן את הרשימה. נסו שוב.",
-
       "notFound": "הפריט לא נמצא",
-
       "textRequired": "יש להזין טקסט לפריט",
-
       "textTooLong": "הטקסט ארוך מדי"
-
     },
-
     "success": {
-
       "created": "הפריט נוסף",
-
       "updated": "הפריט עודכן",
-
       "deleted": "הפריט נמחק",
-
       "completed": "הפריט סומן כהושלם",
-
       "uncompleted": "הפריט סומן כלא הושלם"
-
     }
-
   },
-
   "Documents": {
     "pageTitle": "ארנק הנסיעה",
     "listPageTitle": "מסמכים",
@@ -807,7 +627,6 @@
       "deleteConfirm": "למחוק את המסמך?"
     }
   },
-
   "TravelHub": {
     "heroTitle": "כלי הטיול",
     "heroSubtitle": "מה שצריך לטיול החלק",
@@ -833,13 +652,31 @@
     "documentsCountOne": "מסמך אחד",
     "documentsCountMany": "{count} מסמכים",
     "quickTools": {
-      "currency": { "label": "מטבע", "description": "המרת מטבע" },
-      "weather": { "label": "מזג אוויר", "description": "תחזית לטיול" },
-      "language": { "label": "שפה ותקשורת", "description": "שפה ותקשורת" },
-      "emergency": { "label": "חירום ועזרה", "description": "מידע חשוב" }
+      "currency": {
+        "label": "מטבע",
+        "description": "המרת מטבע"
+      },
+      "weather": {
+        "label": "מזג אוויר",
+        "description": "תחזית לטיול"
+      },
+      "language": {
+        "label": "שפה ותקשורת",
+        "description": "שפה ותקשורת"
+      },
+      "emergency": {
+        "label": "חירום ועזרה",
+        "description": "מידע חשוב"
+      }
     },
-    "attentionSections": { "upcoming": "לקראת הטיול", "active": "במהלך הטיול" },
-    "contextualAccommodation": { "current": "המקום שלך עכשיו", "upcoming": "הלינה הבאה שלך" },
+    "attentionSections": {
+      "upcoming": "לקראת הטיול",
+      "active": "במהלך הטיול"
+    },
+    "contextualAccommodation": {
+      "current": "המקום שלך עכשיו",
+      "upcoming": "הלינה הבאה שלך"
+    },
     "attentionMessages": {
       "packingOne": "נשאר פריט אחד לארוז",
       "packingMany": "נשארו {count} דברים לארוז",
@@ -857,7 +694,6 @@
     "tripMembers": "חברי הטיול",
     "myTrips": "הטיולים שלי"
   },
-
   "Accommodation": {
     "pageTitle": "מקומות לינה",
     "addButtonAria": "הוספת מקום לינה",
@@ -876,6 +712,13 @@
     "manualName": "שם מקום הלינה",
     "manualNameJapanese": "שם מקום הלינה ביפנית",
     "manualNameJapaneseHint": "אופציונלי — לשימוש במצב מונית",
+    "manualNameKorean": "שם מקום הלינה בקוריאנית",
+    "manualNameLocal": "שם מקומי של מקום הלינה",
+    "manualNameLocalHint": "אופציונלי — לשימוש במצב מונית",
+    "localName": "שם מקומי",
+    "localAddress": "כתובת מקומית",
+    "nameKorean": "שם בקוריאנית",
+    "addressKorean": "כתובת בקוריאנית",
     "googleMapsLink": "קישור Google Maps",
     "fallbackName": "מקום לינה",
     "nightCountOne": "לילה אחד",
@@ -883,7 +726,11 @@
     "taxiModePageTitle": "מצב מונית",
     "taxiMissingAddress": "לא הוזנה כתובת. הוסיפו כתובת בהגדרות הטיול.",
     "filterAria": "סינון מקומות לינה",
-    "filters": { "all": "הכל", "upcoming": "בקרוב", "past": "עבר" },
+    "filters": {
+      "all": "הכל",
+      "upcoming": "בקרוב",
+      "past": "עבר"
+    },
     "filterTab": "{label} ({count})",
     "emptyAll": "אין מקומות לינה",
     "emptyUpcoming": "אין מקומות לינה קרובים",
@@ -916,13 +763,17 @@
       "deleteConfirmDetail": "פעולה זו מסירה את מקום הלינה מ-Tabi בלבד — היא לא מבטלת את ההזמנה בבית המלון."
     }
   },
-
   "Transport": {
     "pageTitle": "תחבורה",
     "filterAria": "סינון תחבורה",
     "addMenuAria": "הוספת תחבורה",
     "addMenuTypeAria": "סוג תחבורה",
-    "filters": { "all": "הכל", "flight": "טיסות", "train": "רכבות", "other": "אחר" },
+    "filters": {
+      "all": "הכל",
+      "flight": "טיסות",
+      "train": "רכבות",
+      "other": "אחר"
+    },
     "filterTab": "{label} ({count})",
     "emptyAll": "אין תחבורה",
     "emptyAllHintOwner": "הוסיפו טיסות, רכבות ונסיעות כדי שיופיעו כאן ובמסלול.",
@@ -961,8 +812,11 @@
       "car": "רכב / הסעה",
       "taxi": "מונית"
     },
+    "departureLocationPlaceholder": "תחנה מרכזית",
+    "arrivalLocationPlaceholder": "עיר יעד",
     "trainCategories": {
-      "shinkansen": "Shinkansen",
+      "shinkansen": "שינקנסן",
+      "shinkansenHighSpeed": "רכבת מהירה",
       "limited_express": "Limited Express",
       "reserved": "רכבת שמורה",
       "local": "רכבת מקומית",
@@ -1045,7 +899,6 @@
       "deleteConfirm": "למחוק את קטע התחבורה?"
     }
   },
-
   "Weather": {
     "pageTitle": "מזג אוויר",
     "backAria": "חזרה",
@@ -1076,23 +929,70 @@
     "adviceLayer": "מומלץ לקחת שכבה קלה",
     "adviceComfort": "מזג אוויר נוח לטיול",
     "conditions": {
-      "1000": "בהיר", "1003": "מעונן חלקית", "1006": "מעונן", "1009": "מעונן לגמרי", "1030": "ערפל",
-      "1063": "גשם פזור", "1066": "שלג פזור", "1069": "גשם ושלג מעורב", "1072": "טפטוף קפוא", "1087": "סופות רעמים",
-      "1114": "שלג ורוח", "1117": "סופת שלג", "1135": "ערפל", "1147": "ערפל קפוא", "1150": "טפטוף קל",
-      "1153": "טפטוף", "1168": "טפטוף קפוא", "1171": "טפטוף קפוא חזק", "1180": "גשם קל", "1183": "גשם קל לפרקים",
-      "1186": "גשם בינוני", "1189": "גשם כבד", "1192": "גשם כבד מאוד", "1195": "גשם קיצוני", "1198": "גשם קפוא קל",
-      "1201": "גשם קפוא", "1204": "גשם קפוא כבד", "1207": "גשם קפוא חזק", "1210": "שלג קל", "1213": "שלג",
-      "1216": "שלג כבד", "1219": "שלג חזק", "1222": "שלג קיצוני", "1225": "סופת שלג", "1237": "ברד",
-      "1240": "גשם וברד", "1243": "גשם וברד כבד", "1246": "ברד קיצוני", "1249": "גשם קפוא וברד", "1252": "גשם קפוא וברד כבד",
-      "1255": "ברד קפוא קיצוני", "1258": "גשם קפוא, ברד ושלג", "1261": "גשם קפוא, ברד ושלג כבד", "1264": "סופת ברד",
-      "1273": "ממטרים קלים", "1276": "ממטרים בינוניים", "1279": "ממטרים כבדים", "1282": "ממטרים קיצוניים"
+      "1000": "בהיר",
+      "1003": "מעונן חלקית",
+      "1006": "מעונן",
+      "1009": "מעונן לגמרי",
+      "1030": "ערפל",
+      "1063": "גשם פזור",
+      "1066": "שלג פזור",
+      "1069": "גשם ושלג מעורב",
+      "1072": "טפטוף קפוא",
+      "1087": "סופות רעמים",
+      "1114": "שלג ורוח",
+      "1117": "סופת שלג",
+      "1135": "ערפל",
+      "1147": "ערפל קפוא",
+      "1150": "טפטוף קל",
+      "1153": "טפטוף",
+      "1168": "טפטוף קפוא",
+      "1171": "טפטוף קפוא חזק",
+      "1180": "גשם קל",
+      "1183": "גשם קל לפרקים",
+      "1186": "גשם בינוני",
+      "1189": "גשם כבד",
+      "1192": "גשם כבד מאוד",
+      "1195": "גשם קיצוני",
+      "1198": "גשם קפוא קל",
+      "1201": "גשם קפוא",
+      "1204": "גשם קפוא כבד",
+      "1207": "גשם קפוא חזק",
+      "1210": "שלג קל",
+      "1213": "שלג",
+      "1216": "שלג כבד",
+      "1219": "שלג חזק",
+      "1222": "שלג קיצוני",
+      "1225": "סופת שלג",
+      "1237": "ברד",
+      "1240": "גשם וברד",
+      "1243": "גשם וברד כבד",
+      "1246": "ברד קיצוני",
+      "1249": "גשם קפוא וברד",
+      "1252": "גשם קפוא וברד כבד",
+      "1255": "ברד קפוא קיצוני",
+      "1258": "גשם קפוא, ברד ושלג",
+      "1261": "גשם קפוא, ברד ושלג כבד",
+      "1264": "סופת ברד",
+      "1273": "ממטרים קלים",
+      "1276": "ממטרים בינוניים",
+      "1279": "ממטרים כבדים",
+      "1282": "ממטרים קיצוניים"
     }
   },
-
   "Emergency": {
     "pageTitle": "חירום ועזרה",
-    "urgentSection": "חירום מיידי",
-    "assistanceSection": "סיוע לתיירים וקונסולרי",
+    "verifiedSectionTitle": "מספרי חירום ליעד זה",
+    "missingDestinationNotice": "יש להגדיר מדינת יעד לטיול כדי להציג מספרי חירום מקומיים.",
+    "unsupportedCountryNotice": "לטאבי אין כרגע נתוני מספרי חירום ליעד זה.",
+    "updateTripDestination": "עדכון יעד הטיול",
+    "customResourcesHint": "נוסף על ידי חברי הטיול",
+    "services": {
+      "general": "חירום כללי",
+      "police": "משטרה",
+      "ambulance": "אמבולנס",
+      "fire": "כיבוי אש",
+      "ambulance_and_fire": "אמבולנס וכיבוי אש"
+    },
     "myLocation": "המיקום שלי",
     "currentAccommodation": "מקום הלינה הנוכחי",
     "accommodationDetails": "פרטי לינה",
@@ -1104,7 +1004,7 @@
     "myTripResources": "משאבי הטיול שלי",
     "emergencyPhrases": "משפטים שימושיים בחירום",
     "allEmergencyPhrases": "כל ביטויי החירום",
-    "sourceNote": "מידע רשמי שנבדק ידנית מול המקורות המצוינים.",
+    "sourceNote": "מקור: Android Open Source Project Emergency Number Database (גרסת ECC {revision}, ייבוא נתונים {imported}). המספרים מגיעים ממאגר זה; טאבי לא מאמתת אותם באופן עצמאי בזמן החיוג.",
     "categories": {
       "insurance": "ביטוח",
       "medical": "רפואה",
@@ -1153,7 +1053,6 @@
       "saveResource": "שמירה"
     }
   },
-
   "Language": {
     "pageTitle": "שפה ותקשורת",
     "categoryNavAria": "קטגוריות ביטויים",
@@ -1177,9 +1076,106 @@
       "showAll": "כל הביטויים",
       "favoriteAdd": "הוספה למועדפים",
       "favoriteRemove": "הסרה מהמועדפים"
+    },
+    "runtime": {
+      "unresolvedTravelLanguageTitle": "שפת הנסיעה עדיין לא נקבעה",
+      "unresolvedTravelLanguageBody": "Tabi צריכה יעד עם מדינה בטיול כדי להציג ביטויים בשפת היעד.",
+      "updateTripDetails": "עדכון יעד הטיול",
+      "translationUnavailable": "חלק מהתרגומים אינם זמינים כרגע. ביטויים שמורים במטמון עדיין עשויים להופיע.",
+      "targetUnavailable": "תרגום לא זמין",
+      "pronunciationLatinLabel": "הגייה באותיות לטיניות"
+    },
+    "customTranslator": {
+      "title": "תרגום ביטוי משלכם",
+      "hint": "הקלידו משהו בשפת הממשק שלכם. Tabi יתרגם לשפת הטיול.",
+      "inputLabel": "הביטוי שלכם",
+      "placeholder": "הקלידו ביטוי לתרגום…",
+      "translate": "תרגום",
+      "translating": "מתרגם…",
+      "pronunciationLatinLabel": "הגייה באותיות לטיניות",
+      "validationError": "הקלידו ביטוי לתרגום.",
+      "unavailable": "התרגום לא זמין כרגע. נסו שוב בעוד רגע.",
+      "rateLimited": "הגעתם למגבלת התרגום כרגע. המתינו כמה דקות ונסו שוב.",
+      "unknownTravelLanguage": "הגדירו שפת טיול לפני תרגום ביטויים משלכם.",
+      "openTravelLanguageSettings": "פתיחת הגדרות שפת טיול"
+    },
+    "phrases": {
+      "basics": {
+        "hello": "שלום",
+        "thank-you": "תודה",
+        "thank-you-very-much": "תודה רבה",
+        "excuse-me": "סליחה / סליחה, אפשר?",
+        "please": "בבקשה",
+        "yes": "כן",
+        "no": "לא",
+        "dont-understand": "אני לא מבין/ה",
+        "speak-english": "מדברים אנגלית?",
+        "goodbye": "להתראות"
+      },
+      "restaurants": {
+        "table-for-two": "שולחן לשניים, בבקשה",
+        "menu-english": "אפשר תפריט באנגלית?",
+        "no-meat": "בלי בשר, בבקשה",
+        "allergy": "יש לי אלרגיה ל… (ציינו את המרכיב)",
+        "water": "מים, בבקשה",
+        "bill": "אפשר את החשבון?",
+        "card-payment": "אפשר לשלם בכרטיס?",
+        "delicious": "היה טעים מאוד"
+      },
+      "transport": {
+        "where-station": "איפה התחנה?",
+        "where-platform": "איפה הרציף?",
+        "train-to": "הרכבת הזאת מגיעה ל…?",
+        "buy-ticket": "איפה קונים כרטיס?",
+        "taxi-address": "אפשר להגיע לכתובת הזאת?",
+        "one-person": "כרטיס לאדם אחד",
+        "next-stop": "מה התחנה הבאה?",
+        "express-train": "זו רכבת מהירה?"
+      },
+      "hotel": {
+        "reservation": "יש לי הזמנה",
+        "check-in": "אפשר לעשות צ'ק-אין?",
+        "luggage": "אפשר להשאיר את המזוודות?",
+        "check-out-time": "באיזו שעה צ'ק-אאוט?",
+        "wifi": "מה סיסמת ה-Wi-Fi?",
+        "breakfast": "איפה ארוחת הבוקר?",
+        "towel": "אפשר עוד מגבת?"
+      },
+      "shopping": {
+        "how-much": "כמה זה עולה?",
+        "other-size": "יש מידה אחרת?",
+        "card": "אפשר לשלם בכרטיס?",
+        "tax-free": "Tax Free — אפשר?",
+        "just-looking": "רק מסתכל/ת",
+        "bag": "אפשר שקית?"
+      },
+      "directions": {
+        "restroom": "איפה השירותים?",
+        "exit": "איפה היציאה?",
+        "how-to-get": "איך מגיעים ל…?",
+        "far-from-here": "זה רחוק מכאן?",
+        "walk-minutes": "כמה דקות הליכה?",
+        "lost": "אני הלכתי/ה לאיבוד"
+      },
+      "emergency": {
+        "need-help": "אני צריך/ה עזרה",
+        "ambulance": "תזמינו אמבולנס, בבקשה",
+        "hospital": "איפה בית החולים הקרוב?",
+        "lost-passport": "איבדתי את הדרכון",
+        "police": "תקראו למשטרה",
+        "feel-sick": "אני לא מרגיש/ה טוב",
+        "allergy-medicine": "יש לי אלרגיה — צריך/ה תרופה"
+      },
+      "numbers_time": {
+        "one": "אחת",
+        "two": "שתיים",
+        "ten": "עשר",
+        "what-time": "מה השעה?",
+        "today": "היום",
+        "tomorrow": "מחר"
+      }
     }
   },
-
   "Welcome": {
     "brandName": "Tabi",
     "taglineLine1": "המסע שלך.",
@@ -1190,7 +1186,6 @@
     "metadataTitle": "Tabi — המסע שלך. מתוכנן בצורה מושלמת.",
     "metadataDescription": "תכנון ונסיעה עם הכול במקום אחד — מסלול, לינה, תחבורה ומסמכים."
   },
-
   "PwaInstall": {
     "cta": "התקנת Tabi",
     "iosTitle": "התקנת Tabi באייפון",
@@ -1199,7 +1194,6 @@
     "iosStep2": "בחרו \"הוספה למסך הבית\"",
     "iosStep3": "אשרו \"הוספה\""
   },
-
   "Offline": {
     "metadataTitle": "Offline · Tabi",
     "bannerTitle": "אין חיבור לאינטרנט",
@@ -1208,14 +1202,12 @@
     "pageBody": "כדי לטעון את המידע הזה צריך להתחבר לרשת.",
     "tryAgain": "נסה שוב"
   },
-
   "SwUpdate": {
     "title": "גרסה חדשה של Tabi זמינה",
     "body": "עדכון קצר ויש לך את הגרסה החדשה.",
     "primary": "עדכן עכשיו",
     "secondary": "אחר כך"
   },
-
   "Auth": {
     "brandName": "Tabi",
     "login": {
@@ -1257,7 +1249,6 @@
       "googleSignInFailed": "לא הצלחנו להתחבר עם Google. נסו שוב."
     }
   },
-
   "MyTrips": {
     "metadataTitle": "הטיולים שלי · Tabi",
     "brandName": "Tabi",
@@ -1301,7 +1292,6 @@
       }
     }
   },
-
   "Places": {
     "loadingSuggestions": "טוען הצעות...",
     "noResults": "לא נמצאו תוצאות. נסו חיפוש אחר או הזנה ידנית.",
@@ -1311,7 +1301,6 @@
       "resolveFailed": "לא ניתן לטעון פרטי המקום. נסו שוב."
     }
   },
-
   "Trips": {
     "errors": {
       "generic": "משהו השתבש. נסו שוב.",
@@ -1331,7 +1320,6 @@
       "member": "חבר בטיול"
     }
   },
-
   "TripMembers": {
     "createInviteTitle": "יצירת קישור הזמנה",
     "permission": "הרשאה",
@@ -1357,7 +1345,6 @@
       "roleChanged": "התפקיד עודכן."
     }
   },
-
   "TripInvitations": {
     "landingTitle": "הזמנה לטיול",
     "enterTrip": "כניסה לטיול",
@@ -1381,7 +1368,6 @@
       "ownerHint": "בעלים יכולים לנהל את חברי הטיול וליצור הזמנות נוספות."
     }
   },
-
   "TripReminders": {
     "pageTitle": "תזכורות",
     "settingsTitle": "תזכורות אישיות",
@@ -1407,7 +1393,6 @@
       "nonexistentLocalTime": "השעה הזו לא קיימת בתאריך שנבחר (מעבר שעון קיץ/חורף)."
     }
   },
-
   "TripCover": {
     "title": "תמונת הטיול",
     "hint": "תמונה אישית שתופיע בראש מסך הבית. JPEG, PNG או WebP עד 5MB.",
@@ -1427,7 +1412,6 @@
       "uploaded": "תמונת הטיול עודכנה."
     }
   },
-
   "Settings": {
     "title": "הגדרות",
     "comingSoon": "בקרוב",
@@ -1458,8 +1442,8 @@
         "subtitleMember": "מטבע בסיס של הטיול · {currency}"
       },
       "language": {
-        "title": "שפה",
-        "subtitle": "שפת הממשק של האפליקציה"
+        "title": "שפת טיול",
+        "subtitle": "ביטויים ותרגום ביעד"
       },
       "maps": {
         "title": "מפות וניווט",
@@ -1496,6 +1480,37 @@
       "sectionTitle": "שפת ממשק",
       "sectionHint": "העדפה אישית שלכם. היא חלה על החשבון שלכם ועל כל הטיולים ב-Tabi."
     },
+    "travelLanguagePage": {
+      "back": "חזרה להגדרות",
+      "title": "שפת טיול",
+      "lead": "בחרו את השפה לביטויים ולתרגום האישי בטיול הזה.",
+      "summaryTitle": "המצב הנוכחי",
+      "destinationLabel": "יעד",
+      "destinationUnknown": "עדיין לא הוגדר",
+      "destinationDefaultLabel": "מומלץ ליעד",
+      "destinationDefaultUnknown": "הגדירו יעד כדי לראות המלצה",
+      "effectiveLanguageLabel": "השפה בפועל",
+      "effectiveLanguageUnknown": "עדיין לא זמין",
+      "selectionSourceLabel": "איך נבחרה",
+      "selectionSourceAutomatic": "אוטומטי — לפי היעד",
+      "selectionSourceOverride": "נבחרה לטיול הזה",
+      "pickerTitle": "שינוי שפת טיול",
+      "pickerHint": "בעלי הטיול יכולים לבחור שפה נתמכת אחרת או לחזור לאוטומטי.",
+      "automaticOption": "אוטומטי — לפי היעד",
+      "manualOption": "בחירת שפה מסוימת",
+      "chooseLanguageLabel": "שפה",
+      "chooseLanguagePlaceholder": "בחרו שפה",
+      "recommendedGroup": "מומלץ ליעד שלכם",
+      "allLanguagesGroup": "כל השפות הנתמכות",
+      "save": "שמירה",
+      "savedSuccess": "שפת הטיול נשמרה.",
+      "memberTitle": "שפת טיול",
+      "memberHint": "רק בעל/ת הטיול יכול/ה לשנות את שפת הטיול. אפשר להמשיך להשתמש בביטויים בשפה שמוצגת למעלה.",
+      "errors": {
+        "validation": "לא ניתן לשמור את השפה. בדקו את הבחירה ונסו שוב.",
+        "generic": "משהו השתבש. נסו שוב."
+      }
+    },
     "mapsPage": {
       "back": "חזרה להגדרות",
       "lead": "בחרו באיזו אפליקציה Tabi תשתמש כשאתם פותחים ניווט או מיקום.",
@@ -1508,7 +1523,6 @@
       }
     }
   },
-
   "TripTheme": {
     "pageTitle": "מראה וערכת נושא",
     "pageDescription": "בחרו איך הטיול נראה בתוך Tabi. כל המטיילים בטיול רואים את אותה ערכת נושא.",
@@ -1550,7 +1564,6 @@
       "generic": "משהו השתבש. נסו שוב."
     }
   },
-
   "TripSettings": {
     "pageTitle": "הגדרות",
     "detailsTitle": "פרטי הטיול",
@@ -1558,7 +1571,6 @@
     "tripName": "שם הטיול",
     "dates": "תאריכים"
   },
-
   "TravelersSettings": {
     "pageTitle": "מטיילים ושיתוף",
     "lead": "ראו מי בטיול ונהלו הזמנות.",
@@ -1597,7 +1609,6 @@
     "demoteOwnerConfirm": "להסיר הרשאות בעל/ת טיול? לא יוכל/תהי לנהל מטיילים והזמנות.",
     "revokeConfirm": "לבטל את ההזמנה? הקישור יפסיק לעבוד."
   },
-
   "CurrencySettings": {
     "pageTitle": "מטבע",
     "lead": "בחרו איך הטיול עוקב אחרי כסף ואיזה מטבע משמש אתכם באופן אישי.",
@@ -1620,7 +1631,6 @@
       "invalidCurrency": "יש לבחור מטבע נתמך."
     }
   },
-
   "TripDetailsSettings": {
     "pageTitle": "פרטי הטיול",
     "lead": "עדכנו שם, יעד, תאריכים ותמונת כיסוי.",
@@ -1699,23 +1709,19 @@
       }
     }
   },
-
   "More": {
     "pageTitle": "עוד"
   },
-
   "ItineraryPage": {
     "pageTitle": "מסלול",
     "dayPageTitle": "יום {dayNumber}"
   },
-
   "FinancePreview": {
     "title": "הכסף בטיול",
     "badge": "בקרוב",
     "headline": "ניהול תקציב והוצאות במקום אחד",
     "footer": "מעקב תקציב • הוצאות • חלוקה לקטגוריות"
   },
-
   "CreateTrip": {
     "metadataTitle": "יצירת טיול · Tabi",
     "brandName": "Tabi",
@@ -1763,7 +1769,7 @@
       "tripName": "שם הטיול",
       "tripDescription": "תיאור הטיול",
       "optional": "(אופציונלי)",
-      "descriptionPlaceholder": "ירח דבש ביפן",
+      "descriptionPlaceholder": "כמה מילים על הטיול",
       "summaryTitle": "סיכום הטיול",
       "summaryDestination": "יעד",
       "summaryDates": "תאריכים",
@@ -1835,7 +1841,4 @@
       "backToDetails": "חזרה לפרטי הטיול"
     }
   }
-
 }
-
-

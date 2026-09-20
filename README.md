@@ -1,12 +1,12 @@
 # Tabi
 
-Tabi is a mobile-first travel companion **for traveling in Japan**.
+Tabi is a **mobile-first global travel planning and companion** application.
 
-The first real use case is a honeymoon trip in Japan from 25 October 2026 to 18 November 2026. V1 may include Japan-specific tools (addresses/Kanji, taxi cards, JPY, Suica/IC, Shinkansen, Takkyubin, a Japanese phrase dictionary, Japan emergency information).
+A **Trip** is an independent workspace with a canonical destination (`Trip.destination.countryCode`). Destination-specific behavior (currency, weather seed, emergency numbers, list overlays, local lodging labels, travel language, and similar) is derived from that destination — not from UI locale and not from a global default country.
 
-A **Trip** is still an independent workspace. Users may belong to multiple trips with different roles. Traveler names, hotels, dates, and itinerary content are **data**, not hardcoded into reusable application code.
+Japan is a supported destination with JP-specific overlays when `countryCode === "JP"`. There is no silent Japan fallback for unknown destinations.
 
-This repository is currently **Phase 3 — Trips & Onboarding**. `/` is a temporary internal design-system showcase, not the product homepage.
+Users may belong to multiple trips with different roles. Traveler names, hotels, dates, and itinerary content are **trip data**, not hardcoded into reusable application code.
 
 ## Run locally
 

@@ -88,6 +88,7 @@ export default async function NewTransportPage({
       <AppPage width="content">
         <TransportForm
           tripId={trip.id}
+          destinationCountryCode={trip.destination?.countryCode}
           defaultValues={defaultValues}
           mode="create"
           successHref={successHref}

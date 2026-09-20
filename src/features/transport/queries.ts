@@ -5,6 +5,7 @@ import { attachLinkedCostsToIds } from "@/features/finance/linked-expense-querie
 import { isDateWithinTrip } from "@/features/trips/trip-days";
 import { connectDb } from "@/lib/db/connect";
 import { Transport } from "@/models/Transport";
+import { Trip } from "@/models/Trip";
 import { TRANSPORT_TYPES, type TransportType } from "./transport-types";
 import {
   toTransportCardViewModel,
@@ -18,6 +19,14 @@ import type {
   TransportItineraryItemViewModel,
   TransportRecord,
 } from "./types";
+
+async function resolveTripDestinationCountryCode(
+  tripId: string,
+): Promise<string | null | undefined> {
+  await connectDb();
+  const trip = await Trip.findById(tripId).select("destination.countryCode").lean();
+  return trip?.destination?.countryCode ?? null;
+}
 
 export async function listTransportsForTrip(tripId: string): Promise<TransportRecord[]> {
   await connectDb();
@@ -51,7 +60,10 @@ export async function getTransportForTrip(
 export async function listTransportCardsForTrip(
   tripId: string,
 ): Promise<Record<TransportType, TransportCardViewModel[]>> {
-  const t = await getTranslations("Transport");
+  const [t, destinationCountryCode] = await Promise.all([
+    getTranslations("Transport"),
+    resolveTripDestinationCountryCode(tripId),
+  ]);
   const records = await listTransportsForTrip(tripId);
   const recordsWithCosts = await attachLinkedCostsToIds(tripId, "transport", records);
   const grouped = Object.fromEntries(
@@ -59,7 +71,9 @@ export async function listTransportCardsForTrip(
   ) as Record<TransportType, TransportCardViewModel[]>;
 
   for (const record of recordsWithCosts) {
-    grouped[record.type].push(toTransportCardViewModel(tripId, record, t));
+    grouped[record.type].push(
+      toTransportCardViewModel(tripId, record, t, destinationCountryCode),
+    );
   }
 
   return grouped;
@@ -83,11 +97,14 @@ export async function listTransportsForItineraryDay(
     .sort({ "departure.time": 1, createdAt: 1, _id: 1 })
     .lean();
 
-  const t = await getTranslations("Transport");
+  const [t, destinationCountryCode] = await Promise.all([
+    getTranslations("Transport"),
+    resolveTripDestinationCountryCode(tripId),
+  ]);
   const records = documents.map(toTransportRecord);
   const recordsWithCosts = await attachLinkedCostsToIds(tripId, "transport", records);
   return recordsWithCosts.map((record) =>
-    toTransportItineraryItemViewModel(tripId, record, t),
+    toTransportItineraryItemViewModel(tripId, record, t, destinationCountryCode),
   );
 }
 
@@ -104,13 +121,21 @@ export async function listTransportsForItineraryTrip(
     .sort({ "departure.date": 1, "departure.time": 1, createdAt: 1, _id: 1 })
     .lean();
 
-  const t = await getTranslations("Transport");
+  const [t, destinationCountryCode] = await Promise.all([
+    getTranslations("Transport"),
+    resolveTripDestinationCountryCode(tripId),
+  ]);
   const records = documents.map(toTransportRecord);
   const recordsWithCosts = await attachLinkedCostsToIds(tripId, "transport", records);
   const grouped = new Map<string, TransportItineraryItemViewModel[]>();
 
   for (const record of recordsWithCosts) {
-    const item = toTransportItineraryItemViewModel(tripId, record, t);
+    const item = toTransportItineraryItemViewModel(
+      tripId,
+      record,
+      t,
+      destinationCountryCode,
+    );
     const existing = grouped.get(record.departure.date) ?? [];
     existing.push(item);
     grouped.set(record.departure.date, existing);
@@ -129,8 +154,17 @@ export async function getTransportDetailViewModel(
     return null;
   }
 
-  const t = await getTranslations("Transport");
-  return toTransportDetailViewModel(tripId, record, linkedDocuments, t);
+  const [t, destinationCountryCode] = await Promise.all([
+    getTranslations("Transport"),
+    resolveTripDestinationCountryCode(tripId),
+  ]);
+  return toTransportDetailViewModel(
+    tripId,
+    record,
+    linkedDocuments,
+    t,
+    destinationCountryCode,
+  );
 }
 
 export async function listTransportLinkOptions(tripId: string): Promise<

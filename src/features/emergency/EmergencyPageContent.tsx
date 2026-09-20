@@ -7,54 +7,62 @@ import { CurrentLocationPanel } from "./CurrentLocationPanel.client";
 import { CustomResourcesSection } from "./CustomResourcesSection.client";
 import { EmergencyResourceActions } from "./EmergencyResourceActions";
 import type { EmergencyPageViewModel } from "./types";
+import type { EmergencyServiceCategory } from "./data/emergency-dataset-schema";
 import styles from "./EmergencyPage.module.scss";
+
+function serviceCategoryMessageKey(
+  category: EmergencyServiceCategory,
+): `services.${EmergencyServiceCategory}` {
+  return `services.${category}`;
+}
 
 export async function EmergencyPageContent(model: EmergencyPageViewModel) {
   const [t, user] = await Promise.all([
     getTranslations("Emergency"),
     requireUser(),
   ]);
-  const sourceMeta = model.assistanceResources[0]?.source;
 
   return (
     <AppPage width="content">
       <div className={styles.page}>
-        <section className={styles.section} aria-labelledby="urgent-heading">
-          <h2 id="urgent-heading" className={styles.sectionTitle}>
-            {t("urgentSection")}
-          </h2>
-          <ul className={styles.urgentList}>
-            {model.urgentResources.map((resource) => (
-              <li key={resource.id} className={styles.urgentItem}>
-                <p className={styles.urgentTitle}>{resource.title}</p>
-                {resource.description ? (
-                  <p className={styles.urgentDescription}>{resource.description}</p>
-                ) : null}
-                <EmergencyResourceActions actions={resource.actions} primary />
-              </li>
-            ))}
-          </ul>
-        </section>
+        {model.verified.status === "ready" ? (
+          <section className={styles.section} aria-labelledby="verified-heading">
+            <h2 id="verified-heading" className={styles.sectionTitle}>
+              {t("verifiedSectionTitle")}
+            </h2>
+            <ul className={styles.urgentList}>
+              {model.verified.services.map((service) => (
+                <li key={service.id} className={styles.urgentItem}>
+                  <p className={styles.urgentTitle}>
+                    {t(serviceCategoryMessageKey(service.category))}
+                  </p>
+                  <EmergencyResourceActions actions={service.actions} primary />
+                </li>
+              ))}
+            </ul>
+            <p className={styles.sourceNote}>
+              {t("sourceNote", {
+                revision: model.verified.source.sourceRevision,
+                imported: model.verified.source.datasetImportedAt,
+              })}
+            </p>
+          </section>
+        ) : null}
 
-        <section className={styles.section} aria-labelledby="assistance-heading">
-          <h2 id="assistance-heading" className={styles.sectionTitle}>
-            {t("assistanceSection")}
-          </h2>
-          <ul className={styles.resourceList}>
-            {model.assistanceResources.map((resource) => (
-              <li key={resource.id} className={styles.resourceItem}>
-                <p className={styles.resourceTitle}>{resource.title}</p>
-                {resource.description ? (
-                  <p className={styles.resourceMeta}>{resource.description}</p>
-                ) : null}
-                {resource.availability ? (
-                  <p className={styles.resourceMeta}>{resource.availability}</p>
-                ) : null}
-                <EmergencyResourceActions actions={resource.actions} />
-              </li>
-            ))}
-          </ul>
-        </section>
+        {model.verified.status === "missing_destination" ? (
+          <section className={styles.section} aria-live="polite">
+            <p className={styles.notice}>{t("missingDestinationNotice")}</p>
+            <Link href={model.tripDetailsHref} className={styles.actionButton}>
+              {t("updateTripDestination")}
+            </Link>
+          </section>
+        ) : null}
+
+        {model.verified.status === "unsupported_country" ? (
+          <section className={styles.section} aria-live="polite">
+            <p className={styles.notice}>{t("unsupportedCountryNotice")}</p>
+          </section>
+        ) : null}
 
         <section className={styles.section} aria-labelledby="location-heading">
           <h2 id="location-heading" className={styles.sectionTitle}>
@@ -145,12 +153,6 @@ export async function EmergencyPageContent(model: EmergencyPageViewModel) {
             {t("allEmergencyPhrases")}
           </Link>
         </section>
-
-        {sourceMeta ? (
-          <p className={styles.footerNote}>
-            {t("sourceNote")} ({sourceMeta.verifiedAt})
-          </p>
-        ) : null}
       </div>
     </AppPage>
   );

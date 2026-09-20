@@ -25,6 +25,7 @@ type DayPageShellProps = {
   transportRecords: ReadonlyMap<string, TransportRecord>;
   activityPhotos?: ActivityPhotoMap;
   destinationCalendarTimeZone: string;
+  destinationCountryCode?: string | null;
 };
 
 export function DayPageShell({
@@ -36,6 +37,7 @@ export function DayPageShell({
   transportRecords,
   activityPhotos,
   destinationCalendarTimeZone,
+  destinationCountryCode,
 }: DayPageShellProps) {
   const t = useTranslations("Itinerary");
   const pathname = usePathname();
@@ -186,6 +188,7 @@ export function DayPageShell({
         financeBaseCurrency={day.financeBaseCurrency}
         currencies={day.currencies}
         destinationCalendarTimeZone={destinationCalendarTimeZone}
+        destinationCountryCode={destinationCountryCode}
       />
     </>
   );

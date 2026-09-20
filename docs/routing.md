@@ -35,7 +35,7 @@ Trip URLs always include `tripId`. There is no implied “current trip” outsid
 | `/app/trips/[tripId]/lists/before-trip` | Pre-flight tasks checklist | 11 |
 | `/app/trips/[tripId]/lists/during-trip` | During-trip tasks checklist | 11 |
 | `/app/trips/[tripId]/lists/pre-trip-shopping` | Pre-trip shopping checklist | 11 |
-| `/app/trips/[tripId]/currency` | Travel currency converter (JPY → ILS default) | 12 |
+| `/app/trips/[tripId]/currency` | Travel currency converter (destination + home currency) | 12 |
 | `/app/trips/[tripId]/currency/rate` | Server-mediated Frankfurter exchange-rate proxy | 12 |
 | `/app/trips/[tripId]/weather` | Travel weather — searchable locations, current + 3-day forecast | 13 |
 | `/app/trips/[tripId]/weather/search` | Server-mediated WeatherAPI location search proxy | 13 |

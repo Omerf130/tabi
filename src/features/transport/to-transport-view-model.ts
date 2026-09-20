@@ -18,18 +18,12 @@ import { formatTransportTimeRangeLabel } from "./transport-datetime";
 
 import { createTransportTimezoneLabelResolver } from "./timezone-options";
 
+import { createTrainCategoryLabelResolver } from "./transport-labels";
 import {
-
-  createTrainCategoryLabelResolver,
-
   createTransportTypeLabelResolver,
-
   createTransportTypeSingularLabelResolver,
-
   type TrainCategory,
-
   type TransportType,
-
 } from "./transport-types";
 
 import type {
@@ -90,9 +84,11 @@ function buildMetaLabel(
 
   t: AppTranslator<"Transport">,
 
+  destinationCountryCode?: string | null,
+
 ): string | undefined {
 
-  const getTrainCategory = createTrainCategoryLabelResolver(t);
+  const getTrainCategory = createTrainCategoryLabelResolver(t, destinationCountryCode);
 
 
 
@@ -226,6 +222,8 @@ export function toTransportCardViewModel(
 
   t: AppTranslator<"Transport">,
 
+  destinationCountryCode?: string | null,
+
 ): TransportCardViewModel {
 
   const getTypeSingular = createTransportTypeSingularLabelResolver(t);
@@ -252,7 +250,7 @@ export function toTransportCardViewModel(
 
     ),
 
-    metaLabel: buildMetaLabel(record.type, record.details, t),
+    metaLabel: buildMetaLabel(record.type, record.details, t, destinationCountryCode),
 
     dateLabel: formatCalendarDateDisplay(record.departure.date),
 
@@ -284,6 +282,8 @@ export function toTransportItineraryItemViewModel(
 
   t: AppTranslator<"Transport">,
 
+  destinationCountryCode?: string | null,
+
 ): TransportItineraryItemViewModel {
 
   const getTypeSingular = createTransportTypeSingularLabelResolver(t);
@@ -306,7 +306,7 @@ export function toTransportItineraryItemViewModel(
 
     ),
 
-    metaLabel: buildMetaLabel(record.type, record.details, t),
+    metaLabel: buildMetaLabel(record.type, record.details, t, destinationCountryCode),
 
     timeLabel: formatTransportTimeRangeLabel(record.departure, record.arrival),
 
@@ -332,6 +332,8 @@ export function toTransportDetailViewModel(
 
   t: AppTranslator<"Transport">,
 
+  destinationCountryCode?: string | null,
+
 ): TransportDetailViewModel {
 
   const getType = createTransportTypeLabelResolver(t);
@@ -355,7 +357,7 @@ export function toTransportDetailViewModel(
 
     ),
 
-    metaLabel: buildMetaLabel(record.type, record.details, t),
+    metaLabel: buildMetaLabel(record.type, record.details, t, destinationCountryCode),
 
     departureTimeLabel: record.departure.time,
 

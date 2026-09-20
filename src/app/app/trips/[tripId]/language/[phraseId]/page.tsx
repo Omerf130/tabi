@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { TripHeader } from "@/features/app-shell/TripHeader";
-import { getPhraseFromDefaultPack } from "@/features/language/builtin/registry";
+import { getPhraseIntentById } from "@/features/language/phrase-intent-catalog";
+import { getPhraseIntentUiSourceText } from "@/features/language/phrase-intent-i18n";
 import { PhraseDetailContent } from "@/features/language/PhraseDetailContent";
 import { getPhraseDetailForTrip } from "@/features/language/queries";
 import { requireTripMember } from "@/features/trips/authorization";
@@ -18,13 +19,14 @@ export async function generateMetadata({
     requireTripMember(tripId),
     getTranslations("Language"),
   ]);
-  const phrase = getPhraseFromDefaultPack(phraseId);
+  const intent = getPhraseIntentById(phraseId);
 
-  if (!phrase) {
+  if (!intent) {
     return { title: `${t("errors.notFound")} · ${trip.name}` };
   }
 
-  return { title: `${phrase.sourceText} · ${t("pageTitle")}` };
+  const sourceText = getPhraseIntentUiSourceText(phraseId, t);
+  return { title: `${sourceText} · ${t("pageTitle")}` };
 }
 
 export default async function LanguagePhrasePage({

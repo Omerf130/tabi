@@ -39,6 +39,10 @@ import {
 import { PlaceModeSegment } from "@/features/itinerary/PlaceModeSegment.client";
 import sectionStyles from "@/features/trips/settings/TripSettingsSections.module.scss";
 import { getMaxAccommodationCheckOutDate } from "./accommodation-date-semantics";
+import {
+  resolveAccommodationLocalFieldLang,
+  resolveAccommodationLocalFieldMessageKeys,
+} from "./accommodation-local-field-labels";
 import styles from "./TripAccommodationSettings.module.scss";
 
 const initialState: AccommodationActionState = {};
@@ -47,6 +51,7 @@ type TripAccommodationSettingsProps = {
   tripId: string;
   startDate: string;
   endDate: string;
+  destinationCountryCode?: string | null;
   accommodations: AccommodationSettingsViewModel[];
   variant?: TripSettingsVariant;
   financeBaseCurrency?: string;
@@ -57,6 +62,7 @@ type AccommodationRowProps = {
   tripId: string;
   startDate: string;
   endDate: string;
+  destinationCountryCode?: string | null;
   accommodation: AccommodationSettingsViewModel;
   financeBaseCurrency: string;
   currencies: readonly CurrencyOption[];
@@ -155,12 +161,15 @@ function TripFields({
 function ManualFields({
   accommodation,
   idPrefix,
+  destinationCountryCode,
 }: {
   accommodation?: AccommodationSettingsViewModel;
   idPrefix: string;
+  destinationCountryCode?: string | null;
 }) {
   const t = useTranslations("Accommodation");
-  const tCommon = useTranslations("Common");
+  const localFieldKeys = resolveAccommodationLocalFieldMessageKeys(destinationCountryCode);
+  const localLang = resolveAccommodationLocalFieldLang(destinationCountryCode);
 
   return (
     <>
@@ -174,16 +183,16 @@ function ManualFields({
         />
       </Field>
       <Field
-        label={t("manualNameJapanese")}
+        label={t(localFieldKeys.manualNameLabelKey)}
         htmlFor={`${idPrefix}-manualNameJapanese`}
-        hint={t("manualNameJapaneseHint")}
+        hint={t(localFieldKeys.manualNameHintKey)}
       >
         <Input
           id={`${idPrefix}-manualNameJapanese`}
           name="manualNameJapanese"
           defaultValue={accommodation?.manualNameJapanese}
           dir="auto"
-          lang="ja"
+          lang={localLang}
         />
       </Field>
       <Field label={t("city")} htmlFor={`${idPrefix}-manualCity`}>
@@ -203,14 +212,17 @@ function ManualFields({
           dir="auto"
         />
       </Field>
-      <Field label={t("addressJapanese")} htmlFor={`${idPrefix}-manualAddressJapanese`}>
+      <Field
+        label={t(localFieldKeys.addressLabelKey)}
+        htmlFor={`${idPrefix}-manualAddressJapanese`}
+      >
         <Textarea
           id={`${idPrefix}-manualAddressJapanese`}
           name="manualAddressJapanese"
           defaultValue={accommodation?.manualAddressJapanese}
           rows={2}
           dir="auto"
-          lang="ja"
+          lang={localLang}
         />
       </Field>
       <Field label={t("googleMapsLink")} htmlFor={`${idPrefix}-manualMaps`}>
@@ -232,6 +244,7 @@ export function TripAccommodationForm({
   startDate,
   endDate,
   idPrefix,
+  destinationCountryCode,
   action,
   submitLabel,
   defaultCheckInDate,
@@ -248,6 +261,7 @@ export function TripAccommodationForm({
   startDate: string;
   endDate: string;
   idPrefix: string;
+  destinationCountryCode?: string | null;
   action:
     | typeof createAccommodationAction
     | typeof updateAccommodationAction;
@@ -359,7 +373,11 @@ export function TripAccommodationForm({
 
       {!isGoogleMode ? (
         <>
-          <ManualFields accommodation={accommodation} idPrefix={idPrefix} />
+          <ManualFields
+            accommodation={accommodation}
+            idPrefix={idPrefix}
+            destinationCountryCode={destinationCountryCode}
+          />
           {!plannerPresentation ? (
             <button
               type="button"
@@ -432,6 +450,7 @@ function AccommodationRow({
   tripId,
   startDate,
   endDate,
+  destinationCountryCode,
   accommodation,
   financeBaseCurrency,
   currencies,
@@ -459,6 +478,7 @@ function AccommodationRow({
           accommodation={accommodation}
           startDate={startDate}
           endDate={endDate}
+          destinationCountryCode={destinationCountryCode}
           idPrefix={`edit-${accommodation.id}`}
           action={updateAccommodationAction}
           submitLabel={tCommon("save")}
@@ -490,7 +510,11 @@ function AccommodationRow({
           {accommodation.name}
         </p>
         {accommodation.nameJapanese ? (
-          <p className={styles.itemNameJapanese} dir="auto" lang="ja">
+          <p
+            className={styles.itemNameJapanese}
+            dir="auto"
+            lang={resolveAccommodationLocalFieldLang(destinationCountryCode)}
+          >
             {accommodation.nameJapanese}
           </p>
         ) : null}
@@ -549,6 +573,7 @@ export function TripAccommodationSettings({
   tripId,
   startDate,
   endDate,
+  destinationCountryCode,
   accommodations,
   variant = "stack",
   financeBaseCurrency = "ILS",
@@ -581,6 +606,7 @@ export function TripAccommodationSettings({
             tripId={tripId}
             startDate={startDate}
             endDate={endDate}
+            destinationCountryCode={destinationCountryCode}
             idPrefix="create"
             action={createAccommodationAction}
             submitLabel={t("addSubmit")}
@@ -599,6 +625,7 @@ export function TripAccommodationSettings({
               tripId={tripId}
               startDate={startDate}
               endDate={endDate}
+              destinationCountryCode={destinationCountryCode}
               accommodation={accommodation}
               financeBaseCurrency={financeBaseCurrency}
               currencies={currencies}

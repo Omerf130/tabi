@@ -55,6 +55,7 @@ export default async function AccommodationDetailPage({
         tripId={trip.id}
         accommodation={accommodation}
         mapsNavigationHref={mapsNavigationHref}
+        destinationCountryCode={trip.destination?.countryCode}
       />
     </>
   );

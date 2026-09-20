@@ -59,6 +59,7 @@ export function CustomResourcesSection({
           </Button>
         ) : null}
       </div>
+      <p className={styles.customResourcesHint}>{t("customResourcesHint")}</p>
 
       {showCreateForm ? (
         <TripEmergencyResourceForm

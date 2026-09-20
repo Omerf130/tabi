@@ -36,7 +36,7 @@ Future contextual weather (Accommodation, Activity, GPS) can supply coordinates 
 
 ## Defaults and preferences
 
-- First-use default: **Tokyo, Japan** (coordinates only)
+- First-use seed: trip destination coordinates when available (`resolveWeatherSeedFromDestination`); otherwise user search / saved preference — no Tokyo fallback
 - Browser preference: `tabi.weather.v1.location` (normalized `WeatherLocationRef` JSON)
 - No MongoDB
 

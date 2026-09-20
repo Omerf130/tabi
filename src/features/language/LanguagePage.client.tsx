@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
+import { CustomPhraseTranslator } from "./CustomPhraseTranslator.client";
 import { CategoryGrid } from "./CategoryGrid";
 import { PhraseListRow } from "./PhraseListRow";
 import { normalizeSearchText } from "./search-phrases";
@@ -18,10 +20,17 @@ export function LanguagePageClient({
   phrases,
   favoritePhraseIds,
   categoryLabels,
+  runtimeState,
+  tripDetailsHref,
+  translationWarning,
+  travelLanguageSettingsHref,
+  customTranslationEnabled,
+  targetLanguage,
   initialCategory = null,
   showFavorites = false,
 }: LanguagePageClientProps) {
   const t = useTranslations("Language.errors");
+  const tRuntime = useTranslations("Language.runtime");
   const [query, setQuery] = useState("");
 
   const displayedPhrases = useMemo(() => {
@@ -42,8 +51,28 @@ export function LanguagePageClient({
     return items.filter((item) => item.searchBlob.includes(normalizedQuery));
   }, [phrases, query, showFavorites, favoritePhraseIds, initialCategory]);
 
+  if (runtimeState === "unknown_travel_language") {
+    return (
+      <div className={styles.page}>
+        <div className={styles.runtimeNotice} role="status">
+          <p className={styles.runtimeNoticeTitle}>{tRuntime("unresolvedTravelLanguageTitle")}</p>
+          <p className={styles.runtimeNoticeBody}>{tRuntime("unresolvedTravelLanguageBody")}</p>
+          <Link href={tripDetailsHref} className={styles.runtimeNoticeAction}>
+            {tRuntime("updateTripDetails")}
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.page}>
+      {translationWarning ? (
+        <p className={styles.runtimeWarning} role="status">
+          {tRuntime("translationUnavailable")}
+        </p>
+      ) : null}
+
       <div className={styles.searchWrap}>
         <label htmlFor="phrase-search" className={styles.searchLabel}>
           {t("searchPlaceholder")}
@@ -77,6 +106,13 @@ export function LanguagePageClient({
           ))}
         </ul>
       )}
+
+      <CustomPhraseTranslator
+        tripId={tripId}
+        enabled={customTranslationEnabled}
+        targetLanguage={targetLanguage}
+        travelLanguageSettingsHref={travelLanguageSettingsHref}
+      />
     </div>
   );
 }

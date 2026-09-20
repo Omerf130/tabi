@@ -191,6 +191,7 @@ export function QuickAddForms({
             tripId={context.tripId}
             startDate={bootstrap.startDate}
             endDate={bootstrap.endDate}
+            destinationCountryCode={bootstrap.destinationCountryCode}
             idPrefix="quick-add-accommodation"
             action={createAccommodationAction}
             submitLabel={t("dayActionAddAccommodation")}
@@ -219,6 +220,7 @@ export function QuickAddForms({
             <TransportForm
               key={`qa-transport-${step.transportType}-${date ?? ""}`}
               tripId={context.tripId}
+              destinationCountryCode={bootstrap.destinationCountryCode}
               mode="create"
               overlayNavigation
               plannerPresentation
