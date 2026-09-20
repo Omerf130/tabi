@@ -13,12 +13,15 @@ import {
   IconFilePdf,
   IconGrid,
   IconLink,
+  IconMapPin,
   IconMore,
   IconPlane,
+  IconSearch,
   IconShield,
   IconTicket,
   IconTrain,
 } from "@/components/ui/icons";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { AppPage } from "@/features/app-shell/AppPage";
 import { getTravelDocumentsSettingsHref } from "@/features/documents/constants";
 import {
@@ -230,23 +233,39 @@ export function DocumentsPageContent({
         ) : null}
 
         {filteredDocuments.length === 0 ? (
-          <div className={styles.emptyState}>
-            <p className={styles.emptyTitle}>
-              {documents.length === 0 ? t("emptyAll") : t("emptyFilter")}
-            </p>
-            <p className={styles.emptyHint}>
-              {documents.length === 0
-                ? isOwner
-                  ? t("emptyAllHintOwner")
-                  : t("emptyAllHintGuest")
-                : t("emptyFilterHint")}
-            </p>
-            {documents.length === 0 && isOwner ? (
-              <Link href={getTravelDocumentsSettingsHref(tripId)} className={styles.emptyLink}>
-                {t("addInSettings")}
-              </Link>
-            ) : null}
-          </div>
+          documents.length === 0 ? (
+            <EmptyState
+              variant="section"
+              className={styles.listEmptyState}
+              visual={{
+                motif: "documents",
+                icon: <IconDocuments aria-hidden />,
+                accentIcon: <IconMapPin aria-hidden />,
+              }}
+              title={t("emptyAll")}
+              description={isOwner ? t("emptyAllHintOwner") : t("emptyAllHintGuest")}
+              primaryAction={
+                isOwner
+                  ? {
+                      label: t("addInSettings"),
+                      href: getTravelDocumentsSettingsHref(tripId),
+                    }
+                  : undefined
+              }
+            />
+          ) : (
+            <EmptyState
+              variant="search"
+              className={styles.listEmptyState}
+              visual={{ motif: "search", icon: <IconSearch aria-hidden /> }}
+              title={t("emptyFilter")}
+              description={t("emptyFilterHint")}
+              primaryAction={{
+                label: t("emptyFilterShowAll"),
+                onClick: () => setActiveFilter("all"),
+              }}
+            />
+          )
         ) : (
           <ul className={styles.list}>
             {filteredDocuments.map((document) => {

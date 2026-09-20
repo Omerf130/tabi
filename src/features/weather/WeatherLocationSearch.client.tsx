@@ -1,8 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useId, useRef, useState, useTransition } from "react";
-import { IconSearch } from "@/components/ui/icons";
+import { useCallback, useEffect, useId, useRef, useState, useTransition } from "react";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ProviderAlert } from "@/components/ui/ProviderAlert";
+import { IconSearch, IconWeather } from "@/components/ui/icons";
 import {
   WEATHER_SEARCH_DEBOUNCE_MS,
   WEATHER_SEARCH_MIN_INPUT_LENGTH,
@@ -53,6 +55,36 @@ export function WeatherLocationSearch({
   const canSearch = trimmedQuery.length >= WEATHER_SEARCH_MIN_INPUT_LENGTH;
   const visibleResults = canSearch ? results : [];
 
+  const runSearch = useCallback(
+    async (searchQuery: string, signal?: AbortSignal) => {
+      setStatus(t("searching"));
+      setError(null);
+
+      try {
+        const response = await fetch(buildWeatherSearchHref(tripId, searchQuery), {
+          signal,
+        });
+
+        if (!response.ok) {
+          throw new Error("search failed");
+        }
+
+        const nextResults = (await response.json()) as WeatherLocationRef[];
+        setResults(nextResults);
+        setStatus(null);
+      } catch (fetchError) {
+        if (fetchError instanceof DOMException && fetchError.name === "AbortError") {
+          return;
+        }
+
+        setResults([]);
+        setStatus(null);
+        setError(t("searchFailed"));
+      }
+    },
+    [tripId, t],
+  );
+
   useEffect(() => {
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
@@ -71,31 +103,8 @@ export function WeatherLocationSearch({
       const controller = new AbortController();
       abortRef.current = controller;
 
-      startTransition(async () => {
-        setStatus(t("searching"));
-        setError(null);
-
-        try {
-          const response = await fetch(buildWeatherSearchHref(tripId, trimmedQuery), {
-            signal: controller.signal,
-          });
-
-          if (!response.ok) {
-            throw new Error("search failed");
-          }
-
-          const nextResults = (await response.json()) as WeatherLocationRef[];
-          setResults(nextResults);
-          setStatus(null);
-        } catch (fetchError) {
-          if (fetchError instanceof DOMException && fetchError.name === "AbortError") {
-            return;
-          }
-
-          setResults([]);
-          setStatus(null);
-          setError(t("loadFailed"));
-        }
+      startTransition(() => {
+        void runSearch(trimmedQuery, controller.signal);
       });
     }, WEATHER_SEARCH_DEBOUNCE_MS);
 
@@ -104,7 +113,7 @@ export function WeatherLocationSearch({
         clearTimeout(debounceRef.current);
       }
     };
-  }, [canSearch, trimmedQuery, tripId]);
+  }, [canSearch, trimmedQuery, runSearch]);
 
   function handleClose() {
     if (abortRef.current) {
@@ -165,10 +174,34 @@ export function WeatherLocationSearch({
           />
         </div>
 
-        {error ? <p className={styles.emptyResults}>{error}</p> : null}
+        {error ? (
+          <ProviderAlert
+            className={styles.searchProviderAlert}
+            icon={<IconWeather aria-hidden />}
+            message={t("searchFailed")}
+            retryAction={{
+              label: t("retry"),
+              onClick: () => {
+                if (canSearch) {
+                  void runSearch(trimmedQuery);
+                }
+              },
+            }}
+          />
+        ) : null}
         {status ? <p className={styles.searchStatus}>{status}</p> : null}
         {!error && !status && visibleResults.length === 0 && canSearch ? (
-          <p className={styles.emptyResults}>{t("noResults")}</p>
+          <EmptyState
+            variant="search"
+            className={styles.searchEmptyState}
+            visual={{ motif: "search", icon: <IconSearch aria-hidden /> }}
+            title={t("noResults")}
+            description={t("noResultsHint")}
+            primaryAction={{
+              label: t("clearSearch"),
+              onClick: () => setQuery(""),
+            }}
+          />
         ) : null}
 
         <ul className={styles.searchResults}>

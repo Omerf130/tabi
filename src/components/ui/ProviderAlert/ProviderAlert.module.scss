@@ -1,0 +1,116 @@
+.alert {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.alert[data-tone="error"] {
+  background: linear-gradient(
+    165deg,
+    var(--color-danger-soft) 0%,
+    color-mix(in srgb, var(--color-danger-soft) 70%, var(--color-surface)) 100%
+  );
+  border-color: color-mix(in srgb, var(--color-danger) 22%, var(--color-border));
+}
+
+.alert[data-tone="warning"] {
+  background: linear-gradient(
+    165deg,
+    var(--color-warning-soft) 0%,
+    color-mix(in srgb, var(--color-warning-soft) 70%, var(--color-surface)) 100%
+  );
+  border-color: color-mix(in srgb, var(--color-warning) 22%, var(--color-border));
+}
+
+.alertRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.iconShell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-surface-elevated) 85%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border-strong) 80%, transparent);
+  color: var(--color-danger);
+  box-shadow: var(--shadow-sm);
+}
+
+.alert[data-tone="warning"] .iconShell {
+  color: var(--color-warning);
+}
+
+.iconShell :global(svg) {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  flex: 1;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-secondary);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.message {
+  margin: 0;
+  font-size: var(--text-secondary);
+  line-height: var(--line-height-body);
+  color: var(--color-text);
+}
+
+.alert[data-tone="error"] .message {
+  color: color-mix(in srgb, var(--color-danger) 65%, var(--color-text));
+}
+
+.alert[data-tone="warning"] .message {
+  color: color-mix(in srgb, var(--color-warning) 70%, var(--color-text));
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding-inline-start: calc(2.5rem + var(--space-3));
+}
+
+.secondaryLink,
+.secondaryLinkButton {
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: var(--text-label);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
+@media (max-width: 479px) {
+  .actions {
+    padding-inline-start: 0;
+    width: 100%;
+  }
+}

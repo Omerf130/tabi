@@ -20,7 +20,7 @@ See [permissions.md](permissions.md) and [data-domain.md](data-domain.md).
 - Prefer **Server Components**. Add a Client Component only when the UI needs browser state or event handlers.
 - No global client store in Phase 0. Domain logic should live next to its feature when those phases arrive (`src/features/...`), not in a generic `utils` dump.
 - Styling uses semantic CSS variables (`--color-primary`, etc.). Theme choice (including Sakura) is independent of trip destination. See [theming.md](theming.md).
-- Reusable UI primitives live in `src/components/ui/` (SCSS Modules). Prefer Server Components; client only when a primitive needs event state (BottomNav active routing via TripPrimaryNav, the design-system preview, auth form pending state).
+- Reusable UI primitives live in `src/components/ui/` (SCSS Modules). Shared empty-state presentation (`EmptyState`, `ConfigNotice`, `ProviderAlert`) is documented in [empty-states.md](empty-states.md). Prefer Server Components; client only when a primitive needs event state (BottomNav active routing via TripPrimaryNav, the design-system preview, auth form pending state).
 - Trip-scoped pages use **TripShellLayout** + **TripHeader** + **AppPage**. See [app-shell.md](app-shell.md).
 - Itinerary days are derived from Trip dates server-side; accordion UX in client island. Trip Home is server-rendered from lifecycle + today's Activities. See [itinerary-foundation.md](itinerary-foundation.md), [trip-home.md](trip-home.md).
 - Authentication is first-party (Argon2id + hashed sessions). See [auth.md](auth.md).

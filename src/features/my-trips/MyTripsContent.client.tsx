@@ -30,7 +30,11 @@ export function MyTripsContent({ trips }: MyTripsContentProps) {
       {filteredTrips.length > 0 ? (
         <TripLibraryGrid trips={filteredTrips} />
       ) : (
-        <MyTripsEmptyState filter={activeFilter} hasAnyTrips={trips.length > 0} />
+        <MyTripsEmptyState
+          filter={activeFilter}
+          hasAnyTrips={trips.length > 0}
+          onShowAllTrips={() => setActiveFilter("all")}
+        />
       )}
     </main>
   );

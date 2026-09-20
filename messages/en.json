@@ -554,6 +554,7 @@
     "emptyAllHintOwner": "Add flight tickets, bookings, and insurance so everyone on the trip can access them.",
     "emptyAllHintGuest": "The trip owner has not added documents yet.",
     "emptyFilterHint": "Try a different category.",
+    "emptyFilterShowAll": "Show all documents",
     "addInSettings": "Add a document in settings",
     "addedOn": "Added {date}",
     "detailBreadcrumbWallet": "Travel wallet",
@@ -737,6 +738,8 @@
     "emptyPast": "No past stays",
     "emptyAllHintOwner": "Add stays so they appear here and on the itinerary.",
     "emptyAllHintGuest": "The trip owner has not added stays yet.",
+    "emptyFilterHint": "Try another filter or show everything on this trip.",
+    "emptyFilterShowAll": "Show all stays",
     "name": "Name",
     "nameJapanese": "Name in Japanese",
     "city": "City",
@@ -781,6 +784,8 @@
     "emptyFlight": "No flights on this trip yet",
     "emptyTrain": "No trains on this trip yet",
     "emptyOther": "No other rides on this trip yet",
+    "emptyFilterHint": "Try another filter or show all transport.",
+    "emptyFilterShowAll": "Show all transport",
     "listTitles": {
       "flight": "Flight to {destination}",
       "flightNoDestination": "Flight",
@@ -906,6 +911,12 @@
     "currentSectionAria": "Current weather",
     "nearTermSectionAria": "Short-term forecast",
     "loadFailed": "We couldn't load the weather right now.",
+    "loadFailedTitle": "Weather unavailable",
+    "configLocationTitle": "Choose a weather location",
+    "configLocationDescription": "Search for a place to see the forecast during your trip.",
+    "searchFailed": "We couldn't search locations right now.",
+    "noResultsHint": "Try another spelling or a nearby city.",
+    "clearSearch": "Clear search",
     "retry": "Try again",
     "refreshFailed": "We couldn't refresh the weather. Showing the last loaded data.",
     "updated": "Updated",
@@ -1276,6 +1287,7 @@
       "manyDays": "{count} days"
     },
     "empty": {
+      "showAllTrips": "Show all trips",
       "all": {
         "title": "No trips yet",
         "body": "Start planning your next adventure and keep all your trips in one place.",

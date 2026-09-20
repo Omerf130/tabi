@@ -2,6 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { IconPlane, IconSearch, IconTrain } from "@/components/ui/icons";
 import {
   countTransportsByFilter,
   filterTransportList,
@@ -51,18 +53,30 @@ export function TransportListView({ transports, isOwner }: TransportListViewProp
       </div>
 
       {!hasAnyTransport ? (
-        <div className={styles.emptyState}>
-          <p className={styles.emptyTitle}>{t("emptyAll")}</p>
-          <p className={styles.emptyHint}>
-            {isOwner ? t("emptyAllHintOwner") : t("emptyAllHintGuest")}
-          </p>
-        </div>
+        <EmptyState
+          variant="section"
+          className={styles.listEmptyState}
+          surface="subtle-bordered"
+          visual={{
+            motif: "transport",
+            icon: <IconTrain aria-hidden />,
+            accentIcon: <IconPlane aria-hidden />,
+          }}
+          title={t("emptyAll")}
+          description={isOwner ? t("emptyAllHintOwner") : t("emptyAllHintGuest")}
+        />
       ) : filteredTransports.length === 0 ? (
-        <div className={styles.filterEmptyState}>
-          <p className={styles.emptyTitle}>
-            {t(getTransportFilterEmptyMessageKey(activeFilter))}
-          </p>
-        </div>
+        <EmptyState
+          variant="search"
+          className={styles.listEmptyState}
+          visual={{ motif: "search", icon: <IconSearch aria-hidden /> }}
+          title={t(getTransportFilterEmptyMessageKey(activeFilter))}
+          description={t("emptyFilterHint")}
+          primaryAction={{
+            label: t("emptyFilterShowAll"),
+            onClick: () => setActiveFilter("all"),
+          }}
+        />
       ) : (
         <ul className={styles.list}>
           {filteredTransports.map((transport) => (

@@ -150,7 +150,9 @@ export async function BeforeTripJourney({ journey }: BeforeTripJourneyProps) {
 
   return (
     <section className={styles.beforeJourney} aria-label={t("beforeJourneyAria")}>
-      <BeforeTripRemindersSection reminders={journey.upcomingReminders ?? []} />
+      {journey.upcomingReminders ? (
+        <BeforeTripRemindersSection reminders={journey.upcomingReminders} />
+      ) : null}
 
       {journey.preparation ? (
         <ListTilesSection preparation={journey.preparation} />

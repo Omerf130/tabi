@@ -20,10 +20,14 @@ describe("during trip journey UI contracts", () => {
     );
 
     expect(planSource).toContain("duringPlanTimeline");
-    expect(planSource).toContain('t("todaysPlanEmptyTitle")');
-    expect(planSource).toContain('t("todaysPlanEmptyHint")');
-    expect(planSource).toContain('t("todaysPlanEmptyCta")');
+    expect(planSource).toContain("TodaysPlanEmpty");
     expect(planSource).toContain("section.ctaHref");
+    expect(
+      readFileSync(
+        join(process.cwd(), "src/features/trip-home/TodaysPlanEmpty.client.tsx"),
+        "utf8",
+      ),
+    ).toContain('t("todaysPlanEmptyTitle")');
   });
 
   it("keeps optional NOW and UP NEXT cards conditional", () => {

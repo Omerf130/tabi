@@ -1,0 +1,366 @@
+.stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-primary);
+  --es-sky: color-mix(in srgb, var(--color-link) 14%, var(--color-surface));
+  --es-warm: color-mix(in srgb, var(--color-accent) 38%, var(--color-surface));
+  --es-sage: color-mix(in srgb, var(--color-success) 16%, var(--color-surface));
+  --es-peach: color-mix(in srgb, var(--color-accent) 55%, var(--color-surface-elevated));
+}
+
+.stage[data-scale="full"] {
+  width: min(100%, 7.5rem);
+  height: 6.25rem;
+  margin-block-end: var(--space-2);
+}
+
+.stage[data-scale="section"],
+.stage[data-scale="config"] {
+  width: min(100%, 6rem);
+  height: 5rem;
+  margin-block-end: var(--space-1);
+}
+
+.stage[data-scale="inline"] {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.stage[data-scale="search"] {
+  width: auto;
+  height: auto;
+  margin-block-end: var(--space-1);
+}
+
+.scenery {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.blobSky,
+.blobWarm,
+.blobSage {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(0.5px);
+}
+
+.stage[data-scale="full"] .blobSky {
+  width: 78%;
+  height: 72%;
+  inset-inline-start: 8%;
+  inset-block-start: 6%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    var(--es-sky) 0%,
+    color-mix(in srgb, var(--es-sky) 40%, transparent) 70%
+  );
+  opacity: 0.95;
+}
+
+.stage[data-scale="full"] .blobWarm {
+  width: 52%;
+  height: 48%;
+  inset-inline-end: 6%;
+  inset-block-end: 4%;
+  background: radial-gradient(circle at 60% 60%, var(--es-warm) 0%, transparent 72%);
+  opacity: 0.85;
+}
+
+.stage[data-scale="full"] .blobSage {
+  width: 36%;
+  height: 40%;
+  inset-inline-start: 0;
+  inset-block-end: 8%;
+  background: radial-gradient(circle at 40% 60%, var(--es-sage) 0%, transparent 75%);
+  opacity: 0.75;
+}
+
+.stage[data-scale="section"] .blobSky,
+.stage[data-scale="config"] .blobSky {
+  width: 88%;
+  height: 80%;
+  inset-inline-start: 6%;
+  inset-block-start: 8%;
+  background: radial-gradient(circle at 35% 35%, var(--es-sky) 0%, transparent 68%);
+  opacity: 0.9;
+}
+
+.stage[data-scale="section"] .blobWarm,
+.stage[data-scale="config"] .blobWarm {
+  width: 55%;
+  height: 50%;
+  inset-inline-end: 0;
+  inset-block-end: 0;
+  background: radial-gradient(circle at 50% 50%, var(--es-warm) 0%, transparent 70%);
+  opacity: 0.7;
+}
+
+.stage[data-scale="section"] .blobSage,
+.stage[data-scale="config"] .blobSage {
+  width: 42%;
+  height: 45%;
+  inset-inline-start: -2%;
+  inset-block-end: 6%;
+  background: radial-gradient(circle at 50% 50%, var(--es-sage) 0%, transparent 72%);
+  opacity: 0.65;
+}
+
+.stage[data-motif="documents"] .blobSage {
+  opacity: 0.85;
+}
+
+.stage[data-motif="transport"] .blobWarm {
+  opacity: 0.82;
+}
+
+.stage[data-motif="weather"] .blobSky {
+  opacity: 1;
+}
+
+.decorHero {
+  position: absolute;
+  width: 42%;
+  height: auto;
+  inset-inline-start: 50%;
+  inset-block-end: 14%;
+  transform: translate(-50%, 0);
+  color: var(--es-peach);
+  filter: drop-shadow(0 6px 14px color-mix(in srgb, var(--color-primary) 12%, transparent));
+}
+
+.stage[data-scale="full"] .decorHero {
+  width: 46%;
+}
+
+.decorLeaves {
+  position: absolute;
+  width: 22%;
+  height: auto;
+  inset-inline-start: 4%;
+  inset-block-end: 18%;
+  color: var(--color-success);
+}
+
+.decorRoute {
+  position: absolute;
+  width: 42%;
+  height: auto;
+  inset-inline-end: 2%;
+  inset-block-start: 8%;
+  color: color-mix(in srgb, var(--color-primary) 45%, var(--color-link));
+  opacity: 0.85;
+}
+
+.decorRouteTransport {
+  position: absolute;
+  width: 38%;
+  height: auto;
+  inset-inline-end: 4%;
+  inset-block-start: 18%;
+  color: color-mix(in srgb, var(--color-link) 50%, var(--color-primary));
+  opacity: 0.75;
+}
+
+.decorMap {
+  position: absolute;
+  width: 72%;
+  height: auto;
+  inset-inline-start: 50%;
+  inset-block-start: 50%;
+  translate: -50% -50%;
+  color: color-mix(in srgb, var(--color-link) 35%, var(--color-primary));
+}
+
+.decorPin {
+  position: absolute;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--color-accent) 70%, var(--color-danger));
+  inset-inline-start: 58%;
+  inset-block-start: 38%;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent);
+}
+
+.stage[data-scale="section"][data-motif="documents"] .decorPin {
+  inset-inline-start: 54%;
+  inset-block-start: 42%;
+}
+
+.decorTickets {
+  position: absolute;
+  width: 68%;
+  height: auto;
+  inset-inline-start: 50%;
+  inset-block-start: 46%;
+  translate: -50% -50%;
+  color: color-mix(in srgb, var(--color-link) 40%, var(--color-primary));
+}
+
+.decorClouds {
+  position: absolute;
+  width: 95%;
+  height: auto;
+  inset-inline-start: 50%;
+  inset-block-start: 18%;
+  translate: -50% 0;
+  color: var(--color-link);
+}
+
+.decorCompass {
+  position: absolute;
+  width: 78%;
+  height: auto;
+  inset-inline-start: 50%;
+  inset-block-start: 52%;
+  translate: -50% -50%;
+  color: color-mix(in srgb, var(--color-primary) 55%, var(--color-link));
+  opacity: 0.75;
+}
+
+.foreground {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.primaryIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-surface-elevated) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border-strong) 65%, transparent);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--color-primary) 10%, transparent);
+  color: var(--color-primary);
+}
+
+.stage[data-scale="full"] .primaryIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-full);
+}
+
+.stage[data-scale="section"] .primaryIcon {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: var(--radius-full);
+  transform: translateY(6%);
+}
+
+.stage[data-scale="config"] .primaryIcon {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-full);
+  transform: translateY(4%);
+}
+
+.stage[data-motif="documents"] .primaryIcon {
+  background: color-mix(in srgb, var(--color-surface-elevated) 92%, var(--es-sky));
+}
+
+.stage[data-motif="transport"] .primaryIcon {
+  background: color-mix(in srgb, var(--color-surface-elevated) 94%, var(--es-warm));
+  transform: translateY(2%) rotate(-2deg);
+}
+
+.stage[data-motif="weather"] .primaryIcon {
+  background: color-mix(in srgb, var(--color-surface-elevated) 90%, var(--es-sky));
+  border-color: color-mix(in srgb, var(--color-link) 18%, var(--color-border));
+}
+
+.stage[data-scale="full"] .primaryIcon :global(svg),
+.stage[data-scale="section"] .primaryIcon :global(svg),
+.stage[data-scale="config"] .primaryIcon :global(svg) {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.accentIcon {
+  position: absolute;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-sm);
+  color: color-mix(in srgb, var(--color-link) 70%, var(--color-primary));
+}
+
+.stage[data-scale="full"] .accentIcon {
+  width: 1.75rem;
+  height: 1.75rem;
+  inset-inline-end: 8%;
+  inset-block-start: 6%;
+}
+
+.stage[data-scale="section"] .accentIcon,
+.stage[data-scale="config"] .accentIcon {
+  width: 1.375rem;
+  height: 1.375rem;
+  inset-inline-end: 10%;
+  inset-block-start: 12%;
+}
+
+.stage[data-motif="transport"] .accentIcon {
+  inset-inline-end: 6%;
+  inset-block-start: 8%;
+  color: var(--color-link);
+}
+
+.accentIcon :global(svg) {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.stage[data-scale="full"] .accentIcon :global(svg) {
+  width: 1rem;
+  height: 1rem;
+}
+
+.minimalIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  color: var(--color-text-muted);
+}
+
+.stage[data-scale="search"] .minimalIcon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-text-muted);
+}
+
+.stage[data-scale="inline"] .minimalIcon {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-primary-soft) 55%, transparent);
+}
+
+.stage[data-scale="search"] .minimalIcon :global(svg) {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.stage[data-scale="inline"] .minimalIcon :global(svg) {
+  width: 1rem;
+  height: 1rem;
+}

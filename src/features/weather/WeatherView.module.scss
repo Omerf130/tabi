@@ -358,38 +358,6 @@
   color: var(--color-text-muted);
 }
 
-.errorBlock {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.625rem;
-  padding: 0.875rem 1rem;
-  border-radius: 0.875rem;
-  border: 1px solid var(--color-border);
-  background: rgb(255 252 248 / 100%);
-}
-
-.errorText {
-  margin: 0;
-  font-size: 0.9375rem;
-  color: var(--color-text);
-}
-
-.retryButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 2.5rem;
-  padding-inline: 0.875rem;
-  border-radius: 0.75rem;
-  border: none;
-  background: #5b4fd6;
-  color: #fff;
-  font-size: 0.875rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
 .skeletonLayout {
   display: flex;
   flex-direction: column;
@@ -651,7 +619,23 @@
   color: var(--color-text-muted);
 }
 
-.emptyResults,
+.configNotice,
+.providerAlert {
+  width: 100%;
+  max-width: 28rem;
+  margin-inline: auto;
+}
+
+.searchEmptyState {
+  width: 100%;
+  margin-block: var(--space-2);
+}
+
+.searchProviderAlert {
+  width: 100%;
+  margin-block: var(--space-2);
+}
+
 .searchStatus {
   margin: 0;
   padding: 0.75rem 0;

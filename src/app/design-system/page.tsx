@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Badge } from "@/components/ui/Badge/Badge";
 import { Button } from "@/components/ui/Button/Button";
 import { Card } from "@/components/ui/Card/Card";
+import { EmptyStatesShowcase } from "./EmptyStatesShowcase.client";
 import { Field } from "@/components/ui/Field/Field";
 import { Input } from "@/components/ui/Input/Input";
 import { Select } from "@/components/ui/Select/Select";
@@ -129,6 +130,16 @@ export default function DesignSystemPage() {
               <Input id="locked" name="locked" disabled defaultValue="לא ניתן לעריכה" />
             </Field>
           </div>
+        </section>
+
+        <section className={styles.section} aria-labelledby="empty-states-heading">
+          <h2 id="empty-states-heading" className={styles.sectionTitle}>
+            Empty states (ES1.2)
+          </h2>
+          <p className={styles.bodyCopy}>
+            Shared foundation — see docs/empty-states.md. Preview copy is English for comparison only.
+          </p>
+          <EmptyStatesShowcase />
         </section>
 
         <section className={styles.section} aria-labelledby="badges-heading">

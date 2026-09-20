@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { IconPlane, IconSearch, IconTrain } from "@/components/ui/icons";
 import { CREATE_TRIP_PATH } from "./constants";
 import type { MyTripsFilter } from "./filter-my-trips";
 import styles from "./MyTripsScreen.module.scss";
@@ -9,52 +10,55 @@ import styles from "./MyTripsScreen.module.scss";
 type MyTripsEmptyStateProps = {
   filter: MyTripsFilter;
   hasAnyTrips: boolean;
+  onShowAllTrips?: () => void;
 };
 
-export function MyTripsEmptyState({ filter, hasAnyTrips }: MyTripsEmptyStateProps) {
+export function MyTripsEmptyState({
+  filter,
+  hasAnyTrips,
+  onShowAllTrips,
+}: MyTripsEmptyStateProps) {
   const t = useTranslations(`MyTrips.empty.${filter}`);
-  const titleId = `my-trips-empty-${filter}`;
+  const tReset = useTranslations("MyTrips.empty");
+
+  if (!hasAnyTrips) {
+    return (
+      <EmptyState
+        variant="full"
+        className={styles.myTripsEmptyFull}
+        visual={{
+          motif: "travel",
+          icon: <IconTrain aria-hidden />,
+          accentIcon: <IconPlane aria-hidden />,
+        }}
+        title={t("title")}
+        description={t("body")}
+        primaryAction={{
+          label: t("cta"),
+          href: CREATE_TRIP_PATH,
+        }}
+      />
+    );
+  }
 
   return (
-    <section
-      className={styles.emptyState}
-      aria-labelledby={titleId}
-      data-has-trips={hasAnyTrips ? "true" : "false"}
-    >
-      <div className={styles.emptyIcon} aria-hidden="true">
-        <svg viewBox="0 0 64 64" className={styles.emptyIconSvg}>
-          <rect x="12" y="24" width="40" height="28" rx="4" fill="currentColor" opacity="0.12" />
-          <path
-            d="M20 24 L32 14 L44 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            opacity="0.35"
-          />
-          <path
-            d="M18 52 L46 28"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            opacity="0.28"
-          />
-        </svg>
-      </div>
-
-      <div className={styles.emptyCopy}>
-        <h2 id={titleId} className={styles.emptyTitle}>
-          {t("title")}
-        </h2>
-        <p className={styles.emptyBody}>{t("body")}</p>
-        {filter !== "past" ? (
-          <Link href={CREATE_TRIP_PATH} className={styles.emptyCta}>
-            {t("cta")}
-          </Link>
-        ) : null}
-      </div>
-    </section>
+    <EmptyState
+      variant="search"
+      className={styles.myTripsEmptySearch}
+      visual={{
+        motif: "search",
+        icon: <IconSearch aria-hidden />,
+      }}
+      title={t("title")}
+      description={t("body")}
+      primaryAction={
+        filter !== "all" && onShowAllTrips
+          ? {
+              label: tReset("showAllTrips"),
+              onClick: onShowAllTrips,
+            }
+          : undefined
+      }
+    />
   );
 }

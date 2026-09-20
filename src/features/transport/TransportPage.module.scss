@@ -149,24 +149,9 @@
   color: var(--transport-muted);
 }
 
-.emptyState,
-.filterEmptyState {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  padding-block: var(--space-6);
-  text-align: center;
-}
-
-.emptyTitle {
-  margin: 0;
-  font-weight: var(--font-weight-semibold);
-}
-
-.emptyHint {
-  margin: 0;
-  color: var(--transport-muted);
-  font-size: var(--text-secondary);
+.listEmptyState {
+  width: 100%;
+  max-width: none;
 }
 
 @media (min-width: 1024px) {

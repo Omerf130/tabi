@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { IconActivityTransport } from "@/components/ui/icons";
+import { TodaysPlanEmpty } from "./TodaysPlanEmpty.client";
 import type { TripHomeItinerarySection } from "./types";
 import styles from "./TripHomeContent.module.scss";
 
@@ -9,10 +10,7 @@ type TodaysPlanSectionProps = {
 };
 
 export async function TodaysPlanSection({ section }: TodaysPlanSectionProps) {
-  const [t, tCommon] = await Promise.all([
-    getTranslations("Home"),
-    getTranslations("Common"),
-  ]);
+  const tCommon = await getTranslations("Common");
 
   return (
     <section className={styles.homeSection} aria-labelledby="trip-home-plan">
@@ -40,13 +38,7 @@ export async function TodaysPlanSection({ section }: TodaysPlanSectionProps) {
       ) : null}
 
       {section.isEmpty ? (
-        <div className={styles.duringPlanEmptyState}>
-          <p className={styles.duringPlanEmptyTitle}>{t("todaysPlanEmptyTitle")}</p>
-          <p className={styles.duringPlanEmptyHint}>{t("todaysPlanEmptyHint")}</p>
-          <Link href={section.ctaHref} className={styles.duringPlanEmptyAction}>
-            {t("todaysPlanEmptyCta")}
-          </Link>
-        </div>
+        <TodaysPlanEmpty ctaHref={section.ctaHref} />
       ) : (
         <>
           <ol

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { localeToIntlLocale, resolveAppLocale } from "@/features/i18n/locale";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { ConfigNotice } from "@/components/ui/ConfigNotice";
+import { ProviderAlert } from "@/components/ui/ProviderAlert";
 import { IconBack, IconSearch, IconWeather } from "@/components/ui/icons";
 import { buildTravelWeatherAdvice } from "./build-travel-weather-advice";
 import {
@@ -252,23 +254,32 @@ export function WeatherPage({
       </div>
 
       {!location && !snapshot ? (
-        <div className={styles.errorBlock}>
-          <p className={styles.errorText}>{t("searchLocation")}</p>
-          <button
-            type="button"
-            className={styles.retryButton}
-            onClick={() => setSearchOpen(true)}
-          >
-            {t("searchLocation")}
-          </button>
-        </div>
-      ) : loadFailed ? (
-        <div className={styles.errorBlock} role="alert">
-          <p className={styles.errorText}>{t("loadFailed")}</p>
-          <button type="button" className={styles.retryButton} onClick={handleRetry}>
-            {t("retry")}
-          </button>
-        </div>
+        <ConfigNotice
+          className={styles.configNotice}
+          visual={{
+            motif: "weather",
+            icon: <IconWeather aria-hidden />,
+            accentIcon: <IconSearch aria-hidden />,
+          }}
+          title={t("configLocationTitle")}
+          description={t("configLocationDescription")}
+          primaryAction={{
+            label: t("searchLocation"),
+            onClick: () => setSearchOpen(true),
+          }}
+        />
+      ) : loadFailed && !snapshot ? (
+        <ProviderAlert
+          className={styles.providerAlert}
+          icon={<IconWeather aria-hidden />}
+          title={t("loadFailedTitle")}
+          message={t("loadFailed")}
+          retryAction={{ label: t("retry"), onClick: handleRetry }}
+          secondaryAction={{
+            label: t("searchLocation"),
+            onClick: () => setSearchOpen(true),
+          }}
+        />
       ) : showSkeleton ? (
         <WeatherSkeleton loadingAria={t("loadingAria")} />
       ) : snapshot ? (

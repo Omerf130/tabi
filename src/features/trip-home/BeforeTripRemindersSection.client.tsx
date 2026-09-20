@@ -27,10 +27,7 @@ export function BeforeTripRemindersSection({
           {t("upcomingRemindersAll")}
         </button>
       </div>
-      {reminders.length === 0 ? (
-        <p className={styles.homeEmptyState}>{t("upcomingRemindersEmpty")}</p>
-      ) : (
-        <ul className={styles.homeRowList}>
+      <ul className={styles.homeRowList}>
           {reminders.map((reminder) => (
             <li key={reminder.id} className={styles.homeRowItem}>
               <span className={styles.homeRowIndicator} aria-hidden />
@@ -47,7 +44,6 @@ export function BeforeTripRemindersSection({
             </li>
           ))}
         </ul>
-      )}
     </section>
   );
 }

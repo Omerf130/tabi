@@ -554,6 +554,7 @@
     "emptyAllHintOwner": "הוסיפו כרטיסי טיסה, הזמנות וביטוחים כדי שיהיו זמינים לכל מי שבטיול.",
     "emptyAllHintGuest": "בעל הטיול עדיין לא הוסיף מסמכים.",
     "emptyFilterHint": "נסו לבחור קטגוריה אחרת.",
+    "emptyFilterShowAll": "הצג את כל המסמכים",
     "addInSettings": "להוספת מסמך בהגדרות",
     "addedOn": "נוסף ב{date}",
     "detailBreadcrumbWallet": "ארנק הנסיעה",
@@ -737,6 +738,8 @@
     "emptyPast": "אין מקומות לינה קודמים",
     "emptyAllHintOwner": "הוסיפו מקומות לינה כדי שיופיעו כאן ובמסלול.",
     "emptyAllHintGuest": "בעל הטיול עדיין לא הוסיף מקומות לינה.",
+    "emptyFilterHint": "נסו מסנן אחר או הציגו את כל מקומות הלינה בטיול.",
+    "emptyFilterShowAll": "הצג את כל מקומות הלינה",
     "name": "שם",
     "nameJapanese": "שם ביפנית",
     "city": "עיר",
@@ -781,6 +784,8 @@
     "emptyFlight": "אין עדיין טיסות בטיול הזה",
     "emptyTrain": "אין עדיין רכבות בטיול הזה",
     "emptyOther": "אין עדיין נסיעות אחרות בטיול הזה",
+    "emptyFilterHint": "נסו מסנן אחר או הציגו את כל התחבורה.",
+    "emptyFilterShowAll": "הצג את כל התחבורה",
     "listTitles": {
       "flight": "טיסה ל{destination}",
       "flightNoDestination": "טיסה",
@@ -906,6 +911,12 @@
     "currentSectionAria": "מזג אוויר נוכחי",
     "nearTermSectionAria": "תחזית לטווח קצר",
     "loadFailed": "לא הצלחנו לטעון את מזג האוויר כרגע",
+    "loadFailedTitle": "מזג האוויר לא זמין",
+    "configLocationTitle": "בחרו מיקום למזג האוויר",
+    "configLocationDescription": "חפשו מקום כדי לראות את התחזית במהלך הטיול.",
+    "searchFailed": "לא הצלחנו לחפש מיקומים כרגע.",
+    "noResultsHint": "נסו איות אחר או עיר קרובה.",
+    "clearSearch": "נקה חיפוש",
     "retry": "נסו שוב",
     "refreshFailed": "לא הצלחנו לרענן את מזג האוויר. מוצג המידע האחרון שנטען.",
     "updated": "עודכן",
@@ -1276,6 +1287,7 @@
       "manyDays": "{count} ימים"
     },
     "empty": {
+      "showAllTrips": "הצג את כל הטיולים",
       "all": {
         "title": "עדיין אין טיולים",
         "body": "התחילו לתכנן את ההרפתקה הבאה שלכם ושמרו את כל הטיולים במקום אחד.",

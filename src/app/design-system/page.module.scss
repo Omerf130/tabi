@@ -127,6 +127,13 @@
   color: var(--color-text-muted);
 }
 
+.emptyStateStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  width: 100%;
+}
+
 .backGlyph {
   transform: scaleX(-1);
 }

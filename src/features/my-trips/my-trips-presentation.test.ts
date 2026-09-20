@@ -62,6 +62,8 @@ describe("my trips presentation contracts", () => {
     expect(filterBar).toContain('useTranslations("MyTrips.createTrip")');
     expect(filterBar).toContain("CREATE_TRIP_PATH");
     expect(messages).toContain("Plan Your First Trip");
+    expect(emptyState).toContain('variant="full"');
+    expect(emptyState).toContain('motif: "travel"');
     expect(emptyState).toContain("CREATE_TRIP_PATH");
   });
 
@@ -108,8 +110,13 @@ describe("my trips presentation contracts", () => {
     const messages = readFileSync(join(root, "../messages/en.json"), "utf8");
 
     expect(emptyState).toContain("filter: MyTripsFilter");
+    expect(emptyState).toContain('variant="search"');
+    expect(emptyState).toContain("hasAnyTrips");
     expect(readSource("features/my-trips/MyTripsContent.client.tsx")).toContain(
-      "<MyTripsEmptyState filter={activeFilter}",
+      "filter={activeFilter}",
+    );
+    expect(readSource("features/my-trips/MyTripsContent.client.tsx")).toContain(
+      "hasAnyTrips={trips.length > 0}",
     );
     expect(messages).toContain("No trips yet");
     expect(messages).toContain("No upcoming trips");

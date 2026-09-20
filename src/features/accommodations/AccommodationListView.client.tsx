@@ -2,6 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { IconAccommodation, IconPlane, IconSearch } from "@/components/ui/icons";
 import {
   countAccommodationsByFilter,
   filterAccommodationList,
@@ -59,18 +61,29 @@ export function AccommodationListView({
       </div>
 
       {!hasAnyAccommodation ? (
-        <div className={styles.emptyState}>
-          <p className={styles.emptyTitle}>{t("emptyAll")}</p>
-          <p className={styles.emptyHint}>
-            {isOwner ? t("emptyAllHintOwner") : t("emptyAllHintGuest")}
-          </p>
-        </div>
+        <EmptyState
+          variant="section"
+          className={styles.listEmptyState}
+          visual={{
+            motif: "travel",
+            icon: <IconAccommodation aria-hidden />,
+            accentIcon: <IconPlane aria-hidden />,
+          }}
+          title={t("emptyAll")}
+          description={isOwner ? t("emptyAllHintOwner") : t("emptyAllHintGuest")}
+        />
       ) : filteredItems.length === 0 ? (
-        <div className={styles.filterEmptyState}>
-          <p className={styles.emptyTitle}>
-            {t(getAccommodationFilterEmptyMessageKey(activeFilter))}
-          </p>
-        </div>
+        <EmptyState
+          variant="search"
+          className={styles.listEmptyState}
+          visual={{ motif: "search", icon: <IconSearch aria-hidden /> }}
+          title={t(getAccommodationFilterEmptyMessageKey(activeFilter))}
+          description={t("emptyFilterHint")}
+          primaryAction={{
+            label: t("emptyFilterShowAll"),
+            onClick: () => setActiveFilter("all"),
+          }}
+        />
       ) : (
         <ul className={styles.list}>
           {filteredItems.map((item) => (
