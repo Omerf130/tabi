@@ -1,11 +1,10 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { TabiBrandMark } from "@/features/welcome/TabiBrandMark";
+import { TabiLogo } from "@/features/brand/TabiLogo";
 import { AUTH_BACKGROUND_SRC } from "./auth-visual";
 import styles from "./AuthPageShell.module.scss";
 
 type AuthPageShellProps = {
-  brandName: string;
   title: string;
   subtitle: string;
   children: ReactNode;
@@ -14,7 +13,6 @@ type AuthPageShellProps = {
 };
 
 export function AuthPageShell({
-  brandName,
   title,
   subtitle,
   children,
@@ -38,8 +36,7 @@ export function AuthPageShell({
       <div className={styles.content}>
         <div className={styles.mainColumn}>
           <header className={styles.brandBlock}>
-            <TabiBrandMark className={styles.brandMark} />
-            <p className={styles.brandName}>{brandName}</p>
+            <TabiLogo variant="auth" tone="light" priority />
           </header>
 
           <div className={styles.heroBlock}>

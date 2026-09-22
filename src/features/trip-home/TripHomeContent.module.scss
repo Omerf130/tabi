@@ -5,7 +5,7 @@
   --trip-home-border: var(--color-border);
   --trip-home-primary: var(--color-primary);
   --trip-home-accent: #c48b90;
-  --home-hero-min: clamp(8.125rem, 38vw, 10.625rem);
+  --home-hero-min: clamp(9.125rem, 42.5vw, 11.875rem);
   --home-section-gap: 0.75rem;
   --home-page-pad: 1rem;
   --home-navy: var(--color-primary);
@@ -144,13 +144,8 @@
   color: var(--color-on-primary);
 }
 
-.heroBrandMark {
-  margin: 0;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  opacity: 0.88;
+.heroBrandLogo {
+  margin-block-end: 0.125rem;
 }
 
 .heroTitle {

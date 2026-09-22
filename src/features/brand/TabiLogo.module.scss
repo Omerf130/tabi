@@ -1,0 +1,31 @@
+.logo {
+  display: block;
+  flex-shrink: 0;
+  width: var(--tabi-logo-width);
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: var(--tabi-logo-aspect-ratio);
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.hero {
+  --tabi-logo-width: clamp(11rem, 52vw, 17.5rem);
+}
+
+.auth {
+  --tabi-logo-width: clamp(7.25rem, 38vw, 10rem);
+}
+
+.compact {
+  --tabi-logo-width: clamp(3.75rem, 22vw, 5.25rem);
+}
+
+.toneLight .image {
+  filter: brightness(0) invert(1);
+}

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { TabiBrandMark } from "@/features/welcome/TabiBrandMark";
+import { TabiLogo } from "@/features/brand/TabiLogo";
 import { CREATE_TRIP_HERO_VISUAL } from "./create-trip-visual";
 import { WizardStepper } from "./WizardStepper";
 import type { CreateTripWizardStep } from "./wizard-state";
@@ -17,6 +17,7 @@ type WizardHeroProps = {
 
 export function WizardHero({ step, canGoBack, onBack }: WizardHeroProps) {
   const t = useTranslations("CreateTrip.hero");
+  const tCreateTrip = useTranslations("CreateTrip");
 
   return (
     <header className={styles.hero}>
@@ -50,8 +51,8 @@ export function WizardHero({ step, canGoBack, onBack }: WizardHeroProps) {
           </Link>
         )}
 
-        <div className={styles.heroBrand}>
-          <TabiBrandMark className={styles.heroMark} />
+        <div className={styles.heroBrand} aria-label={tCreateTrip("brandName")}>
+          <TabiLogo variant="compact" tone="light" decorative />
         </div>
 
         <span className={styles.heroTopSpacer} aria-hidden="true" />

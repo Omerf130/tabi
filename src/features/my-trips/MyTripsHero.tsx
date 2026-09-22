@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { TabiBrandMark } from "@/features/welcome/TabiBrandMark";
+import { TabiLogo } from "@/features/brand/TabiLogo";
 import { MY_TRIPS_HERO_VISUAL } from "./constants";
 import { MyTripsAccountAffordance } from "./MyTripsAccountAffordance";
 import styles from "./MyTripsScreen.module.scss";
@@ -28,9 +28,8 @@ export async function MyTripsHero({ userName, avatarHref }: MyTripsHeroProps) {
       </div>
 
       <div className={styles.heroTopBar}>
-        <div className={styles.heroBrand}>
-          <TabiBrandMark className={styles.heroMark} />
-          <span className={styles.heroBrandName}>{t("brandName")}</span>
+        <div className={styles.heroBrand} aria-label={t("brandName")}>
+          <TabiLogo variant="compact" tone="light" decorative />
         </div>
         <MyTripsAccountAffordance
           userName={userName}

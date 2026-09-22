@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { TabiLogo } from "@/features/brand/TabiLogo";
 import { PwaInstallAction } from "@/features/pwa-install/PwaInstallAction.client";
-import { TabiBrandMark } from "./TabiBrandMark";
 import styles from "./WelcomeScreen.module.scss";
 
 export async function WelcomeScreen() {
@@ -25,8 +25,8 @@ export async function WelcomeScreen() {
 
       <div className={styles.content}>
         <header className={styles.brandBlock}>
-          <TabiBrandMark />
-          <h1 id="welcome-brand" className={styles.brandName}>
+          <TabiLogo variant="hero" tone="light" priority />
+          <h1 id="welcome-brand" className={styles.srOnly}>
             {t("brandName")}
           </h1>
           <p className={styles.tagline}>

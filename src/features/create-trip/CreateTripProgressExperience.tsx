@@ -9,7 +9,7 @@ import {
   IconGrid,
   IconMembers,
 } from "@/components/ui/icons";
-import { TabiBrandMark } from "@/features/welcome/TabiBrandMark";
+import { TabiLogo } from "@/features/brand/TabiLogo";
 import {
   CREATE_TRIP_PROGRESS_ALL_ASSETS,
   CREATE_TRIP_READY_ASSET,
@@ -56,11 +56,10 @@ function preloadCreateTripProgressAssets(): void {
   }
 }
 
-function BrandHeader({ brandName }: { brandName: string }) {
+function BrandHeader() {
   return (
     <header className={styles.brandHeader}>
-      <TabiBrandMark className={styles.brandMark} />
-      <span className={styles.brandName}>{brandName}</span>
+      <TabiLogo variant="auth" />
     </header>
   );
 }
@@ -147,7 +146,6 @@ export function CreateTripProgressExperience({
   onEnterTrip,
   onBackToDetails,
 }: CreateTripProgressExperienceProps) {
-  const t = useTranslations("CreateTrip");
   const tProgress = useTranslations("CreateTrip.progress");
   const tReady = useTranslations("CreateTrip.ready");
   const tFailed = useTranslations("CreateTrip.failed");
@@ -230,7 +228,7 @@ export function CreateTripProgressExperience({
         </div>
         <div className={styles.viewport}>
           <div className={styles.column}>
-            <BrandHeader brandName={t("brandName")} />
+            <BrandHeader />
             <div className={styles.errorPanel}>
               <p className={styles.eyebrow}>{tFailed("eyebrow")}</p>
               <h1 className={styles.errorTitle}>{tFailed("title")}</h1>
@@ -259,7 +257,7 @@ export function CreateTripProgressExperience({
         </div>
         <div className={styles.viewport}>
           <div className={styles.column}>
-            <BrandHeader brandName={t("brandName")} />
+            <BrandHeader />
 
             <div className={styles.successBadge}>
               <IconCheck className={styles.successBadgeIcon} />
@@ -335,7 +333,7 @@ export function CreateTripProgressExperience({
       </div>
       <div className={styles.viewport}>
         <div className={styles.column}>
-          <BrandHeader brandName={t("brandName")} />
+          <BrandHeader />
 
           <div className={styles.introBlock}>
             <p className={styles.eyebrow}>{tProgress("eyebrow")}</p>

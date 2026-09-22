@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { TabiLogo } from "@/features/brand/TabiLogo";
 import type { TripHomeHeroViewModel } from "./types";
 import type { TripPhase } from "@/features/trips/trip-phase";
 import styles from "./TripHomeContent.module.scss";
@@ -64,7 +65,12 @@ export async function TripHomeHero({ hero, phase }: TripHomeHeroProps) {
           </>
         ) : phase === "completed" ? (
           <>
-            <p className={styles.heroBrandMark}>Tabi</p>
+            <TabiLogo
+              variant="compact"
+              tone="light"
+              decorative
+              className={styles.heroBrandLogo}
+            />
             <p className={styles.heroTripIdentity}>
               {hero.tripIdentityLabel ?? hero.tripName}
             </p>
@@ -77,7 +83,12 @@ export async function TripHomeHero({ hero, phase }: TripHomeHeroProps) {
           </>
         ) : (
           <>
-            <p className={styles.heroBrandMark}>Tabi</p>
+            <TabiLogo
+              variant="compact"
+              tone="light"
+              decorative
+              className={styles.heroBrandLogo}
+            />
             <h1 className={styles.heroTitle}>{hero.tripName}</h1>
             <p className={styles.heroDates}>{hero.dateRangeLabel}</p>
           </>

@@ -38,7 +38,6 @@ export default async function LoginPage({
 
   return (
     <AuthPageShell
-      brandName={t("brandName")}
       title={t("login.title")}
       subtitle={t("login.subtitle")}
       footer={

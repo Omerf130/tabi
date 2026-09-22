@@ -44,6 +44,7 @@ describe("Product Hardening 1 — trip shell safe-area contract", () => {
     const heroBlock = home.split(".hero[data-phase")[0] ?? home;
     expect(heroBlock).toContain("margin-top: calc(-1 * var(--safe-top))");
     expect(heroBlock).toContain("padding-top: var(--safe-top)");
+    expect(heroBlock).not.toContain("margin-top: var(--space-3)");
   });
 
   it("Travel Hub hero uses coordinated immersive safe-top bleed on mobile", () => {

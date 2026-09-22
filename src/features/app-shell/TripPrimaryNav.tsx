@@ -18,6 +18,7 @@ import {
   NAV_SECTIONS,
   type NavSection,
 } from "./navigation";
+import { TabiLogo } from "@/features/brand/TabiLogo";
 import styles from "./TripPrimaryNav.module.scss";
 import quickAddStyles from "@/features/quick-add/QuickAdd.module.scss";
 
@@ -85,8 +86,8 @@ export function TripPrimaryNav({ tripId, variant }: TripPrimaryNavProps) {
 
   return (
     <div className={styles.rail}>
-      <div className={styles.brand} aria-hidden>
-        Tabi
+      <div className={styles.brand} aria-label="Tabi">
+        <TabiLogo variant="compact" decorative className={styles.brandLogo} />
       </div>
       <div className={quickAddStyles.railQuickAdd}>
         <button

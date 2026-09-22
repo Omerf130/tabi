@@ -6,15 +6,14 @@
 
 .brand {
   flex-shrink: 0;
+  display: flex;
+  justify-content: center;
   padding-block: calc(var(--space-4) + var(--safe-top)) var(--space-5);
   padding-inline: var(--space-2);
-  text-align: center;
-  font-size: var(--text-label);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-primary);
-  line-height: 1;
+}
+
+.brandLogo {
+  margin-inline: auto;
 }
 
 .navWrap {

@@ -37,7 +37,6 @@ export default async function RegisterPage({
 
   return (
     <AuthPageShell
-      brandName={t("brandName")}
       title={t("register.title")}
       subtitle={t("register.subtitle")}
       footer={
