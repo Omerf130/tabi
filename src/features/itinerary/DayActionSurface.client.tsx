@@ -204,6 +204,8 @@ export function DayActionSurface({
       ? formatActivityFormDayContext(startDate, endDate, date, tCommon)
       : null;
 
+  const requestCloseRef = useRef<() => void>(() => {});
+
   const requestClose = useCallback(() => {
     if (!confirmDayActionDiscard(dirty, tActivity)) {
       return;
@@ -211,6 +213,10 @@ export function DayActionSurface({
     setDirty(false);
     onClose();
   }, [dirty, onClose, tActivity]);
+
+  useEffect(() => {
+    requestCloseRef.current = requestClose;
+  }, [requestClose]);
 
   const requestBack = useCallback(() => {
     if (!confirmDayActionDiscard(dirty, tActivity)) {
@@ -242,7 +248,7 @@ export function DayActionSurface({
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        requestClose();
+        requestCloseRef.current();
       }
     }
 
@@ -252,7 +258,7 @@ export function DayActionSurface({
       document.body.style.overflow = previousOverflow;
       triggerRef.current?.focus();
     };
-  }, [isOpen, requestClose]);
+  }, [isOpen]);
 
   function handleMenuSelect(action: DayAddMenuAction) {
     setDirty(false);

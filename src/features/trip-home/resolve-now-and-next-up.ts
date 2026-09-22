@@ -52,6 +52,13 @@ function isTimedActivityNow(
   );
 }
 
+function hasNotStartedYet(
+  activity: ActivityViewModel & { startTime: string },
+  nowJapanTime: string,
+): boolean {
+  return compareWallClockTimes(nowJapanTime, activity.startTime) < 0;
+}
+
 export function resolveNowAndNextUp(
   activities: readonly ActivityViewModel[],
   nowJapanTime: string,
@@ -68,6 +75,7 @@ export function resolveNowAndNextUp(
   const nextCandidates = timedActivities
     .filter((activity) => !isTimedActivityFinished(activity, nowJapanTime))
     .filter((activity) => activity.id !== nowActivity?.id)
+    .filter((activity) => hasNotStartedYet(activity, nowJapanTime))
     .sort(compareTimedActivitiesForNextUp);
 
   return {

@@ -16,6 +16,52 @@ function activity(
 }
 
 describe("resolveNowAndNextUp", () => {
+  it("selects Now when legacy unpadded times are inside start/end range", () => {
+    const result = resolveNowAndNextUp(
+      [
+        activity({
+          id: "a",
+          order: 0,
+          startTime: "9:00",
+          endTime: "12:00",
+        }),
+        activity({
+          id: "b",
+          order: 1,
+          startTime: "13:00",
+          endTime: "14:00",
+        }),
+      ],
+      "10:00",
+    );
+
+    expect(result.nowActivity?.id).toBe("a");
+    expect(result.nextActivity?.id).toBe("b");
+  });
+
+  it("does not treat an in-progress timed activity as Next", () => {
+    const result = resolveNowAndNextUp(
+      [
+        activity({
+          id: "now",
+          order: 0,
+          startTime: "10:00",
+          endTime: "12:00",
+        }),
+        activity({
+          id: "later",
+          order: 1,
+          startTime: "13:00",
+          endTime: "14:00",
+        }),
+      ],
+      "11:00",
+    );
+
+    expect(result.nowActivity?.id).toBe("now");
+    expect(result.nextActivity?.id).toBe("later");
+  });
+
   it("selects Now when current time is inside start/end range", () => {
     const result = resolveNowAndNextUp(
       [

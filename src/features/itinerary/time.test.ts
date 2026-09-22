@@ -3,6 +3,7 @@ import {
   compareWallClockTimes,
   formatActivityTimeDisplay,
   isValidWallClockTime,
+  normalizeWallClockTime,
   validateActivityTimes,
 } from "./time";
 
@@ -21,11 +22,24 @@ describe("isValidWallClockTime", () => {
   });
 });
 
+describe("normalizeWallClockTime", () => {
+  it("normalizes legacy single-digit hours", () => {
+    expect(normalizeWallClockTime("9:30")).toBe("09:30");
+    expect(normalizeWallClockTime("09:30")).toBe("09:30");
+  });
+});
+
 describe("compareWallClockTimes", () => {
-  it("orders times lexicographically", () => {
+  it("orders canonical HH:mm values", () => {
     expect(compareWallClockTimes("09:00", "10:00")).toBeLessThan(0);
     expect(compareWallClockTimes("10:00", "09:00")).toBeGreaterThan(0);
     expect(compareWallClockTimes("10:00", "10:00")).toBe(0);
+  });
+
+  it("orders legacy unpadded hours against padded times", () => {
+    expect(compareWallClockTimes("9:00", "10:00")).toBeLessThan(0);
+    expect(compareWallClockTimes("10:00", "9:00")).toBeGreaterThan(0);
+    expect(compareWallClockTimes("9:30", "09:30")).toBe(0);
   });
 });
 

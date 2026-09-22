@@ -25,16 +25,34 @@ export async function ActivityCompactCard({
     <article
       className={styles.activityCompactCard}
       data-tone={tone}
+      data-has-photo={hasPhoto ? "true" : "false"}
       aria-labelledby={headingId}
     >
+      {hasPhoto ? (
+        <div className={styles.activityCompactMedia}>
+          <PlaceImage
+            photoHref={card.photoPresentation.photoHref}
+            authorAttributions={card.photoPresentation.authorAttributions}
+            showPoweredByGoogle
+            presentation="compact"
+            fallbackIcon="activity-other"
+            frameClassName={styles.activityCompactMediaFrame}
+            imageClassName={styles.activityCompactMediaImage}
+            alt={card.title}
+          />
+        </div>
+      ) : null}
+
       <div className={styles.activityCompactMain}>
-        <p className={styles.activityCompactEyebrow} id={headingId}>
-          <span className={styles.activityCompactDot} aria-hidden />
-          {eyebrow}
-        </p>
-        {card.timeLabel ? (
-          <p className={styles.activityCompactTime}>{card.timeLabel}</p>
-        ) : null}
+        <div className={styles.activityCompactHeader}>
+          <p className={styles.activityCompactEyebrow} id={headingId}>
+            <span className={styles.activityCompactDot} aria-hidden />
+            {eyebrow}
+          </p>
+          {card.timeLabel ? (
+            <p className={styles.activityCompactTime}>{card.timeLabel}</p>
+          ) : null}
+        </div>
         <h3 className={styles.activityCompactTitle} dir="auto">
           {card.title}
         </h3>
@@ -55,21 +73,6 @@ export async function ActivityCompactCard({
           </Link>
         ) : null}
       </div>
-
-      {hasPhoto ? (
-        <div className={styles.activityCompactThumb}>
-          <PlaceImage
-            photoHref={card.photoPresentation.photoHref}
-            authorAttributions={card.photoPresentation.authorAttributions}
-            showPoweredByGoogle
-            presentation="compact"
-            fallbackIcon="activity-other"
-            frameClassName={styles.activityCompactThumbFrame}
-            imageClassName={styles.activityCompactThumbImage}
-            alt={card.title}
-          />
-        </div>
-      ) : null}
     </article>
   );
 }

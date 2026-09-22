@@ -9,6 +9,7 @@ import { TripDocumentForm } from "@/features/documents/TripDocumentSettings";
 import { FinanceExpenseSheet } from "@/features/finance/FinanceExpenseSheet.client";
 import { ACTIVITY_TYPES } from "@/features/itinerary/activity-types";
 import { ActivityForm } from "@/features/itinerary/ActivityForm";
+import { resolveDefaultNewActivityDate } from "@/features/itinerary/resolve-default-activity-date";
 import { emptyActivityFormValues } from "@/features/itinerary/to-activity-view-model";
 import overlayStyles from "@/features/itinerary/AddItemFlow.module.scss";
 import { TransportForm } from "@/features/transport/TransportForm.client";
@@ -171,7 +172,13 @@ export function QuickAddForms({
             overlayNavigation
             pinnedActionFooter={pinnedActionFooter}
             defaultValues={emptyActivityFormValues({
-              date: date ?? bootstrap.startDate,
+              date:
+                date ??
+                resolveDefaultNewActivityDate({
+                  tripStartDate: bootstrap.startDate,
+                  tripEndDate: bootstrap.endDate,
+                  destinationCalendarTimeZone: bootstrap.destinationCalendarTimeZone,
+                }),
               type: ACTIVITY_TYPES[0],
             })}
             onSuccess={onSuccess}

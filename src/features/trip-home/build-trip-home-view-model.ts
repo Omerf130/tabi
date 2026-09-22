@@ -27,6 +27,7 @@ import {
 import { buildDayOneHomePreview } from "./build-day-one-home-preview";
 import {
   buildActiveHomeItineraryPreview,
+  buildLaterTodayPreview,
 } from "./build-home-itinerary-preview";
 import { buildAfterTripSummary } from "./build-after-trip-summary";
 import type { HomePreparationViewModel } from "./build-home-preparation";
@@ -354,6 +355,13 @@ export function buildTripHomeViewModel(
     nowTripLocal,
     excludeIds,
   );
+  const laterToday = buildLaterTodayPreview(
+    dayActivities,
+    dayTransports,
+    nowTripLocal,
+    excludeIds,
+    trip.id,
+  );
 
   const importantToday =
     todayReminders.length > 0
@@ -402,6 +410,9 @@ export function buildTripHomeViewModel(
     translations,
   );
 
+  const transportCountToday =
+    dayTransports.length > 0 ? dayTransports.length : undefined;
+
   return {
     phase: "active",
     hero: {
@@ -416,6 +427,13 @@ export function buildTripHomeViewModel(
     },
     importantToday,
     todaysPlan,
+    laterToday,
+    fullDayItinerary: {
+      href: todaysPlan.ctaHref,
+      label: todaysPlan.isEmpty
+        ? tHome("todaysPlanEmptyCta")
+        : tHome("todaysPlanFullCta"),
+    },
     now,
     upNext,
     tonight,
@@ -423,9 +441,12 @@ export function buildTripHomeViewModel(
       tonightName: tonight?.name,
       weatherLabel: weather?.temperatureLabel,
       weatherIconUrl: weather?.conditionIconUrl,
-      todayItemCount: todaysPlan.isEmpty
-        ? undefined
-        : todaysPlan.items.length + todaysPlan.overflowCount,
+      weatherConditionLabel: weather?.conditionLabel,
+      activityCount:
+        dayActivities.length > 0 ? dayActivities.length : undefined,
+      transportCount: transportCountToday,
+      tripDayNumber: dayNumber,
+      tripDayTotal: totalDays,
       todayPlanHref: todaysPlan.ctaHref,
     },
     remindersManager: buildRemindersManager(input, todayTripLocal),

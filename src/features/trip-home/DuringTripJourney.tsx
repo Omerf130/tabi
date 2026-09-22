@@ -1,9 +1,9 @@
 import { getTranslations } from "next-intl/server";
 import { ActivityCompactCard } from "./ActivityCompactCard";
+import { DuringFullDayLink } from "./DuringFullDayLink";
 import { DuringTodaySummary } from "./DuringTodaySummary";
-import { ImportantTodaySection } from "./ImportantTodaySection";
-import { TodaysPlanSection } from "./TodaysPlanSection";
-import { TripHomeRemindersEntry } from "./TripHomeRemindersEntry.client";
+import { LaterTodaySection } from "./LaterTodaySection";
+import { TodayRemindersSection } from "./TodayRemindersSection";
 import type { TripHomeActiveViewModel } from "./types";
 import styles from "./TripHomeContent.module.scss";
 
@@ -11,8 +11,9 @@ export const DURING_SURFACE_SECTION_ORDER = [
   "importantToday",
   "now",
   "upNext",
+  "laterToday",
   "todaySummary",
-  "todaysPlan",
+  "fullDayItinerary",
 ] as const;
 
 type DuringTripJourneyProps = {
@@ -25,13 +26,14 @@ export async function DuringTripJourney({ model }: DuringTripJourneyProps) {
   return (
     <section className={styles.duringJourney} aria-label={t("duringJourneyAria")}>
       {model.importantToday ? (
-        <ImportantTodaySection {...model.importantToday} />
-      ) : (
-        <TripHomeRemindersEntry defaultTab="today" />
-      )}
+        <TodayRemindersSection {...model.importantToday} />
+      ) : null}
 
       {model.now ? (
-        <section className={styles.homeSection} aria-label={t("nowSectionAria")}>
+        <section
+          className={styles.duringNowNextSection}
+          aria-label={t("nowSectionAria")}
+        >
           <ActivityCompactCard
             card={model.now}
             tone="now"
@@ -42,7 +44,10 @@ export async function DuringTripJourney({ model }: DuringTripJourneyProps) {
       ) : null}
 
       {model.upNext ? (
-        <section className={styles.homeSection} aria-label={t("upNextSectionAria")}>
+        <section
+          className={styles.duringNowNextSection}
+          aria-label={t("upNextSectionAria")}
+        >
           <ActivityCompactCard
             card={model.upNext}
             tone="up-next"
@@ -52,9 +57,11 @@ export async function DuringTripJourney({ model }: DuringTripJourneyProps) {
         </section>
       ) : null}
 
+      <LaterTodaySection items={model.laterToday} />
+
       <DuringTodaySummary summary={model.todaySummary} />
 
-      <TodaysPlanSection section={model.todaysPlan} />
+      <DuringFullDayLink link={model.fullDayItinerary} />
     </section>
   );
 }

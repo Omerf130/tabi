@@ -61,8 +61,9 @@ describe("during trip home", () => {
       "importantToday",
       "now",
       "upNext",
+      "laterToday",
       "todaySummary",
-      "todaysPlan",
+      "fullDayItinerary",
     ]);
   });
 
@@ -258,7 +259,11 @@ describe("during trip home", () => {
     expect(model.todaysPlan.items).toHaveLength(0);
     expect(model.now).toBeNull();
     expect(model.upNext).toBeNull();
-    expect(model.todaySummary.todayItemCount).toBeUndefined();
+    expect(model.todaySummary.activityCount).toBeUndefined();
+    expect(model.laterToday).toHaveLength(0);
+    expect(model.fullDayItinerary.href).toBe(
+      "/app/trips/507f1f77bcf86cd799439011/itinerary/2026-11-01",
+    );
   });
 
   it("CASE B — populated active day exposes timeline items and NOW/UP NEXT", () => {
@@ -299,17 +304,15 @@ describe("during trip home", () => {
       return;
     }
 
-    expect(model.todaysPlan.isEmpty).toBe(false);
-    expect(model.todaysPlan.items.length).toBeGreaterThan(0);
-    expect(model.todaysPlan.items.some((item) => item.title === "Dinner in Gion")).toBe(
-      true,
-    );
-    expect(model.todaysPlan.ctaHref).toBe(
+    expect(model.laterToday.some((item) => item.id === "later")).toBe(true);
+    expect(model.laterToday.some((item) => item.id === "now")).toBe(false);
+    expect(model.laterToday.some((item) => item.id === "next")).toBe(false);
+    expect(model.fullDayItinerary.href).toBe(
       "/app/trips/507f1f77bcf86cd799439011/itinerary/2026-11-01",
     );
     expect(model.now?.id).toBe("now");
     expect(model.upNext?.id).toBe("next");
-    expect(model.todaySummary.todayItemCount).toBeGreaterThan(0);
+    expect(model.todaySummary.activityCount).toBe(3);
   });
 
   it("limits during Google image slots to now, up next, and tonight", () => {

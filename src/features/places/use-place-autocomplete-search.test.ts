@@ -151,6 +151,25 @@ describe("places autocomplete search foundation", () => {
 });
 
 describe("PlaceSearchField focus behavior", () => {
+  it("does not refocus mobile sheets when form dirty state changes", () => {
+    const quickAddHost = readFileSync(
+      path.join(process.cwd(), "src/features/quick-add/QuickAddHost.client.tsx"),
+      "utf8",
+    );
+    const dayActionSurface = readFileSync(
+      path.join(process.cwd(), "src/features/itinerary/DayActionSurface.client.tsx"),
+      "utf8",
+    );
+
+    expect(quickAddHost).toContain("requestCloseRef");
+    expect(quickAddHost).not.toMatch(/\}, \[isOpen, isDesktop, requestClose\]/);
+    expect(quickAddHost).toMatch(/\}, \[isOpen, isDesktop\]/);
+
+    expect(dayActionSurface).toContain("requestCloseRef");
+    expect(dayActionSurface).not.toMatch(/\}, \[isOpen, requestClose\]/);
+    expect(dayActionSurface).toMatch(/\}, \[isOpen\]/);
+  });
+
   it("does not disable the input during loading", () => {
     const source = readFileSync(
       path.join(process.cwd(), "src/features/places/PlaceSearchField.tsx"),

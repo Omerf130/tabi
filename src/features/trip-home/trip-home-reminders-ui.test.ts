@@ -9,7 +9,7 @@ describe("trip home reminders UI contracts", () => {
       "utf8",
     );
     const importantToday = readFileSync(
-      join(process.cwd(), "src/features/trip-home/ImportantTodaySection.tsx"),
+      join(process.cwd(), "src/features/trip-home/TodayRemindersSection.tsx"),
       "utf8",
     );
     const beforeReminders = readFileSync(

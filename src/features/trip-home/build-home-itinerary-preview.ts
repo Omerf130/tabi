@@ -24,7 +24,10 @@ export type HomeItineraryPreview = {
   isEmpty: boolean;
 };
 
-function toPreviewItem(item: ItineraryDayItem): HomeItineraryPreviewItem {
+function toPreviewItem(
+  item: ItineraryDayItem,
+  tripId?: string,
+): HomeItineraryPreviewItem {
   if (item.kind === "activity") {
     return {
       id: item.activity.id,
@@ -33,6 +36,9 @@ function toPreviewItem(item: ItineraryDayItem): HomeItineraryPreviewItem {
       displayTime: item.activity.startTime,
       isUntimed: !item.activity.startTime,
       locationName: item.activity.locationName,
+      detailHref: tripId
+        ? `/app/trips/${tripId}/itinerary/${item.activity.date}`
+        : undefined,
     };
   }
 
@@ -79,10 +85,27 @@ export function buildUpcomingHomeItineraryPreview(
   const preview = merged.slice(0, HOME_ITINERARY_PREVIEW_MAX);
 
   return {
-    items: preview.map(toPreviewItem),
+    items: preview.map((item) => toPreviewItem(item)),
     overflowCount: Math.max(0, merged.length - preview.length),
     isEmpty: merged.length === 0,
   };
+}
+
+export function buildLaterTodayPreview(
+  activities: readonly ActivityViewModel[],
+  transports: readonly TransportItineraryItemViewModel[],
+  nowTripLocal: string,
+  excludeActivityIds: ReadonlySet<string>,
+  tripId: string,
+): HomeItineraryPreviewItem[] {
+  const merged = mergeItineraryDayItems(activities, transports);
+  const eligible = filterMergedItems(merged, {
+    excludeActivityIds,
+    filterPassed: true,
+    nowJapanTime: nowTripLocal,
+  });
+
+  return eligible.map((item) => toPreviewItem(item, tripId));
 }
 
 export function buildActiveHomeItineraryPreview(
@@ -100,7 +123,7 @@ export function buildActiveHomeItineraryPreview(
   const preview = eligible.slice(0, HOME_ITINERARY_PREVIEW_MAX);
 
   return {
-    items: preview.map(toPreviewItem),
+    items: preview.map((item) => toPreviewItem(item)),
     overflowCount: Math.max(0, eligible.length - preview.length),
     isEmpty: merged.length === 0,
   };

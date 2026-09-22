@@ -59,7 +59,7 @@ describe("ES5 empty states project closure", () => {
     expect(duringJourney).toContain("model.importantToday ?");
     expect(duringJourney).toContain("model.now ?");
     expect(duringJourney).toContain("model.upNext ?");
-    expect(todaySummary).toContain("items.length === 0");
+    expect(todaySummary).toContain("tiles.length === 0");
     expect(emergencyActions).toContain("actions.length === 0");
   });
 });

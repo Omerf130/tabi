@@ -114,7 +114,11 @@ export type TripHomeTodaySummary = {
   tonightName?: string;
   weatherLabel?: string;
   weatherIconUrl?: string;
-  todayItemCount?: number;
+  weatherConditionLabel?: string;
+  activityCount?: number;
+  transportCount?: number;
+  tripDayNumber?: number;
+  tripDayTotal?: number;
   todayPlanHref?: string;
 };
 
@@ -126,11 +130,18 @@ export type TripHomeUpcomingViewModel = {
   remindersManager: TripHomeRemindersManagerData;
 };
 
+export type TripHomeFullDayItinerary = {
+  href: string;
+  label: string;
+};
+
 export type TripHomeActiveViewModel = {
   phase: "active";
   hero: TripHomeHeroViewModel;
   importantToday: TripHomeImportantToday | null;
   todaysPlan: TripHomeItinerarySection;
+  laterToday: HomeItineraryPreviewItem[];
+  fullDayItinerary: TripHomeFullDayItinerary;
   now: TripHomeActivityCard | null;
   upNext: TripHomeActivityCard | null;
   tonight: TripHomeTonightCard | null;

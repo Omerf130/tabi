@@ -6,51 +6,85 @@ type DuringTodaySummaryProps = {
   summary: TripHomeTodaySummary;
 };
 
+type SummaryTile = {
+  id: string;
+  value: string;
+  label: string;
+  iconUrl?: string;
+};
+
 export async function DuringTodaySummary({ summary }: DuringTodaySummaryProps) {
-  const [t, tCommon] = await Promise.all([
-    getTranslations("Home"),
-    getTranslations("Common"),
-  ]);
+  const t = await getTranslations("Home");
+  const tCommon = await getTranslations("Common");
 
-  const items = [
-    summary.tonightName
-      ? { label: t("tonightLabel"), value: summary.tonightName }
-      : null,
-    summary.weatherLabel
-      ? {
-          label: t("weatherLabel"),
-          value: summary.weatherLabel,
-          icon: summary.weatherIconUrl,
-        }
-      : null,
-    summary.todayItemCount != null
-      ? {
-          label: t("todayItineraryLabel"),
-          value: tCommon("items", { count: summary.todayItemCount }),
-        }
-      : null,
-  ].filter((item): item is NonNullable<typeof item> => item != null);
+  const tiles: SummaryTile[] = [];
 
-  if (items.length === 0) {
+  if (summary.tonightName) {
+    tiles.push({
+      id: "tonight",
+      value: summary.tonightName,
+      label: t("tonightLabel"),
+    });
+  }
+
+  if (summary.weatherLabel) {
+    tiles.push({
+      id: "weather",
+      value: summary.weatherLabel,
+      label: summary.weatherConditionLabel ?? t("weatherLabel"),
+      iconUrl: summary.weatherIconUrl,
+    });
+  }
+
+  if (summary.activityCount != null && summary.activityCount > 0) {
+    tiles.push({
+      id: "activities",
+      value: String(summary.activityCount),
+      label: t("todayActivitiesCountLabel"),
+    });
+  }
+
+  if (
+    summary.tripDayNumber != null &&
+    summary.tripDayTotal != null &&
+    summary.tripDayTotal > 0
+  ) {
+    tiles.push({
+      id: "trip-day",
+      value: tCommon("dayMeta", {
+        dayNumber: summary.tripDayNumber,
+        totalDays: summary.tripDayTotal,
+      }),
+      label: t("todayTripDayLabel"),
+    });
+  }
+
+  if (summary.transportCount != null && summary.transportCount > 0) {
+    tiles.push({
+      id: "transport",
+      value: String(summary.transportCount),
+      label: t("todayTransportCountLabel"),
+    });
+  }
+
+  if (tiles.length === 0) {
     return null;
   }
 
   return (
     <section className={styles.homeSection} aria-label={t("todaySummaryAria")}>
-      <div className={styles.homeSectionHeader}>
-        <h2 className={styles.homeSectionTitle}>{t("todaySummaryTitle")}</h2>
-      </div>
+      <h2 className={styles.homeSectionTitle}>{t("todaySummaryTitle")}</h2>
       <ul className={styles.duringSummaryGrid}>
-        {items.map((item) => (
-          <li key={item.label} className={styles.duringSummaryTile}>
-            {"icon" in item && item.icon ? (
+        {tiles.map((tile) => (
+          <li key={tile.id} className={styles.duringSummaryTile}>
+            {tile.iconUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={item.icon} alt="" className={styles.duringSummaryIcon} />
+              <img src={tile.iconUrl} alt="" className={styles.duringSummaryIcon} />
             ) : null}
-            <span className={styles.duringSummaryLabel}>{item.label}</span>
             <span className={styles.duringSummaryValue} dir="auto">
-              {item.value}
+              {tile.value}
             </span>
+            <span className={styles.duringSummaryLabel}>{tile.label}</span>
           </li>
         ))}
       </ul>

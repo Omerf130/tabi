@@ -40,6 +40,8 @@ export function QuickAddHost() {
     lastOpenerRef,
   } = useQuickAdd();
 
+  const requestCloseRef = useRef<() => void>(() => {});
+
   const requestClose = useCallback(() => {
     if (!confirmDayActionDiscard(dirty, tActivity)) {
       return;
@@ -48,6 +50,10 @@ export function QuickAddHost() {
     close();
     lastOpenerRef.current?.focus();
   }, [close, dirty, lastOpenerRef, tActivity]);
+
+  useEffect(() => {
+    requestCloseRef.current = requestClose;
+  }, [requestClose]);
 
   const requestBack = useCallback(() => {
     if (!confirmDayActionDiscard(dirty, tActivity)) {
@@ -110,7 +116,7 @@ export function QuickAddHost() {
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        requestClose();
+        requestCloseRef.current();
       }
     }
 
@@ -122,7 +128,7 @@ export function QuickAddHost() {
         dialogRef.current.close();
       }
     };
-  }, [isOpen, isDesktop, requestClose]);
+  }, [isOpen, isDesktop]);
 
   if (!isOpen) {
     return null;
