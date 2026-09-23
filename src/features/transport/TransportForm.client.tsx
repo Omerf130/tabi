@@ -21,10 +21,8 @@ import {
   type TransportActionState,
 } from "./actions";
 import { buildTransportDetailHref } from "./constants";
-import { createTransportTimezoneOptions } from "./timezone-options";
 import {
   createTrainCategoryLabelResolver,
-  createTransportTypeLabelResolver,
   createTransportTypeSingularLabelResolver,
 } from "./transport-labels";
 import { TRAIN_CATEGORIES, type TransportType } from "./transport-types";
@@ -57,37 +55,32 @@ type TransportFormProps = {
   pinnedActionFooter?: boolean;
 };
 
-function TimezoneSelect({
-  id,
-  name,
-  defaultValue,
-  error,
-  label,
-  options,
+function HiddenTimezoneFields({
+  departureTimezone,
+  arrivalTimezone,
+  departureError,
+  arrivalError,
 }: {
-  id: string;
-  name: string;
-  defaultValue: string;
-  error?: string;
-  label: string;
-  options: ReturnType<typeof createTransportTimezoneOptions>;
+  departureTimezone: string;
+  arrivalTimezone: string;
+  departureError?: string;
+  arrivalError?: string;
 }) {
   return (
-    <Field label={label} htmlFor={id} error={error}>
-      <Select
-        id={id}
-        name={name}
-        defaultValue={defaultValue}
-        required
-        aria-invalid={error ? true : undefined}
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </Select>
-    </Field>
+    <>
+      <input type="hidden" name="departureTimezone" defaultValue={departureTimezone} />
+      <input type="hidden" name="arrivalTimezone" defaultValue={arrivalTimezone} />
+      {departureError ? (
+        <p className={styles.formError} role="alert">
+          {departureError}
+        </p>
+      ) : null}
+      {arrivalError ? (
+        <p className={styles.formError} role="alert">
+          {arrivalError}
+        </p>
+      ) : null}
+    </>
   );
 }
 
@@ -105,22 +98,24 @@ function TypeSpecificFields({
   if (type === "flight") {
     return (
       <>
-        <Field label={t("airline")} htmlFor="airline">
-          <Input
-            id="airline"
-            name="airline"
-            defaultValue={defaultValues.airline}
-            maxLength={80}
-          />
-        </Field>
-        <Field label={t("flightNumber")} htmlFor="flightNumber">
-          <Input
-            id="flightNumber"
-            name="flightNumber"
-            defaultValue={defaultValues.flightNumber}
-            maxLength={20}
-          />
-        </Field>
+        <div className={styles.splitRow}>
+          <Field label={t("airline")} htmlFor="airline">
+            <Input
+              id="airline"
+              name="airline"
+              defaultValue={defaultValues.airline}
+              maxLength={80}
+            />
+          </Field>
+          <Field label={t("flightNumber")} htmlFor="flightNumber">
+            <Input
+              id="flightNumber"
+              name="flightNumber"
+              defaultValue={defaultValues.flightNumber}
+              maxLength={20}
+            />
+          </Field>
+        </div>
         <div className={styles.splitRow}>
           <Field label={t("departureTerminal")} htmlFor="departureTerminal">
             <Input
@@ -252,14 +247,13 @@ export function TransportForm({
   const t = useTranslations("Transport");
   const tCommon = useTranslations("Common");
   const tErrors = useTranslations("Transport.errors");
-  const typeLabel = createTransportTypeLabelResolver(t);
   const typeSingularLabel = createTransportTypeSingularLabelResolver(t);
   const trainCategoryLabel = createTrainCategoryLabelResolver(t, destinationCountryCode);
-  const timezoneOptions = createTransportTimezoneOptions(t);
   const router = useRouter();
   const action = mode === "create" ? createTransportAction : updateTransportAction;
   const [state, formAction] = useActionState(action, initialState);
-  const type = defaultValues.type;
+  const [selectedType, setSelectedType] = useState(defaultValues.type);
+  const activeType = mode === "create" ? selectedType : defaultValues.type;
   const [journeyPreview, setJourneyPreview] = useState(() =>
     buildTransportJourneyPreview({
       departureLocationName: defaultValues.departureLocationName,
@@ -323,7 +317,7 @@ export function TransportForm({
       >
         <QuickAddPinnedFields pinnedActionFooter={pinnedActionFooter}>
         <input type="hidden" name="tripId" value={tripId} />
-        <input type="hidden" name="type" value={type} />
+        <input type="hidden" name="type" value={activeType} />
         {mode === "edit" && transportId ? (
           <input type="hidden" name="transportId" value={transportId} />
         ) : null}
@@ -336,67 +330,47 @@ export function TransportForm({
 
         {mode === "create" && onTransportTypeChange ? (
           <TransportTypeChooser
-            selectedType={transportType ?? type}
+            selectedType={transportType ?? activeType}
             onSelect={onTransportTypeChange}
           />
         ) : (
-          <p className={styles.typeBadge}>{typeSingularLabel(type)}</p>
+          <p className={styles.typeBadge}>{typeSingularLabel(activeType)}</p>
         )}
 
         <section aria-labelledby="transport-route-label">
           <h2 id="transport-route-label" className={overlayStyles.blockLabel}>
             {t("route")}
           </h2>
-          <div className={overlayStyles.routePath}>
-            <div className={overlayStyles.routeStop}>
-              <span className={overlayStyles.routeDot} aria-hidden />
-              <div className={overlayStyles.routeStopFields}>
-                <label className={overlayStyles.pairLabel} htmlFor="departureLocationName">
-                  {t("from")}
-                </label>
-                <input
-                  id="departureLocationName"
-                  className={overlayStyles.blockInput}
-                  name="departureLocationName"
-                  defaultValue={defaultValues.departureLocationName}
-                  required
-                  maxLength={200}
-                  dir="auto"
-                  placeholder={t("departureLocationPlaceholder")}
-                  aria-invalid={departureLocationError ? true : undefined}
-                />
-                {departureLocationError ? (
-                  <p className={overlayStyles.overlayError} role="alert">
-                    {departureLocationError}
-                  </p>
-                ) : null}
-              </div>
-            </div>
-            <div className={overlayStyles.routeLine} aria-hidden />
-            <div className={overlayStyles.routeStop}>
-              <span className={overlayStyles.routeDot} data-kind="destination" aria-hidden />
-              <div className={overlayStyles.routeStopFields}>
-                <label className={overlayStyles.pairLabel} htmlFor="arrivalLocationName">
-                  {t("to")}
-                </label>
-                <input
-                  id="arrivalLocationName"
-                  className={overlayStyles.blockInput}
-                  name="arrivalLocationName"
-                  defaultValue={defaultValues.arrivalLocationName}
-                  required
-                  maxLength={200}
-                  dir="auto"
-                  placeholder={t("arrivalLocationPlaceholder")}
-                  aria-invalid={arrivalLocationError ? true : undefined}
-                />
-                {arrivalLocationError ? (
-                  <p className={overlayStyles.overlayError} role="alert">
-                    {arrivalLocationError}
-                  </p>
-                ) : null}
-              </div>
-            </div>
+          <div className={styles.routeRow}>
+            <Field
+              label={t("from")}
+              htmlFor="departureLocationName"
+              error={departureLocationError}
+            >
+              <Input
+                id="departureLocationName"
+                name="departureLocationName"
+                defaultValue={defaultValues.departureLocationName}
+                required
+                maxLength={200}
+                dir="auto"
+                placeholder={t("departureLocationPlaceholder")}
+              />
+            </Field>
+            <span className={styles.routeIndicator} aria-hidden>
+              ↔
+            </span>
+            <Field label={t("to")} htmlFor="arrivalLocationName" error={arrivalLocationError}>
+              <Input
+                id="arrivalLocationName"
+                name="arrivalLocationName"
+                defaultValue={defaultValues.arrivalLocationName}
+                required
+                maxLength={200}
+                dir="auto"
+                placeholder={t("arrivalLocationPlaceholder")}
+              />
+            </Field>
           </div>
         </section>
 
@@ -413,83 +387,69 @@ export function TransportForm({
           <h2 id="transport-times-label" className={overlayStyles.blockLabel}>
             {t("times")}
           </h2>
-          <p className={overlayStyles.timeLegLabel}>{t("departure")}</p>
-          <div className={overlayStyles.pairRow}>
-            <div className={overlayStyles.pairCell}>
-              <label className={overlayStyles.pairLabel} htmlFor="departureDate">
-                {tCommon("date")}
-              </label>
-              <input
+          <p className={styles.legLabel}>{t("departure")}</p>
+          <div className={styles.splitRow}>
+            <Field
+              label={tCommon("date")}
+              htmlFor="departureDate"
+              error={state.fieldErrors?.["departure.date"]}
+            >
+              <Input
                 id="departureDate"
-                className={overlayStyles.blockInput}
                 name="departureDate"
                 type="date"
                 defaultValue={defaultValues.departureDate}
                 required
-                aria-invalid={state.fieldErrors?.["departure.date"] ? true : undefined}
               />
-            </div>
-            <div className={overlayStyles.pairCell}>
-              <label className={overlayStyles.pairLabel} htmlFor="departureTime">
-                {tCommon("time")}
-              </label>
-              <input
+            </Field>
+            <Field
+              label={tCommon("time")}
+              htmlFor="departureTime"
+              error={state.fieldErrors?.["departure.time"]}
+            >
+              <Input
                 id="departureTime"
-                className={overlayStyles.blockInput}
                 name="departureTime"
                 type="time"
                 defaultValue={defaultValues.departureTime}
                 required
-                aria-invalid={state.fieldErrors?.["departure.time"] ? true : undefined}
               />
-            </div>
+            </Field>
           </div>
-          <TimezoneSelect
-            id="departureTimezone"
-            name="departureTimezone"
-            defaultValue={defaultValues.departureTimezone}
-            error={state.fieldErrors?.["departure.timezone"]}
-            label={t("timezone")}
-            options={timezoneOptions}
-          />
-          <p className={overlayStyles.timeLegLabel}>{t("arrival")}</p>
-          <div className={overlayStyles.pairRow}>
-            <div className={overlayStyles.pairCell}>
-              <label className={overlayStyles.pairLabel} htmlFor="arrivalDate">
-                {tCommon("date")}
-              </label>
-              <input
+          <p className={styles.legLabel}>{t("arrival")}</p>
+          <div className={styles.splitRow}>
+            <Field
+              label={tCommon("date")}
+              htmlFor="arrivalDate"
+              error={state.fieldErrors?.["arrival.date"]}
+            >
+              <Input
                 id="arrivalDate"
-                className={overlayStyles.blockInput}
                 name="arrivalDate"
                 type="date"
                 defaultValue={defaultValues.arrivalDate}
                 required
-                aria-invalid={state.fieldErrors?.["arrival.date"] ? true : undefined}
               />
-            </div>
-            <div className={overlayStyles.pairCell}>
-              <label className={overlayStyles.pairLabel} htmlFor="arrivalTime">
-                {tCommon("time")}
-              </label>
-              <input
+            </Field>
+            <Field
+              label={tCommon("time")}
+              htmlFor="arrivalTime"
+              error={state.fieldErrors?.["arrival.time"]}
+            >
+              <Input
                 id="arrivalTime"
-                className={overlayStyles.blockInput}
                 name="arrivalTime"
                 type="time"
                 defaultValue={defaultValues.arrivalTime}
                 required
-                aria-invalid={state.fieldErrors?.["arrival.time"] ? true : undefined}
               />
-            </div>
+            </Field>
           </div>
-          <TimezoneSelect
-            id="arrivalTimezone"
-            name="arrivalTimezone"
-            defaultValue={defaultValues.arrivalTimezone}
-            error={state.fieldErrors?.["arrival.timezone"]}
-            label={t("timezone")}
-            options={timezoneOptions}
+          <HiddenTimezoneFields
+            departureTimezone={defaultValues.departureTimezone}
+            arrivalTimezone={defaultValues.arrivalTimezone}
+            departureError={state.fieldErrors?.["departure.timezone"]}
+            arrivalError={state.fieldErrors?.["arrival.timezone"]}
           />
         </section>
 
@@ -515,7 +475,7 @@ export function TransportForm({
               />
             </Field>
             <TypeSpecificFields
-              type={type}
+              type={activeType}
               defaultValues={defaultValues}
               t={t}
               trainCategoryLabel={trainCategoryLabel}
@@ -569,7 +529,7 @@ export function TransportForm({
       onChange={(event) => syncJourneyPreview(event.currentTarget)}
     >
       <input type="hidden" name="tripId" value={tripId} />
-      <input type="hidden" name="type" value={type} />
+      <input type="hidden" name="type" value={activeType} />
       {mode === "edit" && transportId ? (
         <input type="hidden" name="transportId" value={transportId} />
       ) : null}
@@ -580,7 +540,13 @@ export function TransportForm({
         </p>
       ) : null}
 
-      <p className={styles.typeBadge}>{typeLabel(type)}</p>
+      <div className={styles.typeSection}>
+        {mode === "create" ? (
+          <TransportTypeChooser selectedType={activeType} onSelect={setSelectedType} />
+        ) : (
+          <p className={styles.typeBadge}>{typeSingularLabel(activeType)}</p>
+        )}
+      </div>
 
       {journeyPreview ? (
         <div className={overlayStyles.journeyPreview} aria-live="polite">
@@ -591,31 +557,70 @@ export function TransportForm({
         </div>
       ) : null}
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{t("fromSection")}</h2>
-        <Field
-          label={t("location")}
-          htmlFor="departureLocationName"
-          error={state.fieldErrors?.["departure.locationName"]}
-        >
-          <Input
-            id="departureLocationName"
-            name="departureLocationName"
-            defaultValue={defaultValues.departureLocationName}
-            required
-            maxLength={200}
-            dir="auto"
-          />
-        </Field>
-        <Field label={t("locationCode")} htmlFor="departureLocationCode">
-          <Input
-            id="departureLocationCode"
-            name="departureLocationCode"
-            defaultValue={defaultValues.departureLocationCode}
-            maxLength={20}
-            dir="auto"
-          />
-        </Field>
+      <section className={styles.section} aria-labelledby="transport-route-heading">
+        <h2 id="transport-route-heading" className={styles.sectionTitle}>
+          {t("route")}
+        </h2>
+        <div className={styles.routeRow}>
+          <Field
+            label={t("from")}
+            htmlFor="departureLocationName"
+            error={state.fieldErrors?.["departure.locationName"]}
+          >
+            <Input
+              id="departureLocationName"
+              name="departureLocationName"
+              defaultValue={defaultValues.departureLocationName}
+              required
+              maxLength={200}
+              dir="auto"
+            />
+          </Field>
+          <span className={styles.routeIndicator} aria-hidden>
+            ↔
+          </span>
+          <Field
+            label={t("to")}
+            htmlFor="arrivalLocationName"
+            error={state.fieldErrors?.["arrival.locationName"]}
+          >
+            <Input
+              id="arrivalLocationName"
+              name="arrivalLocationName"
+              defaultValue={defaultValues.arrivalLocationName}
+              required
+              maxLength={200}
+              dir="auto"
+            />
+          </Field>
+        </div>
+        <div className={styles.splitRow}>
+          <Field label={t("departureLocationCode")} htmlFor="departureLocationCode">
+            <Input
+              id="departureLocationCode"
+              name="departureLocationCode"
+              defaultValue={defaultValues.departureLocationCode}
+              maxLength={20}
+              dir="auto"
+            />
+          </Field>
+          <Field label={t("arrivalLocationCode")} htmlFor="arrivalLocationCode">
+            <Input
+              id="arrivalLocationCode"
+              name="arrivalLocationCode"
+              defaultValue={defaultValues.arrivalLocationCode}
+              maxLength={20}
+              dir="auto"
+            />
+          </Field>
+        </div>
+      </section>
+
+      <section className={styles.section} aria-labelledby="transport-times-heading">
+        <h2 id="transport-times-heading" className={styles.sectionTitle}>
+          {t("times")}
+        </h2>
+        <p className={styles.legLabel}>{t("departure")}</p>
         <div className={styles.splitRow}>
           <Field
             label={tCommon("date")}
@@ -644,41 +649,7 @@ export function TransportForm({
             />
           </Field>
         </div>
-        <TimezoneSelect
-          id="departureTimezone"
-          name="departureTimezone"
-          defaultValue={defaultValues.departureTimezone}
-          error={state.fieldErrors?.["departure.timezone"]}
-          label={t("timezone")}
-          options={timezoneOptions}
-        />
-      </section>
-
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{t("toSection")}</h2>
-        <Field
-          label={t("location")}
-          htmlFor="arrivalLocationName"
-          error={state.fieldErrors?.["arrival.locationName"]}
-        >
-          <Input
-            id="arrivalLocationName"
-            name="arrivalLocationName"
-            defaultValue={defaultValues.arrivalLocationName}
-            required
-            maxLength={200}
-            dir="auto"
-          />
-        </Field>
-        <Field label={t("locationCode")} htmlFor="arrivalLocationCode">
-          <Input
-            id="arrivalLocationCode"
-            name="arrivalLocationCode"
-            defaultValue={defaultValues.arrivalLocationCode}
-            maxLength={20}
-            dir="auto"
-          />
-        </Field>
+        <p className={styles.legLabel}>{t("arrival")}</p>
         <div className={styles.splitRow}>
           <Field
             label={tCommon("date")}
@@ -707,20 +678,20 @@ export function TransportForm({
             />
           </Field>
         </div>
-        <TimezoneSelect
-          id="arrivalTimezone"
-          name="arrivalTimezone"
-          defaultValue={defaultValues.arrivalTimezone}
-          error={state.fieldErrors?.["arrival.timezone"]}
-          label={t("timezone")}
-          options={timezoneOptions}
+        <HiddenTimezoneFields
+          departureTimezone={defaultValues.departureTimezone}
+          arrivalTimezone={defaultValues.arrivalTimezone}
+          departureError={state.fieldErrors?.["departure.timezone"]}
+          arrivalError={state.fieldErrors?.["arrival.timezone"]}
         />
       </section>
 
-      <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>{t("detailsSection")}</h2>
+      <section className={styles.section} aria-labelledby="transport-details-heading">
+        <h2 id="transport-details-heading" className={styles.sectionTitle}>
+          {t("detailsSection")}
+        </h2>
         <TypeSpecificFields
-          type={type}
+          type={activeType}
           defaultValues={defaultValues}
           t={t}
           trainCategoryLabel={trainCategoryLabel}
