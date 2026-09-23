@@ -71,6 +71,7 @@ describe("Product Hardening 1 — trip shell safe-area contract", () => {
   it("AppPage flushTop only removes page spacing, not shell safe-top", () => {
     const page = read("features/app-shell/AppPage.module.scss");
     expect(page).toMatch(/\[data-flush-top="true"\][\s\S]*padding-top:\s*0/);
+    expect(page).toMatch(/\[data-flush-top="true"\][\s\S]*padding-bottom:\s*0/);
     expect(page).not.toContain("--safe-top");
 
     const shell = read("features/app-shell/TripShellLayout.module.scss");

@@ -25,43 +25,45 @@ export async function DuringTripJourney({ model }: DuringTripJourneyProps) {
 
   return (
     <section className={styles.duringJourney} aria-label={t("duringJourneyAria")}>
-      {model.importantToday ? (
-        <TodayRemindersSection {...model.importantToday} />
-      ) : null}
+      <div className={styles.duringTodaySurface}>
+        {model.importantToday ? (
+          <TodayRemindersSection {...model.importantToday} />
+        ) : null}
 
-      {model.now ? (
-        <section
-          className={styles.duringNowNextSection}
-          aria-label={t("nowSectionAria")}
-        >
-          <ActivityCompactCard
-            card={model.now}
-            tone="now"
-            eyebrow={t("nowEyebrow")}
-            headingId="trip-home-now"
-          />
-        </section>
-      ) : null}
+        {model.now ? (
+          <section
+            className={styles.duringNowNextSection}
+            aria-label={t("nowSectionAria")}
+          >
+            <ActivityCompactCard
+              card={model.now}
+              tone="now"
+              eyebrow={t("nowEyebrow")}
+              headingId="trip-home-now"
+            />
+          </section>
+        ) : null}
 
-      {model.upNext ? (
-        <section
-          className={styles.duringNowNextSection}
-          aria-label={t("upNextSectionAria")}
-        >
-          <ActivityCompactCard
-            card={model.upNext}
-            tone="up-next"
-            eyebrow={t("upNextEyebrow")}
-            headingId="trip-home-up-next"
-          />
-        </section>
-      ) : null}
+        {model.upNext ? (
+          <section
+            className={styles.duringNowNextSection}
+            aria-label={t("upNextSectionAria")}
+          >
+            <ActivityCompactCard
+              card={model.upNext}
+              tone="up-next"
+              eyebrow={t("upNextEyebrow")}
+              headingId="trip-home-up-next"
+            />
+          </section>
+        ) : null}
 
-      <LaterTodaySection items={model.laterToday} />
+        <LaterTodaySection items={model.laterToday} />
 
-      <DuringTodaySummary summary={model.todaySummary} />
+        <DuringTodaySummary summary={model.todaySummary} />
 
-      <DuringFullDayLink link={model.fullDayItinerary} />
+        <DuringFullDayLink link={model.fullDayItinerary} />
+      </div>
     </section>
   );
 }

@@ -26,6 +26,8 @@
   --color-surface-themed: #f3f6fa;
   --color-surface-themed-strong: #eef2f8;
   --color-surface-card: #ffffff;
+  /* Trip Home during-trip main page surface (themes override in trip-themes.scss). */
+  --color-surface-home-page: #ffffff;
   --color-accent-well: var(--color-primary-soft);
   --color-shell-surface: var(--color-surface);
   --color-primary: #1a2740;

@@ -20,6 +20,10 @@
 @media (max-width: 1023px) {
   .page[data-flush-top="true"] {
     padding-top: 0;
+    /* Trip Home: shell contentArea already reserves Bottom Nav + safe-bottom. */
+    padding-bottom: 0;
+    /* Narrower horizontal pad so Trip theme frames the Today surface (~8px each side). */
+    padding-inline: var(--space-2);
   }
 }
 

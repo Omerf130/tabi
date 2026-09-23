@@ -298,6 +298,39 @@ describe("during trip today experience", () => {
     expect(later.map((item) => item.id)).toEqual(["later"]);
   });
 
+  it("keeps ActivityCompactCard presentation structure for NOW/NEXT", () => {
+    const card = readFileSync(
+      join(process.cwd(), "src/features/trip-home/ActivityCompactCard.tsx"),
+      "utf8",
+    );
+
+    expect(card).toContain("activityCompactTop");
+    expect(card).toContain("activityCompactBody");
+    expect(card).toContain("activityCompactAction");
+    expect(card).not.toContain("activityCompactFooter");
+  });
+
+  it("preserves Trip Hero layout tokens and Bottom Nav shell clearance", () => {
+    const heroLayout = readFileSync(
+      join(process.cwd(), "src/features/trip-home/trip-home-hero-layout.test.ts"),
+      "utf8",
+    );
+    const shell = readFileSync(
+      join(process.cwd(), "src/features/app-shell/TripShellLayout.module.scss"),
+      "utf8",
+    );
+    const appPage = readFileSync(
+      join(process.cwd(), "src/features/app-shell/AppPage.module.scss"),
+      "utf8",
+    );
+
+    expect(heroLayout).toContain("--home-hero-min");
+    expect(shell).toContain("--size-bottom-nav");
+    expect(shell).toContain("padding-bottom: calc(");
+    expect(appPage).toMatch(/\[data-flush-top="true"\][\s\S]*padding-bottom:\s*0/);
+    expect(shell).not.toMatch(/\.contentArea[\s\S]{0,180}min-height:\s*calc/);
+  });
+
   it("does not introduce horizontal carousel or scroll-snap in during-trip UI", () => {
     const scss = readFileSync(
       join(process.cwd(), "src/features/trip-home/TripHomeContent.module.scss"),

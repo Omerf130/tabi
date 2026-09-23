@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { IconChevron } from "@/components/ui/icons";
 import type { HomeItineraryPreviewItem } from "./build-home-itinerary-preview";
 import styles from "./TripHomeContent.module.scss";
 
@@ -18,17 +19,18 @@ export async function LaterTodaySection({ items }: LaterTodaySectionProps) {
   ]);
 
   return (
-    <section className={styles.homeSection} aria-labelledby="trip-home-later-today">
+    <section
+      className={styles.duringSurfaceSection}
+      aria-labelledby="trip-home-later-today"
+    >
       <h2 id="trip-home-later-today" className={styles.homeSectionTitle}>
         {t("laterTodayTitle")}
       </h2>
-      <ul className={styles.laterTodayList}>
+      <div className={styles.laterTodayPanel}>
+        <ul className={styles.laterTodayList}>
         {items.map((item, index) => {
           const row = (
             <>
-              <time className={styles.laterTodayTime}>
-                {item.isUntimed ? tCommon("noTime") : item.displayTime}
-              </time>
               <div className={styles.laterTodayCopy}>
                 <p className={styles.laterTodayTitle} dir="auto">
                   {item.title}
@@ -39,6 +41,9 @@ export async function LaterTodaySection({ items }: LaterTodaySectionProps) {
                   </p>
                 ) : null}
               </div>
+              <time className={styles.laterTodayTime}>
+                {item.isUntimed ? tCommon("noTime") : item.displayTime}
+              </time>
             </>
           );
 
@@ -51,6 +56,7 @@ export async function LaterTodaySection({ items }: LaterTodaySectionProps) {
               {item.detailHref ? (
                 <Link href={item.detailHref} className={styles.laterTodayLink}>
                   {row}
+                  <IconChevron className={styles.laterTodayChevron} aria-hidden />
                 </Link>
               ) : (
                 <div className={styles.laterTodayStatic}>{row}</div>
@@ -58,7 +64,8 @@ export async function LaterTodaySection({ items }: LaterTodaySectionProps) {
             </li>
           );
         })}
-      </ul>
+        </ul>
+      </div>
     </section>
   );
 }

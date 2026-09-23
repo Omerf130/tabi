@@ -64,7 +64,7 @@
   width: min(48vw, 11rem);
   max-height: 6.5rem;
   object-position: 70% 40%;
-  opacity: 0.32;
+  opacity: 0.36;
 }
 
 .root[data-atmosphere-theme="sakura"] .layer[data-layer="bottom"] {
@@ -83,7 +83,7 @@
   width: min(62vw, 14.5rem);
   max-height: 7.5rem;
   object-position: 92% 8%;
-  opacity: 0.58;
+  opacity: 0.62;
 }
 
 .root[data-atmosphere-theme="forest"] .layer[data-layer="bottom"] {
@@ -92,7 +92,7 @@
   width: min(66vw, 15rem);
   max-height: 7rem;
   object-position: 8% 100%;
-  opacity: 0.48;
+  opacity: 0.52;
 }
 
 /* —— Sunset: celestial corner fragment only —— */
@@ -102,7 +102,7 @@
   width: min(46vw, 10.5rem);
   max-height: 8rem;
   object-position: 78% 12%;
-  opacity: 0.62;
+  opacity: 0.66;
 }
 
 /* Trip Home: large hero — keep top edge clean; decoration starts below hero */
@@ -120,7 +120,7 @@
     inset-inline-start: -38%;
     width: min(70vw, 16rem);
     max-height: 7.5rem;
-    opacity: 0.58;
+    opacity: 0.62;
   }
 
   .root[data-atmosphere-theme="forest"] .layer[data-layer="top"] {
@@ -128,7 +128,7 @@
     inset-inline-end: -34%;
     width: min(58vw, 13rem);
     max-height: 6.5rem;
-    opacity: 0.5;
+    opacity: 0.54;
   }
 
   .root[data-atmosphere-theme="sunset"] .layer[data-layer="top"] {
@@ -136,7 +136,7 @@
     inset-inline-end: -28%;
     width: min(40vw, 9rem);
     max-height: 6.5rem;
-    opacity: 0.55;
+    opacity: 0.58;
   }
 }
 

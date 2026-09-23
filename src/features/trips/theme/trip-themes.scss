@@ -11,6 +11,7 @@
   --theme-atmosphere-primary: rgb(26 39 64 / 6%);
   --theme-atmosphere-secondary: rgb(26 39 64 / 4%);
   --theme-atmosphere-soft: rgb(26 39 64 / 3%);
+  --color-surface-home-page: #ffffff;
 }
 
 [data-trip-theme="ocean"] {
@@ -30,6 +31,7 @@
   --color-surface-themed: #d4e6f0;
   --color-surface-themed-strong: #c8dfec;
   --color-surface-card: #f8fcfe;
+  --color-surface-home-page: #f8fcfe;
   --color-accent-soft: #dbeaf2;
   --color-accent-well: color-mix(in srgb, var(--color-primary) 18%, var(--color-surface));
   --color-shell-surface: #f2f8fb;
@@ -54,9 +56,9 @@
 }
 
 [data-trip-theme="sakura"] {
-  --theme-atmosphere-primary: rgb(107 68 88 / 12%);
-  --theme-atmosphere-secondary: rgb(196 139 154 / 10%);
-  --theme-atmosphere-soft: rgb(237 224 228 / 35%);
+  --theme-atmosphere-primary: rgb(107 68 88 / 14%);
+  --theme-atmosphere-secondary: rgb(196 139 154 / 12%);
+  --theme-atmosphere-soft: rgb(230 200 210 / 42%);
 
   --color-primary: #6b4458;
   --color-primary-hover: #7d5168;
@@ -64,16 +66,17 @@
   --color-primary-soft: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface));
   --color-on-primary: #ffffff;
 
-  --color-background: #faf5f6;
+  --color-background: #f0e4e9;
   --color-surface: #ffffff;
   --color-surface-elevated: #ffffff;
-  --color-surface-subtle: #f3ecee;
-  --color-surface-themed: #ede0e4;
-  --color-surface-themed-strong: #e4d4da;
+  --color-surface-subtle: #ead8df;
+  --color-surface-themed: #e2cbd4;
+  --color-surface-themed-strong: #d8bec8;
   --color-surface-card: #fffbfc;
+  --color-surface-home-page: #fff9fa;
   --color-accent-soft: #f0e4e8;
   --color-accent-well: color-mix(in srgb, var(--color-primary) 18%, var(--color-surface));
-  --color-shell-surface: #fcf7f8;
+  --color-shell-surface: #f5eaee;
 
   --color-text: #352830;
   --color-text-muted: #7a6d72;
@@ -95,9 +98,9 @@
 }
 
 [data-trip-theme="forest"] {
-  --theme-atmosphere-primary: rgb(45 90 74 / 10%);
-  --theme-atmosphere-secondary: rgb(61 107 88 / 8%);
-  --theme-atmosphere-soft: rgb(220 232 224 / 40%);
+  --theme-atmosphere-primary: rgb(45 90 74 / 12%);
+  --theme-atmosphere-secondary: rgb(61 107 88 / 10%);
+  --theme-atmosphere-soft: rgb(200 220 208 / 48%);
 
   --color-primary: #2d5a4a;
   --color-primary-hover: #356657;
@@ -105,16 +108,17 @@
   --color-primary-soft: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface));
   --color-on-primary: #ffffff;
 
-  --color-background: #f2f6f3;
+  --color-background: #e3efe8;
   --color-surface: #ffffff;
   --color-surface-elevated: #ffffff;
-  --color-surface-subtle: #e8f0eb;
-  --color-surface-themed: #dce8e0;
-  --color-surface-themed-strong: #d0dfd4;
+  --color-surface-subtle: #d9e9df;
+  --color-surface-themed: #cde0d4;
+  --color-surface-themed-strong: #bfd5c8;
   --color-surface-card: #fbfdfc;
+  --color-surface-home-page: #f9fcfa;
   --color-accent-soft: #e2ebe5;
   --color-accent-well: color-mix(in srgb, var(--color-primary) 18%, var(--color-surface));
-  --color-shell-surface: #f4f8f5;
+  --color-shell-surface: #ebf3ee;
 
   --color-text: #1f2e28;
   --color-text-muted: #62756c;
@@ -136,9 +140,9 @@
 }
 
 [data-trip-theme="sunset"] {
-  --theme-atmosphere-primary: rgb(212 132 90 / 18%);
-  --theme-atmosphere-secondary: rgb(164 79 61 / 10%);
-  --theme-atmosphere-soft: rgb(236 226 214 / 45%);
+  --theme-atmosphere-primary: rgb(212 132 90 / 20%);
+  --theme-atmosphere-secondary: rgb(164 79 61 / 12%);
+  --theme-atmosphere-soft: rgb(236 210 190 / 50%);
 
   --color-primary: #a44f3d;
   --color-primary-hover: #b85a45;
@@ -146,16 +150,17 @@
   --color-primary-soft: color-mix(in srgb, var(--color-primary) 16%, var(--color-surface));
   --color-on-primary: #ffffff;
 
-  --color-background: #faf6f2;
+  --color-background: #f2e8dc;
   --color-surface: #ffffff;
   --color-surface-elevated: #ffffff;
-  --color-surface-subtle: #f3ebe3;
-  --color-surface-themed: #ece2d6;
-  --color-surface-themed-strong: #e2d6c8;
+  --color-surface-subtle: #e8ddd0;
+  --color-surface-themed: #ded0c0;
+  --color-surface-themed-strong: #d4c4b2;
   --color-surface-card: #fffdfa;
+  --color-surface-home-page: #fffbf7;
   --color-accent-soft: #f0e8de;
   --color-accent-well: color-mix(in srgb, var(--color-primary) 18%, var(--color-surface));
-  --color-shell-surface: #faf7f3;
+  --color-shell-surface: #f7efe6;
 
   --color-text: #3a2f29;
   --color-text-muted: #85776d;
